@@ -108,7 +108,7 @@ public class DoctorDAO {
         }
         return 0;
     }
-
+    // get doctor
     public Doctor getDoctorById(int id) {
         ArrayList<Doctor> l = new ArrayList<>();
         String xSql = """
