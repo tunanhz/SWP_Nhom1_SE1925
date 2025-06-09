@@ -31,7 +31,7 @@ public class AppointmentDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 appointment = new Appointment(rs.getInt("appointment_id"), rs.getInt("doctor_id"),
-                        rs.getInt("patient_id"), rs.getInt("receptionist_id"), rs.getString("appointment_datetime"),
+                        rs.getInt("patient_id"), rs.getInt("receptionist_id"), rs.getDate("appointment_datetime"),
                         rs.getString("shift"), rs.getString("status"), rs.getString("note"));
             }
         } catch (SQLException e) {
@@ -67,7 +67,7 @@ public class AppointmentDAO {
                         rs.getInt("doctor_id"),
                         rs.getInt("patient_id"),
                         rs.getInt("receptionist_id"),
-                        rs.getString("appointment_datetime"),
+                        rs.getDate("appointment_datetime"),
                         rs.getString("shift"),
                         rs.getString("status"),
                         rs.getString("note")
@@ -106,7 +106,7 @@ public class AppointmentDAO {
                         rs.getInt("doctor_id"),
                         rs.getInt("patient_id"),
                         rs.getInt("receptionist_id"),
-                        rs.getString("appointment_datetime"),
+                        rs.getDate("appointment_datetime"),
                         rs.getString("shift"),
                         rs.getString("status"),
                         rs.getString("note")
@@ -145,7 +145,7 @@ public class AppointmentDAO {
                         rs.getInt("doctor_id"),
                         rs.getInt("patient_id"),
                         rs.getInt("receptionist_id"),
-                        rs.getString("appointment_datetime"),
+                        rs.getDate("appointment_datetime"),
                         rs.getString("shift"),
                         rs.getString("status"),
                         rs.getString("note")

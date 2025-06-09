@@ -1,11 +1,13 @@
 package model;
 
+import java.util.Date;
+
 public class Appointment {
     private int appointmentID;
     private int doctorID;
     private int patientID;
     private int receptionistID;
-    private String appointmentDatetime;
+    private Date appointmentDatetime;
     private String shift;
     private String status;
     private String note;
@@ -13,7 +15,7 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(int appointmentID, int doctorID, int patientID, int receptionistID, String appointmentDatetime, String shift, String status, String note) {
+    public Appointment(int appointmentID, int doctorID, int patientID, int receptionistID, Date appointmentDatetime, String shift, String status, String note) {
         this.appointmentID = appointmentID;
         this.doctorID = doctorID;
         this.patientID = patientID;
@@ -56,11 +58,11 @@ public class Appointment {
         this.receptionistID = receptionistID;
     }
 
-    public String getAppointmentDatetime() {
+    public Date getAppointmentDatetime() {
         return appointmentDatetime;
     }
 
-    public void setAppointmentDatetime(String appointmentDatetime) {
+    public void setAppointmentDatetime(Date appointmentDatetime) {
         this.appointmentDatetime = appointmentDatetime;
     }
 
