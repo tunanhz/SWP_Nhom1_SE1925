@@ -4,12 +4,14 @@
  */
 package model;
 
+import dal.AppointmentDAO;
+
 /**
  *
  * @author DTanh
  */
 public class Patient {
-    private int id;
+    private int patientId;
     private String fullName;
     private String dateOfBirth;
     private String gender;
@@ -17,11 +19,13 @@ public class Patient {
     private String address;
     private String email;
 
+    private Appointment appointment;
+
     public Patient() {
     }
 
-    public Patient(int id, String fullName, String dateOfBirth, String gender, String phone, String address, String email) {
-        this.id = id;
+    public Patient(int patientId, String fullName, String dateOfBirth, String gender, String phone, String address, String email) {
+        this.patientId = patientId;
         this.fullName = fullName;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
@@ -31,11 +35,11 @@ public class Patient {
     }
 
     public int getId() {
-        return id;
+        return patientId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int patientId) {
+        this.patientId = patientId;
     }
 
     public String getFullName() {
@@ -85,5 +89,15 @@ public class Patient {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Appointment getAppointment() {
+        return appointment;
+    }
+
+    AppointmentDAO ad = new AppointmentDAO();
+    public void includeAppointment() {
+        this.appointment = ad.getAppointmentByPatientId(patientId);
+    }
+
 }
 

@@ -2,7 +2,7 @@ package model;
 
 public class Doctor {
 
-    private int ID;
+    private int doctorId;
     private String fullName;
     private String phone;
     private String eduLevel;
@@ -13,8 +13,8 @@ public class Doctor {
     public Doctor() {
     }
 
-    public Doctor(int ID, String fullName, String phone, String eduLevel, String department, String email, String img) {
-        this.ID = ID;
+    public Doctor(int doctorId, String fullName, String phone, String eduLevel, String department, String email, String img) {
+        this.doctorId = doctorId;
         this.fullName = fullName;
         this.phone = phone;
         this.eduLevel = eduLevel;
@@ -24,11 +24,11 @@ public class Doctor {
     }
 
     public int getID() {
-        return ID;
+        return doctorId;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setID(int doctorId) {
+        this.doctorId = doctorId;
     }
 
     public String getFullName() {
