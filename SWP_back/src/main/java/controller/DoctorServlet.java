@@ -55,7 +55,7 @@ public class DoctorServlet extends HttpServlet{
         }
 
         if (pathInfo == null || pathInfo.equals("/")){
-            int page = 1; // Mặc định trang 1
+            int page = 8; // Mặc định trang 1
             int size = 8; // Mặc định 8 bác sĩ mỗi trang
             String name = null;
             String department = null;
