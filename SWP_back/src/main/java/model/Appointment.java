@@ -1,8 +1,13 @@
+
+package model;
+
+import java.util.Date;
+
 public class Appointment {
     private int appointmentId;
     private int doctorId;
     private int patientId;
-    private String appointmentDatetime;
+    private Date appointmentDatetime;
     private int receptionistId;
     private String shift;
     private String status;
@@ -11,7 +16,7 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(int appointmentId, int doctorId, int patientId, String appointmentDatetime, 
+    public Appointment(int appointmentId, int doctorId, int patientId, Date appointmentDatetime,
                       int receptionistId, String shift, String status, String note) {
         this.appointmentId = appointmentId;
         this.doctorId = doctorId;
@@ -47,11 +52,11 @@ public class Appointment {
         this.patientId = patientId;
     }
 
-    public String getAppointmentDatetime() {
+    public Date getAppointmentDatetime() {
         return appointmentDatetime;
     }
 
-    public void setAppointmentDatetime(String appointmentDatetime) {
+    public void setAppointmentDatetime(Date appointmentDatetime) {
         this.appointmentDatetime = appointmentDatetime;
     }
 
