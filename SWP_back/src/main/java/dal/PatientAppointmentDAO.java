@@ -2,6 +2,7 @@ package dal;
 
 import model.Appointment;
 import model.AppointmentDTO;
+import model.Doctor;
 import model.Patient;
 
 import java.sql.PreparedStatement;
@@ -174,6 +175,69 @@ public class PatientAppointmentDAO {
         }
     }
 
+    public AppointmentDTO getAppointmentsByAccountAppointmentId(int id){
+        String xSql = """
+            SELECT
+                ap.account_patient_id,
+                p.patient_id,
+                a.doctor_id,
+                a.appointment_id,
+                a.receptionist_id,
+                p.full_name,
+                p.dob,
+                p.gender,
+                p.phone,
+                p.[address],
+                ap.email,
+                ap.status AS account_status,
+                a.appointment_datetime,
+                a.[shift],
+                a.status AS appointment_status,
+                a.note
+            FROM AccountPatient ap
+            FULL OUTER JOIN Patient_AccountPatient pa
+                ON pa.account_patient_id = ap.account_patient_id
+            FULL OUTER JOIN Patient p
+                ON p.patient_id = pa.patient_id
+            FULL OUTER JOIN Appointment a
+                ON a.patient_id = p.patient_id
+            JOIN Doctor d on d.doctor_id = a.doctor_id
+            WHERE a.appointment_id = ?
+                AND a.appointment_datetime IS NOT NULL
+                AND ap.status = 'Enable'                      
+                      """;
+        AppointmentDTO a = null;
+        try {
+            PreparedStatement ps = ad.getConnection().prepareStatement(xSql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                a = new AppointmentDTO(
+                        rs.getInt("account_patient_id"),
+                        rs.getInt("patient_id"),
+                        rs.getObject("doctor_id") != null ? rs.getInt("doctor_id") : null,
+                        rs.getInt("appointment_id"),
+                        rs.getObject("receptionist_id") != null ? rs.getInt("receptionist_id") : null,
+                        rs.getString("full_name"),
+                        rs.getDate("dob"),
+                        rs.getString("gender"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        rs.getString("email"),
+                        rs.getString("account_status"),
+                        rs.getTimestamp("appointment_datetime"),
+                        rs.getString("shift"),
+                        rs.getString("appointment_status"),
+                        rs.getString("note")
+                );
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return a;
+    }
 
 
     public static void main(String[] args) {
