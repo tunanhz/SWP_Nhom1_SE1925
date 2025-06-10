@@ -90,9 +90,8 @@ public class Patient {
         return appointment;
     }
 
-
-    AppointmentDAO appointmentDAO = new AppointmentDAO();
     public void includeAppointment() {
+        AppointmentDAO appointmentDAO = new AppointmentDAO();
         this.appointment = appointmentDAO.getAppointmentByPatientId(id);
     }
 

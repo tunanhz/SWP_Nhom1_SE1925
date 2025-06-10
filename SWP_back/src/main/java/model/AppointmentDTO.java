@@ -1,5 +1,7 @@
 package model;
 
+import dal.DoctorDAO;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -20,6 +22,8 @@ public class AppointmentDTO {
     private String shift;
     private String appointmentStatus;
     private String note;
+
+    private Doctor doctor;
 
     // Constructor
     public AppointmentDTO(int accountPatientId, int patientId, Integer doctorId, int appointmentId,
@@ -180,6 +184,19 @@ public class AppointmentDTO {
     public String getFormattedAppointmentDateTime() {
         return new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(appointmentDateTime);
     }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+
+    public void includeDoctor() {
+        if (doctorId != null) {
+            DoctorDAO dao =  new DoctorDAO();
+            this.doctor = dao.getDoctorById(this.doctorId);
+        }
+    }
+
     // toString method for debugging and logging
     @Override
     public String toString() {

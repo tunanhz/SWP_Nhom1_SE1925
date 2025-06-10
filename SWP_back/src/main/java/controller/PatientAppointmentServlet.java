@@ -65,6 +65,7 @@ public class PatientAppointmentServlet extends HttpServlet {
                 // Get appointments and total count
                 ArrayList<AppointmentDTO> appointments = appointmentDAO.getAppointmentsByAccountPatientId(
                         accountPatientId, fullName, appointmentDateTime, status, offset, pageSize);
+
                 int totalAppointment = appointmentDAO.countAppointmentsByAccountPatientId(
                         accountPatientId, fullName, appointmentDateTime, status);
                 int totalPages = (int) Math.ceil((double) totalAppointment / pageSize);
