@@ -51,6 +51,7 @@ public class PatientAppointmentDAO {
                 ON p.patient_id = pa.patient_id
             FULL OUTER JOIN Appointment a
                 ON a.patient_id = p.patient_id
+            JOIN Doctor d on d.doctor_id = a.doctor_id
             WHERE ap.account_patient_id = ?
                 AND a.appointment_datetime IS NOT NULL
                 AND ap.status = 'Enable'
@@ -108,6 +109,7 @@ public class PatientAppointmentDAO {
                         rs.getString("appointment_status"),
                         rs.getString("note")
                 );
+                dto.includeDoctor();
                 appointments.add(dto);
             }
         } catch (SQLException e) {
