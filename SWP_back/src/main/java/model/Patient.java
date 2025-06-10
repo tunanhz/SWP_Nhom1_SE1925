@@ -4,6 +4,8 @@
  */
 package model;
 
+import dal.AppointmentDAO;
+
 /**
  *
  * @author DTanh
@@ -16,6 +18,8 @@ public class Patient {
     private String phone;
     private String address;
     private String email;
+
+    private Appointment appointment;
 
     public Patient() {
     }
@@ -80,6 +84,16 @@ public class Patient {
 
     public String getEmail() {
         return email;
+    }
+
+    public Appointment getAppointment() {
+        return appointment;
+    }
+
+
+    AppointmentDAO appointmentDAO = new AppointmentDAO();
+    public void includeAppointment() {
+        this.appointment = appointmentDAO.getAppointmentByPatientId(id);
     }
 
     public void setEmail(String email) {
