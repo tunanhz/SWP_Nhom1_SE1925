@@ -1,3 +1,5 @@
+package model;
+
 public class AccountPatient {
     private int accountPatientId;
     private String username;
