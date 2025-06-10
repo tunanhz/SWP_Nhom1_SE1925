@@ -92,33 +92,33 @@ public class PatientAppointmentServlet extends HttpServlet {
                 out.print("{\"error\": \"Failed to fetch appointments\"}");
                 LOGGER.severe("Error processing request: " + e.getMessage());
             }
-//        } else {
-//            String[] splits = pathInfo.split("/");
-//            if (splits.length == 2) {
-//                try {
-//                    int id = Integer.parseInt(splits[1]);
-//                    Doctor doctor = doctorDAO.getDoctorById(id);
-//                    if (doctor != null) {
-//                        JsonObject responseJson = new JsonObject();
-//                        responseJson.add("doctor", gson.toJsonTree(doctor));
-//                        out.print(gson.toJson(responseJson));
-//                    } else {
-//                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//                        out.print("{\"error\": \"Doctor not found\"}");
-//                    }
-//                } catch (NumberFormatException e) {
-//                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//                    out.print("{\"error\": \"Invalid doctor ID format\"}");
-//                    LOGGER.severe("Invalid doctor ID: " + e.getMessage());
-//                } catch (Exception e) {
-//                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//                    out.print("{\"error\": \"Failed to fetch doctor\"}");
-//                    LOGGER.severe("Error processing doctor request: " + e.getMessage());
-//                }
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//                out.print("{\"error\": \"Invalid path\"}");
-//            }
+        } else {
+            String[] splits = pathInfo.split("/");
+            if (splits.length == 2) {
+                try {
+                    int id = Integer.parseInt(splits[1]);
+                    AppointmentDTO appointmentDTO = appointmentDAO.getAppointmentsByAccountAppointmentId(id);
+                    if (appointmentDTO != null) {
+                        JsonObject responseJson = new JsonObject();
+                        responseJson.add("appointment", gson.toJsonTree(appointmentDTO));
+                        out.print(gson.toJson(responseJson));
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        out.print("{\"error\": \"Doctor not found\"}");
+                    }
+                } catch (NumberFormatException e) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.print("{\"error\": \"Invalid doctor ID format\"}");
+                    LOGGER.severe("Invalid doctor ID: " + e.getMessage());
+                } catch (Exception e) {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    out.print("{\"error\": \"Failed to fetch doctor\"}");
+                    LOGGER.severe("Error processing doctor request: " + e.getMessage());
+                }
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.print("{\"error\": \"Invalid path\"}");
+            }
             out.flush();
         }
     }
