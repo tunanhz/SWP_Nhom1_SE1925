@@ -1,33 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author DTanh
- */
-public class AccountStaff {
+
+public class AccountStaff extends Account {
     private int accountStaffId;
-    private String userName;
-    private String passWord;
     private String role;
-    private String email;
     private String img;
-    private boolean status;
 
     public AccountStaff() {
+        super("", "", "", false); // Giá trị mặc định
     }
 
     public AccountStaff(int accountStaffId, String userName, String passWord, String role, String email, String img, boolean status) {
+        super(userName, passWord, email, status);
         this.accountStaffId = accountStaffId;
-        this.userName = userName;
-        this.passWord = passWord;
         this.role = role;
-        this.email = email;
         this.img = img;
-        this.status = status;
     }
 
     public int getAccountStaffId() {
@@ -39,24 +26,23 @@ public class AccountStaff {
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 
     public String getPassWord() {
-        return passWord;
+        return password;
     }
 
     public void setPassWord(String passWord) {
-        this.passWord = passWord;
+        this.password = passWord;
     }
 
-    public String getRole() {
-        return role;
-    }
+    // Xóa getter thông thường getRole() để tránh xung đột
+    // public String getRole() { return this.role; }
 
     public void setRole(String role) {
         this.role = role;
@@ -86,4 +72,20 @@ public class AccountStaff {
         this.status = status;
     }
 
+    @Override
+    public String getRole() {
+        return this.role; // Triển khai phương thức abstract từ Account
+    }
+
+    @Override
+    public void displayDashboard() {
+        // Logic redirect dựa trên role (doctor, nurse, receptionist, etc.)
+        if ("doctor".equals(this.role)) {
+            System.out.println("Redirect to Doctor Dashboard");
+        } else if ("nurse".equals(this.role)) {
+            System.out.println("Redirect to Nurse Dashboard");
+        } else {
+            System.out.println("Redirect to Staff Dashboard");
+        }
+    }
 }

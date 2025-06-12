@@ -1,62 +1,59 @@
-package model;
-
-import java.util.Date;
-
 public class Prescription {
-    int prescriptionID;
-    Date prescriptionDate;
-    String patientName;
-    String patientPhone;
-    String doctorName;
+    private int prescriptionId;
+    private int medicineRecordId;
+    private int doctorId;
+    private String prescriptionDate;
+    private String status;
 
     public Prescription() {
     }
 
-    public Prescription(int prescriptionID, Date prescriptionDate, String patientName, String patientPhone, String doctorName) {
-        this.doctorName = doctorName;
-        this.prescriptionID = prescriptionID;
+    public Prescription(int prescriptionId, int medicineRecordId, int doctorId, 
+                       String prescriptionDate, String status) {
+        this.prescriptionId = prescriptionId;
+        this.medicineRecordId = medicineRecordId;
+        this.doctorId = doctorId;
         this.prescriptionDate = prescriptionDate;
-        this.patientName = patientName;
-        this.patientPhone = patientPhone;
+        this.status = status;
     }
 
-    public int getPrescriptionID() {
-        return prescriptionID;
+    public int getPrescriptionId() {
+        return prescriptionId;
     }
 
-    public void setPrescriptionID(int prescriptionID) {
-        this.prescriptionID = prescriptionID;
+    public void setPrescriptionId(int prescriptionId) {
+        this.prescriptionId = prescriptionId;
     }
 
-    public Date getPrescriptionDate() {
+    public int getMedicineRecordId() {
+        return medicineRecordId;
+    }
+
+    public void setMedicineRecordId(int medicineRecordId) {
+        this.medicineRecordId = medicineRecordId;
+    }
+
+    public int getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(int doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public String getPrescriptionDate() {
         return prescriptionDate;
     }
 
-    public void setPrescriptionDate(Date prescriptionDate) {
+    public void setPrescriptionDate(String prescriptionDate) {
         this.prescriptionDate = prescriptionDate;
     }
 
-    public String getPatientName() {
-        return patientName;
+    public String getStatus() {
+        return status;
     }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
-    }
-
-    public String getPatientPhone() {
-        return patientPhone;
-    }
-
-    public void setPatientPhone(String patientPhone) {
-        this.patientPhone = patientPhone;
-    }
-
-    public String getDoctorName() {
-        return doctorName;
-    }
-
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
