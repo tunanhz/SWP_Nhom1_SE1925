@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 
-    @WebServlet("/api/doctors/*")
+@WebServlet("/api/doctors/*")
 public class DoctorServlet extends HttpServlet{
     private final DoctorDAO dao = new DoctorDAO();
     private final AtomicLong counter = new AtomicLong();
