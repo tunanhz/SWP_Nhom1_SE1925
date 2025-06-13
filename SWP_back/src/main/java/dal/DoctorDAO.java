@@ -15,11 +15,11 @@ public class DoctorDAO {
     public ArrayList<Doctor> getAllDoctors(int page, int size) {
         ArrayList<Doctor> l = new ArrayList<>();
         String xSql = """
-                      Select d.doctor_id, d.full_name, d.phone, d.eduLevel,d.department, a.email, a.[img]  from [dbo].[Doctor] d
-                      join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id
-                      where a.role = 'Doctor' and a.status = 'Enable'
-                      order by d.doctor_id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
-                      """;
+                Select d.doctor_id, d.full_name, d.phone, d.eduLevel,d.department, a.email, a.[img]  from [dbo].[Doctor] d
+                join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id
+                where a.role = 'Doctor' and a.status = 'Enable'
+                order by d.doctor_id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
+                """;
 
         try {
             PreparedStatement ps = ad.getConnection().prepareStatement(xSql);
@@ -45,11 +45,11 @@ public class DoctorDAO {
     public ArrayList<Doctor> searchDoctorsByName(String name, int page, int size) {
         ArrayList<Doctor> doctors = new ArrayList<>();
         String sql = """
-                      Select d.doctor_id, d.full_name, d.phone, d.eduLevel,d.department, a.email, a.[img]  from [dbo].[Doctor] d
-                      join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id
-                      where a.role = 'Doctor' and a.status = 'Enable' AND d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?
-                      order by d.doctor_id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
-                     """;
+                 Select d.doctor_id, d.full_name, d.phone, d.eduLevel,d.department, a.email, a.[img]  from [dbo].[Doctor] d
+                 join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id
+                 where a.role = 'Doctor' and a.status = 'Enable' AND d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?
+                 order by d.doctor_id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
+                """;
 
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
@@ -72,10 +72,10 @@ public class DoctorDAO {
 
     public int getTotalDoctorsByName(String name) {
         String sql = """
-                     SELECT COUNT(*) FROM [dbo].[Doctor] d
-                     join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id 
-                     where a.role = 'Doctor' and a.status = 'Enable' AND d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?
-                     """;
+                SELECT COUNT(*) FROM [dbo].[Doctor] d
+                join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id 
+                where a.role = 'Doctor' and a.status = 'Enable' AND d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?
+                """;
 
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
@@ -93,10 +93,10 @@ public class DoctorDAO {
 
     public int getTotalDoctors() {
         String sql = """
-                        SELECT COUNT(*) from [dbo].[Doctor] d
-                        join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id
-                        where a.role = 'Doctor' and a.status = 'Enable'
-                     """;
+                   SELECT COUNT(*) from [dbo].[Doctor] d
+                   join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id
+                   where a.role = 'Doctor' and a.status = 'Enable'
+                """;
         try {
             PreparedStatement ps = ad.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -112,10 +112,10 @@ public class DoctorDAO {
     public Doctor getDoctorById(int id) {
         ArrayList<Doctor> l = new ArrayList<>();
         String xSql = """
-                      Select d.doctor_id, d.full_name, d.phone, d.eduLevel,d.department, a.email, a.[img]  from [dbo].[Doctor] d
-                      join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id
-                      where a.role = 'Doctor' and a.status = 'Enable' and d.doctor_id = ?                      
-                      """;
+                Select d.doctor_id, d.full_name, d.phone, d.eduLevel,d.department, a.email, a.[img]  from [dbo].[Doctor] d
+                join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id
+                where a.role = 'Doctor' and a.status = 'Enable' and d.doctor_id = ?                      
+                """;
         Doctor d = null;
         try {
             PreparedStatement ps = ad.getConnection().prepareStatement(xSql);
@@ -143,25 +143,25 @@ public class DoctorDAO {
 
         ArrayList<Doctor> doctors = new ArrayList<>();
         String sql = """
-        SELECT 
-            d.doctor_id, 
-            d.full_name, 
-            d.phone, 
-            d.eduLevel, 
-            d.department, 
-            a.email, 
-            a.[img]
-        FROM [dbo].[Doctor] d
-        JOIN [dbo].[AccountStaff] a ON a.account_staff_id = d.account_staff_id
-        WHERE 
-            a.role = 'Doctor' 
-            AND a.status = 'Enable' 
-            AND (? IS NULL OR d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-            AND (? IS NULL OR d.department COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-        ORDER BY d.doctor_id 
-        OFFSET ? ROWS 
-        FETCH NEXT ? ROWS ONLY;
-    """;
+                    SELECT 
+                        d.doctor_id, 
+                        d.full_name, 
+                        d.phone, 
+                        d.eduLevel, 
+                        d.department, 
+                        a.email, 
+                        a.[img]
+                    FROM [dbo].[Doctor] d
+                    JOIN [dbo].[AccountStaff] a ON a.account_staff_id = d.account_staff_id
+                    WHERE 
+                        a.role = 'Doctor' 
+                        AND a.status = 'Enable' 
+                        AND (? IS NULL OR d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                        AND (? IS NULL OR d.department COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                    ORDER BY d.doctor_id 
+                    OFFSET ? ROWS 
+                    FETCH NEXT ? ROWS ONLY;
+                """;
 
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
@@ -204,15 +204,15 @@ public class DoctorDAO {
 
     public int getTotalDoctorsByNameAndDepartment(String name, String department) {
         String sql = """
-        SELECT COUNT(*) 
-        FROM [dbo].[Doctor] d
-        JOIN [dbo].[AccountStaff] a ON a.account_staff_id = d.account_staff_id
-        WHERE 
-            a.role = 'Doctor' 
-            AND a.status = 'Enable' 
-            AND (? IS NULL OR d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-            AND (? IS NULL OR d.department COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?);
-    """;
+                    SELECT COUNT(*) 
+                    FROM [dbo].[Doctor] d
+                    JOIN [dbo].[AccountStaff] a ON a.account_staff_id = d.account_staff_id
+                    WHERE 
+                        a.role = 'Doctor' 
+                        AND a.status = 'Enable' 
+                        AND (? IS NULL OR d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                        AND (? IS NULL OR d.department COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?);
+                """;
 
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
@@ -240,12 +240,12 @@ public class DoctorDAO {
 
     public ArrayList<String> getDepartments() {
         String sql = """
-        SELECT DISTINCT department 
-        FROM [dbo].[Doctor] d
-        JOIN [dbo].[AccountStaff] a ON a.account_staff_id = d.account_staff_id
-        WHERE a.role = 'Doctor' AND a.status = 'Enable'
-        ORDER BY department;
-    """;
+                    SELECT DISTINCT department 
+                    FROM [dbo].[Doctor] d
+                    JOIN [dbo].[AccountStaff] a ON a.account_staff_id = d.account_staff_id
+                    WHERE a.role = 'Doctor' AND a.status = 'Enable'
+                    ORDER BY department;
+                """;
         ArrayList<String> departments = new ArrayList<>();
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
