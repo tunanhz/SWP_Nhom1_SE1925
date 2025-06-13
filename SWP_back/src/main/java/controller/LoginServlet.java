@@ -20,7 +20,7 @@ import java.io.PrintWriter;
  *
  * @author Datnq
  */
-@WebServlet("/api/login")
+@WebServlet("/api/login/*")
 public class LoginServlet extends HttpServlet {
     private final AccountPatientDAO patientDAO = new AccountPatientDAO();
     private final AccountStaffDAO staffDAO = new AccountStaffDAO();
@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -43,52 +43,37 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("application/json");
         request.setCharacterEncoding("UTF-8");
 
-        PrintWriter out = response.getWriter();
-        try {
-            // Đọc dữ liệu JSON từ request
-            BufferedReader reader = request.getReader();
-            JsonObject loginData = gson.fromJson(reader, JsonObject.class);
-            String username = loginData.get("username").getAsString();
-            String password = loginData.get("password").getAsString();
+        String username = request.getParameter("user-name");
+        String password = request.getParameter("pwd");
 
+        // Tạo session
+        HttpSession session = request.getSession();
+
+        try {
             // Kiểm tra đăng nhập cho AccountPatient
             AccountPatient patient = patientDAO.checkLogin(username, password);
             if (patient != null) {
-                JsonObject jsonResponse = new JsonObject();
-                jsonResponse.addProperty("status", "success");
-                jsonResponse.addProperty("role", "patient");
-                jsonResponse.addProperty("redirectUrl", "../dashboard/patient-dashboard.html");
-                jsonResponse.add("user", gson.toJsonTree(patient));
-                out.println(jsonResponse.toString());
+                session.setAttribute("user", patient);
+                session.setAttribute("role", "patient");
+                response.sendRedirect("dashboard/patient-dashboard.html");
                 return;
             }
 
             // Kiểm tra đăng nhập cho AccountStaff
             AccountStaff staff = staffDAO.checkLogin(username, password);
             if (staff != null) {
-                JsonObject jsonResponse = new JsonObject();
-                jsonResponse.addProperty("status", "success");
-                jsonResponse.addProperty("role", staff.getRole());
-                jsonResponse.addProperty("redirectUrl", "../dashboard/index.html");
-                jsonResponse.add("user", gson.toJsonTree(staff));
-                out.println(jsonResponse.toString());
+                session.setAttribute("user", staff);
+                session.setAttribute("role", "staff");
+                response.sendRedirect("dashboard/doctors.html");
                 return;
             }
 
-            // Nếu không tìm thấy tài khoản
-            JsonObject errorResponse = new JsonObject();
-            errorResponse.addProperty("status", "error");
-            errorResponse.addProperty("message", "Invalid username or password");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            out.println(errorResponse.toString());
+            // Đăng nhập thất bại
+            response.sendRedirect("dashboard/errors/error404.html");
+            print("đăng nhập thất bại");
 
         } catch (Exception e) {
-            JsonObject errorResponse = new JsonObject();
-            errorResponse.addProperty("status", "error");
-            errorResponse.addProperty("message", "Internal server error");
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.println(errorResponse.toString());
-            e.printStackTrace();
+            response.sendRedirect("dashboard/errors/error500.html");
         }
     }
 }
