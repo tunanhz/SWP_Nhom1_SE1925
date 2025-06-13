@@ -1,6 +1,5 @@
 
 package model;
-
 import java.util.Date;
 
 public class Appointment {
@@ -17,7 +16,7 @@ public class Appointment {
     }
 
     public Appointment(int appointmentId, int doctorId, int patientId, Date appointmentDatetime,
-                      int receptionistId, String shift, String status, String note) {
+                       int receptionistId, String shift, String status, String note) {
         this.appointmentId = appointmentId;
         this.doctorId = doctorId;
         this.patientId = patientId;
@@ -90,5 +89,34 @@ public class Appointment {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+
+    private int receptionistID;
+    private String doctorName;
+    private String patientName;
+
+    public int getReceptionistID() {
+        return receptionistID;
+    }
+
+    public void setReceptionistID(int receptionistID) {
+        this.receptionistID = receptionistID;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
+    }
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
     }
 }

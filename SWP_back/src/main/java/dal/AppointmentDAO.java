@@ -1,9 +1,9 @@
 package dal;
 
 import model.Appointment;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
+import java.util.logging.Logger;
 
 public class AppointmentDAO {
     DBContext ad = new DBContext();
@@ -166,6 +166,57 @@ public class AppointmentDAO {
         AppointmentDAO dao = new AppointmentDAO();
         Appointment appointment = dao.getAppointmentByPatientId(18);
         System.out.println(appointment);
+    }
+
+
+
+    private static final Logger LOGGER = Logger.getLogger(AppointmentDAO.class.getName());
+
+    public Appointment createAppointment(Appointment appointment) throws SQLException {
+        String sql = "{call sp_CreatePatientAppointment(?, ?, ?, ?, ?, ?)}";
+        Appointment createdAppointment = null;
+        Connection conn = null;
+        CallableStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = ad.getConnection();
+            stmt = conn.prepareCall(sql);
+
+            stmt.setInt(1, appointment.getPatientId());
+            stmt.setInt(2, appointment.getDoctorId());
+            stmt.setTimestamp(3, new Timestamp(appointment.getAppointmentDatetime().getTime()));
+            stmt.setString(4, appointment.getShift());
+            stmt.setString(5, appointment.getNote() != null ? appointment.getNote() : null);
+            stmt.setObject(6, appointment.getReceptionistId() != -1 ? appointment.getReceptionistId() : null);
+
+            LOGGER.info("Executing statement: " + sql);
+            boolean hasResult = stmt.execute();
+            if (hasResult) {
+                rs = stmt.getResultSet();
+                if (rs.next()) {
+                    createdAppointment = new Appointment();
+                    createdAppointment.setAppointmentId(rs.getInt("appointment_id"));
+                    createdAppointment.setAppointmentDatetime(rs.getTimestamp("appointment_datetime"));
+                    createdAppointment.setShift(rs.getString("shift"));
+                    createdAppointment.setStatus(rs.getString("status"));
+                    createdAppointment.setDoctorName(rs.getString("doctor_name"));
+                    createdAppointment.setPatientName(rs.getString("patient_name"));
+                }
+            }
+
+            if (createdAppointment == null) {
+                throw new SQLException("Failed to create appointment, no result returned.");
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("SQL Error: " + e.getMessage());
+            throw e;
+        } finally {
+            // Đóng tài nguyên một cách an toàn
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+        return createdAppointment;
     }
 
 }
