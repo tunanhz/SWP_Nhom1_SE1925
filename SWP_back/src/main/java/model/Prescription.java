@@ -1,3 +1,5 @@
+package model;
+
 public class Prescription {
     private int prescriptionId;
     private int medicineRecordId;
@@ -8,8 +10,8 @@ public class Prescription {
     public Prescription() {
     }
 
-    public Prescription(int prescriptionId, int medicineRecordId, int doctorId, 
-                       String prescriptionDate, String status) {
+    public Prescription(int prescriptionId, int medicineRecordId, int doctorId,
+                        String prescriptionDate, String status) {
         this.prescriptionId = prescriptionId;
         this.medicineRecordId = medicineRecordId;
         this.doctorId = doctorId;
