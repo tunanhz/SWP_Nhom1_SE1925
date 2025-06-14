@@ -1,8 +1,5 @@
 package model;
-<<<<<<< HEAD
 
-=======
->>>>>>> a8fc15e07df1e5c7b327c34684658fb816abc6da
 public class Medicine {
     private int medicineId;
     private String name;
