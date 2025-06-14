@@ -10,8 +10,8 @@ import java.util.logging.Logger;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 /**
- *
  * AnhDT
  */
 public class DBContext {
@@ -34,6 +34,7 @@ public class DBContext {
             e.printStackTrace();
         }
     }
+
     public void closeConnection() {
         try {
             if (connection != null && connection.isClosed()) {
@@ -44,13 +45,14 @@ public class DBContext {
             System.out.println("Error closing connection: " + e.getMessage());
         }
     }
+
     private static DBContext instance = new DBContext();
 
-    public static DBContext getInstance(){
+    public static DBContext getInstance() {
         return instance;
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         return connection;
     }
 

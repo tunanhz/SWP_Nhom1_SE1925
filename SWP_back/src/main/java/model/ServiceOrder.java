@@ -1,3 +1,4 @@
+package model;
 public class ServiceOrder {
     private int serviceOrderId;
     private int doctorId;

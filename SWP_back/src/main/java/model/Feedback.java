@@ -1,3 +1,4 @@
+package model;
 public class Feedback {
     private int feedbackId;
     private int patientId;

@@ -1,3 +1,4 @@
+package model;
 public class ImportInfo {
     private int importId;
     private int distributorId;

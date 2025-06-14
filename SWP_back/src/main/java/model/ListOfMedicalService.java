@@ -1,3 +1,4 @@
+package model;
 public class ListOfMedicalService {
     private int serviceId;
     private String name;

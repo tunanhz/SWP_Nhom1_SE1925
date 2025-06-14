@@ -1,3 +1,4 @@
+package model;
 public class Warehouse {
     private int warehouseId;
     private String name;

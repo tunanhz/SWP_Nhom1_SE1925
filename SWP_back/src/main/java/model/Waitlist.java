@@ -1,3 +1,4 @@
+package model;
 public class Waitlist {
     private int waitlistId;
     private int patientId;

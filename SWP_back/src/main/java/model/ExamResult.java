@@ -1,3 +1,4 @@
+package model;
 public class ExamResult {
     private int examResultId;
     private int medicineRecordId;

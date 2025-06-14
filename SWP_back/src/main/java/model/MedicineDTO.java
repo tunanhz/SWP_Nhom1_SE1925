@@ -1,5 +1,8 @@
 package model;
-public class Medicine {
+import java.util.Date;
+
+
+public class MedicineDTO {
     private int medicineId;
     private String name;
     private int unitId;
@@ -7,22 +10,21 @@ public class Medicine {
     private String ingredient;
     private String usage;
     private String preservation;
-    private String manuDate;
+    private Date manuDate;
     private String expDate;
     private int quantity;
     private double price;
     private int warehouseId;
 
-    public Medicine() {
+    public MedicineDTO() {
     }
 
-    public Medicine(int medicineId, String name, int unitId, int categoryId, String ingredient, 
-                   String usage, String preservation, String manuDate, String expDate, 
-                   int quantity, double price, int warehouseId) {
+    public MedicineDTO(int medicineId, String name, int unitId, int categoryId, String ingredient,
+                    String usage, String preservation, Date manuDate, String expDate,
+                    int quantity, double price, int warehouseId) {
         this.medicineId = medicineId;
         this.name = name;
         this.unitId = unitId;
-
         this.categoryId = categoryId;
         this.ingredient = ingredient;
         this.usage = usage;
@@ -90,11 +92,11 @@ public class Medicine {
         this.preservation = preservation;
     }
 
-    public String getManuDate() {
+    public Date getManuDate() {
         return manuDate;
     }
 
-    public void setManuDate(String manuDate) {
+    public void setManuDate(Date manuDate) {
         this.manuDate = manuDate;
     }
 
@@ -128,5 +130,15 @@ public class Medicine {
 
     public void setWarehouseId(int warehouseId) {
         this.warehouseId = warehouseId;
+    }
+
+    private String warehouseName;
+
+    public MedicineDTO(int medicineId, String name, int quantity, double price, String warehouseName) {
+        this.medicineId = medicineId;
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+        this.warehouseName = warehouseName;
     }
 }

@@ -1,3 +1,4 @@
+package model;
 public class SystemLogStaff {
     private int logId;
     private int accountStaffId;
