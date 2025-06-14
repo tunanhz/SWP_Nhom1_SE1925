@@ -1,0 +1,42 @@
+package dal;
+
+import model.AccountStaff;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class AccountStaffDAO {
+    DBContext dbContext = DBContext.getInstance();
+
+    public AccountStaff getAccountByUsernameAndPassword(String username, String password) {
+        AccountStaff account = null;
+        String sql = """
+                     SELECT * FROM [dbo].[AccountStaff] 
+                     WHERE userName = ? AND passWord = ? AND status = 'Enable'
+                     """;
+
+        try {
+            PreparedStatement stmt = dbContext.getConnection().prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                account = new AccountStaff(
+                        rs.getInt("account_staff_id"), rs.getString("username"), rs.getString("password"),
+                        rs.getString("role"), rs.getString("email"), rs.getString("img"), rs.getBoolean("status")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return account;
+    }
+
+    public static void main(String[] args) {
+        AccountStaffDAO dao = new AccountStaffDAO();
+        AccountStaff staff = dao.getAccountByUsernameAndPassword("doquocdat", "P@ss123");
+        System.out.println(staff);
+    }
+}
