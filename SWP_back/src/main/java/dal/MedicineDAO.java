@@ -1,7 +1,10 @@
 package dal;
 
 import model.MedicineDTO;
+<<<<<<< HEAD
 
+=======
+>>>>>>> a8fc15e07df1e5c7b327c34684658fb816abc6da
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

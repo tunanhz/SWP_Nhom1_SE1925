@@ -1,3 +1,4 @@
+package model;
 public class ServiceInvoice {
     private int serviceInvoiceId;
     private int invoiceId;

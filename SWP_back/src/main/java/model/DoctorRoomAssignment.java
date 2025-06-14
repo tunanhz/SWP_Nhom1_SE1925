@@ -1,3 +1,4 @@
+package model;
 public class DoctorRoomAssignment {
     private int assignmentId;
     private int doctorId;

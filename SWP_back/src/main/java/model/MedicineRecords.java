@@ -1,3 +1,4 @@
+package model;
 public class MedicineRecords {
     private int medicineRecordId;
     private int patientId;

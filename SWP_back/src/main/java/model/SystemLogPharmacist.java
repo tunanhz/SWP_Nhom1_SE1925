@@ -1,3 +1,4 @@
+package model;
 public class SystemLogPharmacist {
     private int logId;
     private int accountPharmacistId;

@@ -1,3 +1,4 @@
+package model;
 public class DoctorSchedule {
     private int scheduleId;
     private int doctorId;

@@ -1,3 +1,4 @@
+package model;
 public class AccountPharmacist {
     private int accountPharmacistId;
     private String username;

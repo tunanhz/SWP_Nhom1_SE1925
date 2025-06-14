@@ -1,3 +1,4 @@
+package model;
 public class Diagnosis {
     private int diagnosisId;
     private int doctorId;

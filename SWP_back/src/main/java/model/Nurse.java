@@ -1,3 +1,4 @@
+package model;
 public class Nurse {
     private int nurseId;
     private String fullName;

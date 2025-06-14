@@ -1,3 +1,4 @@
+package model;
 public class AdminSystem {
     private int adminId;
     private String fullName;
