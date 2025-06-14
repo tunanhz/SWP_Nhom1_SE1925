@@ -1,3 +1,5 @@
+package model;
+
 public class Medicines {
     private int prescriptionInvoiceId;
     private int medicineId;

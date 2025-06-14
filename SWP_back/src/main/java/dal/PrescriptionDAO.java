@@ -2,18 +2,21 @@ package dal;
 
 
 import model.Prescription;
+import model.PrescriptionDTO;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+
 public class PrescriptionDAO {
     DBContext ad = new DBContext();
 
-    public ArrayList<Prescription> getAllPrescriptions(int page, int size) {
-        ArrayList<Prescription> l = new ArrayList<>();
+    public ArrayList<PrescriptionDTO> getAllPrescriptions(int page, int size) {
+        ArrayList<PrescriptionDTO> l = new ArrayList<>();
         String xSql = """
-                      
+                
                 SELECT\s
                           p.prescription_id,
                           p.prescription_date,
@@ -30,7 +33,7 @@ public class PrescriptionDAO {
                       WHERE p.status = 'Pending'
                 ORDER BY p.prescription_id
                                 OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
-                      """;
+                """;
 
         try {
             PreparedStatement ps = ad.getConnection().prepareStatement(xSql);
@@ -40,7 +43,7 @@ public class PrescriptionDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                l.add(new Prescription(rs.getInt("prescription_id"), rs.getDate("prescription_date"),
+                l.add(new PrescriptionDTO(rs.getInt("prescription_id"), rs.getDate("prescription_date"),
                         rs.getNString("status"), rs.getNString("patient_name"),
                         rs.getNString("patient_phone"), rs.getNString("doctor_name"),
                         rs.getNString("doctor_department"), rs.getNString("doctor_Phone")));
@@ -54,29 +57,28 @@ public class PrescriptionDAO {
     }
 
 
-
-    public ArrayList<Prescription> getPrescriptionDetailById(int prescriptionId) {
-        ArrayList<Prescription> list = new ArrayList<>();
+    public ArrayList<PrescriptionDTO> getPrescriptionDetailById(int prescriptionId) {
+        ArrayList<PrescriptionDTO> list = new ArrayList<>();
         String sql = """
-            SELECT 
-                p.prescription_id,
-                p.prescription_date,
-                p.status,
-                pt.full_name AS patient_name,
-                d.full_name AS doctor_name,
-                m.name AS medicine_name,
-                ms.quantity,
-                ms.dosage,
-                m.price
-            FROM Prescription p
-            JOIN MedicineRecords mr ON p.medicineRecord_id = mr.medicineRecord_id
-            JOIN Patient pt ON mr.patient_id = pt.patient_id
-            JOIN Doctor d ON p.doctor_id = d.doctor_id
-            JOIN PrescriptionInvoice pi ON pi.prescription_id = p.prescription_id
-            JOIN Medicines ms ON ms.prescription_invoice_id = pi.prescription_invoice_id
-            JOIN Medicine m ON ms.medicine_id = m.medicine_id
-            WHERE p.prescription_id = ?;
-            """;
+                SELECT 
+                    p.prescription_id,
+                    p.prescription_date,
+                    p.status,
+                    pt.full_name AS patient_name,
+                    d.full_name AS doctor_name,
+                    m.name AS medicine_name,
+                    ms.quantity,
+                    ms.dosage,
+                    m.price
+                FROM Prescription p
+                JOIN MedicineRecords mr ON p.medicineRecord_id = mr.medicineRecord_id
+                JOIN Patient pt ON mr.patient_id = pt.patient_id
+                JOIN Doctor d ON p.doctor_id = d.doctor_id
+                JOIN PrescriptionInvoice pi ON pi.prescription_id = p.prescription_id
+                JOIN Medicines ms ON ms.prescription_invoice_id = pi.prescription_invoice_id
+                JOIN Medicine m ON ms.medicine_id = m.medicine_id
+                WHERE p.prescription_id = ?;
+                """;
 
         try {
             PreparedStatement ps = ad.getConnection().prepareStatement(sql);
@@ -84,7 +86,7 @@ public class PrescriptionDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(new Prescription(
+                list.add(new PrescriptionDTO(
                         rs.getInt("prescription_id"),
                         rs.getDate("prescription_date"),
                         rs.getNString("status"),
