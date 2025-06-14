@@ -1,4 +1,8 @@
 package model;
+<<<<<<< HEAD
+
+=======
+>>>>>>> a8fc15e07df1e5c7b327c34684658fb816abc6da
 public class Medicine {
     private int medicineId;
     private String name;
@@ -16,9 +20,9 @@ public class Medicine {
     public Medicine() {
     }
 
-    public Medicine(int medicineId, String name, int unitId, int categoryId, String ingredient, 
-                   String usage, String preservation, String manuDate, String expDate, 
-                   int quantity, double price, int warehouseId) {
+    public Medicine(int medicineId, String name, int unitId, int categoryId, String ingredient,
+                    String usage, String preservation, String manuDate, String expDate,
+                    int quantity, double price, int warehouseId) {
         this.medicineId = medicineId;
         this.name = name;
         this.unitId = unitId;

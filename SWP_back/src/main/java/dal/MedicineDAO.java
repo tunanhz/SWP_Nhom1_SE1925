@@ -1,6 +1,10 @@
 package dal;
 
 import model.MedicineDTO;
+<<<<<<< HEAD
+
+=======
+>>>>>>> a8fc15e07df1e5c7b327c34684658fb816abc6da
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,16 +16,16 @@ public class MedicineDAO {
     public MedicineDTO getMedicineById(int medicine_id) {
         MedicineDTO medicine = null;
         String sql = """
-            SELECT
-                m.medicine_id,
-                m.name,
-                m.quantity,
-                m.price,
-                w.name AS warehouse_name
-            FROM Medicine m
-            JOIN Warehouse w ON m.warehouse_id = w.warehouse_id
-            WHERE m.medicine_id = ?
-        """;
+                    SELECT
+                        m.medicine_id,
+                        m.name,
+                        m.quantity,
+                        m.price,
+                        w.name AS warehouse_name
+                    FROM Medicine m
+                    JOIN Warehouse w ON m.warehouse_id = w.warehouse_id
+                    WHERE m.medicine_id = ?
+                """;
 
         try {
             PreparedStatement ps = ad.getConnection().prepareStatement(sql);

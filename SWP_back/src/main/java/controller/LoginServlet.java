@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- *
  * @author Datnq
  */
 @WebServlet("/api/login/*")

@@ -9,7 +9,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+<<<<<<< HEAD
+=======
 import model.PrescriptionDTO;
+>>>>>>> a8fc15e07df1e5c7b327c34684658fb816abc6da
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,7 +22,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 @WebServlet("/api/prescription/*")
-
 
 
 public class PrescriptionServlet extends HttpServlet {
@@ -53,8 +55,12 @@ public class PrescriptionServlet extends HttpServlet {
                     sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid page or size parameters");
                     return;
                 }
+<<<<<<< HEAD
+                ArrayList<Prescription> prescriptions = dao.getAllPrescriptions(page, size);
+=======
 
                 ArrayList<PrescriptionDTO> prescriptions = dao.getAllPrescriptions(page, size);
+>>>>>>> a8fc15e07df1e5c7b327c34684658fb816abc6da
                 out.println(gson.toJson(prescriptions));
                 resp.setStatus(HttpServletResponse.SC_OK);
             } else {
@@ -67,8 +73,6 @@ public class PrescriptionServlet extends HttpServlet {
             sendError(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Server error: " + e.getMessage());
         }
     }
-
-
 
 
     private void setCORSHeaders(HttpServletResponse resp) {
@@ -91,9 +95,6 @@ public class PrescriptionServlet extends HttpServlet {
         }
         return Integer.parseInt(param);
     }
-
-
-
 
 
 }
