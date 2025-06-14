@@ -9,6 +9,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.PrescriptionDTO;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -52,7 +54,7 @@ public class PrescriptionServlet extends HttpServlet {
                     return;
                 }
 
-                ArrayList<Prescription> prescriptions = dao.getAllPrescriptions(page, size);
+                ArrayList<PrescriptionDTO> prescriptions = dao.getAllPrescriptions(page, size);
                 out.println(gson.toJson(prescriptions));
                 resp.setStatus(HttpServletResponse.SC_OK);
             } else {

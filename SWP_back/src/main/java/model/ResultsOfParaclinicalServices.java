@@ -1,3 +1,4 @@
+package model;
 public class ResultsOfParaclinicalServices {
     private int resultId;
     private int serviceOrderItemId;

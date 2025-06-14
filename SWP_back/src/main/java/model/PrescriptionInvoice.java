@@ -1,3 +1,4 @@
+package model;
 public class PrescriptionInvoice {
     private int prescriptionInvoiceId;
     private int invoiceId;

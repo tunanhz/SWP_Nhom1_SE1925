@@ -1,3 +1,4 @@
+package model;
 public class AdminBusiness {
     private int adminId;
     private String fullName;

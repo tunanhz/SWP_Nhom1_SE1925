@@ -2,7 +2,7 @@ package controller;
 
 import com.google.gson.JsonObject;
 import dal.PrescriptionDAO;
-import model.Prescription;
+import model.PrescriptionDTO;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -43,7 +43,7 @@ public class PrescriptionDetailServlet extends HttpServlet {
                     return;
                 }
 
-                ArrayList<Prescription> prescriptions = dao.getPrescriptionDetailById(prescriptionId);
+                ArrayList<PrescriptionDTO> prescriptions = dao.getPrescriptionDetailById(prescriptionId);
                 if (prescriptions == null || prescriptions.isEmpty()) {
                     sendError(resp, HttpServletResponse.SC_NOT_FOUND, "Prescription not found");
                     return;

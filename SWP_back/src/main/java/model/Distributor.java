@@ -1,3 +1,4 @@
+package model;
 public class Distributor {
     private int distributorId;
     private String distributorName;

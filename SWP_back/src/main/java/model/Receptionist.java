@@ -1,3 +1,4 @@
+package model;
 public class Receptionist {
     private int receptionistId;
     private String fullName;

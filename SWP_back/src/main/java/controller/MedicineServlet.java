@@ -1,7 +1,7 @@
 package controller;
 import com.google.gson.JsonObject;
 import dal.MedicineDAO;
-import model.Medicine;
+import model.MedicineDTO;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -51,7 +51,7 @@ public class MedicineServlet extends HttpServlet  {
                     return;
                 }
 
-                Medicine medicines = dao.getMedicineById(9);
+                MedicineDTO medicines = dao.getMedicineById(9);
                 out.println(gson.toJsonTree(medicines));
                 resp.setStatus(HttpServletResponse.SC_OK);
             } else {

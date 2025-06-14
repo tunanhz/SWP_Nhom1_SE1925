@@ -1,6 +1,6 @@
 package dal;
 
-import model.Medicine;
+import model.MedicineDTO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,8 +9,8 @@ public class MedicineDAO {
 
     DBContext ad = new DBContext();
 
-    public Medicine getMedicineById(int medicine_id) {
-        Medicine medicine = null;
+    public MedicineDTO getMedicineById(int medicine_id) {
+        MedicineDTO medicine = null;
         String sql = """
             SELECT
                 m.medicine_id,
@@ -29,7 +29,7 @@ public class MedicineDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                medicine = new Medicine(
+                medicine = new MedicineDTO(
                         rs.getInt("medicine_id"),
                         rs.getNString("name"),
                         rs.getInt("quantity"),
