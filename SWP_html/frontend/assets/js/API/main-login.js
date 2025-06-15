@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(data => {
                 console.log('Response from server:', data); // Log để debug
+                localStorage.setItem('account', JSON.stringify(data.account));
 
                 // Kiểm tra phản hồi
                 if (data.success) {
