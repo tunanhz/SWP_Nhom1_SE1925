@@ -14,6 +14,7 @@ public abstract class Account {
     }
 
     public abstract String getRole();
+
     public abstract void displayDashboard();
 
     public String getUsername() {
