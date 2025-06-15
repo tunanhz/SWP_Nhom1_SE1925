@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @WebServlet("/api/patientAppointment/*")
@@ -72,7 +74,7 @@ public class PatientAppointmentServlet extends HttpServlet {
                     return;
                 }
                 int accountPatientId = Integer.parseInt(accountPatientIdParam.trim());
-                String fullName = request.getParameter("fullName");
+                String fullName = request.getParameter("name");
                 String appointmentDateTime = request.getParameter("appointmentDateTime");
                 String status = request.getParameter("status");
                 int page = Integer.parseInt(request.getParameter("page") != null ? request.getParameter("page") : "1");
@@ -85,25 +87,19 @@ public class PatientAppointmentServlet extends HttpServlet {
                     return;
                 }
 
-                // Validate and sanitize appointmentDateTime
-                String validatedDateTime = validateAndParseDateTime(appointmentDateTime);
-                if (appointmentDateTime != null && validatedDateTime == null) {
-                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                    out.print("{\"error\": \"Invalid appointmentDateTime format. Use formats like 'yyyy-MM-dd HH:mm:ss', 'MM/dd/yyyy, HH:mm:ss a', 'yyyy-MM-dd', or 'yyyy-MM'\"}");
-                    return;
-                }
+                String appointmentDateValid = parseDateTime(appointmentDateTime);
 
                 // Log request for debugging
                 LOGGER.info("Fetching appointments for accountPatientId=" + accountPatientId +
-                        ", fullName=" + fullName + ", appointmentDateTime=" + validatedDateTime +
+                        ", fullName=" + fullName + ", appointmentDateTime=" + appointmentDateValid +
                         ", status=" + status + ", page=" + page + ", pageSize=" + pageSize);
 
                 // Get appointments and total count
                 ArrayList<AppointmentDTO> appointments = appointmentDAO.getAppointmentsByAccountPatientId(
-                        accountPatientId, fullName, validatedDateTime, status, page, pageSize);
+                        accountPatientId, fullName, appointmentDateValid, status, page, pageSize);
 
                 int totalAppointment = appointmentDAO.countAppointmentsByAccountPatientId(
-                        accountPatientId, fullName, validatedDateTime, status);
+                        accountPatientId, fullName, appointmentDateValid, status);
                 int totalPages = (int) Math.ceil((double) totalAppointment / pageSize);
 
                 ArrayList<AppointmentPatientDTO> appointmentPatientDTOS = appointmentDAO.getThreeAppointmentsUpcoming(accountPatientId);
@@ -163,60 +159,186 @@ public class PatientAppointmentServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
     }
 
-    private String validateAndParseDateTime(String dateTime) {
-        if (dateTime == null || dateTime.trim().isEmpty()) {
+
+    public static String parseDateTime(String input) {
+        // Return null if input is null
+        if (input == null) {
             return null;
         }
 
-        // Sanitize input
-        String cleanedDateTime = dateTime.trim();
-        if (cleanedDateTime.length() > 25 || !VALID_DATE_PATTERN.matcher(cleanedDateTime).matches()) {
-            LOGGER.warning("Invalid date-time input (length or characters): " + cleanedDateTime);
-            return null;
+        // Check for empty input
+        if (input.trim().isEmpty()) {
+            return "Error: Năm là bắt buộc. Vui lòng nhập năm.";
         }
 
-        // Try parsing with supported formats
-        for (DateTimeFormatter formatter : FORMATTERS) {
-            try {
-                String pattern = formatter.toString();
-                LocalDateTime localDateTime;
+        // Normalize input: replace / with - and trim spaces
+        input = input.trim().replace("/", "-");
 
-                // Handle partial formats (yyyy, yyyy-MM, MM/dd/yyyy, etc.)
-                if (pattern.equals("yyyy-MM") && !cleanedDateTime.contains(":")) {
-                    localDateTime = LocalDateTime.parse(cleanedDateTime + "-01 00:00:00",
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                    return cleanedDateTime; // Return partial for SQL LIKE
-                } else if (pattern.equals("yyyy") && !cleanedDateTime.contains("-") && !cleanedDateTime.contains("/")) {
-                    localDateTime = LocalDateTime.parse(cleanedDateTime + "-01-01 00:00:00",
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                    return cleanedDateTime; // Return year for SQL LIKE
-                } else if (pattern.contains("/yyyy") && !cleanedDateTime.contains(":")) {
-                    // Handle MM/dd/yyyy without time
-                    localDateTime = LocalDateTime.parse(cleanedDateTime + ", 00:00:00 AM",
-                            DateTimeFormatter.ofPattern(pattern + ", HH:mm:ss a"));
-                    return formatter.format(localDateTime).substring(0, 10).replace("/", "-"); // Return yyyy-MM-dd
-                } else {
-                    // Handle full date-time formats
-                    localDateTime = LocalDateTime.parse(cleanedDateTime, formatter);
-                }
+        // Regex patterns for different input formats
+        Pattern fullDateTimePattern = Pattern.compile("^(\\d{4})-(\\d{1,2})-(\\d{1,2})\\s+(\\d{1,2}):(\\d{1,2})$");
+        Pattern dateOnlyPattern = Pattern.compile("^(\\d{4})-(\\d{1,2})-(\\d{1,2})$");
+        Pattern yearMonthPattern = Pattern.compile("^(\\d{4})-(\\d{1,2})$");
+        Pattern yearOnlyPattern = Pattern.compile("^(\\d{4})$");
+        Pattern ddMMyyyyDateTimePattern = Pattern.compile("^(\\d{1,2})-(\\d{1,2})-(\\d{4})\\s+(\\d{1,2}):(\\d{1,2})$");
+        Pattern ddMMyyyyDatePattern = Pattern.compile("^(\\d{1,2})-(\\d{1,2})-(\\d{4})$");
+        Pattern mmDDyyyyDateTimePattern = Pattern.compile("^(\\d{1,2})-(\\d{1,2})-(\\d{4})\\s+(\\d{1,2}):(\\d{1,2})$");
+        Pattern mmDDyyyyDatePattern = Pattern.compile("^(\\d{1,2})-(\\d{1,2})-(\\d{4})$");
+        Pattern mmYYYYPattern = Pattern.compile("^(\\d{1,2})-(\\d{4})$");
 
-                // Validate year range
-                if (localDateTime.getYear() < 1900 || localDateTime.getYear() > 9999) {
-                    LOGGER.warning("Date out of valid range: " + cleanedDateTime);
-                    return null;
-                }
+        Matcher matcher;
 
-                // Return formatted string for SQL LIKE
-                return pattern.contains("h:mm:ss a") || pattern.contains("HH:mm")
-                        ? OUTPUT_FORMATTER.format(localDateTime) // Full date-time
-                        : formatter.format(localDateTime).replace("/", "-"); // Partial date
+        try {
+            // Full date and time (yyyy-mm-dd hh:mm, e.g., 2025-06-15 14:30 or 2025-06-15 4:5)
+            matcher = fullDateTimePattern.matcher(input);
+            if (matcher.matches()) {
+                int year = Integer.parseInt(matcher.group(1));
+                int month = Integer.parseInt(matcher.group(2));
+                int day = Integer.parseInt(matcher.group(3));
+                int hour = Integer.parseInt(matcher.group(4));
+                int minute = Integer.parseInt(matcher.group(5));
 
-            } catch (DateTimeParseException e) {
-                // Continue to try next formatter
+                return validateAndFormatDateTime(year, month, day, hour, minute);
             }
+
+            // Full date and time (dd-mm-yyyy hh:mm, e.g., 15-06-2025 14:30)
+            matcher = ddMMyyyyDateTimePattern.matcher(input);
+            if (matcher.matches()) {
+                int day = Integer.parseInt(matcher.group(1));
+                int month = Integer.parseInt(matcher.group(2));
+                int year = Integer.parseInt(matcher.group(3));
+                int hour = Integer.parseInt(matcher.group(4));
+                int minute = Integer.parseInt(matcher.group(5));
+
+                return validateAndFormatDateTime(year, month, day, hour, minute);
+            }
+
+            // Full date and time (mm-dd-yyyy hh:mm, e.g., 06-15-2025 14:30)
+            matcher = mmDDyyyyDateTimePattern.matcher(input);
+            if (matcher.matches()) {
+                int month = Integer.parseInt(matcher.group(1));
+                int day = Integer.parseInt(matcher.group(2));
+                int year = Integer.parseInt(matcher.group(3));
+                int hour = Integer.parseInt(matcher.group(4));
+                int minute = Integer.parseInt(matcher.group(5));
+
+                return validateAndFormatDateTime(year, month, day, hour, minute);
+            }
+
+            // Date only (yyyy-mm-dd, e.g., 2025-6-5)
+            matcher = dateOnlyPattern.matcher(input);
+            if (matcher.matches()) {
+                int year = Integer.parseInt(matcher.group(1));
+                int month = Integer.parseInt(matcher.group(2));
+                int day = Integer.parseInt(matcher.group(3));
+
+                return validateAndFormatDate(year, month, day);
+            }
+
+            // Date only (dd-mm-yyyy, e.g., 5-6-2025)
+            matcher = ddMMyyyyDatePattern.matcher(input);
+            if (matcher.matches()) {
+                int day = Integer.parseInt(matcher.group(1));
+                int month = Integer.parseInt(matcher.group(2));
+                int year = Integer.parseInt(matcher.group(3));
+
+                return validateAndFormatDate(year, month, day);
+            }
+
+            // Date only (mm-dd-yyyy, e.g., 6-5-2025)
+            matcher = mmDDyyyyDatePattern.matcher(input);
+            if (matcher.matches()) {
+                int month = Integer.parseInt(matcher.group(1));
+                int day = Integer.parseInt(matcher.group(2));
+                int year = Integer.parseInt(matcher.group(3));
+
+                return validateAndFormatDate(year, month, day);
+            }
+
+            // Year and month only (yyyy-mm, e.g., 2025-06)
+            matcher = yearMonthPattern.matcher(input);
+            if (matcher.matches()) {
+                int year = Integer.parseInt(matcher.group(1));
+                int month = Integer.parseInt(matcher.group(2));
+
+                if (month < 1 || month > 12) {
+                    return "Error: Tháng không hợp lệ. Vui lòng nhập tháng từ 1 đến 12.";
+                }
+
+                return String.format("%04d-%02d", year, month);
+            }
+
+            // Month and year only (mm-yyyy, e.g., 06-2025)
+            matcher = mmYYYYPattern.matcher(input);
+            if (matcher.matches()) {
+                int month = Integer.parseInt(matcher.group(1));
+                int year = Integer.parseInt(matcher.group(2));
+
+                if (month < 1 || month > 12) {
+                    return "Error: Tháng không hợp lệ. Vui lòng nhập tháng từ 1 đến 12.";
+                }
+
+                return String.format("%04d-%02d", year, month);
+            }
+
+            // Year only (e.g., 2025)
+            matcher = yearOnlyPattern.matcher(input);
+            if (matcher.matches()) {
+                int year = Integer.parseInt(matcher.group(1));
+                return String.valueOf(year);
+            }
+
+        } catch (NumberFormatException e) {
+            return "Error: Định dạng số không hợp lệ.";
         }
-        //test
-        LOGGER.warning("Failed to parse date-time: " + cleanedDateTime);
-        return null;
+
+        return "Error: Định dạng không hợp lệ. Vui lòng kiểm tra lại đầu vào.";
     }
+
+    private static String validateAndFormatDateTime(int year, int month, int day, int hour, int minute) {
+        // Validate month
+        if (month < 1 || month > 12) {
+            return "Error: Tháng không hợp lệ. Vui lòng nhập tháng từ 1 đến 12.";
+        }
+
+        // Validate day
+        if (!isValidDay(year, month, day)) {
+            return "Error: Ngày không hợp lệ cho tháng và năm đã nhập.";
+        }
+
+        // Validate time
+        if (hour > 23) {
+            return "Error: Giờ không hợp lệ. Vui lòng nhập giờ từ 0 đến 23.";
+        }
+        if (minute > 59) {
+            return "Error: Phút không hợp lệ. Vui lòng nhập phút từ 0 đến 59.";
+        }
+
+        // Format output
+        return String.format("%04d-%02d-%02d %02d:%02d:00", year, month, day, hour, minute);
+    }
+
+    private static String validateAndFormatDate(int year, int month, int day) {
+        // Validate month
+        if (month < 1 || month > 12) {
+            return "Error: Tháng không hợp lệ. Vui lòng nhập tháng từ 1 đến 12.";
+        }
+
+        // Validate day
+        if (!isValidDay(year, month, day)) {
+            return "Error: Ngày không hợp lệ cho tháng và năm đã nhập.";
+        }
+
+        // Format output
+        return String.format("%04d-%02d-%02d", year, month, day);
+    }
+
+    private static boolean isValidDay(int year, int month, int day) {
+        try {
+            LocalDate date = LocalDate.of(year, month, day);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
 }

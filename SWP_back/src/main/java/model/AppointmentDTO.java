@@ -18,7 +18,7 @@ public class AppointmentDTO {
     private String address;
     private String email;
     private String accountStatus;
-    private Timestamp appointmentDateTime; // For both date and time
+    private String appointmentDateTime; // For both date and time
     private String shift;
     private String appointmentStatus;
     private String note;
@@ -29,7 +29,7 @@ public class AppointmentDTO {
     public AppointmentDTO(int accountPatientId, int patientId, Integer doctorId, int appointmentId,
                           Integer receptionistId, String fullName, Date dob, String gender,
                           String phone, String address, String email, String accountStatus,
-                          Timestamp appointmentDateTime, String shift, String appointmentStatus, String note) {
+                          String appointmentDateTime, String shift, String appointmentStatus, String note) {
         this.accountPatientId = accountPatientId;
         this.patientId = patientId;
         this.doctorId = doctorId;
@@ -149,11 +149,11 @@ public class AppointmentDTO {
         this.accountStatus = accountStatus;
     }
 
-    public Timestamp getAppointmentDateTime() {
+    public String getAppointmentDateTime() {
         return appointmentDateTime;
     }
 
-    public void setAppointmentDateTime(Timestamp appointmentDateTime) {
+    public void setAppointmentDateTime(String appointmentDateTime) {
         this.appointmentDateTime = appointmentDateTime;
     }
 
@@ -192,7 +192,7 @@ public class AppointmentDTO {
 
     public void includeDoctor() {
         if (doctorId != null) {
-            DoctorDAO dao =  new DoctorDAO();
+            DoctorDAO dao = new DoctorDAO();
             this.doctor = dao.getDoctorById(this.doctorId);
         }
     }
