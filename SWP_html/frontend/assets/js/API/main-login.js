@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(data => {
                 console.log('Response from server:', data); // Log để debug
+                localStorage.setItem('account', JSON.stringify(data.account));
 
                 // Kiểm tra phản hồi
                 if (data.success) {
@@ -52,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             window.location.href = "./front-end/index.html";
                             break;
                         case 'patient':
-                            window.location.href = '/dashboard/patient-dashboard.html';
+                            window.location.href = '/SWP_html/dashboard/patient-dashboard.html';
                             break;
                         case 'pharmacist':
                             window.location.href = "./front-end/index.html";

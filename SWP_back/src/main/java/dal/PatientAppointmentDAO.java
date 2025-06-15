@@ -56,7 +56,12 @@ public class PatientAppointmentDAO {
                             AND ap.status = 'Enable'
                             AND acs.status = 'Enable'
                             AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-                            AND (? IS NULL OR CONVERT(VARCHAR, a.appointment_datetime, 120) COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                            AND (? IS NULL OR CONVERT(VARCHAR, a.appointment_datetime, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
+                                LIKE CASE
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]' THEN ? + '%'
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                                ELSE ? END)
                             AND (? IS NULL OR a.status COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                         ORDER BY p.patient_id
                         OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
@@ -74,18 +79,24 @@ public class PatientAppointmentDAO {
             stmt.setString(2, nameQuery);
             stmt.setString(3, nameQuery != null ? "%" + nameQuery + "%" : null);
 
-            // Appointment year filter
+            // Appointment
+            stmt.setString(4, appointmentDateTime);
+            stmt.setString(5, "%" + appointmentDateTime + "%");
+            stmt.setString(6, "%" + appointmentDateTime + "%");
+            stmt.setString(7, "%" + appointmentDateTime + "%");
+            stmt.setString(8, "%" + appointmentDateTime + "%");
+            stmt.setString(9, "%" + appointmentDateTime + "%");
+            stmt.setString(10, "%" + appointmentDateTime + "%");
+            stmt.setString(11, "%" + appointmentDateTime + "%");
 
-            stmt.setObject(4, appointmentDateTime);
-            stmt.setObject(5, appointmentDateTime);
             // Status filter
-            stmt.setString(6, status);
-            stmt.setString(7, status != null ? "%" + status + "%" : null);
+            stmt.setString(12, status);
+            stmt.setString(13, status != null ? "%" + status + "%" : null);
 
             // Pagination
             int offset = (page - 1) * pageSize;
-            stmt.setInt(8, offset);
-            stmt.setInt(9, pageSize);
+            stmt.setInt(14, offset);
+            stmt.setInt(15, pageSize);
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -95,17 +106,17 @@ public class PatientAppointmentDAO {
                         rs.getObject("doctor_id") != null ? rs.getInt("doctor_id") : null,
                         rs.getInt("appointment_id"),
                         rs.getObject("receptionist_id") != null ? rs.getInt("receptionist_id") : null,
-                        rs.getString("full_name"),
+                        rs.getNString("full_name"),
                         rs.getDate("dob"),
                         rs.getString("gender"),
                         rs.getString("phone"),
                         rs.getString("address"),
                         rs.getString("email"),
                         rs.getString("account_status"),
-                        rs.getTimestamp("appointment_datetime"),
+                        rs.getString("appointment_datetime"),
                         rs.getString("shift"),
                         rs.getString("appointment_status"),
-                        rs.getString("note")
+                        rs.getNString("note")
                 );
                 dto.includeDoctor();
                 appointments.add(dto);
@@ -138,7 +149,12 @@ public class PatientAppointmentDAO {
                         AND ap.status = 'Enable'
                         AND acs.status = 'Enable'
                         AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-                        AND (? IS NULL OR CONVERT(VARCHAR, a.appointment_datetime, 120) COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                        AND (? IS NULL OR CONVERT(VARCHAR, a.appointment_datetime, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
+                                LIKE CASE
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]' THEN ? + '%'
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                                ELSE ? END)
                         AND (? IS NULL OR a.status COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                 """;
 
@@ -151,13 +167,18 @@ public class PatientAppointmentDAO {
             stmt.setString(3, fullName != null ? "%" + fullName + "%" : null);
 
             // Appointment year filter
-
             stmt.setObject(4, appointmentDateTime);
-            stmt.setObject(5, appointmentDateTime);
+            stmt.setString(5, "%" + appointmentDateTime + "%");
+            stmt.setString(6, "%" + appointmentDateTime + "%");
+            stmt.setString(7, "%" + appointmentDateTime + "%");
+            stmt.setString(8, "%" + appointmentDateTime + "%");
+            stmt.setString(9, "%" + appointmentDateTime + "%");
+            stmt.setString(10, "%" + appointmentDateTime + "%");
+            stmt.setString(11, "%" + appointmentDateTime + "%");
 
             // Status filter
-            stmt.setString(6, status);
-            stmt.setString(7, status != null ? "%" + status + "%" : null);
+            stmt.setString(12, status);
+            stmt.setString(13, status != null ? "%" + status + "%" : null);
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -222,7 +243,7 @@ public class PatientAppointmentDAO {
                         rs.getString("address"),
                         rs.getString("email"),
                         rs.getString("account_status"),
-                        rs.getTimestamp("appointment_datetime"),
+                        rs.getString("appointment_datetime"),
                         rs.getString("shift"),
                         rs.getString("appointment_status"),
                         rs.getString("note")
