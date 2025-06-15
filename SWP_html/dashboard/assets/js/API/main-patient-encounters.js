@@ -1,6 +1,7 @@
+const accountString = localStorage.getItem('account');
+const account = JSON.parse(accountString);
 
-const storedAccountId = localStorage.getItem('accountId');
-const baseAPI = `http://localhost:8080/SWP_back_war_exploded/api/patientAppointment/?accountPatientId=${storedAccountId}`;
+const baseAPI = `http://localhost:8080/SWP_back_war_exploded/api/patientAppointment/?accountPatientId=${account.accountPatientId}`;
 const pageSize = 6;
 const state = {
     currentPage: 1,
@@ -306,7 +307,7 @@ function populateEditFormConfirm(appointment) {
     if (hiddenIdInput) hiddenIdInput.value = appointment.patientId;
 }
 
-async function handleFormSubmission(event) {
+async function handleFormSubmissionConfirm(event) {
     event.preventDefault();
     const form = event.target;
     const patientId = form.querySelector("#patientId").value;
