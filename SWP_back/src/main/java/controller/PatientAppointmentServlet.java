@@ -3,6 +3,8 @@ package controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dal.PatientAppointmentDAO;
+import model.Account;
+import model.AccountPatient;
 import model.AppointmentDTO;
 import model.AppointmentPatientDTO;
 import jakarta.servlet.ServletException;
@@ -31,25 +33,6 @@ public class PatientAppointmentServlet extends HttpServlet {
     private final PatientAppointmentDAO appointmentDAO = new PatientAppointmentDAO();
     private final Gson gson = new Gson();
 
-    // Supported date-time formats
-    private static final List<DateTimeFormatter> FORMATTERS = Arrays.asList(
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
-            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-            DateTimeFormatter.ofPattern("yyyy-MM"),
-            DateTimeFormatter.ofPattern("yyyy"),
-            DateTimeFormatter.ofPattern("M/d/yyyy, h:mm:ss a"),
-            DateTimeFormatter.ofPattern("MM/dd/yyyy, HH:mm:ss a"),
-            DateTimeFormatter.ofPattern("M/d/yyyy"),
-            DateTimeFormatter.ofPattern("MM/dd/yyyy")
-    );
-
-    // Output formatter for SQL compatibility (yyyy-MM-dd HH:mm:ss)
-    private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-    // Input validation pattern (allows digits, hyphens, slashes, colons, spaces, commas, AM/PM)
-    private static final Pattern VALID_DATE_PATTERN = Pattern.compile("^[0-9\\-/:, aApPmM]{0,25}$");
-
     @Override
     protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setCORSHeaders(resp);
@@ -66,8 +49,9 @@ public class PatientAppointmentServlet extends HttpServlet {
 
         if (pathInfo == null || pathInfo.equals("/")) {
             try {
-                // Parse query parameters
+
                 String accountPatientIdParam = request.getParameter("accountPatientId");
+
                 if (accountPatientIdParam == null || accountPatientIdParam.trim().isEmpty()) {
                     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                     out.print("{\"error\": \"accountPatientId is required\"}");

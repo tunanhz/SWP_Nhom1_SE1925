@@ -1,6 +1,6 @@
 package model;
 
-public class AccountPatient extends Account{
+public class AccountPatient extends Account {
     private int accountPatientId;
 
     public AccountPatient() {
@@ -51,10 +51,12 @@ public class AccountPatient extends Account{
     public void setStatus(boolean status) {
         this.status = status;
     }
+
     @Override
     public String getRole() {
         return "patient"; // Triển khai phương thức abstract
     }
+
     @Override
     public void displayDashboard() {
         // Logic redirect hoặc hiển thị dashboard patient, ví dụ:

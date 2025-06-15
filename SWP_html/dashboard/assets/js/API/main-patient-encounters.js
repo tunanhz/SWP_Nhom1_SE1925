@@ -1,4 +1,6 @@
-const baseAPI = "http://localhost:8080/SWP_back_war_exploded/api/patientAppointment/?accountPatientId=1";
+
+const storedAccountId = localStorage.getItem('accountId');
+const baseAPI = `http://localhost:8080/SWP_back_war_exploded/api/patientAppointment/?accountPatientId=${storedAccountId}`;
 const pageSize = 6;
 const state = {
     currentPage: 1,
@@ -16,8 +18,22 @@ function sanitizeHTML(str) {
 function formatDateTime(dateTime) {
     return dateTime ? new Date(dateTime).toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }) : "N/A";
 }
+
 function formatDateTimeConfirm(dateTime) {
     return dateTime ? new Date(dateTime).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) : "N/A";
+}
+
+function formatDateToYYYYMMDD(dateStr) {
+    if (!dateStr) return "N/A";
+
+    const date = new Date(dateStr);
+    if (isNaN(date)) return "Invalid date";
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
 }
 
 function createAppointmentRow(appointment, index) {
@@ -61,7 +77,7 @@ function createAppointmentRow(appointment, index) {
         } else {
             return `
                 <a class="d-inline-block pe-2 edit-btn" data-bs-toggle="offcanvas"
-                   href="#offcanvasEncounterEdit" aria-controls="offcanvasEncounterEdit" aria-label="Edit Appointment"
+                   href="#offcanvasEncounterEditPending" aria-controls="offcanvasEncounterEditPending" aria-label="Edit Appointment"
                    data-appointment='${JSON.stringify(appointment)}'>
                     <span class="text-success">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -274,7 +290,7 @@ function populateEditFormConfirm(appointment) {
     const form = document.querySelector("#offcanvasEncounterEditConfirm form");
 
     if (namePatient) namePatient.value = `${sanitizeHTML(appointment.fullName)}`;
-    if (dateOfBirth) dateOfBirth.value = formatDateTimeConfirm(appointment.dob);
+    if (dateOfBirth) dateOfBirth.value = formatDateToYYYYMMDD(appointment.dob);
     if (gender) gender.value = sanitizeHTML(appointment.gender || "");
     if (phonePatient) phonePatient.value = sanitizeHTML(appointment.phone);
     if (address) address.value = sanitizeHTML(appointment.address);
