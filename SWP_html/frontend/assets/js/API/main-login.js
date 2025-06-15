@@ -1,4 +1,4 @@
-let baseAPI = 'http://localhost:8081/SWP_back_war_exploded/api/loginServlet'; // Điều chỉnh context path
+let baseAPI = 'http://localhost:8080/SWP_back_war_exploded/api/loginServlet'; // Điều chỉnh context path
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('loginForm');
