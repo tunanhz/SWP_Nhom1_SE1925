@@ -30,8 +30,18 @@
 
    <link rel="stylesheet" href="./assets/vendor/sheperd/dist/css/sheperd.css">
 
-   <!-- Sweetlaert2 css -->
-   <link rel="stylesheet" href="./assets/vendor/sweetalert2/dist/sweetalert2.min.css"/>
+   <!-- Choisejs css -->
+   <link rel="stylesheet" href="./assets/vendor/choiceJS/style/choices.min.css">
+
+
+
+
+
+   <!-- Fullcalender CSS -->
+   <link rel='stylesheet' href='./assets/vendor/fullcalendar/core/main.css' />
+   <link rel='stylesheet' href='./assets/vendor/fullcalendar/daygrid/main.css' />
+   <link rel='stylesheet' href='./assets/vendor/fullcalendar/timegrid/main.css' />
+   <link rel='stylesheet' href='./assets/vendor/fullcalendar/list/main.css' />
 
    <!-- Kivicare Design System Css -->
    <link rel="stylesheet" href="./assets/css/kivicare.min.css?v=1.4.1" />
@@ -80,7 +90,7 @@
                   <div class="offcanvas-body">
                      <ul class="iq-nav-menu list-unstyled gap-1">
                         <li class="nav-item">
-                           <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 "
+                           <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0"
                               aria-current="page" href="./patient-dashboard.html">
                               <i class="icon" data-bs-toggle="tooltip" title="Dashboard" data-bs-placement="right">
                                  <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 24 24" fill="none">
@@ -99,7 +109,7 @@
                            </a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 "
+                           <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 active"
                               aria-current="page" href="./patient-appointment.html">
                               <i class="icon" data-bs-toggle="tooltip" title="Appointments" data-bs-placement="right">
                                  <svg width="20" class="icon-20" viewBox="0 0 24 24" fill="none"
@@ -139,7 +149,7 @@
                            </a>
                            <ul class="iq-header-sub-menu list-unstyled collapse" id="allPatitentPages">
                               <li class="nav-item">
-                                 <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 active"
+                                 <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 "
                                     aria-current="page" href="./patient-encounters.html">
                                     <i class="icon" data-bs-toggle="tooltip" title="Encounters" data-bs-placement="right">
                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
@@ -647,260 +657,198 @@
       </nav>            <!--Nav End-->
    </div>
    <div class="content-inner container-fluid pb-0" id="page_layout">
-      <div class="d-flex align-items-sm-center align-items-start justify-content-between gap-5 flex-sm-row flex-column mt-5">
+
+      <div class="d-flex justify-content-between align-items-center mb-5 gap-3 flex-wrap">
          <div>
-            <h1 class="mb-3">Encounters</h1>
-            <span class="mx-0 text-capitalize">you check your total number of appointments and all other information.</span>
+            <h1 class="mt-5">Appointments</h1>
+            <span class="mb-4">Your All Appointment Schedule Is Here.Check Now!</span>
          </div>
-         <a class="btn btn-primary " data-bs-toggle="offcanvas" href="./patient-appointment.html">
+         <button class="btn btn-primary " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddAppointment"
+                 aria-controls="offcanvasAddAppointment">
         <span class="btn-inner">
-            <span class="text d-inline-block align-middle">Add New</span>
+            <span class="text d-inline-block align-middle">Add Appointment</span>
             <span class="icon d-inline-block align-middle ms-1 ps-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
                     <path
                             d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                            fill="currentColor"></path>
+                            fill="currentColor" />
                 </svg>
             </span>
         </span>
-         </a>
+         </button>
       </div>
-      <div class="card-header">
-         <div class="row d-flex align-items-center justify-content-start flex-wrap">
-            <!-- Search Input -->
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-2 mb-md-0">
-               <div class="input-group flex-nowrap">
-                <span class="input-group-text">
-                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
-                        <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
-                </span>
-                  <input type="text" id="appointment-search-name" class="form-control" placeholder="Search Name Patient..." style="border: 1px solid #9fa2a5;">
-               </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-2 mb-md-0">
-               <div class="input-group flex-nowrap">
-                <span class="input-group-text">
-                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
-                        <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
-                </span>
-                  <input type="text" id="appointment-search-date" class="form-control" placeholder="Search Date Appointment (dd/mm/yyyy)..." style="border: 1px solid #9fa2a5;">
-               </div>
-            </div>
-
-            <!-- Department Select -->
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-2 mb-md-0">
-               <select id="status-search" class="form-select border text-body rounded" aria-label="Select status">
-                  <option value="" selected>All Status</option>
-                  <option value="Confirmed">Confirmed</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Cancelled">Cancelled</option>
-               </select>
-            </div>
-
-            <!-- Find Appointment Button -->
-            <div class="col-lg-2 col-md-4 col-sm-12 text-sm-center">
-               <button class="btn btn-outline-primary w-100 w-md-auto px-4"
-
-               >
-                <span class="btn-inner">
-                    <span class="text d-inline-block align-middle">Find Appointment</span>
-                    <span class="icon d-inline-block align-middle ms-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                            <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
-                        </svg>
-                    </span>
-                </span>
-               </button>
-            </div>
-         </div>
-      </div>
-
-      <div class="row pt-5">
-         <div class="col-lg-12">
-            <div class="card" id="infor-Appointment">
-               <!--Thay dữ liệu kết quả-->
-               <div class="card-body">
-                  <div class="table-responsive">
-                     <!--Thay dữ liệu kết quả bảng-->
-                     <table class="table border-end border-start align-middle mb-0 rounded">
-                        <thead class="table-dark">
-                        <tr>
-                           <th scope="col">No.</th>
-                           <th scope="col">Doctors</th>
-                           <th scope="col">Patient</th>
-                           <th scope="col">Clinic Name</th>
-                           <th scope="col">Last Visit</th>
-                           <th scope="col">appointment date</th>
-                           <th scope="col">Add Note</th>
-                           <th scope="col">Status</th>
-                           <th scope="col">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr data-item="list">
-                           <th scope="row">1</th>
-                           <td>
-                              <div class="d-flex align-items-center gap-3">
-                                 <img src="./assets/images/dashboard/dr-amine-louis.png"
-                                      class="img-fluid flex-shrink-0 icon-40 object-fit-cover"
-                                      alt="dr-amine-louis">
-                                 <h5 class="mb-0">Dr. Amine Louis</h5>
-                              </div>
-                           </td>
-                           <td>...</td>
-                           <td>kivicare skin specialist</td>
-                           <td>24 Apr At 10:00 AM</td>
-                           <td>...</td>
-                           <td>Acne Treatment</td>
-                           <td>Completed</td>
-                           <td>
-                              <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                 href="#offcanvasEncounterEditConfirm" aria-controls="offcanvasEncounterEditConfirm">
-                                        <span class="text-success">
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                      d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                      stroke-linejoin="round" />
-                                                <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                        </span>
-                              </a>
-                              <a href="#" class="d-inline-block ps-2 delete-btn">
-                                        <span class="text-danger">
-                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                        d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path
-                                                        d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                            </svg>
-                                        </span>
-                              </a>
-                           </td>
-                        </tr>
-                        <tr data-item="list">
-                           <th scope="row">1</th>
-                           <td>
-                              <div class="d-flex align-items-center gap-3">
-                                 <img src="./assets/images/dashboard/dr-amine-louis.png"
-                                      class="img-fluid flex-shrink-0 icon-40 object-fit-cover"
-                                      alt="dr-amine-louis">
-                                 <h5 class="mb-0">Dr. Amine Louis</h5>
-                              </div>
-                           </td>
-                           <td>...</td>
-                           <td>kivicare skin specialist</td>
-                           <td>24 Apr At 10:00 AM</td>
-                           <td>...</td>
-                           <td>Acne Treatment</td>
-                           <td>Completed</td>
-                           <td>
-                              <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                 href="#offcanvasEncounterEditConfirm" aria-controls="offcanvasEncounterEditConfirm">
-                                        <span class="text-success">
-                                             <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1614 12.0531C15.1614 13.7991 13.7454 15.2141 11.9994 15.2141C10.2534 15.2141 8.83838 13.7991 8.83838 12.0531C8.83838 10.3061 10.2534 8.89111 11.9994 8.89111C13.7454 8.89111 15.1614 10.3061 15.1614 12.0531Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M11.998 19.355C15.806 19.355 19.289 16.617 21.25 12.053C19.289 7.48898 15.806 4.75098 11.998 4.75098H12.002C8.194 4.75098 4.711 7.48898 2.75 12.053C4.711 16.617 8.194 19.355 12.002 19.355H11.998Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                              </a>
-                           </td>
-                        </tr>
-                        </tbody>
-                     </table>
-                     <!--Thay dữ liệu kết quả bảng-->
+      <div class="row">
+         <div class="modal fade" id="add-appointment" data-bs-keyboard="true" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <h5 class="modal-title">Add Appointment</h5>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-               </div>
-               <div class="card-footer pt-0">
-                  <!--Thay phân trang-->
-                  <div class="d-flex justify-content-center mt-4">
-                     <button class="btn btn-secondary text-white me-3" type="button">
-          <span class="btn-inner">
-            <span class="text d-inline-block align-middle">Previous</span>
-            <span class="icon d-inline-block align-middle ms-1 ps-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-              </svg>
-            </span>
-          </span>
-                     </button>
-                     <span class="align-self-center me-3">Page 1 of 8</span>
-                     <button class="btn btn-primary me-3" type="button">
-          <span class="btn-inner">
-            <span class="text d-inline-block align-middle">Next</span>
-            <span class="icon d-inline-block align-middle ms-1 ps-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-              </svg>
-            </span>
-          </span>
-                     </button>
+                  <div class="modal-body">
+                     <form id="add-form" action="javascript:void(0)" method="post">
+                        <div class="d-flex flex-column align-items-start">
+                           <input type="hidden" name="id">
+                           <input type="hidden" name="appointment_type">
+                           <div class=" w-100" id="v-pills-tabContent">
+                              <div class="fade active show" id="-3">
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label for="addtitle" class="col-form-label">Title</label>
+                                    </div>
+                                    <div class="col-10">
+                                       <input type="text" id="addtitle" class="form-control"
+                                              aria-describedby="addtitle">
+                                    </div>
+                                 </div>
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label for="addname" class="col-form-label">Doctor Name</label>
+                                    </div>
+                                    <div class="col-10">
+                                       <input type="text" id="addname" class="form-control"
+                                              aria-describedby="addname">
+                                    </div>
+                                 </div>
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label for="nametitle" class="col-form-label">
+                                          <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
+                                               xmlns="http://www.w3.org/2000/svg">
+                                             <path d="M3.09265 9.40427H20.9166" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M16.4421 13.3097H16.4514" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M12.0046 13.3097H12.0139" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M7.5579 13.3097H7.56717" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M16.4421 17.1962H16.4514" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M12.0046 17.1962H12.0139" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M7.5579 17.1962H7.56717" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M16.0437 2V5.29078" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M7.96552 2V5.29078" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path fill-rule="evenodd" clip-rule="evenodd"
+                                                   d="M16.2383 3.57922H7.77096C4.83427 3.57922 3 5.21516 3 8.22225V17.2719C3 20.3263 4.83427 22 7.77096 22H16.229C19.175 22 21 20.3546 21 17.3475V8.22225C21.0092 5.21516 19.1842 3.57922 16.2383 3.57922Z"
+                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                          </svg>
+                                       </label>
+                                    </div>
+                                    <div class="col-5">
+                                       <input type="text" name="start_date" id="nametitle"
+                                              class="form-control date_flatpicker" placeholder="Select Start Date ">
+                                    </div>
+                                    <div class="col-5">
+                                       <input type="text" name="end_date" class="form-control date_flatpicker"
+                                              placeholder="Select End Date ">
+                                    </div>
+                                 </div>
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label class="col-form-label">
+                                          <svg class="icon-24" width="24" height="24" viewBox="0 0 24 24"
+                                               fill="none" xmlns="http://www.w3.org/2000/svg">
+                                             <path fill-rule="evenodd" clip-rule="evenodd"
+                                                   d="M21.2498 12.0005C21.2498 17.1095 17.1088 21.2505 11.9998 21.2505C6.8908 21.2505 2.7498 17.1095 2.7498 12.0005C2.7498 6.89149 6.8908 2.75049 11.9998 2.75049C17.1088 2.75049 21.2498 6.89149 21.2498 12.0005Z"
+                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M15.4314 14.9429L11.6614 12.6939V7.84689"
+                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                          </svg>
+                                       </label>
+                                    </div>
+                                    <div class="col-10 d-flex align-items-center justify-content-center">
+                                       <input type="text" name="start_time" class="form-control time_flatpicker">
+                                       <span class="mx-2">To</span>
+                                       <input type="text" name="end_time" class="form-control time_flatpicker">
+                                    </div>
+                                 </div>
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label class="col-form-label">
+                                          <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
+                                               xmlns="http://www.w3.org/2000/svg">
+                                             <path d="M13.7474 20.4429H21" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path fill-rule="evenodd" clip-rule="evenodd"
+                                                   d="M12.78 3.79479C13.5557 2.86779 14.95 2.73186 15.8962 3.49173C15.9485 3.53296 17.6295 4.83879 17.6295 4.83879C18.669 5.46719 18.992 6.80311 18.3494 7.82259C18.3153 7.87718 8.81195 19.7645 8.81195 19.7645C8.49578 20.1589 8.01583 20.3918 7.50291 20.3973L3.86353 20.443L3.04353 16.9723C2.92866 16.4843 3.04353 15.9718 3.3597 15.5773L12.78 3.79479Z"
+                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M11.0208 6.00092L16.4731 10.188" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                          </svg>
+                                       </label>
+                                    </div>
+                                    <div class="col-10">
+                                       <select name="service" class="form-select choices-multiple-remove-button"
+                                               multiple>
+                                          <option disabled>Select Services</option>
+                                          <option value="Anesthetics">Anesthetics</option>
+                                          <option value="Cardiology">Cardiology</option>
+                                          <option value="ENT">ENT</option>
+                                          <option value="Gastroenterology">Gastroenterology</option>
+                                       </select>
+                                    </div>
+                                 </div>
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label class="col-form-label">
+                                          <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
+                                               xmlns="http://www.w3.org/2000/svg">
+                                             <path
+                                                     d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341"
+                                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                     stroke-linejoin="round"></path>
+                                             <path fill-rule="evenodd" clip-rule="evenodd"
+                                                   d="M8.82812 10.921L16.3011 3.44799C17.2321 2.51799 18.7411 2.51799 19.6721 3.44799L20.8891 4.66499C21.8201 5.59599 21.8201 7.10599 20.8891 8.03599L13.3801 15.545C12.9731 15.952 12.4211 16.181 11.8451 16.181H8.09912L8.19312 12.401C8.20712 11.845 8.43412 11.315 8.82812 10.921Z"
+                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round"></path>
+                                             <path d="M15.1655 4.60254L19.7315 9.16854" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round"></path>
+                                          </svg>
+                                       </label>
+                                    </div>
+                                    <div class="col-10">
+                                            <textarea name="description" class="form-control" rows="3"
+                                                      placeholder="Description"></textarea>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </form>
+                     <div class="d-flex align-items-center justify-content-center form-check">
+                        <input type="checkbox" class="form-check-input m-0" id="addconfirm2" name="confirm"
+                               value="Bike">
+                        <label class="form-check-label ms-2" for="addconfirm2">Confirm Information</label>
+                     </div>
                   </div>
-                  <!--Thay phân trang-->
-               </div>
-               <!--Thay dữ liệu kết quả-->
-            </div>
-         </div>
-      </div>
-
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEncounterEditConfirm" aria-labelledby="offcanvasEncounterEditConfirmLabel">
-         <div class="offcanvas-header border-bottom">
-            <h3 class="offcanvas-title" id="offcanvasEncounterEditConfirmLabel">Edit Infor Patient</h3>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-         </div>
-         <div class="offcanvas-body">
-            <form id="editEncounterForm">
-               <div class="form-group col-md-12">
-                  <label class="form-label" for="namePatient">Name Patient <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="namePatient" value="Dr. Amine Louis" required>
-               </div>
-               <div class="form-group col-md-12">
-                  <label class="form-label" for="dateOfBirth">Date Of Birth <span class="text-danger">*</span></label>
-                  <input type="date" class="form-control" id="dateOfBirth" value="Dr. Amine Louis" required>
-               </div>
-               <div class="form-group col-md-12">
-                  <label class="form-label" for="gender">Gender <span class="text-danger">*</span></label>
-                  <select class="form-control" id="gender" required>
-                     <option value="" selected>Select Gender</option>
-                     <option value="Nam">Male</option>
-                     <option value="Nữ">Female</option>
-                     <option value="Other">Other</option>
-                  </select>
-               </div>
-               <div class="form-group col-md-12">
-                  <label class="form-label" for="phonePatient">Phone Patient <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="phonePatient" value="Acne Treatment" required>
-               </div>
-               <div class="form-group col-md-12">
-                  <label class="form-label" for="address">Address <span class="text-danger">*</span></label>
-                  <textarea class="form-control" id="address" rows="2" required>Half Of The Treatment Is Done.</textarea>
-               </div>
-               <!-- Hidden input for patientId -->
-               <input type="hidden" id="patientId" value="">
-               <div class="offcanvas-footer border-top">
-                  <div class="d-grid d-md-flex gap-3 p-3">
-                     <button type="submit" class="btn btn-primary">
+                  <div class="modal-footer border-0">
+                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
                         <span class="btn-inner">
-                            <span class="text d-inline-block align-middle">Update</span>
+                            <span class="text d-inline-block align-middle">Discard Changes</span>
                             <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
+                                     fill="none">
                                     <path
                                             d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
                                             fill="currentColor" />
@@ -908,11 +856,12 @@
                             </span>
                         </span>
                      </button>
-                     <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
+                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" name="save">
                         <span class="btn-inner">
-                            <span class="text d-inline-block align-middle">Close</span>
+                            <span class="text d-inline-block align-middle">Save</span>
                             <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
+                                     fill="none">
                                     <path
                                             d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
                                             fill="currentColor" />
@@ -922,56 +871,339 @@
                      </button>
                   </div>
                </div>
-            </form>
+            </div>
+         </div>
+         <div class="modal fade" id="edit-appointment" data-bs-keyboard="true" tabindex="-1"
+              aria-labelledby="edit-appointment" aria-hidden="true">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <h5 class="modal-title">Edit Appointment</h5>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                     <form action="javascript:void(0)" method="post">
+                        <div class="d-flex flex-column align-items-start">
+                           <input type="hidden" name="id">
+                           <input type="hidden" name="appointment_type">
+                           <div class=" w-100" id="app-pills-tabContent">
+                              <div class="fade active show" id="v-pills-home-3">
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label for="title-drop-1" class="col-form-label">Title</label>
+                                    </div>
+                                    <div class="col-10">
+                                       <input type="text" id="title-drop-1" class="form-control"
+                                              aria-describedby="title-drop-1">
+                                    </div>
+                                 </div>
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label for="dr-name-1" class="col-form-label">Doctor Name</label>
+                                    </div>
+                                    <div class="col-10">
+                                       <input type="text" id="dr-name-1" class="form-control"
+                                              aria-describedby="dr-name-1">
+                                    </div>
+                                 </div>
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label class="col-form-label">
+                                          <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
+                                               xmlns="http://www.w3.org/2000/svg">
+                                             <path d="M3.09265 9.40427H20.9166" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M16.4421 13.3097H16.4514" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M12.0046 13.3097H12.0139" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M7.5579 13.3097H7.56717" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M16.4421 17.1962H16.4514" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M12.0046 17.1962H12.0139" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M7.5579 17.1962H7.56717" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M16.0437 2V5.29078" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M7.96552 2V5.29078" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path fill-rule="evenodd" clip-rule="evenodd"
+                                                   d="M16.2383 3.57922H7.77096C4.83427 3.57922 3 5.21516 3 8.22225V17.2719C3 20.3263 4.83427 22 7.77096 22H16.229C19.175 22 21 20.3546 21 17.3475V8.22225C21.0092 5.21516 19.1842 3.57922 16.2383 3.57922Z"
+                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                          </svg>
+                                       </label>
+                                    </div>
+                                    <div class="col-5">
+                                       <input type="text" name="start_date" class="form-control date_flatpicker"
+                                              placeholder="Select Start Date ">
+                                    </div>
+                                    <div class="col-5">
+                                       <input type="text" name="end_date" class="form-control date_flatpicker"
+                                              placeholder="Select End Date ">
+                                    </div>
+                                 </div>
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label class="col-form-label">
+                                          <svg class="icon-24" width="24" height="24" viewBox="0 0 24 24"
+                                               fill="none" xmlns="http://www.w3.org/2000/svg">
+                                             <path fill-rule="evenodd" clip-rule="evenodd"
+                                                   d="M21.2498 12.0005C21.2498 17.1095 17.1088 21.2505 11.9998 21.2505C6.8908 21.2505 2.7498 17.1095 2.7498 12.0005C2.7498 6.89149 6.8908 2.75049 11.9998 2.75049C17.1088 2.75049 21.2498 6.89149 21.2498 12.0005Z"
+                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M15.4314 14.9429L11.6614 12.6939V7.84689"
+                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                          </svg>
+                                       </label>
+                                    </div>
+                                    <div class="col-10 d-flex align-items-center justify-content-center">
+                                       <input type="text" name="start_time" class="form-control time_flatpicker">
+                                       <span class="mx-2">To</span>
+                                       <input type="text" name="end_time" class="form-control time_flatpicker">
+                                    </div>
+                                 </div>
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label class="col-form-label">
+                                          <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
+                                               xmlns="http://www.w3.org/2000/svg">
+                                             <path d="M13.7474 20.4429H21" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path fill-rule="evenodd" clip-rule="evenodd"
+                                                   d="M12.78 3.79479C13.5557 2.86779 14.95 2.73186 15.8962 3.49173C15.9485 3.53296 17.6295 4.83879 17.6295 4.83879C18.669 5.46719 18.992 6.80311 18.3494 7.82259C18.3153 7.87718 8.81195 19.7645 8.81195 19.7645C8.49578 20.1589 8.01583 20.3918 7.50291 20.3973L3.86353 20.443L3.04353 16.9723C2.92866 16.4843 3.04353 15.9718 3.3597 15.5773L12.78 3.79479Z"
+                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                             <path d="M11.0208 6.00092L16.4731 10.188" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round" />
+                                          </svg>
+                                       </label>
+                                    </div>
+                                    <div class="col-10">
+                                       <select name="service" class="form-select choices-multiple-remove-button"
+                                               multiple>
+                                          <option disabled>Select Services</option>
+                                          <option value="Anesthetics">Anesthetics</option>
+                                          <option value="Cardiology">Cardiology</option>
+                                          <option value="ENT">ENT</option>
+                                          <option value="Gastroenterology">Gastroenterology</option>
+                                       </select>
+                                    </div>
+                                 </div>
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
+                                       <label class="col-form-label">
+                                          <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
+                                               xmlns="http://www.w3.org/2000/svg">
+                                             <path
+                                                     d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341"
+                                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                     stroke-linejoin="round"></path>
+                                             <path fill-rule="evenodd" clip-rule="evenodd"
+                                                   d="M8.82812 10.921L16.3011 3.44799C17.2321 2.51799 18.7411 2.51799 19.6721 3.44799L20.8891 4.66499C21.8201 5.59599 21.8201 7.10599 20.8891 8.03599L13.3801 15.545C12.9731 15.952 12.4211 16.181 11.8451 16.181H8.09912L8.19312 12.401C8.20712 11.845 8.43412 11.315 8.82812 10.921Z"
+                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round"></path>
+                                             <path d="M15.1655 4.60254L19.7315 9.16854" stroke="currentColor"
+                                                   stroke-width="1.5" stroke-linecap="round"
+                                                   stroke-linejoin="round"></path>
+                                          </svg>
+                                       </label>
+                                    </div>
+                                    <div class="col-10">
+                                            <textarea name="description" class="form-control" rows="3"
+                                                      placeholder="Description"></textarea>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </form>
+                     <div class="d-flex align-items-center justify-content-center">
+                        <input type="checkbox" id="editconfirm" name="confirm" value="Bike">
+                        <label for="editconfirm" class="ms-2"> Confirm Information</label>
+                     </div>
+                  </div>
+                  <div class="modal-footer border-0">
+                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                        <span class="btn-inner">
+                            <span class="text d-inline-block align-middle">Discard Changes</span>
+                            <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
+                                     fill="none">
+                                    <path
+                                            d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                            fill="currentColor" />
+                                </svg>
+                            </span>
+                        </span>
+                     </button>
+                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <span class="btn-inner">
+                            <span class="text d-inline-block align-middle">Save</span>
+                            <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
+                                     fill="none">
+                                    <path
+                                            d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                            fill="currentColor" />
+                                </svg>
+                            </span>
+                        </span>
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col-lg-12 calendar-s">
+            <div class="card">
+               <div class="card-header">
+                  <div class="row align-items-center">
+                     <div class="col-lg-6 col-md-4">
+                        <div class="dropdown f-none">
+                           <button class="dropdown btn border text-body p-33 mb-3 mb-md-0 rounded"
+                                   id="dropdownMenuAppointment" data-bs-toggle="dropdown" aria-expanded="false">
+                              <svg class="icon-30 bg-primary-subtle p-1 me-2" viewBox="0 0 24 24" fill="none"
+                                   xmlns="http://www.w3.org/2000/svg">
+                                 <path fill-rule="evenodd" clip-rule="evenodd"
+                                       d="M3 16.87V9.25699H21V16.931C21 20.07 19.0241 22 15.8628 22H8.12733C4.99561 22 3 20.03 3 16.87ZM7.95938 14.41C7.50494 14.431 7.12953 14.07 7.10977 13.611C7.10977 13.151 7.46542 12.771 7.91987 12.75C8.36443 12.75 8.72997 13.101 8.73985 13.55C8.7596 14.011 8.40395 14.391 7.95938 14.41ZM12.0198 14.41C11.5653 14.431 11.1899 14.07 11.1701 13.611C11.1701 13.151 11.5258 12.771 11.9802 12.75C12.4248 12.75 12.7903 13.101 12.8002 13.55C12.82 14.011 12.4643 14.391 12.0198 14.41ZM16.0505 18.09C15.596 18.08 15.2305 17.7 15.2305 17.24C15.2206 16.78 15.5862 16.401 16.0406 16.391H16.0505C16.5148 16.391 16.8902 16.771 16.8902 17.24C16.8902 17.71 16.5148 18.09 16.0505 18.09ZM11.1701 17.24C11.1899 17.7 11.5653 18.061 12.0198 18.04C12.4643 18.021 12.82 17.641 12.8002 17.181C12.7903 16.731 12.4248 16.38 11.9802 16.38C11.5258 16.401 11.1701 16.78 11.1701 17.24ZM7.09989 17.24C7.11965 17.7 7.49506 18.061 7.94951 18.04C8.39407 18.021 8.74973 17.641 8.72997 17.181C8.72009 16.731 8.35456 16.38 7.90999 16.38C7.45554 16.401 7.09989 16.78 7.09989 17.24ZM15.2404 13.601C15.2404 13.141 15.596 12.771 16.0505 12.761C16.4951 12.761 16.8507 13.12 16.8705 13.561C16.8804 14.021 16.5247 14.401 16.0801 14.41C15.6257 14.42 15.2503 14.07 15.2404 13.611V13.601Z"
+                                       fill="currentColor"></path>
+                                 <path opacity="0.4"
+                                       d="M3.00336 9.2569C3.0162 8.6699 3.0656 7.5049 3.15846 7.1299C3.63267 5.0209 5.24298 3.6809 7.54485 3.4899H16.4559C18.738 3.6909 20.3681 5.0399 20.8423 7.1299C20.9342 7.4949 20.9836 8.6689 20.9964 9.2569H3.00336Z"
+                                       fill="currentColor"></path>
+                                 <path
+                                         d="M8.30486 6.59C8.73955 6.59 9.06556 6.261 9.06556 5.82V2.771C9.06556 2.33 8.73955 2 8.30486 2C7.87017 2 7.54416 2.33 7.54416 2.771V5.82C7.54416 6.261 7.87017 6.59 8.30486 6.59Z"
+                                         fill="currentColor"></path>
+                                 <path
+                                         d="M15.6949 6.59C16.1197 6.59 16.4556 6.261 16.4556 5.82V2.771C16.4556 2.33 16.1197 2 15.6949 2C15.2603 2 14.9342 2.33 14.9342 2.771V5.82C14.9342 6.261 15.2603 6.59 15.6949 6.59Z"
+                                         fill="currentColor"></path>
+                              </svg>
+                              <span class="fw-500 text-primary">All Appointments</span>
+                              <svg width="8" class="ms-1 transform-up" viewBox="0 0 12 8" fill="none"
+                                   xmlns="http://www.w3.org/2000/svg">
+                                 <path fill-rule="evenodd" clip-rule="evenodd"
+                                       d="M6 5.08579L10.2929 0.792893C10.6834 0.402369 11.3166 0.402369 11.7071 0.792893C12.0976 1.18342 12.0976 1.81658 11.7071 2.20711L6.70711 7.20711C6.31658 7.59763 5.68342 7.59763 5.29289 7.20711L0.292893 2.20711C-0.0976311 1.81658 -0.0976311 1.18342 0.292893 0.792893C0.683418 0.402369 1.31658 0.402369 1.70711 0.792893L6 5.08579Z"
+                                       fill="currentColor"></path>
+                              </svg>
+                           </button>
+                           <ul class="dropdown-menu dropdown-menu-soft-primary"
+                               aria-labelledby="dropdownMenuAppointment">
+                              <li><a class="dropdown-item active" href="#">View</a></li>
+                              <li><a class="dropdown-item" href="#">Edit</a></li>
+                              <li><a class="dropdown-item" href="#">Delete</a></li>
+                              <li><a class="dropdown-item" href="#">Update</a></li>
+                              <li><a class="dropdown-item" href="#">Download</a></li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div class="col-lg-6 col-md-8 text-sm-start text-md-end">
+                        <div class="btn-toolbar d-inline-flex  gap-3 flex-wrap mb-0 flex-column flex-md-row">
+                           <div class="input-group flex-nowrap">
+                                <span class="input-group-text">
+                                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        </circle>
+                                        <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5"
+                                              stroke-linecap="round" stroke-linejoin="round">
+                                        </path>
+                                    </svg>
+                                </span>
+                              <input type="text" class="form-control" placeholder="Search Here...">
+                           </div>
+                           <div>
+                              <button class="btn btn-outline-primary px-4">
+                                    <span class="btn-inner">
+                                        <span class="text d-inline-block align-middle">Find Appointments</span>
+                                        <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                                 viewBox="0 0 8 8" fill="none">
+                                                <path
+                                                        d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                                        fill="currentColor" />
+                                            </svg>
+                                        </span>
+                                    </span>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="card-body pt-0">
+                  <div id="bookingcalendar" class="rounded overflow-hidden"></div>
+               </div>
+            </div>
          </div>
       </div>
 
-
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEncounterView"
-           aria-labelledby="offcanvasEncounterViewLabel">
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddAppointment" aria-labelledby="offcanvasAddAppointmentLabel">
          <div class="offcanvas-header border-bottom">
-            <h3 class="offcanvas-title" id="offcanvasEncounterViewLabel">View Encounters</h3>
+            <h3 class="offcanvas-title" id="offcanvasAddAppointmentLabel">Add Appointment</h3>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
          </div>
          <div class="offcanvas-body">
             <div class="form-group col-md-12">
-               <label class="form-label" for="Name">Name <span class="text-danger">*</span></label>
-               <input type="text" class="form-control" id="Name" value="Dr. Amine Louis">
+               <label class="form-label" >Title <span class="text-danger">*</span></label>
+               <input type="text" class="form-control">
+               <span class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-12">
+               <label class="form-label" >Doctor Name <span class="text-danger">*</span></label>
+               <input type="text" class="form-control">
+               <span class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-12">
+               <label class="form-label" >Date And Time <span class="text-danger">*</span></label>
+               <input type="text" class="form-control date_flatpicker flatpickr-input active" readonly="readonly">
             </div>
             <div class="form-group">
-               <div class="d-flex justify-content-between align-items-center">
-                  <label class="form-label" for="profile_image">Profile Image</label>
-               </div>
-               <input type="file" class="form-control" id="profile_image" accept=".jpeg, .jpg, .png, .gif">
+               <label class="form-label">Select Services <span class="text-danger">*</span></label>
+               <select class="form-control select2-basic-single" >
+                  <option>Select</option>
+                  <option>Anesthetics</option>
+                  <option>Cardiology</option>
+                  <option>ENT</option>
+                  <option>Gastroenterology</option>
+               </select>
             </div>
             <div class="form-group col-md-12">
-               <label class="form-label" for="ClinicName">Clinic Name <span class="text-danger">*</span></label>
-               <input type="text" class="form-control" id="ClinicName" value="kivicare skin specialist">
-            </div>
-            <div class="form-group col-md-12">
-               <label class="form-label" for="datetime">Last Visit <span class="text-danger">*</span></label>
-               <input type="text" id="datetime" class="form-control date_flatpicker flatpickr-input active" value="2023-04-24" readonly="readonly">
-
-            </div>
-            <div class="form-group col-md-12">
-               <label class="form-label" for="reason">Reason <span class="text-danger">*</span></label>
-               <input type="text" class="form-control" id="reason" value="Acne Treatment">
-            </div>
-            <div class="form-group col-md-12">
-               <label class="form-label" for="note">Add Note <span class="text-danger">*</span></label>
-               <textarea class="form-control" id="note" rows="2">Half Of The Treatment Is Done.</textarea>
+               <label class="form-label" for="add_note">Description </label>
+               <textarea class="form-control" rows="2">Provide Description</textarea>
             </div>
          </div>
          <div class="offcanvas-footer border-top">
             <div class="d-grid d-md-flex gap-3 p-3">
-               <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
+               <button type="reset" class="btn btn-primary d-block">
+                <span class="btn-inner">
+                    <span class="text d-inline-block align-middle">Save</span>
+                    <span class="icon d-inline-block align-middle ms-1 ps-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                            <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
+                        </svg>
+                    </span>
+                </span>
+               </button>
+               <button class="btn btn-secondary d-block" type="button" data-bs-dismiss="offcanvas">
                 <span class="btn-inner">
                     <span class="text d-inline-block align-middle">Close</span>
                     <span class="icon d-inline-block align-middle ms-1 ps-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                            <path
-                                    d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                    fill="currentColor" />
+                            <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
                         </svg>
                     </span>
                 </span>
@@ -979,70 +1211,6 @@
             </div>
          </div>
       </div>
-
-      <!--<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEncounterAdd"
-          aria-labelledby="offcanvasEncounterAddLabel">
-          <div class="offcanvas-header border-bottom">
-              <h3 class="offcanvas-title" id="offcanvasEncounterAddLabel">Add Encounters</h3>
-              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-          </div>
-          <div class="offcanvas-body">
-              <div class="form-group col-md-12">
-                  <label class="form-label" for="add_Name">Name <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="add_Name">
-              </div>
-              <div class="form-group">
-                  <div class="d-flex justify-content-between align-items-center">
-                      <label class="form-label" for="add_profile_image">Profile Image</label>
-                  </div>
-                  <input type="file" class="form-control" id="add_profile_image" accept=".jpeg, .jpg, .png, .gif">
-              </div>
-              <div class="form-group col-md-12">
-                  <label class="form-label" for="Add_ClinicName">Clinic Name <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="Add_ClinicName">
-              </div>
-              <div class="form-group col-md-12">
-                  <label class="form-label" for="add_datetime">Last Visit <span class="text-danger">*</span></label>
-                  <input type="text" id="add_datetime" class="form-control date_flatpicker flatpickr-input active" readonly="readonly">
-              </div>
-              <div class="form-group col-md-12">
-                  <label class="form-label" for="add_reason">Reason <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="add_reason">
-              </div>
-              <div class="form-group col-md-12">
-                  <label class="form-label" for="add_note">Add Note <span class="text-danger">*</span></label>
-                  <textarea class="form-control" id="add_note" rows="2"></textarea>
-              </div>
-          </div>
-          <div class="offcanvas-footer border-top">
-              <div class="d-grid d-md-flex gap-3 p-3">
-                  <button type="submit" class="btn btn-primary">
-                      <span class="btn-inner">
-                          <span class="text d-inline-block align-middle">Save</span>
-                          <span class="icon d-inline-block align-middle ms-1 ps-2">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                                  <path
-                                      d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                      fill="currentColor" />
-                              </svg>
-                          </span>
-                      </span>
-                  </button>
-                  <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
-                      <span class="btn-inner">
-                          <span class="text d-inline-block align-middle">Close</span>
-                          <span class="icon d-inline-block align-middle ms-1 ps-2">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                                  <path
-                                      d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                      fill="currentColor" />
-                              </svg>
-                          </span>
-                      </span>
-                  </button>
-              </div>
-          </div>
-      </div>-->
    </div>
    <!-- Footer Section Start -->
    <footer class="footer">
@@ -1864,10 +2032,6 @@
       </div>
    </div>
 </div>
-
-<!--API Main-->
-<script src="./assets/js/API/main-patient-encounters.js"></script>
-
 <!-- Library Bundle Script -->
 <script src="./assets/js/core/libs.min.js"></script>
 <!-- Plugin Scripts -->
@@ -1889,10 +2053,10 @@
 <script src="./assets/js/plugins/fslightbox.js" defer></script>
 
 
-<!-- Sweet-alert Script -->
-<script src="./assets/vendor/sweetalert2/dist/sweetalert2.min.js" async></script>
-<script src="./assets/js/plugins/sweet-alert.js" defer></script>
 
+<!-- Choisejs Script -->
+<script src="./assets/vendor/choiceJS/script/choices.min.js"></script>
+<script src="./assets/js/plugins/choice.js" defer></script>
 
 <!-- Select2 Script -->
 <script src="./assets/js/plugins/select2.js" defer></script>
@@ -1921,7 +2085,14 @@
 
 <!-- Icons -->
 <script src="./assets/js/solid-icon-search-filter.js?v=1.4.1" defer></script>
-
-
+<!-- Fullcalender Javascript -->
+<script src="./assets/js/plugins/bookappointment.js"></script>
+<script src='./assets/vendor/fullcalendar/core/main.js'></script>
+<script src='./assets/vendor/fullcalendar/daygrid/main.js'></script>
+<script src='./assets/vendor/fullcalendar/timegrid/main.js'></script>
+<script src='./assets/vendor/fullcalendar/list/main.js'></script>
+<script src='./assets/vendor/fullcalendar/interaction/main.js'></script>
+<script src='./assets/vendor/moment.min.js'></script>
+<script src='./assets/js/plugins/calender.js'></script>
 </body>
 </html>

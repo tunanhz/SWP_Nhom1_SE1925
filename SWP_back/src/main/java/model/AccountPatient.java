@@ -2,7 +2,7 @@ package model;
 
 public class AccountPatient extends Account {
     private int accountPatientId;
-
+    
     public AccountPatient() {
         super("", "", "", false);
     }
