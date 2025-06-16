@@ -312,8 +312,8 @@ public class PatientAppointmentDAO {
                         rs.getString("appointment_time"),
                         rs.getString("days_until_appointment"),
                         rs.getString("message"),
-                        rs.getString("shift"),
                         rs.getString("appointment_status"),
+                        rs.getString("shift"),
                         rs.getString("note")
                 );
                 appointmentDTOS.add(dto);
@@ -323,6 +323,22 @@ public class PatientAppointmentDAO {
             throw new RuntimeException("Failed to fetch appointments", e);
         }
         return appointmentDTOS;
+    }
+
+    public boolean deleteAppointmentById(int appointmentId) {
+        String sql = """
+                DELETE FROM [dbo].[Appointment]
+                WHERE [appointment_id] = ?
+                """;
+
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+            stmt.setInt(1, appointmentId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void main(String[] args) {

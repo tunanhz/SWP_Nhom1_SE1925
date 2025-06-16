@@ -17,7 +17,21 @@ function sanitizeHTML(str) {
 }
 
 function formatDateTime(dateTime) {
-    return dateTime ? new Date(dateTime).toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }) : "N/A";
+    if (!dateTime) return "N/A";
+    const options = {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+    };
+    const date = new Date(dateTime);
+    const timePart = date.toLocaleTimeString('en-US', options);
+    const day = date.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', day: '2-digit' });
+    const month = date.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', month: '2-digit' });
+    const year = date.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric' });
+
+    return `${timePart}, ${day}/${month}/${year}`;
 }
 
 function formatDateTimeConfirm(dateTime) {
@@ -45,8 +59,9 @@ function createAppointmentRow(appointment, index) {
     const renderActionButtons = () => {
         if (isCompleted) {
             return `
-                <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                   href="#offcanvasEncounterView" aria-controls="offcanvasEncounterView" aria-label="View Appointment">
+                <a class="d-inline-block pe-2 view-btn" data-bs-toggle="offcanvas"
+                   href="#offcanvasEncounterView" aria-controls="offcanvasEncounterView" aria-label="View Appointment"
+                   data-appointment='${JSON.stringify(appointment)}'>
                     <span class="text-success">
                         <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd" 
@@ -61,7 +76,7 @@ function createAppointmentRow(appointment, index) {
             `;
         } else if (isConfirmed) {
             return `
-                <a class="d-inline-block pe-2 edit-btn" data-bs-toggle="offcanvas"
+                <a class="d-inline-block pe-2 edit-btn1" data-bs-toggle="offcanvas"
                    href="#offcanvasEncounterEditConfirm" aria-controls="offcanvasEncounterEditConfirm" aria-label="Edit Appointment"
                    data-appointment='${JSON.stringify(appointment)}'>
                     <span class="text-success">
@@ -77,7 +92,7 @@ function createAppointmentRow(appointment, index) {
             `;
         } else {
             return `
-                <a class="d-inline-block pe-2 edit-btn" data-bs-toggle="offcanvas"
+                <a class="d-inline-block pe-2 edit-btn2" data-bs-toggle="offcanvas"
                    href="#offcanvasEncounterEditPending" aria-controls="offcanvasEncounterEditPending" aria-label="Edit Appointment"
                    data-appointment='${JSON.stringify(appointment)}'>
                     <span class="text-success">
@@ -220,10 +235,27 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
         container.innerHTML = appointments.length ? appointmentTable + paginationHTML : '<p>No Appointments found.</p>';
 
         // Attach event listeners for edit buttons
-        container.querySelectorAll(".edit-btn").forEach(button => {
+        container.querySelectorAll(".edit-btn1").forEach(button => {
             button.addEventListener("click", function(e) {
                 const appointment = JSON.parse(this.dataset.appointment);
                 populateEditFormConfirm(appointment);
+            });
+        });
+
+        // Attach event listeners for edit buttons
+        container.querySelectorAll(".edit-btn2").forEach(button => {
+            button.addEventListener("click", function(e) {
+                const appointment = JSON.parse(this.dataset.appointment);
+                populateEditFormPending(appointment);
+            });
+        });
+
+
+        // Attach event listeners for edit buttons
+        container.querySelectorAll(".view-btn").forEach(button => {
+            button.addEventListener("click", function(e) {
+                const appointment = JSON.parse(this.dataset.appointment);
+                populateView(appointment);
             });
         });
 
@@ -249,11 +281,8 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                             if (!response.ok) {
                                 throw new Error("Failed to delete appointment");
                             }
-                            this.closest('[data-item="list"]').remove();
                             Swal.fire("Deleted!", "Your appointment has been deleted.", "success");
-                            if (container.querySelectorAll('[data-item="list"]').length === 0 && state.currentPage > 1) {
-                                displayAppointment(state.currentPage - 1);
-                            }
+                            await displayAppointment(state.currentPage, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
                         } catch (error) {
                             Swal.fire("Error!", "Could not delete appointment. Please try again.", "error");
                             console.error("Delete error:", error);
@@ -312,35 +341,161 @@ async function handleFormSubmissionConfirm(event) {
     const form = event.target;
     const patientId = form.querySelector("#patientId").value;
     const namePatient = form.querySelector("#namePatient").value;
-    const dateOfBirth = form.querySelector("#dateOfBirth").value;
+    const dob = form.querySelector("#dateOfBirth").value;
     const gender = form.querySelector("#gender").value;
     const phonePatient = form.querySelector("#phonePatient").value;
     const address = form.querySelector("#address").value;
+
+
+    if (!patientId || isNaN(patientId)) {
+        Swal.fire("Error!", "Invalid patient ID", "error");
+        return;
+    }
+
+    if (!namePatient || namePatient.length > 100 || /\s{2,}/.test(namePatient)) {
+        Swal.fire("Error!", "Full name must be max 100 characters and contain single spaces only", "error");
+        return;
+    }
+
+    if (!phonePatient || !/^[0][1-9]{9}$/.test(phonePatient)) {
+        Swal.fire("Error!", "Phone number must be exactly 10 digits and start with 0", "error");
+        return;
+    }
+
+    if (address.length > 225) {
+        Swal.fire("Error!", "Address must not exceed 225 characters", "error");
+        return;
+    }
+
+    try {
+        if (!patientId || isNaN(patientId)) {
+            throw new Error("Invalid patient ID");
+        }
+
+        const patientData = {
+            fullName: namePatient,
+            dob: dob,
+            gender: gender || null,
+            phone: phonePatient,
+            address: address
+        };
+        const url = `http://localhost:8080/SWP_back_war_exploded/api/patient/${patientId}`;
+        console.log("Sending PUT to:", url);
+        console.log("Data:", patientData);
+
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(patientData)
+        });
+
+        if (!response) {
+            throw new Error("No response received from server");
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        Swal.fire("Success!", "Patient updated successfully.", "success");
+        bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasEncounterEditConfirm")).hide();
+        displayAppointment(state.currentPage);
+    } catch (error) {
+        console.error("Update error:", error);
+        Swal.fire("Error!", `Could not update patient: ${error.message}`, "error");
+    }
+}
+
+function populateEditFormPending(appointment) {
+    // Populate form fields
+    const appointmentDateTime = document.getElementById("appointmentDateTime");
+    const note = document.getElementById("note");
+    const appointmentStatus = document.getElementById("appointmentStatus");
+
+    const form = document.querySelector("#editPendingAppointmentForm");
+
+    if (appointmentDateTime) {
+        // Convert appointmentDateTime to datetime-local format (YYYY-MM-DDTHH:MM)
+        const date = new Date(appointment.appointmentDateTime);
+        if (!isNaN(date)) {
+            const formattedDateTime = date.toISOString().slice(0, 16); // e.g., 2025-06-15T10:30
+            appointmentDateTime.value = formattedDateTime;
+        } else {
+            appointmentDateTime.value = "";
+        }
+    }
+    if (note) note.value = sanitizeHTML(appointment.note || "");
+    if (appointmentStatus) appointmentStatus.value = sanitizeHTML(appointment.appointmentStatus || "");
+
+    // Store appointment ID in a hidden input
+    let hiddenIdInput = form ? form.querySelector("#appointmentId") : null;
+    if (!hiddenIdInput && form) {
+        hiddenIdInput = document.createElement("input");
+        hiddenIdInput.type = "hidden";
+        hiddenIdInput.id = "appointmentId";
+        form.appendChild(hiddenIdInput);
+    }
+    if (hiddenIdInput) hiddenIdInput.value = appointment.appointmentId;
+}
+
+async function handleFormSubmissionPending(event) {
+    event.preventDefault();
+    const form = event.target;
+    const appointmentId = form.querySelector("#appointmentId").value;
+    const appointmentDateTime = form.querySelector("#appointmentDateTime").value;
+    const note = form.querySelector("#note").value;
+    const appointmentStatus = form.querySelector("#appointmentStatus").value;
+
     try {
         const formData = new FormData();
-        formData.append("fullName", namePatient);
-        formData.append("dob", dateOfBirth);
-        formData.append("gender", gender);
-        formData.append("phone", phonePatient);
-        formData.append("address", address);
+        formData.append("appointmentDateTime", appointmentDateTime);
+        formData.append("note", note);
+        formData.append("appointmentStatus", appointmentStatus);
 
-        const response = await fetch(`${baseAPI.split('?')[0]}/${patientId}`, {
+        const response = await fetch(`${baseAPI.split('?')[0]}/${appointmentId}`, {
             method: "PUT",
             body: formData
         });
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || "Failed to update patient update");
+            throw new Error(errorData.error || "Failed to update appointment");
         }
 
-        Swal.fire("Success!", "Patient updated successfully.", "success");
-        bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasEncounterEditConfirm")).hide();
+        Swal.fire("Success!", "Appointment updated successfully.", "success");
+        bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasEncounterEditPending")).hide();
         displayAppointment(state.currentPage); // Refresh table
     } catch (error) {
-        Swal.fire("Error!", `Could not update patient: ${error.message}`, "error");
+        Swal.fire("Error!", `Could not update appointment: ${error.message}`, "error");
         console.error("Update error:", error);
     }
+}
+
+function populateView(appointment) {
+    // Populate form fields
+    const namePatient1 = document.getElementById("namePatient1");
+    const dateOfBirth1 = document.getElementById("dateOfBirth1");
+    const gender1 = document.getElementById("gender1");
+    const phonePatient1 = document.getElementById("phonePatient1");
+    const address1 = document.getElementById("address1");
+    const nameDoctor1 = document.getElementById("nameDoctor1");
+    const phoneDoctor1 = document.getElementById("phoneDoctor1");
+    const emailDoctor1 = document.getElementById("emailDoctor1");
+    const status1 = document.getElementById("status1");
+
+    if (namePatient1) namePatient1.value = `${sanitizeHTML(appointment.fullName)}`;
+    if (dateOfBirth1) dateOfBirth1.value = formatDateToYYYYMMDD(appointment.dob);
+    if (gender1) gender1.value = sanitizeHTML(appointment.gender || "");
+    if (phonePatient1) phonePatient1.value = sanitizeHTML(appointment.phone);
+    if (address1) address1.value = sanitizeHTML(appointment.address);
+    if (nameDoctor1) nameDoctor1.value = sanitizeHTML(`Dr.${appointment.doctor.fullName}`);
+    if (phoneDoctor1) phoneDoctor1.value = sanitizeHTML(appointment.doctor.phone);
+    if (emailDoctor1) emailDoctor1.value = sanitizeHTML(appointment.doctor.email);
+    if (status1) status1.value = sanitizeHTML(appointment.appointmentStatus);
 }
 
 function triggerSearch() {
@@ -385,8 +540,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Attach form submission handler
-    const editForm = document.querySelector("#offcanvasEncounterEditConfirm form");
-    if (editForm) {
-        editForm.addEventListener("submit", handleFormSubmission);
+    const editForm1 = document.querySelector("#offcanvasEncounterEditConfirm form");
+    if (editForm1) {
+        editForm1.addEventListener("submit", handleFormSubmissionConfirm);
+    }
+
+    // Attach form submission handler for pending appointments
+    const editForm2 = document.querySelector("#editPendingAppointmentForm");
+    if (editForm2) {
+        editForm2.addEventListener("submit", handleFormSubmissionPending);
     }
 });
