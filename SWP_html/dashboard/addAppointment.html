@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Đặt lịch khám</title>
+</head>
+<body>
+    <h2>Thêm cuộc hẹn</h2>
+
+    <form id="appointmentForm">
+        <label for="departmentSelect">Chọn chuyên khoa:</label>
+        <select id="departmentSelect">
+            <option value="">-- Chọn chuyên khoa --</option>
+        </select>
+
+        <br><br>
+
+        <label for="doctorSelect">Chọn bác sĩ:</label>
+        <select id="doctorSelect" disabled>
+            <option value="">-- Chọn bác sĩ --</option>
+        </select>
+
+         <div id="dateForm" style="display: none;">
+            <br><br>
+            <label>Tháng sau:</label>
+            <select id="monthSelect">
+                <option value="2025">2025</option>
+            </select>
+
+            <div>
+                <table>
+                    <tr><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>CN</th></tr>
+                    <tr><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td></tr>
+                    <tr><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td></tr>
+                    <tr><td>30</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div id="timeForm" style="display: none;">
+            <br><br>
+            <table>
+                <tr>
+                    <td><button type="button" class="time-slot" value="06:00">06:00</button></td>
+                    <td><button type="button" class="time-slot" value="06:15">06:15</button></td>
+                    <td><button type="button" class="time-slot" value="06:30">06:30</button></td>
+                    <td><button type="button" class="time-slot" value="06:45">06:45</button></td>
+                    <td><button type="button" class="time-slot" value="07:00">07:00</button></td>
+                    <td><button type="button" class="time-slot" value="07:15">07:15</button></td>
+                    <td><button type="button" class="time-slot" value="07:30">07:30</button></td>
+                    <td><button type="button" class="time-slot" value="07:45">07:45</button></td>
+                    <td><button type="button" class="time-slot" value="08:00">08:00</button></td>
+                    <td><button type="button" class="time-slot" value="08:15">08:15</button></td>
+                    <td><button type="button" class="time-slot" value="08:30" aria-readonly="false">08:30</button></td>
+                </tr>
+                <tr>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                    <td><button type="button" class="time-slot" value="08:45">08:45</button></td>
+                    <td><button type="button" class="time-slot" value="09:00">09:00</button></td>
+                    <td><button type="button" class="time-slot" value="09:15">09:15</button></td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="time-slot" value="09:30">09:30</button></td>
+                    <td><button type="button" class="time-slot" value="09:45">09:45</button></td>
+                    <td><button type="button" class="time-slot" value="10:00">10:00</button></td>
+                    <td><button type="button" class="time-slot" value="10:15">10:15</button></td>
+                    <td><button type="button" class="time-slot" value="10:30">10:30</button></td>
+                    <td><button type="button" class="time-slot" value="10:45">10:45</button></td>
+                    <td><button type="button" class="time-slot" value="11:00">11:00</button></td>
+                    <td><button type="button" class="time-slot" value="11:15">11:15</button></td>
+                    <td><button type="button" class="time-slot" value="11:30">11:30</button></td>
+                    <td><button type="button" class="time-slot" value="11:45">11:45</button></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="time-slot" value="13:30">13:30</button></td>
+                    <td><button type="button" class="time-slot" value="13:45">13:45</button></td>
+                    <td><button type="button" class="time-slot" value="14:00">14:00</button></td>
+                    <td><button type="button" class="time-slot" value="14:15">14:15</button></td>
+                    <td><button type="button" class="time-slot" value="14:30">14:30</button></td>
+                    <td><button type="button" class="time-slot" value="14:45">14:45</button></td>
+                    <td><button type="button" class="time-slot" value="15:00">15:00</button></td>
+                    <td><button type="button" class="time-slot" value="15:15">15:15</button></td>
+                    <td><button type="button" class="time-slot" value="15:30">15:30</button></td>
+                    <td><button type="button" class="time-slot" value="15:45">15:45</button></td>
+                    <td><button type="button" class="time-slot" value="16:00">16:00</button></td>
+                </tr>
+                <tr>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                    <td><button type="button" class="time-slot" value="16:15">16:15</button></td>
+                </tr>
+            </table>
+            <input type="hidden" id="selectedTime" name="time">
+            <button type="submit">Đặt lịch</button>
+        </div>
+    </form>
+
+    <script>
+    const departmentSelect = document.getElementById('departmentSelect');
+    const doctorSelect = document.getElementById('doctorSelect');
+    const dateForm = document.getElementById('dateForm');
+    const timeForm = document.getElementById('timeForm');
+    // Gọi API danh sách chuyên khoa
+    fetch('http://localhost:8080/SWP_back_war_exploded/api/doctors/departments')
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(dept => {
+                const option = document.createElement('option');
+                option.value = dept;
+                option.textContent = dept;
+                departmentSelect.appendChild(option);
+            });
+
+            // Sau khi load department, mặc định hiển thị toàn bộ bác sĩ
+            loadDoctors(); // <- gọi luôn để hiển thị toàn bộ bác sĩ ban đầu
+        });
+
+    // Load danh sách bác sĩ (có hoặc không có chuyên khoa)
+    function loadDoctors(department = "") {
+        doctorSelect.innerHTML = '<option value="">-- Chọn bác sĩ --</option>';
+        doctorSelect.disabled = true;
+
+        let url = "http://localhost:8080/SWP_back_war_exploded/api/doctors";
+        if (department) {
+            url += `?department=${encodeURIComponent(department)}`;
+        }
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                const doctors = data.doctors;
+                doctors.forEach(doc => {
+                    const option = document.createElement('option');
+                    option.value = doc.ID;
+                    option.textContent = doc.fullName;
+                    doctorSelect.appendChild(option);
+                });
+                doctorSelect.disabled = false;
+            });
+    }
+
+    // Khi thay đổi chuyên khoa
+    departmentSelect.addEventListener('change', () => {
+        const selectedDept = departmentSelect.value;
+        loadDoctors(selectedDept); // gọi lại hàm load bác sĩ theo chuyên khoa (hoặc toàn bộ nếu rỗng)
+    });
+
+     // Hiển thị form ngày khi chọn bác sĩ
+    doctorSelect.addEventListener('change', () => {
+        if (doctorSelect.value) {
+            dateForm.style.display = 'block';
+        } else {
+            dateForm.style.display = 'none';
+            timeForm.style.display = 'none';
+        }
+    });
+
+    // Hiển thị form giờ khi chọn ngày
+    const days = document.querySelectorAll('#dateForm table td');
+    days.forEach(day => {
+        day.addEventListener('click', () => {
+            days.forEach(d => d.style.backgroundColor = '');
+            day.style.backgroundColor = '#90ee90';
+            timeForm.style.display = 'block';
+        });
+    });
+
+</script>
+
+</body>
+</html>
