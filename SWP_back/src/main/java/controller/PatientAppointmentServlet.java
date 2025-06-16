@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
@@ -137,12 +138,85 @@ public class PatientAppointmentServlet extends HttpServlet {
         out.flush();
     }
 
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        setCORSHeaders(response);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        String pathInfo = request.getPathInfo();
+        PrintWriter out = response.getWriter();
+
+        if (pathInfo != null && pathInfo.split("/").length == 2) {
+            try {
+                Long id = Long.parseLong(pathInfo.split("/")[1]);
+                // Đọc JSON từ request body
+                StringBuilder sb = new StringBuilder();
+                try (BufferedReader reader = request.getReader()) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                }
+//                User updatedUser = gson.fromJson(sb.toString(), User.class);
+//                User existingUser = users.stream().filter(u -> u.getId().equals(id)).findFirst().orElse(null);
+//
+//                if (existingUser != null) {
+//                    existingUser.setName(updatedUser.getName());
+//                    existingUser.setEmail(updatedUser.getEmail());
+//                    out.print(gson.toJson(existingUser));
+//                } else {
+//                    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+//                    out.print("{\"error\":\"User not found\"}");
+//                }
+            } catch (NumberFormatException e) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.print("{\"error\":\"Invalid ID\"}");
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\":\"Invalid request\"}");
+        }
+        out.flush();
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        setCORSHeaders(response);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        String pathInfo = request.getPathInfo();
+        PrintWriter out = response.getWriter();
+
+        if (pathInfo != null && pathInfo.split("/").length == 2) {
+            try {
+                int id = Integer.parseInt(pathInfo.split("/")[1]);
+                boolean removed = appointmentDAO.deleteAppointmentById(id);
+                if (removed) {
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT); // Use 204 instead of 200
+                    LOGGER.info("Appointment " + id + " deleted successfully");
+                } else {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    out.print("{\"error\":\"Appointment not found\"}");
+                    LOGGER.info("Appointment " + id + " not found");
+                }
+            } catch (NumberFormatException e) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.print("{\"error\":\"Invalid ID\"}");
+                LOGGER.severe("Error processing Appointment request: " + e.getMessage());
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\":\"Invalid request\"}");
+        }
+        out.flush();
+    }
+
+
     private void setCORSHeaders(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
     }
-
 
     public static String parseDateTime(String input) {
         // Return null if input is null

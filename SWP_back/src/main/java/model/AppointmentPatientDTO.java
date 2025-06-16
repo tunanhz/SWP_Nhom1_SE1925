@@ -11,8 +11,8 @@ public class AppointmentPatientDTO {
     private String appointmentTime;
     private String daysUntilAppointment;
     private String message;
-    private String shift;
     private String appointmentStatus;
+    private String shift;
     private String note;
 
     public AppointmentPatientDTO() {

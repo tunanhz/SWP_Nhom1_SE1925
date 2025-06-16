@@ -1,37 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 import dal.AppointmentDAO;
 
-/**
- *
- * @author DTanh
- */
 public class Patient {
     private int id;
     private String fullName;
-    private String dateOfBirth;
+    private String dob;
     private String gender;
     private String phone;
     private String address;
-    private String email;
-
     private Appointment appointment;
 
     public Patient() {
     }
 
-    public Patient(int id, String fullName, String dateOfBirth, String gender, String phone, String address, String email) {
+    public Patient(int id, String fullName, String dob, String gender, String phone, String address) {
         this.id = id;
         this.fullName = fullName;
-        this.dateOfBirth = dateOfBirth;
+        this.dob = dob;
         this.gender = gender;
         this.phone = phone;
         this.address = address;
-        this.email = email;
     }
 
     public int getId() {
@@ -50,12 +39,12 @@ public class Patient {
         this.fullName = fullName;
     }
 
-    public String getDateOfBirth() {
-        return dateOfBirth;
+    public String getDob() {
+        return dob;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDob(String dob) {
+        this.dob = dob;
     }
 
     public String getGender() {
@@ -82,10 +71,6 @@ public class Patient {
         this.address = address;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public Appointment getAppointment() {
         return appointment;
     }
@@ -94,9 +79,4 @@ public class Patient {
         AppointmentDAO appointmentDAO = new AppointmentDAO();
         this.appointment = appointmentDAO.getAppointmentByPatientId(id);
     }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
-
