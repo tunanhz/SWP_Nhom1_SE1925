@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Đặt lịch khám</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h2 { color: #333; text-align: center; }
+        .form-group { margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        select, button, textarea { padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px; width: 200px; }
+        textarea { width: 100%; max-width: 400px; height: 100px; resize: vertical; }
+        table { border-collapse: collapse; margin: 10px 0; }
+        td { padding: 5px; text-align: center; cursor: pointer; }
+        td:hover { background-color: #f0f0f0; }
+        .selected { background-color: #90ee90; }
+        .time-slot { width: 70px; margin: 2px; }
+        .disabled { background-color: #e0e0e0; cursor: not-allowed; pointer-events: none; }
+        #dateForm, #timeForm { display: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Thêm cuộc hẹn</h2>
+
+    <form id="appointmentForm" action="http://localhost:8080/SWP_back_war_exploded/api/Add_appointments" method="POST">
+        <div class="form-group">
+            <label for="departmentSelect">Chọn chuyên khoa:</label>
+            <select id="departmentSelect" name="department">
+                <option value="">-- Chọn chuyên khoa --</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="doctorSelect">Chọn bác sĩ:</label>
+            <select id="doctorSelect" name="doctorId" disabled>
+                <option value="">-- Chọn bác sĩ --</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="note">Ghi chú:</label>
+            <textarea id="note" name="note" placeholder="Nhập ghi chú (ví dụ: triệu chứng, yêu cầu đặc biệt)"></textarea>
+        </div>
+
+        <div id="dateForm" class="form-group">
+            <label>Chọn tháng và năm:</label>
+            <select id="yearSelect"></select>
+            <select id="monthSelect"></select>
+            <div id="calendar"></div>
+            <input type="hidden" id="selectedDate" name="date">
+        </div>
+
+        <div id="timeForm" class="form-group">
+            <h3>Buổi sáng</h3>
+            <table>
+                <tr>
+                    <td><button type="button" class="time-slot" value="06:00">06:00</button></td>
+                    <td><button type="button" class="time-slot" value="06:15">06:15</button></td>
+                    <td><button type="button" class="time-slot" value="06:30">06:30</button></td>
+                    <td><button type="button" class="time-slot" value="06:45">06:45</button></td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="time-slot" value="07:00">07:00</button></td>
+                    <td><button type="button" class="time-slot" value="07:15">07:15</button></td>
+                    <td><button type="button" class="time-slot" value="07:30">07:30</button></td>
+                    <td><button type="button" class="time-slot" value="07:45">07:45</button></td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="time-slot" value="08:00">08:00</button></td>
+                    <td><button type="button" class="time-slot" value="08:15">08:15</button></td>
+                    <td><button type="button" class="time-slot" value="08:30">08:30</button></td>
+                    <td><button type="button" class="time-slot" value="08:45">08:45</button></td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="time-slot" value="09:00">09:00</button></td>
+                    <td><button type="button" class="time-slot" value="09:15">09:15</button></td>
+                    <td><button type="button" class="time-slot" value="09:30">09:30</button></td>
+                    <td><button type="button" class="time-slot" value="09:45">09:45</button></td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="time-slot" value="10:00">10:00</button></td>
+                    <td><button type="button" class="time-slot" value="10:15">10:15</button></td>
+                    <td><button type="button" class="time-slot" value="10:30">10:30</button></td>
+                    <td><button type="button" class="time-slot" value="10:45">10:45</button></td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="time-slot" value="11:00">11:00</button></td>
+                    <td><button type="button" class="time-slot" value="11:15">11:15</button></td>
+                    <td><button type="button" class="time-slot" value="11:30">11:30</button></td>
+                    <td><button type="button" class="time-slot" value="11:45">11:45</button></td>
+                </tr>
+            </table>
+
+            <h3>Buổi chiều</h3>
+            <table>
+                <tr>
+                    <td><button type="button" class="time-slot" value="13:30">13:30</button></td>
+                    <td><button type="button" class="time-slot" value="13:45">13:45</button></td>
+                    <td><button type="button" class="time-slot" value="14:00">14:00</button></td>
+                    <td><button type="button" class="time-slot" value="14:15">14:15</button></td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="time-slot" value="14:30">14:30</button></td>
+                    <td><button type="button" class="time-slot" value="14:45">14:45</button></td>
+                    <td><button type="button" class="time-slot" value="15:00">15:00</button></td>
+                    <td><button type="button" class="time-slot" value="15:15">15:15</button></td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="time-slot" value="15:30">15:30</button></td>
+                    <td><button type="button" class="time-slot" value="15:45">15:45</button></td>
+                    <td><button type="button" class="time-slot" value="16:00">16:00</button></td>
+                </tr>
+            </table>
+
+            <h3>Buổi tối</h3>
+            <table>
+                <tr>
+                    <td><button type="button" class="time-slot" value="16:15">16:15</button></td>
+                </tr>
+            </table>
+            <input type="hidden" id="selectedTime" name="time">
+            <button type="submit">Đặt lịch</button>
+        </div>
+    </form>
+
+    <script>
+        const departmentSelect = document.getElementById('departmentSelect');
+        const doctorSelect = document.getElementById('doctorSelect');
+        const dateForm = document.getElementById('dateForm');
+        const timeForm = document.getElementById('timeForm');
+        const selectedTime = document.getElementById('selectedTime');
+        const selectedDate = document.getElementById('selectedDate');
+        const calendar = document.getElementById('calendar');
+        const yearSelect = document.getElementById('yearSelect');
+        const monthSelect = document.getElementById('monthSelect');
+        const appointmentForm = document.getElementById('appointmentForm');
+
+        // Populate year options
+        function populateYears() {
+            const currentYear = new Date().getFullYear();
+            for (let i = currentYear; i <= currentYear + 1; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                yearSelect.appendChild(option);
+            }
+            yearSelect.value = currentYear;
+        }
+
+        // Populate month options
+        function populateMonths() {
+            const months = [
+                'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
+                'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
+            ];
+            const currentMonth = new Date().getMonth();
+            months.forEach((month, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = month;
+                monthSelect.appendChild(option);
+            });
+            monthSelect.value = currentMonth;
+        }
+
+        // Check if date is in the past
+        function isPastDate(year, month, day) {
+            const selectedDate = new Date(year, month, day);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return selectedDate < today;
+        }
+
+        // Check if time is in the past for today
+        function isPastTime(time, selectedDateStr) {
+            const today = new Date();
+            const selected = new Date(`${selectedDateStr}T${time}`);
+            return selected < today;
+        }
+
+        // Generate dynamic calendar
+        function generateCalendar(year, month) {
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDay = firstDay.getDay();
+            let table = '<table><tr><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>CN</th></tr><tr>';
+            let dayCount = 1;
+
+            for (let i = 0; i < 6; i++) {
+                for (let j = 0; j < 7; j++) {
+                    if ((i === 0 && j < startingDay) || dayCount > daysInMonth) {
+                        table += '<td></td>';
+                    } else {
+                        const isPast = isPastDate(year, month, dayCount);
+                        table += `<td class="${isPast ? 'disabled' : ''}">${dayCount}</td>`;
+                        dayCount++;
+                    }
+                }
+                table += '</tr><tr>';
+                if (dayCount > daysInMonth) break;
+            }
+            table += '</tr></table>';
+            calendar.innerHTML = table;
+
+            const days = document.querySelectorAll('#calendar table td');
+            days.forEach(day => {
+                if (day.textContent && !day.classList.contains('disabled')) {
+                    day.addEventListener('click', () => {
+                        days.forEach(d => d.classList.remove('selected'));
+                        day.classList.add('selected');
+                        timeForm.style.display = 'block';
+                        resetTimeSelection();
+                        const selectedDay = day.textContent.padStart(2, '0');
+                        const selectedMonth = String(parseInt(month) + 1).padStart(2, '0');
+                        selectedDate.value = `${year}-${selectedMonth}-${selectedDay}`;
+                        updateTimeSlots();
+                    });
+                }
+            });
+        }
+
+        // Update time slots
+        function updateTimeSlots() {
+            const timeSlots = document.querySelectorAll('.time-slot');
+            const selectedDateStr = selectedDate.value;
+            const today = new Date();
+            const isToday = new Date(selectedDateStr).toDateString() === today.toDateString();
+
+            timeSlots.forEach(slot => {
+                slot.classList.remove('disabled');
+                if (isToday && isPastTime(slot.value, selectedDateStr)) {
+                    slot.classList.add('disabled');
+                }
+            });
+        }
+
+        // Reset time selection
+        function resetTimeSelection() {
+            const timeSlots = document.querySelectorAll('.time-slot');
+            timeSlots.forEach(slot => slot.classList.remove('selected'));
+            selectedTime.value = '';
+            if (selectedSlot) selectedSlot.classList.remove('selected');
+            selectedSlot = null;
+        }
+
+        // Initial setup
+        populateYears();
+        populateMonths();
+        generateCalendar(new Date().getFullYear(), new Date().getMonth());
+
+        yearSelect.addEventListener('change', () => {
+            generateCalendar(yearSelect.value, monthSelect.value);
+            timeForm.style.display = 'none';
+            resetTimeSelection();
+            selectedDate.value = '';
+        });
+
+        monthSelect.addEventListener('change', () => {
+            generateCalendar(yearSelect.value, monthSelect.value);
+            timeForm.style.display = 'none';
+            resetTimeSelection();
+            selectedDate.value = '';
+        });
+
+        // Load departments
+        fetch('http://localhost:8080/SWP_back_war_exploded/api/doctors/departments')
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(dept => {
+                    const option = document.createElement('option');
+                    option.value = dept;
+                    option.textContent = dept;
+                    departmentSelect.appendChild(option);
+                });
+                loadDoctors();
+            });
+
+        // Load doctors
+        function loadDoctors(department = "") {
+            doctorSelect.innerHTML = '<option value="">-- Chọn bác sĩ --</option>';
+            doctorSelect.disabled = true;
+
+            let url = "http://localhost:8080/SWP_back_war_exploded/api/all-doctors";
+            if (department) url += `?department=${encodeURIComponent(department)}`;
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    data.doctors.forEach(doc => {
+                        const option = document.createElement('option');
+                        option.value = doc.ID;
+                        option.textContent = doc.fullName;
+                        option.dataset.department = doc.department;
+                        doctorSelect.appendChild(option);
+                    });
+                    doctorSelect.disabled = false;
+                });
+        }
+
+        departmentSelect.addEventListener('change', () => {
+            loadDoctors(departmentSelect.value);
+        });
+
+        doctorSelect.addEventListener('change', () => {
+            if (doctorSelect.value) {
+                const selectedOption = doctorSelect.querySelector(`option[value="${doctorSelect.value}"]`);
+                if (selectedOption) departmentSelect.value = selectedOption.dataset.department;
+                dateForm.style.display = 'block';
+            } else {
+                dateForm.style.display = 'none';
+                timeForm.style.display = 'none';
+                resetTimeSelection();
+                selectedDate.value = '';
+            }
+        });
+
+        let selectedSlot = null;
+        const timeSlots = document.querySelectorAll('.time-slot');
+        timeSlots.forEach(slot => {
+            slot.addEventListener('click', () => {
+                if (slot.classList.contains('disabled')) return;
+                if (selectedSlot) selectedSlot.classList.remove('selected');
+                slot.classList.add('selected');
+                selectedSlot = slot;
+                selectedTime.value = slot.value;
+            });
+        });
+
+        appointmentForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!doctorSelect.value) {
+        alert('Vui lòng chọn bác sĩ.');
+        return;
+    }
+    if (!selectedDate.value) {
+        alert('Vui lòng chọn ngày.');
+        return;
+    }
+    if (!selectedTime.value) {
+        alert('Vui lòng chọn giờ.');
+        return;
+    }
+
+    const selectedDateTime = new Date(`${selectedDate.value}T${selectedTime.value}`);
+    if (selectedDateTime < new Date()) {
+        alert('Không thể chọn ngày hoặc giờ trong quá khứ.');
+        return;
+    }
+
+    const formData = {
+        doctorId: doctorSelect.value,
+        date: selectedDate.value,
+        time: selectedTime.value,
+        note: document.getElementById('note').value,
+        department: departmentSelect.value
+    };
+
+    try {
+        const response = await fetch(appointmentForm.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        const data = await response.json();
+        if (response.ok) {
+            alert('Đặt lịch thành công!');
+            appointmentForm.reset();
+            dateForm.style.display = 'none';
+            timeForm.style.display = 'none';
+            resetTimeSelection();
+            selectedDate.value = '';
+            doctorSelect.disabled = true;
+        } else {
+            alert(`Lỗi: ${data.error || 'Không thể đặt lịch.'}`);
+        }
+    } catch (error) {
+        alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
+        console.error('Error:', error);
+    }
+});
+    </script>
+</body>
+</html>
+
+
+
+<!--phan JS-->
+    <!-- <script src="./assets/js/API/main-addAppointment.js"></script> -->

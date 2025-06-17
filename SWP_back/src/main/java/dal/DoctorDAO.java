@@ -260,11 +260,106 @@ public class DoctorDAO {
         return departments;
     }
 
+
+
+
+    public ArrayList<Doctor> getAllDoctors() {
+        ArrayList<Doctor> l = new ArrayList<>();
+        String xSql = """
+            Select d.doctor_id, d.full_name, d.phone, d.eduLevel, d.department, a.email, a.[img] 
+            from [dbo].[Doctor] d
+            join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id
+            where a.role = 'Doctor' and a.status = 'Enable'
+            order by d.doctor_id;
+            """;
+
+        try {
+            PreparedStatement ps = ad.getConnection().prepareStatement(xSql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                l.add(new Doctor(rs.getInt("doctor_id"), rs.getNString("full_name"),
+                        rs.getNString("phone"), rs.getNString("eduLevel"),
+                        rs.getNString("department"), rs.getNString("email"),
+                        rs.getNString("img")));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return l;
+    }
+
+    public ArrayList<Doctor> searchDoctorsByNameAndDepartment(String name, String department) {
+        // Input validation
+
+
+        ArrayList<Doctor> doctors = new ArrayList<>();
+        String sql = """
+                    SELECT 
+                        d.doctor_id, 
+                        d.full_name, 
+                        d.phone, 
+                        d.eduLevel, 
+                        d.department, 
+                        a.email, 
+                        a.[img]
+                    FROM [dbo].[Doctor] d
+                    JOIN [dbo].[AccountStaff] a ON a.account_staff_id = d.account_staff_id
+                    WHERE 
+                        a.role = 'Doctor' 
+                        AND a.status = 'Enable' 
+                        AND (? IS NULL OR d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                        AND (? IS NULL OR d.department COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                    ORDER BY d.doctor_id 
+                    
+                """;
+
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+            // Prepare parameters
+            String namePattern = (name == null || name.trim().isEmpty()) ? null : "%" + name.trim() + "%";
+            String deptPattern = (department == null || department.trim().isEmpty()) ? null : "%" + department.trim() + "%";
+
+            // Set parameters for name
+            stmt.setNString(1, namePattern);
+            stmt.setNString(2, namePattern);
+
+            // Set parameters for department
+            stmt.setNString(3, deptPattern);
+            stmt.setNString(4, deptPattern);
+
+            // Set pagination parameters
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    doctors.add(new Doctor(
+                            rs.getInt("doctor_id"),
+                            rs.getNString("full_name"),
+                            rs.getNString("phone"),
+                            rs.getNString("eduLevel"),
+                            rs.getNString("department"),
+                            rs.getNString("email"),
+                            rs.getNString("img")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error searching doctors: " + e.getMessage());
+            throw new RuntimeException("Failed to search doctors", e);
+        }
+
+        return doctors;
+    }
+
     public static void main(String[] args) {
         DoctorDAO dao = new DoctorDAO();
         ArrayList<Doctor> l = dao.searchDoctorsByNameAndDepartment("u", "Nội tổng quát", 1, 8);
         System.out.println(l);
     }
+
+
 
 }
 
