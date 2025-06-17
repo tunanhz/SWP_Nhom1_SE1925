@@ -177,7 +177,6 @@ public class AppointmentDAO {
         Appointment createdAppointment = null;
         Connection conn = null;
         CallableStatement stmt = null;
-        ResultSet rs = null;
         try {
             conn = ad.getConnection();
             stmt = conn.prepareCall(sql);
@@ -185,40 +184,36 @@ public class AppointmentDAO {
             stmt.setInt(1, appointment.getDoctorId());
             stmt.setInt(2, appointment.getPatientId());
             stmt.setTimestamp(3, new Timestamp(appointment.getAppointmentDatetime().getTime()));
-            stmt.setString(4, appointment.getShift());
+
+            // Nếu bạn có receptionistId thì setInt, nếu không thì:
+            stmt.setNull(4, java.sql.Types.INTEGER);  // receptionist_id
             stmt.setString(5, appointment.getNote());
-            stmt.setObject(6, appointment.getReceptionistId() != -1 ? appointment.getReceptionistId() : null, Types.INTEGER);
+
+            // Đăng ký tham số output: @error_message
+            stmt.registerOutParameter(6, java.sql.Types.NVARCHAR);
 
             LOGGER.info("Executing statement: " + sql);
-            boolean hasResult = stmt.execute();
-            if (hasResult) {
-                rs = stmt.getResultSet();
-                if (rs.next()) {
-                    createdAppointment = new Appointment();
-                    createdAppointment.setAppointmentId(rs.getInt("appointment_id"));
-                    createdAppointment.setDoctorId(rs.getInt("doctor_id"));
-                    createdAppointment.setPatientId(rs.getInt("patient_id"));
-                    createdAppointment.setAppointmentDatetime(rs.getTimestamp("appointment_datetime"));
-                    createdAppointment.setShift(rs.getString("shift"));
-                    createdAppointment.setStatus(rs.getString("status"));
-                    createdAppointment.setNote(rs.getString("note"));
-                    createdAppointment.setDoctorName(rs.getString("doctor_name"));
-                    createdAppointment.setPatientName(rs.getString("patient_name"));
-                }
-            }
+            stmt.execute();
 
-            if (createdAppointment == null) {
-                throw new SQLException("Failed to create appointment, no result returned.");
+            // Đọc thông điệp trả về
+            String message = stmt.getString(6);
+            LOGGER.info("Stored Procedure Message: " + message);
+
+            // Ghi nhận thành công nếu message là thành công
+            if (message != null && message.contains("thành công")) {
+                createdAppointment = appointment;  // hoặc gán ID nếu SP trả
+            } else {
+                throw new SQLException("Stored Procedure failed: " + message);
             }
         } catch (SQLException e) {
             LOGGER.severe("SQL Error: " + e.getMessage());
             throw e;
         } finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { LOGGER.severe(e.getMessage()); }
             if (stmt != null) try { stmt.close(); } catch (SQLException e) { LOGGER.severe(e.getMessage()); }
             if (conn != null) try { conn.close(); } catch (SQLException e) { LOGGER.severe(e.getMessage()); }
         }
         return createdAppointment;
     }
+
 
 }
