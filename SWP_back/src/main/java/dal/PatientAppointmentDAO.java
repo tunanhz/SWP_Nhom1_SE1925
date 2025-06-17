@@ -341,6 +341,77 @@ public class PatientAppointmentDAO {
         }
     }
 
+    public ArrayList<AppointmentDTO> getTop3CompletedAppointments(int accountPatientId) {
+        ArrayList<AppointmentDTO> appointments = new ArrayList<>();
+        String query = """
+                SELECT TOP(3)
+                    ap.account_patient_id,
+                    p.patient_id,
+                    a.doctor_id,
+                    a.appointment_id,
+                    a.receptionist_id,
+                    p.full_name,
+                    p.dob,
+                    p.gender,
+                    p.phone,
+                    p.[address],
+                    ap.email,
+                    ap.status AS account_status,
+                    a.appointment_datetime,
+                    a.[shift],
+                    a.status AS appointment_status,
+                    a.note
+                FROM AccountPatient ap
+                INNER JOIN Patient_AccountPatient pa ON pa.account_patient_id = ap.account_patient_id
+                INNER JOIN Patient p ON p.patient_id = pa.patient_id
+                LEFT JOIN Appointment a ON a.patient_id = p.patient_id
+                INNER JOIN Doctor d ON d.doctor_id = a.doctor_id
+                INNER JOIN AccountStaff acs ON acs.account_staff_id = d.account_staff_id
+                WHERE ap.account_patient_id = ?
+                    AND a.appointment_datetime IS NOT NULL
+                    AND ap.status = 'Enable'
+                    AND acs.status = 'Enable'
+                    AND a.status = 'Completed'
+                ORDER BY p.patient_id
+                """;
+
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(query)) {
+            // Set account_patient_id (hardcoded to 1 as per query)
+            stmt.setInt(1, accountPatientId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    AppointmentDTO dto = new AppointmentDTO(
+                            rs.getInt("account_patient_id"),
+                            rs.getInt("patient_id"),
+                            rs.getObject("doctor_id") != null ? rs.getInt("doctor_id") : null,
+                            rs.getInt("appointment_id"),
+                            rs.getObject("receptionist_id") != null ? rs.getInt("receptionist_id") : null,
+                            rs.getNString("full_name"),
+                            rs.getDate("dob"),
+                            rs.getString("gender"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
+                            rs.getString("email"),
+                            rs.getString("account_status"),
+                            rs.getString("appointment_datetime"),
+                            rs.getString("shift"),
+                            rs.getString("appointment_status"),
+                            rs.getNString("note")
+                    );
+                    dto.includeDoctor();
+                    appointments.add(dto);
+                }
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe(
+                    String.format("Error fetching top 3 completed appointments for accountPatientId=1: %s", e.getMessage())
+            );
+            throw new RuntimeException("Failed to fetch appointments", e);
+        }
+        return appointments;
+    }
+
     public static void main(String[] args) {
         PatientAppointmentDAO dao = new PatientAppointmentDAO();
         AppointmentDTO a = dao.getAppointmentsByAppointmentId(2);

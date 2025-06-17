@@ -753,26 +753,19 @@
       <!--Visited Doctors and Payments-->
       <div class="row">
          <div class="col-xl-6">
-            <div class="card">
+            <div class="card" id="three-AppointmentCompleted">
                <div class="card-header d-flex  align-items-center justify-content-between flex-wrap gap-2 mb-3">
                   <div>
                      <h4 class="mb-0">Visited Doctors</h4>
                   </div>
                   <div class="dropdown text-end">
-                     <button class="dropdown btn border-0 p-0" id="dropdownMenuVisitedDoctors" data-bs-toggle="dropdown"
-                             aria-expanded="false">
+                     <a href="patient-encounters.html" class="dropdown btn border-0 p-0"
+                        aria-expanded="false">
                         <span class="fw-500">View All</span>
                         <svg width="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="transform-icon transform-down">
                            <path d="M8.5 5L15.5 12L8.5 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
-                     </button>
-                     <ul class="dropdown-menu dropdown-menu-soft-primary sub-dropdown transform-left-dropdown" aria-labelledby="dropdownMenuVisitedDoctors">
-                        <li><a class="dropdown-item active" href="#">View</a></li>
-                        <li><a class="dropdown-item" href="#">Delete</a></li>
-                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                        <li><a class="dropdown-item" href="#">Print</a></li>
-                        <li><a class="dropdown-item" href="#">Download</a></li>
-                     </ul>
+                     </a>
                   </div>
                </div>
                <div class="card-body pt-0">
@@ -801,32 +794,6 @@
                            <td>Skin Specialist</td>
                            <td>03</td>
                         </tr>
-                        <tr>
-                           <td>2</td>
-                           <td>
-                              <div class="d-flex align-items-center gap-3">
-                                 <img class="img-fluid flex-shrink-0 icon-40 object-fit-cover"
-                                      src="./assets/images/dashboard/drKeinoshine.png" alt="drKeinoshine">
-                                 <h5 class="mb-0">Dr.Keino Shine</h5>
-                              </div>
-                           </td>
-                           <td>keino@gmail.com</td>
-                           <td>Tooth Cleaning</td>
-                           <td>05</td>
-                        </tr>
-                        <tr class="border-0">
-                           <td class="border-0">3</td>
-                           <td class="border-0">
-                              <div class="d-flex align-items-center gap-3">
-                                 <img class="img-fluid flex-shrink-0 icon-40 object-fit-cover"
-                                      src="./assets/images/dashboard/drMaxwellena.png" alt="drMaxwellena">
-                                 <h5 class="mb-0">Dr.Maxwell Ena</h5>
-                              </div>
-                           </td>
-                           <td class="border-0">maxwell@gmail.com</td>
-                           <td class="border-0">Skin Whitening</td>
-                           <td class="border-0">02</td>
-                        </tr>
                         </tbody>
                      </table>
                   </div>
@@ -840,19 +807,13 @@
                      <h4 class="mb-0">Payments</h4>
                   </div>
                   <div class="dropdown text-end">
-                     <button class="dropdown btn border-0 p-0" id="dropdownMenuPayment" data-bs-toggle="dropdown"
-                             aria-expanded="false">
+                     <a class="dropdown btn border-0 p-0" href="patient-payments.html"
+                        aria-expanded="false">
                         <span class="fw-500">View All</span>
                         <svg width="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="transform-icon transform-down">
                            <path d="M8.5 5L15.5 12L8.5 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
-                     </button>
-                     <ul class="dropdown-menu dropdown-menu-soft-primary sub-dropdown transform-left-dropdown" aria-labelledby="dropdownMenuPayment">
-                        <li><a class="dropdown-item active" href="#">View</a></li>
-                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                        <li><a class="dropdown-item" href="#">Print</a></li>
-                        <li><a class="dropdown-item" href="#">Download</a></li>
-                     </ul>
+                     </a>
                   </div>
                </div>
                <div class="card-body pt-0">
@@ -891,74 +852,6 @@
                            </button>
                         </div>
                      </li>
-                     <li
-                             class="d-flex flex-sm-row flex-column align-items-sm-center align-items-start justify-content-between flex-wrap gap-1 mb-4 bg-primary-subtle py-3 px-4 rounded">
-                        <div class="d-flex flex-sm-row flex-column align-items-sm-center align-items-start flex-wrap gap-4">
-                           <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                              <g clip-path="url(#clip0_483_26502)">
-                                 <path
-                                         d="M22 11C22 10.7348 22.1054 10.4804 22.2929 10.2929C22.4804 10.1054 22.7348 10 23 10H27C27.2652 10 27.5196 10.1054 27.7071 10.2929C27.8946 10.4804 28 10.7348 28 11V13C28 13.2652 27.8946 13.5196 27.7071 13.7071C27.5196 13.8946 27.2652 14 27 14H23C22.7348 14 22.4804 13.8946 22.2929 13.7071C22.1054 13.5196 22 13.2652 22 13V11Z"
-                                         fill="currentColor" />
-                                 <path
-                                         d="M4 4C2.93913 4 1.92172 4.42143 1.17157 5.17157C0.421427 5.92172 0 6.93913 0 8L0 24C0 25.0609 0.421427 26.0783 1.17157 26.8284C1.92172 27.5786 2.93913 28 4 28H28C29.0609 28 30.0783 27.5786 30.8284 26.8284C31.5786 26.0783 32 25.0609 32 24V8C32 6.93913 31.5786 5.92172 30.8284 5.17157C30.0783 4.42143 29.0609 4 28 4H4ZM30 8V18H2V8C2 7.46957 2.21071 6.96086 2.58579 6.58579C2.96086 6.21071 3.46957 6 4 6H28C28.5304 6 29.0391 6.21071 29.4142 6.58579C29.7893 6.96086 30 7.46957 30 8ZM28 26H4C3.46957 26 2.96086 25.7893 2.58579 25.4142C2.21071 25.0391 2 24.5304 2 24V22H30V24C30 24.5304 29.7893 25.0391 29.4142 25.4142C29.0391 25.7893 28.5304 26 28 26Z"
-                                         fill="currentColor" />
-                              </g>
-                              <defs>
-                                 <clipPath id="clip0_483_26500">
-                                    <rect width="32" height="32" fill="white" />
-                                 </clipPath>
-                              </defs>
-                           </svg>
-                           <div>
-                              <h5 class="mb-0">Dr.Paige Turner</h5>
-                              <h6 class="text-body fw-normal mb-0 mt-2">22 May At 11:00 AM</h6>
-                           </div>
-                        </div>
-                        <h5 class="mb-0 text-primary mt-sm-0 mt-3">$250.50</h5>
-                        <div class="dropdown text-end">
-                           <button class="dropdown btn border-0 p-0">
-                              <svg width="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M8.5 5L15.5 12L8.5 19" stroke="currentColor" stroke-width="1.5"
-                                       stroke-linecap="round" stroke-linejoin="round"></path>
-                              </svg>
-                           </button>
-                        </div>
-                     </li>
-                     <li
-                             class="d-flex flex-sm-row flex-column align-items-sm-center align-items-start justify-content-between flex-wrap gap-1 bg-primary-subtle py-3 px-4 rounded">
-                        <div class="d-flex flex-sm-row flex-column align-items-sm-center align-items-start flex-wrap gap-4">
-                           <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                              <g clip-path="url(#clip0_483_26502)">
-                                 <path
-                                         d="M22 11C22 10.7348 22.1054 10.4804 22.2929 10.2929C22.4804 10.1054 22.7348 10 23 10H27C27.2652 10 27.5196 10.1054 27.7071 10.2929C27.8946 10.4804 28 10.7348 28 11V13C28 13.2652 27.8946 13.5196 27.7071 13.7071C27.5196 13.8946 27.2652 14 27 14H23C22.7348 14 22.4804 13.8946 22.2929 13.7071C22.1054 13.5196 22 13.2652 22 13V11Z"
-                                         fill="currentColor" />
-                                 <path
-                                         d="M4 4C2.93913 4 1.92172 4.42143 1.17157 5.17157C0.421427 5.92172 0 6.93913 0 8L0 24C0 25.0609 0.421427 26.0783 1.17157 26.8284C1.92172 27.5786 2.93913 28 4 28H28C29.0609 28 30.0783 27.5786 30.8284 26.8284C31.5786 26.0783 32 25.0609 32 24V8C32 6.93913 31.5786 5.92172 30.8284 5.17157C30.0783 4.42143 29.0609 4 28 4H4ZM30 8V18H2V8C2 7.46957 2.21071 6.96086 2.58579 6.58579C2.96086 6.21071 3.46957 6 4 6H28C28.5304 6 29.0391 6.21071 29.4142 6.58579C29.7893 6.96086 30 7.46957 30 8ZM28 26H4C3.46957 26 2.96086 25.7893 2.58579 25.4142C2.21071 25.0391 2 24.5304 2 24V22H30V24C30 24.5304 29.7893 25.0391 29.4142 25.4142C29.0391 25.7893 28.5304 26 28 26Z"
-                                         fill="currentColor" />
-                              </g>
-                              <defs>
-                                 <clipPath id="clip0_483_26501">
-                                    <rect width="32" height="32" fill="white" />
-                                 </clipPath>
-                              </defs>
-                           </svg>
-                           <div>
-                              <h5 class="mb-0">Dr.Harriet Upp</h5>
-                              <h6 class="text-body fw-normal mb-0 mt-2">22 May At 11:00 AM</h6>
-                           </div>
-                        </div>
-                        <h5 class="mb-0 text-primary mt-sm-0 mt-3">$150.50</h5>
-                        <div class="dropdown text-end">
-                           <button class="dropdown btn border-0 p-0">
-                              <svg width="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M8.5 5L15.5 12L8.5 19" stroke="currentColor" stroke-width="1.5"
-                                       stroke-linecap="round" stroke-linejoin="round"></path>
-                              </svg>
-                           </button>
-                        </div>
-                     </li>
                   </ul>
                </div>
             </div>
@@ -980,7 +873,7 @@
                             <svg class="icon-16" width="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M15.85 2.50065C16.481 2.50065 17.111 2.58965 17.71 2.79065C21.401 3.99065 22.731 8.04065 21.62 11.5806C20.99 13.3896 19.96 15.0406 18.611 16.3896C16.68 18.2596 14.561 19.9196 12.28 21.3496L12.03 21.5006L11.77 21.3396C9.48102 19.9196 7.35002 18.2596 5.40102 16.3796C4.06102 15.0306 3.03002 13.3896 2.39002 11.5806C1.26002 8.04065 2.59002 3.99065 6.32102 2.76965C6.61102 2.66965 6.91002 2.59965 7.21002 2.56065H7.33002C7.61102 2.51965 7.89002 2.50065 8.17002 2.50065H8.28002C8.91002 2.51965 9.52002 2.62965 10.111 2.83065H10.17C10.21 2.84965 10.24 2.87065 10.26 2.88965C10.481 2.96065 10.69 3.04065 10.89 3.15065L11.27 3.32065C11.3618 3.36962 11.4649 3.44445 11.554 3.50912C11.6104 3.55009 11.6612 3.58699 11.7 3.61065C11.7163 3.62028 11.7329 3.62996 11.7496 3.63972C11.8354 3.68977 11.9247 3.74191 12 3.79965C13.111 2.95065 14.46 2.49065 15.85 2.50065ZM18.51 9.70065C18.92 9.68965 19.27 9.36065 19.3 8.93965V8.82065C19.33 7.41965 18.481 6.15065 17.19 5.66065C16.78 5.51965 16.33 5.74065 16.18 6.16065C16.04 6.58065 16.26 7.04065 16.68 7.18965C17.321 7.42965 17.75 8.06065 17.75 8.75965V8.79065C17.731 9.01965 17.8 9.24065 17.94 9.41065C18.08 9.58065 18.29 9.67965 18.51 9.70065Z" fill="currentColor"></path>
                             </svg>
-                        </span> By <a href="https://iqonic.design/" target="_blank">IQONIC Design</a>.
+                        </span> By <a href="https://iqonic.design/" target="_blank">Tuan Anh Design</a>.
          </h6>
       </div>
    </footer>
