@@ -122,4 +122,44 @@ public class PatientDAO {
         return patients;
     }
 
+    public boolean insertPatient(String fullName, String dob, String gender, String phone, String address) {
+        String sql = """
+                INSERT INTO [dbo].[Patient]
+                ([full_name], [dob], [gender], [phone], [address])
+                VALUES (?, ?, ?, ?, ?);
+                """;
+
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+            stmt.setNString(1, fullName);
+            stmt.setNString(2, dob);
+            stmt.setNString(3, gender);
+            stmt.setNString(4, phone);
+            stmt.setNString(5, address);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deletePatient(int patientId) {
+        String sql = """
+                DELETE FROM [dbo].[Patient]
+                WHERE [patient_id] = ?;
+                """;
+
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+            stmt.setInt(1, patientId);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
