@@ -38,7 +38,6 @@ public class AppointmentServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         try {
-            // Đọc body JSON từ request
             StringBuilder sb = new StringBuilder();
             BufferedReader reader = request.getReader();
             String line;
@@ -47,13 +46,17 @@ public class AppointmentServlet extends HttpServlet {
             }
             String jsonData = sb.toString();
 
-            // Parse JSON thành object
             AppointmentRequest appointmentRequest = gson.fromJson(jsonData, AppointmentRequest.class);
 
-            // Validate required fields
             if (appointmentRequest.getDoctorId() == null || appointmentRequest.getDate() == null || appointmentRequest.getTime() == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 out.println("{\"error\": \"Missing required fields: doctorId, date, or time\"}");
+                return;
+            }
+
+            if (!appointmentRequest.getDoctorId().matches("\\d+")) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.println("{\"error\": \"Invalid doctorId format\"}");
                 return;
             }
 
@@ -61,9 +64,7 @@ public class AppointmentServlet extends HttpServlet {
             String date = appointmentRequest.getDate();
             String time = appointmentRequest.getTime();
             String note = appointmentRequest.getNote();
-            String department = appointmentRequest.getDepartment();
 
-            // Parse date and time
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Date appointmentDatetime;
             try {
@@ -71,13 +72,6 @@ public class AppointmentServlet extends HttpServlet {
             } catch (ParseException e) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 out.println("{\"error\": \"Invalid date or time format\"}");
-                return;
-            }
-
-            String shift = determineShift(time);
-            if (shift == null) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.println("{\"error\": \"Invalid time for shift determination\"}");
                 return;
             }
 
@@ -90,26 +84,25 @@ public class AppointmentServlet extends HttpServlet {
 
             Appointment appointment = new Appointment();
             appointment.setDoctorId(doctorId);
+            appointment.setPatientId(1); // TODO: replace with actual patientId from session
             appointment.setAppointmentDatetime(appointmentDatetime);
-            appointment.setShift(shift);
             appointment.setNote(note != null && !note.trim().isEmpty() ? note.trim() : null);
-//            appointment.setPatientId(getPatientId(request));
-            appointment.setPatientId(1);
-            appointment.setReceptionistId(-1);
 
             Appointment createdAppointment = dao.createAppointment(appointment);
-            if (createdAppointment == null) {
-                throw new SQLException("Appointment creation failed, no result returned.");
+            if (createdAppointment != null) {
+                response.setStatus(HttpServletResponse.SC_CREATED);
+                out.println(gson.toJson(createdAppointment));
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.println("{\"error\": \"Failed to create appointment\"}");
             }
 
-            response.setStatus(HttpServletResponse.SC_CREATED);
-            out.println(gson.toJson(createdAppointment));
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.println("{\"error\": \"Database error: " + e.getMessage() + "\"}");
+            out.println("{\"error\": \"Database error: " + e.getMessage().replace("\"", "\\\"") + "\"}");
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.println("{\"error\": \"Unexpected error: " + e.getMessage() + "\"}");
+            out.println("{\"error\": \"Unexpected error: " + e.getMessage().replace("\"", "\\\"") + "\"}");
         } finally {
             out.flush();
         }
