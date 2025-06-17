@@ -8,14 +8,43 @@ public class AppointmentRequest {
     private String department;
 
     // Getters and setters
-    public String getDoctorId() { return doctorId; }
-    public void setDoctorId(String doctorId) { this.doctorId = doctorId; }
-    public String getDate() { return date; }
-    public void setDate(String date) { this.date = date; }
-    public String getTime() { return time; }
-    public void setTime(String time) { this.time = time; }
-    public String getNote() { return note; }
-    public void setNote(String note) { this.note = note; }
-    public String getDepartment() { return department; }
-    public void setDepartment(String department) { this.department = department; }
+    public String getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(String doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 }

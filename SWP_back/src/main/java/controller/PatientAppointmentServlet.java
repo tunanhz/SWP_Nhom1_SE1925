@@ -88,11 +88,12 @@ public class PatientAppointmentServlet extends HttpServlet {
                 int totalPages = (int) Math.ceil((double) totalAppointment / pageSize);
 
                 ArrayList<AppointmentPatientDTO> appointmentPatientDTOS = appointmentDAO.getThreeAppointmentsUpcoming(accountPatientId);
-
+                ArrayList<AppointmentDTO> threeAppointmentComplete = appointmentDAO.getTop3CompletedAppointments(accountPatientId);
                 // Build response JSON
                 JsonObject responseJson = new JsonObject();
                 responseJson.add("appointments", gson.toJsonTree(appointments));
                 responseJson.add("threeAppointmentsUpcoming", gson.toJsonTree(appointmentPatientDTOS));
+                responseJson.add("threeAppointmentComplete", gson.toJsonTree(threeAppointmentComplete));
                 responseJson.addProperty("totalPages", totalPages);
                 responseJson.addProperty("currentPage", page);
                 responseJson.addProperty("pageSize", pageSize);
