@@ -8,6 +8,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.AppointmentRequest;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -22,48 +26,45 @@ public class AppointmentServlet extends HttpServlet {
 
     @Override
     protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setHeader("Access-Control-Allow-Origin", "*");
-        resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        setCorsHeaders(resp);
         resp.setStatus(HttpServletResponse.SC_OK);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Received POST request to /api/appointments");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        System.out.println("Received POST request to /api/Add_appointments");
+        setCorsHeaders(response);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter out = response.getWriter();
         try {
-            // Get form parameters
-            String department = request.getParameter("department");
-            String doctorIdStr = request.getParameter("doctorId");
-            String date = request.getParameter("date");
-            String time = request.getParameter("time");
-            String note = request.getParameter("note");
+            // Đọc body JSON từ request
+            StringBuilder sb = new StringBuilder();
+            BufferedReader reader = request.getReader();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            String jsonData = sb.toString();
+
+            // Parse JSON thành object
+            AppointmentRequest appointmentRequest = gson.fromJson(jsonData, AppointmentRequest.class);
 
             // Validate required fields
-            if (doctorIdStr == null || doctorIdStr.isEmpty() || date == null || date.isEmpty() || time == null || time.isEmpty()) {
+            if (appointmentRequest.getDoctorId() == null || appointmentRequest.getDate() == null || appointmentRequest.getTime() == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 out.println("{\"error\": \"Missing required fields: doctorId, date, or time\"}");
                 return;
             }
 
-            // Parse doctorId
-            int doctorId;
-            try {
-                doctorId = Integer.parseInt(doctorIdStr);
-            } catch (NumberFormatException e) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.println("{\"error\": \"Invalid doctorId format\"}");
-                return;
-            }
+            int doctorId = Integer.parseInt(appointmentRequest.getDoctorId());
+            String date = appointmentRequest.getDate();
+            String time = appointmentRequest.getTime();
+            String note = appointmentRequest.getNote();
+            String department = appointmentRequest.getDepartment();
 
-            // Parse date and time into appointmentDatetime
+            // Parse date and time
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Date appointmentDatetime;
             try {
@@ -74,7 +75,6 @@ public class AppointmentServlet extends HttpServlet {
                 return;
             }
 
-            // Determine shift based on time
             String shift = determineShift(time);
             if (shift == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -82,7 +82,6 @@ public class AppointmentServlet extends HttpServlet {
                 return;
             }
 
-            // Validate appointment date (must be in future)
             Date currentDate = new Date();
             if (appointmentDatetime.before(currentDate)) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -90,24 +89,20 @@ public class AppointmentServlet extends HttpServlet {
                 return;
             }
 
-            // Create Appointment object
             Appointment appointment = new Appointment();
             appointment.setDoctorId(doctorId);
             appointment.setAppointmentDatetime(appointmentDatetime);
             appointment.setShift(shift);
-            appointment.setNote(note != null && !note.trim().isEmpty() ? note.trim() : null); // Set note, allow null if empty
-            // Set patientId (assuming a default or session-based value)
-            appointment.setPatientId(getPatientId(request)); // Implement this based on your authentication
-            // Set receptionistId to -1 (indicating NULL in DAO)
+            appointment.setNote(note != null && !note.trim().isEmpty() ? note.trim() : null);
+//            appointment.setPatientId(getPatientId(request));
+            appointment.setPatientId(1);
             appointment.setReceptionistId(-1);
 
-            // Call DAO to create appointment
             Appointment createdAppointment = dao.createAppointment(appointment);
             if (createdAppointment == null) {
                 throw new SQLException("Appointment creation failed, no result returned.");
             }
 
-            // Prepare response
             response.setStatus(HttpServletResponse.SC_CREATED);
             out.println(gson.toJson(createdAppointment));
         } catch (SQLException e) {
@@ -116,8 +111,15 @@ public class AppointmentServlet extends HttpServlet {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.println("{\"error\": \"Unexpected error: " + e.getMessage() + "\"}");
+        } finally {
+            out.flush();
         }
-        out.flush();
+    }
+
+    private void setCorsHeaders(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
     }
 
     private String determineShift(String time) {
@@ -137,9 +139,11 @@ public class AppointmentServlet extends HttpServlet {
         return null;
     }
 
-    private int getPatientId(HttpServletRequest request) {
-        // Placeholder: Implement logic to get patientId (e.g., from session or authentication)
-        // For now, return a default value or throw an error if not authenticated
-        return 1; // Replace with actual logic (e.g., session.getAttribute("patientId"))
-    }
+//    private int getPatientId(HttpServletRequest request) {
+//        HttpSession session = request.getSession(false);
+//        if (session != null && session.getAttribute("patientId") != null) {
+//            return (Integer) session.getAttribute("patientId");
+//        }
+//        throw new IllegalStateException("No authenticated patient found in session");
+//    }
 }
