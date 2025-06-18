@@ -417,7 +417,7 @@ public class PatientAppointmentDAO {
         AppointmentDTO a = dao.getAppointmentsByAppointmentId(2);
         System.out.println(a);
 
-        ArrayList<AppointmentPatientDTO> appointments = dao.getThreeAppointmentsUpcoming(1);
+        ArrayList<AppointmentDTO> appointments = dao.getAppointmentsByAccountPatientId(1, "", "", "", 1, 20);
         System.out.println(appointments.size());
     }
 

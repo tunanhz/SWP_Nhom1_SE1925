@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class PatientDAO {
     DBContext ad = new DBContext();
@@ -39,7 +40,7 @@ public class PatientDAO {
         }
     }
 
-    public ArrayList<Patient> getAllPatientsByAccountPatientId(int accountPatientId, String fullName, String dob, String gender, int offset, int pageSize) {
+    public ArrayList<Patient> getAllPatientsByAccountPatientId(int accountPatientId, String fullName, String dob, String gender, int page, int pageSize) {
         String sql = """
                 SELECT
                     p.patient_id,
@@ -63,7 +64,7 @@ public class PatientDAO {
                         WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
                         WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
                         ELSE ? END)
-                    AND p.gender = ?
+                    AND (? IS NULL OR p.gender COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                 ORDER BY p.patient_id
                 OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
                 """;
@@ -73,37 +74,26 @@ public class PatientDAO {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
             stmt.setInt(1, accountPatientId);
 
-            // Handle full_name parameter
-            if (fullName == null || fullName.trim().isEmpty()) {
-                stmt.setNull(2, Types.NVARCHAR);
-                stmt.setNull(3, Types.NVARCHAR);
-            } else {
-                stmt.setNString(2, fullName);
-                stmt.setNString(3, "%" + fullName + "%");
-            }
 
-            // Handle dob parameter
-            if (dob == null || dob.trim().isEmpty()) {
-                stmt.setNull(4, Types.NVARCHAR);
-                stmt.setNull(5, Types.NVARCHAR);
-                stmt.setNull(6, Types.NVARCHAR);
-                stmt.setNull(7, Types.NVARCHAR);
-                stmt.setNull(8, Types.NVARCHAR);
-                stmt.setNull(9, Types.NVARCHAR);
-                stmt.setNull(10, Types.NVARCHAR);
-            } else {
-                stmt.setNString(4, dob);
-                stmt.setNString(5, dob);
-                stmt.setNString(6, dob);
-                stmt.setNString(7, dob);
-                stmt.setNString(8, dob);
-                stmt.setNString(9, dob);
-                stmt.setNString(10, dob);
-            }
+            stmt.setNString(2, fullName);
+            stmt.setNString(3, "%" + fullName + "%");
 
-            stmt.setNString(11, gender);
-            stmt.setInt(12, offset);
-            stmt.setInt(13, pageSize);
+
+            stmt.setNString(4, dob);
+            stmt.setNString(5, "%" + dob + "%");
+            stmt.setNString(6, "%" + dob + "%");
+            stmt.setNString(7, "%" + dob + "%");
+            stmt.setNString(8, "%" + dob + "%");
+            stmt.setNString(9, "%" + dob + "%");
+            stmt.setNString(10, "%" + dob + "%");
+            stmt.setNString(11, "%" + dob + "%");
+
+            stmt.setNString(12, gender);
+            stmt.setString(13, gender != null ? "%" + gender + "%" : null);
+
+            int offset = (page - 1) * pageSize;
+            stmt.setInt(14, offset);
+            stmt.setInt(15, pageSize);
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -120,6 +110,64 @@ public class PatientDAO {
             e.printStackTrace();
         }
         return patients;
+    }
+
+    public int countPatientByAccountPatientId(
+            int accountPatientId,
+            String fullName,
+            String dob,
+            String gender) {
+        String query = """
+                    SELECT COUNT(*) AS total
+                    FROM AccountPatient ap
+                FULL OUTER JOIN Patient_AccountPatient pa
+                    ON pa.account_patient_id = ap.account_patient_id
+                FULL OUTER JOIN Patient p
+                    ON p.patient_id = pa.patient_id
+                WHERE ap.account_patient_id = ?
+                    AND ap.status = 'Enable'
+                    AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                    AND (? IS NULL OR
+                        CONVERT(VARCHAR, p.dob, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
+                        LIKE CASE
+                        WHEN ? LIKE '[0-9][0-9][0-9][0-9]' THEN ? + '%'
+                        WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                        WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                        ELSE ? END)
+                    AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                """;
+
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(query)) {
+            // Account patient ID
+            stmt.setInt(1, accountPatientId);
+
+            // Full name filter
+            stmt.setString(2, fullName);
+            stmt.setString(3, fullName != null ? "%" + fullName + "%" : null);
+
+            // dob year filter
+            stmt.setString(4, dob);
+            stmt.setString(5, "%" + dob + "%");
+            stmt.setString(6, "%" + dob + "%");
+            stmt.setString(7, "%" + dob + "%");
+            stmt.setString(8, "%" + dob + "%");
+            stmt.setString(9, "%" + dob + "%");
+            stmt.setString(10, "%" + dob + "%");
+            stmt.setString(11, "%" + dob + "%");
+
+            // Gender filter
+            stmt.setString(12, gender);
+            stmt.setString(13, gender != null ? "%" + gender + "%" : null);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error counting patients: " + e.getMessage());
+            throw new RuntimeException("Failed to count patients", e);
+        }
     }
 
     public boolean insertPatient(String fullName, String dob, String gender, String phone, String address) {
@@ -161,5 +209,11 @@ public class PatientDAO {
             e.printStackTrace();
             return false;
         }
+    }
+    
+    public static void main(String[] args) {
+        PatientDAO patientDAO = new PatientDAO();
+        ArrayList<Patient> patients = patientDAO.getAllPatientsByAccountPatientId(1, "", "", "", 1, 10);
+        System.out.println(patients.size());
     }
 }
