@@ -24,7 +24,7 @@ public class AccountPatientDAO {
             if (rs.next()) {
                 account = new AccountPatient(
                         rs.getInt("account_patient_id"), rs.getString("username"), rs.getString("password"),
-                        rs.getString("email"), rs.getBoolean("status")
+                        rs.getString("email"), rs.getBoolean("status"), rs.getString("img")
                 );
             }
         } catch (SQLException e) {

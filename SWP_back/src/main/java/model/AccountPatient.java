@@ -2,14 +2,15 @@ package model;
 
 public class AccountPatient extends Account {
     private int accountPatientId;
-    
+    private String img;
     public AccountPatient() {
         super("", "", "", false);
     }
 
-    public AccountPatient(int accountPatientId, String username, String password, String email, boolean status) {
+    public AccountPatient(int accountPatientId, String username, String password, String email, boolean status, String img) {
         super(username, password, email, status);
         this.accountPatientId = accountPatientId;
+        this.img = img;
     }
 
     public int getAccountPatientId() {
@@ -50,6 +51,14 @@ public class AccountPatient extends Account {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     @Override

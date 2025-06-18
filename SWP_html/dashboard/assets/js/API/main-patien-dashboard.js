@@ -2,8 +2,22 @@ const accountString = localStorage.getItem("account");
 const account = JSON.parse(accountString);
 const baseAPI = `http://localhost:8080/SWP_back_war_exploded/api/patientAppointment/?accountPatientId=${account.accountPatientId}`;
 
+let imagePath = account?.img ;
+
 if (account) {
   document.getElementById('username').innerHTML = `Hello! ${account.username}`;
+
+  const userImgElement = document.getElementById('userImg');
+    if (userImgElement) {
+        userImgElement.src = imagePath;
+        userImgElement.alt = `Profile of ${account.username || 'User'}`;
+    }
+
+    const profileImgElement = document.getElementById('profileImg');
+    if (profileImgElement) {
+        profileImgElement.src = imagePath;
+        profileImgElement.alt = `Profile of ${account.username || 'User'}`;
+    }
 }
 
 function createAppointmentCompletedRow(appointment, index) {
