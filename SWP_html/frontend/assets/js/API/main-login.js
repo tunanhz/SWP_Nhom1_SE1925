@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             window.location.href = "./front-end/index.html";
                             break;
                         case 'patient':
-                            window.location.href = '/SWP_html/dashboard/patient-dashboard.html';
+                            window.location.href = '/dashboard/patient-dashboard.html';
                             break;
                         case 'pharmacist':
                             window.location.href = "./front-end/index.html";
