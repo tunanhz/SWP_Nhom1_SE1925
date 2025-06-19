@@ -40,8 +40,23 @@
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
-      
-      
+      <script src="./assets/js/API/main-signup.js" defer></script>
+      <style>
+        .sign-in-page {
+            background-image: url('assets/images/background/background_login.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            width: 100%;
+        }
+        .custom-form-field label {
+            font-weight: 500;
+        }
+        .custom-file-input {
+            margin-bottom: 1rem;
+        }
+    </style>
       <meta name="page_colors" content=''>
   </head>
   <body class=" body-bg landing-pages">
@@ -74,17 +89,23 @@
                      </span>
                   </a>
                </div>
-               <form method="post">
+               <form id="signupForm" method="post" enctype="multipart/form-data">
                   <div class="custom-form-field">
-                     <input
-                        type="email"
-                        name="user-name"
-                        placeholder="Your email id *"
-                        class="form-control mb-5"
-                        required
-                        pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
-                        title="Please enter a valid Gmail address (e.g., example@gmail.com)">
+                        <label for="username">Username <span>*</span></label>
+                        <input type="text" name="username" id="username" class="form-control mb-5" required>
                   </div>
+                            <div class="custom-form-field">
+                                <label for="password">Password <span>*</span></label>
+                                <input type="password" name="password" id="password" class="form-control mb-5" required>
+                            </div>
+                                    <div class="custom-form-field">
+                                        <label for="email">Email <span>*</span></label>
+                                        <input type="email" name="email" id="email" class="form-control mb-5" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Please enter a valid email address">
+                                    </div>
+                                            <div class="custom-form-field custom-file-input">
+                                                <label for="img">Profile Image <span>*</span></label>
+                                                <input type="file" name="img" id="img" class="form-control mb-5" accept="image/*" required>
+                                            </div>
 
                   <p class="mb-5"> Your personal data will be used to support
                      your experience throughout this
@@ -92,6 +113,7 @@
                      purposes described in our <a
                         href="./privacy-policy.html"> privcy policy</a>.
                   </p>
+                  <div class="iq-btn-container">
                   <button type="submit"
                      class="iq-button text-capitalize border-0">
                      <span
@@ -105,6 +127,7 @@
                         </svg>
                      </span>
                   </button>
+                  </div>
                </form>
                <div class="d-flex align-items-center mt-3">
                   <p class="my-0 text-capitalize">Already have an account?</p>
@@ -201,7 +224,7 @@
     <!-- Library Bundle Script -->
     <script src="./assets/js/core/libs.min.js"></script>
     <!-- Plugin Scripts -->
-    
+    <script src="./assets/js/plugins/flatpickr.min.js" defer></script>
     <!-- Slider-tab Script -->
     <script src="./assets/js/plugins/slider-tabs.js"></script>
     
@@ -228,4 +251,5 @@
     <!-- Kivicare Pages Script -->
     <script src="./assets/js/slider.js" defer></script>
     <script src="./assets/js/scroll-text.js" defer></script>  </body>
+    <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 </html>
