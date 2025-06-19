@@ -39,6 +39,25 @@ public class PatientDAO {
         }
     }
 
+    public boolean updatePatientStatus(int patientId, String status) {
+        String sql = """
+                UPDATE [HealthCareSystem].[dbo].[Patient]
+                SET [status] = ?
+                WHERE [patient_id] = ?;
+                """;
+
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+            stmt.setNString(1, status);
+            stmt.setInt(2, patientId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public ArrayList<Patient> getAllPatientsByAccountPatientId(int accountPatientId, String fullName, String dob, String gender, int page, int pageSize) {
         Logger LOGGER = Logger.getLogger(this.getClass().getName());
         String sql = """
@@ -169,11 +188,9 @@ public class PatientDAO {
 
     public boolean insertPatient(String fullName, String dob, String gender, String phone, String address, String status) {
         String sql = """
-                INSERT INTO [dbo].[Patient]
-                ([full_name], [dob], [gender], [phone], [address], [status])
-                VALUES (?, ?, ?, ?, ?, ?);
+                INSERT INTO Patient (full_name, dob, gender, phone, address, status) VALUES
+                (?, ?, ?, ?, ?, ?)
                 """;
-
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
             stmt.setNString(1, fullName);
@@ -182,6 +199,25 @@ public class PatientDAO {
             stmt.setNString(4, phone);
             stmt.setNString(5, address);
             stmt.setNString(6, status);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean insertAccountPatient(String fullName, String dob, String gender, String phone, String address, int account_id) {
+        Patient p = getPatientByDetails(fullName, dob, gender, phone, address);
+        String sql = """
+                 INSERT INTO [dbo].[Patient_AccountPatient]
+                ([patient_id],[account_patient_id])
+                VALUES (?,?)
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+            stmt.setInt(1, p.getId());
+            stmt.setInt(2, account_id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -208,6 +244,39 @@ public class PatientDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Patient getPatientByDetails(String fullName, String dob, String gender, String phone, String address) {
+        String sql = """
+                SELECT [patient_id], [full_name], [dob], [gender], [phone], [address], [status]
+                FROM [HealthCareSystem].[dbo].[Patient]
+                WHERE [full_name] = ? AND [dob] = ? AND [gender] = ? AND [phone] = ? AND [address] = ?
+                """;
+
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+            stmt.setNString(1, fullName);
+            stmt.setNString(2, dob);
+            stmt.setNString(3, gender);
+            stmt.setNString(4, phone);
+            stmt.setNString(5, address);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Patient patient = new Patient();
+                patient.setId(rs.getInt("patient_id"));
+                patient.setFullName(rs.getString("full_name"));
+                patient.setDob(rs.getString("dob"));
+                patient.setGender(rs.getString("gender"));
+                patient.setPhone(rs.getString("phone"));
+                patient.setAddress(rs.getString("address"));
+                patient.setStatus(rs.getString("status"));
+                return patient;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void main(String[] args) {
