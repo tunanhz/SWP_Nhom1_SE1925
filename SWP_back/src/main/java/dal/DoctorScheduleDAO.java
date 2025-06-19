@@ -1,6 +1,7 @@
 package dal;
 
 import model.DoctorSchedule;
+
 import java.sql.*;
 import java.util.logging.Logger;
 
@@ -40,8 +41,16 @@ public class DoctorScheduleDAO {
             LOGGER.severe("SQL Error: " + e.getMessage());
             throw e;
         } finally {
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { LOGGER.severe(e.getMessage()); }
-            if (conn != null) try { conn.close(); } catch (SQLException e) { LOGGER.severe(e.getMessage()); }
+            if (stmt != null) try {
+                stmt.close();
+            } catch (SQLException e) {
+                LOGGER.severe(e.getMessage());
+            }
+            if (conn != null) try {
+                conn.close();
+            } catch (SQLException e) {
+                LOGGER.severe(e.getMessage());
+            }
         }
         return createdSchedule;
     }

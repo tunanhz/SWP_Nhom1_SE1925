@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 @WebServlet("/api/doctors/*")
-public class DoctorServlet extends HttpServlet{
+public class DoctorServlet extends HttpServlet {
     private final DoctorDAO dao = new DoctorDAO();
     private final AtomicLong counter = new AtomicLong();
     private final Gson gson = new Gson();
@@ -54,7 +55,7 @@ public class DoctorServlet extends HttpServlet{
             return;
         }
 
-        if (pathInfo == null || pathInfo.equals("/")){
+        if (pathInfo == null || pathInfo.equals("/")) {
             int page = 1; // Mặc định trang 1
             int size = 8; // Mặc định 8 bác sĩ mỗi trang
             String name = null;

@@ -9,18 +9,34 @@ public class Patient {
     private String gender;
     private String phone;
     private String address;
+    private String status;
+
     private Appointment appointment;
+
 
     public Patient() {
     }
 
-    public Patient(int id, String fullName, String dob, String gender, String phone, String address) {
+    public Patient(int id, String fullName, String dob, String gender, String phone, String address, String status) {
         this.id = id;
         this.fullName = fullName;
         this.dob = dob;
         this.gender = gender;
         this.phone = phone;
         this.address = address;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setAppointment(Appointment appointment) {
+        this.appointment = appointment;
     }
 
     public int getId() {

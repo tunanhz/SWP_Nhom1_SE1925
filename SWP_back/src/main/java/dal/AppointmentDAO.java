@@ -22,7 +22,7 @@ public class AppointmentDAO {
                         ,[note]
                 FROM [HealthCareSystem].[dbo].[Appointment]
                 WHERE patient_id = ?
-                     """;
+                """;
 
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
@@ -50,17 +50,17 @@ public class AppointmentDAO {
     public Appointment getAppointmentByDoctorId(int doctorId) {
         Appointment appointment = null;
         String sql = """
-            SELECT  [appointment_id]
-                    ,[doctor_id]
-                    ,[patient_id]
-                    ,[appointment_datetime]
-                    ,[receptionist_id]
-                    ,[shift]
-                    ,[status]
-                    ,[note]
-            FROM [HealthCareSystem].[dbo].[Appointment]
-            WHERE doctor_id = ?
-                 """;
+                SELECT  [appointment_id]
+                        ,[doctor_id]
+                        ,[patient_id]
+                        ,[appointment_datetime]
+                        ,[receptionist_id]
+                        ,[shift]
+                        ,[status]
+                        ,[note]
+                FROM [HealthCareSystem].[dbo].[Appointment]
+                WHERE doctor_id = ?
+                """;
 
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
@@ -89,17 +89,17 @@ public class AppointmentDAO {
     public Appointment getAppointmentByAppointmentId(int appointmentId) {
         Appointment appointment = null;
         String sql = """
-            SELECT  [appointment_id]
-                    ,[doctor_id]
-                    ,[patient_id]
-                    ,[appointment_datetime]
-                    ,[receptionist_id]
-                    ,[shift]
-                    ,[status]
-                    ,[note]
-            FROM [HealthCareSystem].[dbo].[Appointment]
-            WHERE appointment_id = ?
-                 """;
+                SELECT  [appointment_id]
+                        ,[doctor_id]
+                        ,[patient_id]
+                        ,[appointment_datetime]
+                        ,[receptionist_id]
+                        ,[shift]
+                        ,[status]
+                        ,[note]
+                FROM [HealthCareSystem].[dbo].[Appointment]
+                WHERE appointment_id = ?
+                """;
 
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
@@ -128,17 +128,17 @@ public class AppointmentDAO {
     public Appointment getAppointmentByReceptionistId(int receptionistId) {
         Appointment appointment = null;
         String sql = """
-            SELECT  [appointment_id]
-                    ,[doctor_id]
-                    ,[patient_id]
-                    ,[appointment_datetime]
-                    ,[receptionist_id]
-                    ,[shift]
-                    ,[status]
-                    ,[note]
-            FROM [HealthCareSystem].[dbo].[Appointment]
-            WHERE receptionist_id = ?
-                 """;
+                SELECT  [appointment_id]
+                        ,[doctor_id]
+                        ,[patient_id]
+                        ,[appointment_datetime]
+                        ,[receptionist_id]
+                        ,[shift]
+                        ,[status]
+                        ,[note]
+                FROM [HealthCareSystem].[dbo].[Appointment]
+                WHERE receptionist_id = ?
+                """;
 
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
@@ -167,7 +167,6 @@ public class AppointmentDAO {
         Appointment appointment = dao.getAppointmentByPatientId(18);
         System.out.println(appointment);
     }
-
 
 
     private static final Logger LOGGER = Logger.getLogger(AppointmentDAO.class.getName());
@@ -209,8 +208,16 @@ public class AppointmentDAO {
             LOGGER.severe("SQL Error: " + e.getMessage());
             throw e;
         } finally {
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { LOGGER.severe(e.getMessage()); }
-            if (conn != null) try { conn.close(); } catch (SQLException e) { LOGGER.severe(e.getMessage()); }
+            if (stmt != null) try {
+                stmt.close();
+            } catch (SQLException e) {
+                LOGGER.severe(e.getMessage());
+            }
+            if (conn != null) try {
+                conn.close();
+            } catch (SQLException e) {
+                LOGGER.severe(e.getMessage());
+            }
         }
         return createdAppointment;
     }

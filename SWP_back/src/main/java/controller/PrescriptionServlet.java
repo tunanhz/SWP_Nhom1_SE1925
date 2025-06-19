@@ -2,7 +2,6 @@ package controller;
 
 import com.google.gson.JsonObject;
 import dal.PrescriptionDAO;
-import model.Prescription;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.PrescriptionDTO;
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -54,7 +52,7 @@ public class PrescriptionServlet extends HttpServlet {
                     sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid page or size parameters");
                     return;
                 }
-                
+
                 ArrayList<PrescriptionDTO> prescriptions = dao.getAllPrescriptions(page, size);
 
                 out.println(gson.toJson(prescriptions));

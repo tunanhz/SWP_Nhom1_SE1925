@@ -1,6 +1,7 @@
 package dal;
 
 import model.AccountPatient;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,9 +12,9 @@ public class AccountPatientDAO {
     public AccountPatient getAccountByUsernameAndPassword(String username, String password) {
         AccountPatient account = null;
         String sql = """
-                     SELECT * FROM [dbo].[AccountPatient] 
-                     WHERE username = ? AND password = ? AND status = 'Enable'
-                     """;
+                SELECT * FROM [dbo].[AccountPatient] 
+                WHERE username = ? AND password = ? AND status = 'Enable'
+                """;
 
         try {
             PreparedStatement stmt = dbContext.getConnection().prepareStatement(sql);

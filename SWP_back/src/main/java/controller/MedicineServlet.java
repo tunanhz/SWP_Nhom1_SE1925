@@ -1,4 +1,5 @@
 package controller;
+
 import com.google.gson.JsonObject;
 import dal.MedicineDAO;
 import model.MedicineDTO;
@@ -8,15 +9,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 
 @WebServlet("/api/medicine/*")
-public class MedicineServlet extends HttpServlet  {
+public class MedicineServlet extends HttpServlet {
 
     private final MedicineDAO dao = new MedicineDAO();
     private final AtomicLong counter = new AtomicLong();
@@ -64,8 +64,6 @@ public class MedicineServlet extends HttpServlet  {
             sendError(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Server error: " + e.getMessage());
         }
     }
-
-
 
 
     private void setCORSHeaders(HttpServletResponse resp) {
