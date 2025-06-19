@@ -1,14 +1,12 @@
 package dal;
 
 
-import model.Prescription;
 import model.PrescriptionDTO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 public class PrescriptionDAO {
     DBContext ad = new DBContext();
@@ -56,7 +54,7 @@ public class PrescriptionDAO {
         return (l);
     }
 
-    
+
     public ArrayList<PrescriptionDTO> getPrescriptionDetailById(int prescriptionId) {
         ArrayList<PrescriptionDTO> list = new ArrayList<>();
         String sql = """

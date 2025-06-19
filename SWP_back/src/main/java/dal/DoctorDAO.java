@@ -261,17 +261,15 @@ public class DoctorDAO {
     }
 
 
-
-
     public ArrayList<Doctor> getAllDoctors() {
         ArrayList<Doctor> l = new ArrayList<>();
         String xSql = """
-            Select d.doctor_id, d.full_name, d.phone, d.eduLevel, d.department, a.email, a.[img] 
-            from [dbo].[Doctor] d
-            join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id
-            where a.role = 'Doctor' and a.status = 'Enable'
-            order by d.doctor_id;
-            """;
+                Select d.doctor_id, d.full_name, d.phone, d.eduLevel, d.department, a.email, a.[img] 
+                from [dbo].[Doctor] d
+                join [dbo].[AccountStaff] a on a.account_staff_id = d.account_staff_id
+                where a.role = 'Doctor' and a.status = 'Enable'
+                order by d.doctor_id;
+                """;
 
         try {
             PreparedStatement ps = ad.getConnection().prepareStatement(xSql);
@@ -313,7 +311,7 @@ public class DoctorDAO {
                         AND (? IS NULL OR d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                         AND (? IS NULL OR d.department COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                     ORDER BY d.doctor_id 
-                    
+                
                 """;
 
         try {
@@ -358,7 +356,6 @@ public class DoctorDAO {
         ArrayList<Doctor> l = dao.searchDoctorsByNameAndDepartment("u", "Nội tổng quát", 1, 8);
         System.out.println(l);
     }
-
 
 
 }

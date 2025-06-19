@@ -5,9 +5,7 @@ import model.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.logging.Logger;
 
 public class PatientAppointmentDAO {
@@ -55,6 +53,7 @@ public class PatientAppointmentDAO {
                             AND a.appointment_datetime IS NOT NULL
                             AND ap.status = 'Enable'
                             AND acs.status = 'Enable'
+                            AND p.status = 'Enable'
                             AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                             AND (? IS NULL OR CONVERT(VARCHAR, a.appointment_datetime, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
                                 LIKE CASE
@@ -148,6 +147,7 @@ public class PatientAppointmentDAO {
                         AND a.appointment_datetime IS NOT NULL
                         AND ap.status = 'Enable'
                         AND acs.status = 'Enable'
+                        AND p.status = 'Enable'
                         AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                         AND (? IS NULL OR CONVERT(VARCHAR, a.appointment_datetime, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
                                 LIKE CASE
@@ -223,6 +223,7 @@ public class PatientAppointmentDAO {
                     AND a.appointment_datetime IS NOT NULL
                     AND ap.status = 'Enable'
                     AND acs.status = 'Enable'
+                    AND p.status = 'Enable'
                 """;
         AppointmentDTO a = null;
         try {
@@ -288,6 +289,7 @@ public class PatientAppointmentDAO {
                                                                 AND a.appointment_datetime IS NOT NULL
                                                                 AND ap.status = 'Enable'
                                                                 AND acs.status = 'Enable'
+                                                                AND p.status = 'Enable'
                                                             	AND a.status = 'Confirmed'
                                                             	AND a.appointment_datetime > GETDATE()
                                                             	ORDER BY a.appointment_datetime ASC
@@ -371,6 +373,7 @@ public class PatientAppointmentDAO {
                     AND a.appointment_datetime IS NOT NULL
                     AND ap.status = 'Enable'
                     AND acs.status = 'Enable'
+                    AND p.status = 'Enable'
                     AND a.status = 'Completed'
                 ORDER BY p.patient_id
                 """;

@@ -9,9 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.AppointmentDTO;
-import model.AppointmentPatientDTO;
-import model.Doctor;
 import model.Patient;
 
 import java.io.BufferedReader;
@@ -101,7 +98,7 @@ public class PatientServlet extends HttpServlet {
         }
     }
 
-
+    
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         setCORSHeaders(response);
@@ -156,7 +153,8 @@ public class PatientServlet extends HttpServlet {
                             updatedPatient.getDob(),
                             gender,
                             updatedPatient.getPhone(),
-                            updatedPatient.getAddress()
+                            updatedPatient.getAddress(),
+                            updatedPatient.getStatus()
                     );
                     out.print(gson.toJson(responsePatient));
                 } else {
@@ -177,7 +175,6 @@ public class PatientServlet extends HttpServlet {
         out.flush();
     }
 
-
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         setCORSHeaders(response);
@@ -191,20 +188,24 @@ public class PatientServlet extends HttpServlet {
                 int id = Integer.parseInt(pathInfo.split("/")[1]);
                 boolean removed = patientDAO.deletePatient(id);
                 if (removed) {
-                    response.setStatus(HttpServletResponse.SC_NO_CONTENT); // Use 204 instead of 200
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204
                     LOGGER.info("Patient " + id + " deleted successfully");
                 } else {
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404
                     out.print("{\"error\":\"Patient not found\"}");
                     LOGGER.info("Patient " + id + " not found");
                 }
             } catch (NumberFormatException e) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
                 out.print("{\"error\":\"Invalid ID\"}");
                 LOGGER.severe("Error processing Patient request: " + e.getMessage());
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500
+                out.print("{\"error\":\"Server error\"}");
+                LOGGER.severe("Unexpected error: " + e.getMessage());
             }
         } else {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
             out.print("{\"error\":\"Invalid request\"}");
         }
         out.flush();

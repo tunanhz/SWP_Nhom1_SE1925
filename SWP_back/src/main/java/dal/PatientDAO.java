@@ -5,7 +5,6 @@ import model.Patient;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -41,6 +40,7 @@ public class PatientDAO {
     }
 
     public ArrayList<Patient> getAllPatientsByAccountPatientId(int accountPatientId, String fullName, String dob, String gender, int page, int pageSize) {
+        Logger LOGGER = Logger.getLogger(this.getClass().getName());
         String sql = """
                 SELECT
                     p.patient_id,
@@ -48,7 +48,8 @@ public class PatientDAO {
                     p.dob,
                     p.gender,
                     p.phone,
-                    p.[address]
+                    p.[address],
+                    p.status
                 FROM AccountPatient ap
                 FULL OUTER JOIN Patient_AccountPatient pa
                     ON pa.account_patient_id = ap.account_patient_id
@@ -56,45 +57,37 @@ public class PatientDAO {
                     ON p.patient_id = pa.patient_id
                 WHERE ap.account_patient_id = ?
                     AND ap.status = 'Enable'
+                    AND p.status = 'Enable'
                     AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-                    AND (? IS NULL OR
-                        CONVERT(VARCHAR, p.dob, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
-                        LIKE CASE
-                        WHEN ? LIKE '[0-9][0-9][0-9][0-9]' THEN ? + '%'
-                        WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
-                        WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
-                        ELSE ? END)
-                    AND (? IS NULL OR p.gender COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                    AND (? IS NULL OR CONVERT(DATE, p.dob) = CONVERT(DATE, ?))
+                    AND (? IS NULL OR p.gender COLLATE SQL_Latin1_General_CP1_CI_AI = ?)
                 ORDER BY p.patient_id
                 OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
                 """;
 
         ArrayList<Patient> patients = new ArrayList<>();
-        try {
-            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
+            // Set parameters
             stmt.setInt(1, accountPatientId);
 
-
+            // FullName
             stmt.setNString(2, fullName);
-            stmt.setNString(3, "%" + fullName + "%");
+            stmt.setNString(3, fullName != null ? "%" + fullName + "%" : null);
 
-
+            // DOB
             stmt.setNString(4, dob);
-            stmt.setNString(5, "%" + dob + "%");
-            stmt.setNString(6, "%" + dob + "%");
-            stmt.setNString(7, "%" + dob + "%");
-            stmt.setNString(8, "%" + dob + "%");
-            stmt.setNString(9, "%" + dob + "%");
-            stmt.setNString(10, "%" + dob + "%");
-            stmt.setNString(11, "%" + dob + "%");
+            stmt.setNString(5, dob);
 
-            stmt.setNString(12, gender);
-            stmt.setString(13, gender != null ? "%" + gender + "%" : null);
+            // Gender
+            stmt.setNString(6, gender);
+            stmt.setNString(7, gender);
 
+            // Pagination
             int offset = (page - 1) * pageSize;
-            stmt.setInt(14, offset);
-            stmt.setInt(15, pageSize);
+            stmt.setInt(8, offset);
+            stmt.setInt(9, pageSize);
 
+            // Execute query
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Patient patient = new Patient();
@@ -104,9 +97,12 @@ public class PatientDAO {
                 patient.setGender(rs.getString("gender"));
                 patient.setPhone(rs.getString("phone"));
                 patient.setAddress(rs.getString("address"));
+                patient.setStatus(rs.getString("status"));
                 patients.add(patient);
             }
+            LOGGER.info("Fetched " + patients.size() + " patients for accountPatientId=" + accountPatientId);
         } catch (SQLException e) {
+            LOGGER.severe("Error fetching patients for accountPatientId=" + accountPatientId + ": " + e.getMessage());
             e.printStackTrace();
         }
         return patients;
@@ -126,6 +122,7 @@ public class PatientDAO {
                     ON p.patient_id = pa.patient_id
                 WHERE ap.account_patient_id = ?
                     AND ap.status = 'Enable'
+                    AND p.status = 'Enable'
                     AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                     AND (? IS NULL OR
                         CONVERT(VARCHAR, p.dob, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
@@ -170,11 +167,11 @@ public class PatientDAO {
         }
     }
 
-    public boolean insertPatient(String fullName, String dob, String gender, String phone, String address) {
+    public boolean insertPatient(String fullName, String dob, String gender, String phone, String address, String status) {
         String sql = """
                 INSERT INTO [dbo].[Patient]
-                ([full_name], [dob], [gender], [phone], [address])
-                VALUES (?, ?, ?, ?, ?);
+                ([full_name], [dob], [gender], [phone], [address], [status])
+                VALUES (?, ?, ?, ?, ?, ?);
                 """;
 
         try {
@@ -184,7 +181,7 @@ public class PatientDAO {
             stmt.setNString(3, gender);
             stmt.setNString(4, phone);
             stmt.setNString(5, address);
-
+            stmt.setNString(6, status);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -195,22 +192,24 @@ public class PatientDAO {
 
     public boolean deletePatient(int patientId) {
         String sql = """
-                DELETE FROM [dbo].[Patient]
-                WHERE [patient_id] = ?;
+                UPDATE [dbo].[Patient]
+                SET [status] = 'Disable'
+                WHERE patient_id = ?;
                 """;
-
-        try {
-            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
             stmt.setInt(1, patientId);
-
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
-    
+
     public static void main(String[] args) {
         PatientDAO patientDAO = new PatientDAO();
         ArrayList<Patient> patients = patientDAO.getAllPatientsByAccountPatientId(1, "", "", "", 1, 10);
