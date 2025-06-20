@@ -78,7 +78,12 @@ public class PatientDAO {
                     AND ap.status = 'Enable'
                     AND p.status = 'Enable'
                     AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-                    AND (? IS NULL OR CONVERT(DATE, p.dob) = CONVERT(DATE, ?))
+                    AND (? IS NULL OR CONVERT(VARCHAR, p.dob, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
+                                LIKE CASE
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]' THEN ? + '%'
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                                ELSE ? END)
                     AND (? IS NULL OR p.gender COLLATE SQL_Latin1_General_CP1_CI_AI = ?)
                 ORDER BY p.patient_id
                 OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
@@ -96,15 +101,21 @@ public class PatientDAO {
             // DOB
             stmt.setNString(4, dob);
             stmt.setNString(5, dob);
+            stmt.setNString(6, dob);
+            stmt.setNString(7, dob);
+            stmt.setNString(8, dob);
+            stmt.setNString(9, dob);
+            stmt.setNString(10, dob);
+            stmt.setNString(11, dob);
 
             // Gender
-            stmt.setNString(6, gender);
-            stmt.setNString(7, gender);
+            stmt.setNString(12, gender);
+            stmt.setNString(13, gender);
 
             // Pagination
             int offset = (page - 1) * pageSize;
-            stmt.setInt(8, offset);
-            stmt.setInt(9, pageSize);
+            stmt.setInt(14, offset);
+            stmt.setInt(15, pageSize);
 
             // Execute query
             ResultSet rs = stmt.executeQuery();
