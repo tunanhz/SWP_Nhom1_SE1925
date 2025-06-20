@@ -30,13 +30,18 @@
         
         <link rel="stylesheet" href="./assets/vendor/sheperd/dist/css/sheperd.css">
         
+        <!-- Choisejs css -->
+        <link rel="stylesheet" href="./assets/vendor/choiceJS/style/choices.min.css">
         
         
-        <!-- Sweetlaert2 css -->
-        <link rel="stylesheet" href="./assets/vendor/sweetalert2/dist/sweetalert2.min.css"/>
         
         
         
+        <!-- Fullcalender CSS -->
+        <link rel='stylesheet' href='./assets/vendor/fullcalendar/core/main.css' />
+        <link rel='stylesheet' href='./assets/vendor/fullcalendar/daygrid/main.css' />
+        <link rel='stylesheet' href='./assets/vendor/fullcalendar/timegrid/main.css' />
+        <link rel='stylesheet' href='./assets/vendor/fullcalendar/list/main.css' />
         
         <!-- Kivicare Design System Css -->
         <link rel="stylesheet" href="./assets/css/kivicare.min.css?v=1.4.1" />
@@ -144,7 +149,7 @@
                                          </a>
                                          <ul class="iq-header-sub-menu list-unstyled collapse" id="allPatitentPages">
                                             <li class="nav-item">
-                                               <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 "
+                                               <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 active"
                                                   aria-current="page" href="./patient-patient.html">
                                                   <i class="icon" data-bs-toggle="tooltip" title="Patients" data-bs-placement="right">
                                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -209,7 +214,7 @@
                                          </ul>
                                       </li>
                                       <li class="nav-item">
-                                               <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 active"
+                                               <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 "
                                                   aria-current="page" href="./patient-payments.html">
                                                   <i class="icon" data-bs-toggle="tooltip" title="Payments" data-bs-placement="right">
                                                      <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
@@ -681,842 +686,145 @@
                     </nav>            <!--Nav End-->
             </div>
             <div class="content-inner container-fluid pb-0" id="page_layout">
-<div class="row mt-5 mb-5">
-    <!--<div class="col-lg-6">
-        <div class="card p-5">
-            <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                <div class="content">
-                    <h3 class="mb-2">Payment Method</h3>
-                    <span class="mx-0 text-capitalize">your credit card information.</span>
-                </div>
-                <button type="button" class="btn btn-primary">
-                    <span class="btn-inner">
-                        <span class="text d-inline-block align-middle">Change</span>
-                        <span class="icon d-inline-block align-middle ms-1 ps-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                                <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor"></path>
-                            </svg>
-                        </span>
-                     </span>
-                </button>
-            </div>
-            <div class="d-flex align-items-center gap-3 mt-5 flex-wrap">
-                <div class="p-3 bg-white shadow">
-                    <svg width="36" height="13" viewBox="0 0 36 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M9.00032 12.7412H5.88477L3.54848 3.09097C3.43759 2.64706 3.20214 2.25462 2.8558 2.06966C1.99146 1.60484 1.03902 1.23492 0 1.04835V0.676814H5.01891C5.7116 0.676814 6.23111 1.23492 6.31769 1.88309L7.52989 8.8441L10.6439 0.676814H13.6729L9.00032 12.7412ZM15.4049 12.7412H12.4625L14.8854 0.676814H17.8278L15.4049 12.7412ZM21.6342 4.02025C21.7208 3.37047 22.2403 2.99893 22.8464 2.99893C23.7988 2.90565 24.8363 3.09222 25.7022 3.55543L26.2217 0.957914C25.3559 0.586381 24.4034 0.399811 23.5391 0.399811C20.6833 0.399811 18.6052 2.0709 18.6052 4.39017C18.6052 6.15455 20.0772 7.08097 21.1162 7.63907C22.2403 8.19557 22.6732 8.5671 22.5866 9.1236C22.5866 9.95834 21.7208 10.3299 20.8564 10.3299C19.8174 10.3299 18.7784 10.0516 17.8275 9.58681L17.308 12.1859C18.347 12.6491 19.4711 12.8357 20.5101 12.8357C23.7122 12.9274 25.7022 11.2579 25.7022 8.75206C25.7022 5.59645 21.6342 5.41148 21.6342 4.02025ZM36.0001 12.7412L33.6638 0.676814H31.1543C30.6348 0.676814 30.1153 1.04835 29.9421 1.60484L25.6159 12.7412H28.6449L29.2495 10.9784H32.9711L33.3175 12.7412H36.0001ZM31.5872 3.92715L32.4515 8.47401H30.0287L31.5872 3.92715Z"
-                            fill="#172B85" />
+<div class="row">
+    <div class="col-lg-12">
+       <div class="card">
+   <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div>
+         <h4>All Patient</h4>
+      </div>
+      <button class="btn btn-primary " type="button" data-bs-toggle="offcanvas"
+         data-bs-target="#offcanvasPatientAdd" aria-controls="offcanvasPatientAdd">
+         <span class="btn-inner">
+            <span class="text d-inline-block align-middle">Add Patient</span>
+            <span class="icon d-inline-block align-middle ms-1 ps-2">
+               <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                  <path
+                        d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                        fill="currentColor" />
+               </svg>
+            </span>
+         </span>
+      </button>
+   </div>
+   <div class="card-header">
+    <div class="row d-flex align-items-center justify-content-start flex-wrap">
+        <!-- Search Input -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-2 mb-md-0">
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text">
+                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
+                        <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                     </svg>
-                </div>
-                <div class="visa-content">
-                    <h5 class="mb-2">Visa Credit Card </h5>
-                    <h6 class="m-0 text-capitalize text-body">Expire In Year 2024</h6>
-                </div>
+                </span>
+                <input type="text" id="patient-search-name" class="form-control" placeholder="Search Name Patient...">
             </div>
-            <div class="mt-5">
-                <ul class="list-inline m-0 p-0 d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                    <li>
-                        <div class="d-flex align-items-center gap-2">
-                            <h5 class="mb-0">
-                                <span class="text-primary"><svg fill="none" xmlns="http://www.w3.org/2000/svg"
-                                        width="16" height="16" viewBox="0 0 24 24">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M11.9849 15.3462C8.11731 15.3462 4.81445 15.931 4.81445 18.2729C4.81445 20.6148 8.09636 21.2205 11.9849 21.2205C15.8525 21.2205 19.1545 20.6348 19.1545 18.2938C19.1545 15.9529 15.8735 15.3462 11.9849 15.3462Z"
-                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M11.9849 12.0059C14.523 12.0059 16.5801 9.94779 16.5801 7.40969C16.5801 4.8716 14.523 2.81445 11.9849 2.81445C9.44679 2.81445 7.3887 4.8716 7.3887 7.40969C7.38013 9.93922 9.42394 11.9973 11.9525 12.0059H11.9849Z"
-                                            stroke="currentColor" stroke-width="1.42857" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </span>Holder Name:
-                            </h5>
-                            <span>Amine Steward</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="d-flex align-items-center gap-2">
-                            <h5 class="mb-0">
-                                <span class="text-primary">
-                                    <svg fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 24 24">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M11.5317 12.4724C15.5208 16.4604 16.4258 11.8467 18.9656 14.3848C21.4143 16.8328 22.8216 17.3232 19.7192 20.4247C19.3306 20.737 16.8616 24.4943 8.1846 15.8197C-0.493478 7.144 3.26158 4.67244 3.57397 4.28395C6.68387 1.17385 7.16586 2.58938 9.61449 5.03733C12.1544 7.5765 7.54266 8.48441 11.5317 12.4724Z"
-                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </span>Phone Number:
-                            </h5>
-                            <a href="tel:+6802023210" class="text-body">+ (680) 202-3210</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="d-flex align-items-center gap-2">
-                            <h5 class="mb-0">
-                                <span class="text-primary">
-                                    <svg fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            d="M17.9028 8.85107L13.4596 12.4641C12.6201 13.1301 11.4389 13.1301 10.5994 12.4641L6.11865 8.85107"
-                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M16.9089 21C19.9502 21.0084 22 18.5095 22 15.4384V8.57001C22 5.49883 19.9502 3 16.9089 3H7.09114C4.04979 3 2 5.49883 2 8.57001V15.4384C2 18.5095 4.04979 21.0084 7.09114 21H16.9089Z"
-                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </span>Email:
-                            </h5>
-                            <a href="mailto:amine@gmail.com" class="text-body">amine@gmail.com</a>
-                        </div>
-                    </li>
-                </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-2 mb-md-0">
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text">
+                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
+                        <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </span>
+                <input type="text" id="patient-search-date" class="form-control" placeholder="Search Date Of Birth (dd/mm/yyyy)...">
             </div>
+        </div>
+
+        <!-- Gender Select -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-2 mb-md-0">
+            <select id="gender-search" class="form-select border text-body rounded" aria-label="Select status">
+                <option value="" selected>All Gender</option>
+                <option value="Nam">Male</option>
+                <option value="Nữ">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <!-- Find Appointment Button -->
+        <div class="col-lg-2 col-md-4 col-sm-12 text-sm-center">
+            <button class="btn btn-outline-primary w-100 w-md-auto px-4">
+                <span class="btn-inner">
+                    <span class="text d-inline-block align-middle">Find Patient</span>
+                    <span class="icon d-inline-block align-middle ms-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                            <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
+                        </svg>
+                    </span>
+                </span>
+            </button>
         </div>
     </div>
-    <div class="col-lg-6 mt-lg-0 mt-5">
-        <div class="card p-5">
-            <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                <div class="content">
-                    <h3 class="mb-2">Payment Method</h3>
-                    <span class="mx-0 text-capitalize">your credit card information.</span>
-                </div>
-                 <button type="button" class="btn btn-primary">
-                    <span class="btn-inner">
-                        <span class="text d-inline-block align-middle">Change</span>
-                        <span class="icon d-inline-block align-middle ms-1 ps-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                                <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor"></path>
-                            </svg>
+</div>
+<div id="infor-patient">
+    <div class="card-body pt-0">
+      <div class="table-responsive">
+         <table class="table border-end border-start align-middle mb-0 rounded">
+            <thead class="table-dark">
+               <tr>
+                  <th>No.</th>
+                  <th>Patient Name</th>
+                  <th>Date Of Birth</th>
+                  <th>Phone Number</th>
+                  <th>Gender</th>
+                  <th>Address</th>
+                  <th>Action</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr data-item="list">
+                  <th scope="row">1</th>
+                  <td>#14356</td>
+                  <td>
+                     <h6 class="mb-0 text-body fw-normal">Isabella Brown</h6>
+                  </td>
+                  <td>23</td>
+                  <td>+1 345 675 345</td>
+                  <td>Female</td>
+                  <td>
+                     <a data-bs-toggle="offcanvas" href="#offcanvasPatientEdit" aria-controls="offcanvasPatientEdit"
+                        class="d-inline-block pe-2">
+                        <span class="text-success">
+                           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path d="M9.31055 14.3321H14.75" stroke="currentColor" stroke-width="1.5"
+                                 stroke-linecap="round" stroke-linejoin="round" />
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                 d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round" />
+                              <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor" stroke-width="1.5"
+                                 stroke-linecap="round" stroke-linejoin="round" />
+                           </svg>
                         </span>
-                     </span>
-                </button>
-            </div>
-            <div class="mt-5 row">
-                <div class="col-md-6">
-                    <ul class="list-inline m-0 p-0">
-                        <li class="mb-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <h5 class="mb-0">
-                                    Package:
-                                </h5>
-                                <span>Basic</span>
-                            </div>
-                        </li>
-                        <li class="mb-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <h5 class="mb-0">
-                                    Membership Fee:
-                                </h5>
-                                <span><span class="text-danger">$25</span>/Year</span>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex align-items-center gap-2">
-                                <h5 class="mb-0">
-                                    Start Date:
-                                </h5>
-                                <span>20 June, 2022</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-6 mt-md-0 mt-3">
-                    <ul class="list-inline m-0 p-0">
-                        <li class="mb-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <h5 class="mb-0">
-                                    Payment Method:
-                                </h5>
-                                <span>Visa Credit Card</span>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex align-items-center gap-2">
-                                <h5 class="mb-0">
-                                    Expire Date:
-                                </h5>
-                                <span>19 June, 2023</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>-->
-    <div class="col-lg-12 mt-5">
-        <div class="card">
-            <div class="card-header">
-                <div class="row align-items-center">
-                    <div class="col-sm-6">
-                        <h4>Payments</h4>
-                        <p class="mb-0">Online Transaction History.</p>
-                    </div>
-                    <div class="col-sm-6 text-sm-end mt-sm-0 mt-4">
-                        <a href="#" class="btn btn-primary" download><svg height="16" width="16" viewBox="0 0 24 24"
-                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12.1221 15.436L12.1221 3.39502" stroke="currentColor" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path d="M15.0381 12.5083L12.1221 15.4363L9.20609 12.5083" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path
-                                    d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
-                            </svg> Download All</a>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body pt-0">
-                <div class="table-responsive">
-                    <table class="table border-end border-start align-middle mb-0 rounded">
-                        <thead class="table-dark">
-                            <tr>
-                                <th scope="col">No.</th>
-                                <th scope="col">Invoice PDF</th>
-                                <th scope="col">Clinic Name Transaction</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Date And Time</th>
-                                <th scope="col">Download</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-item="list">
-                                <th scope="row">1</th>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="text-secondary">
-                                            <svg width="32" height="31" viewBox="0 0 27 26" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g>
-                                                    <path d="M22.9346 15.4375H19.6846V21.125" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M22.1221 18.6875H19.6846" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 19.5H7.49707C8.03579 19.5 8.55245 19.286 8.93338 18.9051C9.31431 18.5241 9.52832 18.0075 9.52832 17.4688C9.52832 16.93 9.31431 16.4134 8.93338 16.0324C8.55245 15.6515 8.03579 15.4375 7.49707 15.4375H5.87207V21.125"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M12.3721 15.4375V21.125H13.9971C14.7513 21.125 15.4746 20.8254 16.0079 20.2921C16.5412 19.7588 16.8408 19.0355 16.8408 18.2812C16.8408 17.527 16.5412 16.8037 16.0079 16.2704C15.4746 15.7371 14.7513 15.4375 13.9971 15.4375H12.3721Z"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 11.375V4.0625C5.87207 3.84701 5.95767 3.64035 6.11005 3.48798C6.26242 3.3356 6.46908 3.25 6.68457 3.25H16.4346L22.1221 8.9375V11.375"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M16.4346 3.25V8.9375H22.1221" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        <h5 class="mb-0 text-body">Invoice Pdf 1</h5>
-                                    </div>
-                                </td>
-                                <td>kivicare skin specialist</td>
-                                <td>Dr. Amine Louis</td>
-                                <td>24 Apr At 10:00 AM</td>
-                                <td>
-                                    <a href="#" class="text-body align-middle" download><svg class="me-2" height="16"
-                                            width="16" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12.1221 15.436L12.1221 3.39502" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                            </path>
-                                            <path d="M15.0381 12.5083L12.1221 15.4363L9.20609 12.5083"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                            <path
-                                                d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                        </svg> Download</a>
-                                </td>
-                                <td>
-                                    <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                        href="#offcanvasPatientPayment" aria-controls="offcanvasPatientPayment">
-                                        <span class="text-success">
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <a href="#" class="d-inline-block ps-2 delete-btn">
-                                        <span class="text-danger ">
-                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path
-                                                    d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr data-item="list">
-                                <th scope="row">2</th>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="text-secondary">
-                                            <svg width="32" height="31" viewBox="0 0 27 26" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g>
-                                                    <path d="M22.9346 15.4375H19.6846V21.125" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M22.1221 18.6875H19.6846" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 19.5H7.49707C8.03579 19.5 8.55245 19.286 8.93338 18.9051C9.31431 18.5241 9.52832 18.0075 9.52832 17.4688C9.52832 16.93 9.31431 16.4134 8.93338 16.0324C8.55245 15.6515 8.03579 15.4375 7.49707 15.4375H5.87207V21.125"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M12.3721 15.4375V21.125H13.9971C14.7513 21.125 15.4746 20.8254 16.0079 20.2921C16.5412 19.7588 16.8408 19.0355 16.8408 18.2812C16.8408 17.527 16.5412 16.8037 16.0079 16.2704C15.4746 15.7371 14.7513 15.4375 13.9971 15.4375H12.3721Z"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 11.375V4.0625C5.87207 3.84701 5.95767 3.64035 6.11005 3.48798C6.26242 3.3356 6.46908 3.25 6.68457 3.25H16.4346L22.1221 8.9375V11.375"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M16.4346 3.25V8.9375H22.1221" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        <h5 class="mb-0 text-body">Invoice Pdf 1</h5>
-                                    </div>
-                                </td>
-                                <td>kivicare dentist</td>
-                                <td>Dr. Alexandra Johnson</td>
-                                <td>28 Mar At 12:00 PM</td>
-                                <td>
-                                    <a href="#" class="text-body align-middle" download><svg class="me-2" height="16"
-                                            width="16" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12.1221 15.436L12.1221 3.39502" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                            </path>
-                                            <path d="M15.0381 12.5083L12.1221 15.4363L9.20609 12.5083"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                            <path
-                                                d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                        </svg> Download</a>
-                                </td>
-                                <td>
-                                    <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                        href="#offcanvasPatientPayment" aria-controls="offcanvasPatientPayment">
-                                        <span class="text-success">
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <a href="#" class="d-inline-block ps-2 delete-btn">
-                                        <span class="text-danger">
-                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path
-                                                    d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr data-item="list">
-                                <th scope="row">3</th>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="text-secondary">
-                                            <svg width="32" height="31" viewBox="0 0 27 26" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g>
-                                                    <path d="M22.9346 15.4375H19.6846V21.125" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M22.1221 18.6875H19.6846" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 19.5H7.49707C8.03579 19.5 8.55245 19.286 8.93338 18.9051C9.31431 18.5241 9.52832 18.0075 9.52832 17.4688C9.52832 16.93 9.31431 16.4134 8.93338 16.0324C8.55245 15.6515 8.03579 15.4375 7.49707 15.4375H5.87207V21.125"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M12.3721 15.4375V21.125H13.9971C14.7513 21.125 15.4746 20.8254 16.0079 20.2921C16.5412 19.7588 16.8408 19.0355 16.8408 18.2812C16.8408 17.527 16.5412 16.8037 16.0079 16.2704C15.4746 15.7371 14.7513 15.4375 13.9971 15.4375H12.3721Z"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 11.375V4.0625C5.87207 3.84701 5.95767 3.64035 6.11005 3.48798C6.26242 3.3356 6.46908 3.25 6.68457 3.25H16.4346L22.1221 8.9375V11.375"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M16.4346 3.25V8.9375H22.1221" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        <h5 class="mb-0 text-body">Invoice Pdf 1</h5>
-                                    </div>
-                                </td>
-                                <td>kivicare skin specialist</td>
-                                <td>Dr. Benjamin Davis</td>
-                                <td>30 Mar At 04:00 PM</td>
-                                <td>
-                                    <a href="#" class="text-body align-middle" download><svg class="me-2" height="16"
-                                            width="16" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12.1221 15.436L12.1221 3.39502" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                            </path>
-                                            <path d="M15.0381 12.5083L12.1221 15.4363L9.20609 12.5083"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                            <path
-                                                d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                        </svg> Download</a>
-                                </td>
-                                <td>
-                                    <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                        href="#offcanvasPatientPayment" aria-controls="offcanvasPatientPayment">
-                                        <span class="text-success">
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <a href="#" class="d-inline-block ps-2 delete-btn">
-                                        <span class="text-danger">
-                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path
-                                                    d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr data-item="list">
-                                <th scope="row">4</th>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="text-secondary">
-                                            <svg width="32" height="31" viewBox="0 0 27 26" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g>
-                                                    <path d="M22.9346 15.4375H19.6846V21.125" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M22.1221 18.6875H19.6846" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 19.5H7.49707C8.03579 19.5 8.55245 19.286 8.93338 18.9051C9.31431 18.5241 9.52832 18.0075 9.52832 17.4688C9.52832 16.93 9.31431 16.4134 8.93338 16.0324C8.55245 15.6515 8.03579 15.4375 7.49707 15.4375H5.87207V21.125"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M12.3721 15.4375V21.125H13.9971C14.7513 21.125 15.4746 20.8254 16.0079 20.2921C16.5412 19.7588 16.8408 19.0355 16.8408 18.2812C16.8408 17.527 16.5412 16.8037 16.0079 16.2704C15.4746 15.7371 14.7513 15.4375 13.9971 15.4375H12.3721Z"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 11.375V4.0625C5.87207 3.84701 5.95767 3.64035 6.11005 3.48798C6.26242 3.3356 6.46908 3.25 6.68457 3.25H16.4346L22.1221 8.9375V11.375"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M16.4346 3.25V8.9375H22.1221" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        <h5 class="mb-0 text-body">Invoice Pdf 1</h5>
-                                    </div>
-                                </td>
-                                <td>kivicare eye care</td>
-                                <td>Dr. Emily Thompson</td>
-                                <td>06 Feb At 10:00 AM</td>
-                                <td>
-                                    <a href="#" class="text-body align-middle" download><svg class="me-2" height="16"
-                                            width="16" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12.1221 15.436L12.1221 3.39502" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                            </path>
-                                            <path d="M15.0381 12.5083L12.1221 15.4363L9.20609 12.5083"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                            <path
-                                                d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                        </svg> Download</a>
-                                </td>
-                                <td>
-                                    <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                        href="#offcanvasPatientPayment" aria-controls="offcanvasPatientPayment">
-                                        <span class="text-success">
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <a href="#" class="d-inline-block ps-2 delete-btn">
-                                        <span class="text-danger">
-                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path
-                                                    d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr data-item="list">
-                                <th scope="row">5</th>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="text-secondary">
-                                            <svg width="32" height="31" viewBox="0 0 27 26" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g>
-                                                    <path d="M22.9346 15.4375H19.6846V21.125" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M22.1221 18.6875H19.6846" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 19.5H7.49707C8.03579 19.5 8.55245 19.286 8.93338 18.9051C9.31431 18.5241 9.52832 18.0075 9.52832 17.4688C9.52832 16.93 9.31431 16.4134 8.93338 16.0324C8.55245 15.6515 8.03579 15.4375 7.49707 15.4375H5.87207V21.125"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M12.3721 15.4375V21.125H13.9971C14.7513 21.125 15.4746 20.8254 16.0079 20.2921C16.5412 19.7588 16.8408 19.0355 16.8408 18.2812C16.8408 17.527 16.5412 16.8037 16.0079 16.2704C15.4746 15.7371 14.7513 15.4375 13.9971 15.4375H12.3721Z"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 11.375V4.0625C5.87207 3.84701 5.95767 3.64035 6.11005 3.48798C6.26242 3.3356 6.46908 3.25 6.68457 3.25H16.4346L22.1221 8.9375V11.375"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M16.4346 3.25V8.9375H22.1221" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        <h5 class="mb-0 text-body">Invoice Pdf 1</h5>
-                                    </div>
-                                </td>
-                                <td>kivicare general</td>
-                                <td>Dr. Christopher Martinez</td>
-                                <td>06 Jan At 11:00 AM</td>
-                                <td>
-                                    <a href="#" class="text-body align-middle" download><svg class="me-2" height="16"
-                                            width="16" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12.1221 15.436L12.1221 3.39502" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                            </path>
-                                            <path d="M15.0381 12.5083L12.1221 15.4363L9.20609 12.5083"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                            <path
-                                                d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                        </svg> Download</a>
-                                </td>
-                                <td>
-                                    <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                        href="#offcanvasPatientPayment" aria-controls="offcanvasPatientPayment">
-                                        <span class="text-success">
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <a href="#" class="d-inline-block ps-2 delete-btn">
-                                        <span class="text-danger">
-                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path
-                                                    d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr data-item="list">
-                                <th scope="row">6</th>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="text-secondary">
-                                            <svg width="32" height="31" viewBox="0 0 27 26" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g>
-                                                    <path d="M22.9346 15.4375H19.6846V21.125" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M22.1221 18.6875H19.6846" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 19.5H7.49707C8.03579 19.5 8.55245 19.286 8.93338 18.9051C9.31431 18.5241 9.52832 18.0075 9.52832 17.4688C9.52832 16.93 9.31431 16.4134 8.93338 16.0324C8.55245 15.6515 8.03579 15.4375 7.49707 15.4375H5.87207V21.125"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M12.3721 15.4375V21.125H13.9971C14.7513 21.125 15.4746 20.8254 16.0079 20.2921C16.5412 19.7588 16.8408 19.0355 16.8408 18.2812C16.8408 17.527 16.5412 16.8037 16.0079 16.2704C15.4746 15.7371 14.7513 15.4375 13.9971 15.4375H12.3721Z"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 11.375V4.0625C5.87207 3.84701 5.95767 3.64035 6.11005 3.48798C6.26242 3.3356 6.46908 3.25 6.68457 3.25H16.4346L22.1221 8.9375V11.375"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M16.4346 3.25V8.9375H22.1221" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        <h5 class="mb-0 text-body">Invoice Pdf 1</h5>
-                                    </div>
-                                </td>
-                                <td>kivicare general</td>
-                                <td>Dr. Olivia Wilson</td>
-                                <td>08 Jan At 10:30 AM</td>
-                                <td>
-                                    <a href="#" class="text-body align-middle" download><svg class="me-2" height="16"
-                                            width="16" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12.1221 15.436L12.1221 3.39502" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                            </path>
-                                            <path d="M15.0381 12.5083L12.1221 15.4363L9.20609 12.5083"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                            <path
-                                                d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                        </svg> Download</a>
-                                </td>
-                                <td>
-                                    <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                        href="#offcanvasPatientPayment" aria-controls="offcanvasPatientPayment">
-                                        <span class="text-success">
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <a href="#" class="d-inline-block ps-2 delete-btn">
-                                        <span class="text-danger">
-                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path
-                                                    d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr data-item="list">
-                                <th scope="row">7</th>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="text-secondary">
-                                            <svg width="32" height="31" viewBox="0 0 27 26" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g>
-                                                    <path d="M22.9346 15.4375H19.6846V21.125" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M22.1221 18.6875H19.6846" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 19.5H7.49707C8.03579 19.5 8.55245 19.286 8.93338 18.9051C9.31431 18.5241 9.52832 18.0075 9.52832 17.4688C9.52832 16.93 9.31431 16.4134 8.93338 16.0324C8.55245 15.6515 8.03579 15.4375 7.49707 15.4375H5.87207V21.125"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M12.3721 15.4375V21.125H13.9971C14.7513 21.125 15.4746 20.8254 16.0079 20.2921C16.5412 19.7588 16.8408 19.0355 16.8408 18.2812C16.8408 17.527 16.5412 16.8037 16.0079 16.2704C15.4746 15.7371 14.7513 15.4375 13.9971 15.4375H12.3721Z"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M5.87207 11.375V4.0625C5.87207 3.84701 5.95767 3.64035 6.11005 3.48798C6.26242 3.3356 6.46908 3.25 6.68457 3.25H16.4346L22.1221 8.9375V11.375"
-                                                        stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M16.4346 3.25V8.9375H22.1221" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        <h5 class="mb-0 text-body">Invoice Pdf 1</h5>
-                                    </div>
-                                </td>
-                                <td>kivicare general</td>
-                                <td>Dr. Ethan Rodriguez</td>
-                                <td>13 Jan At 01:00 PM</td>
-                                <td>
-                                    <a href="#" class="text-body align-middle" download><svg class="me-2" height="16"
-                                            width="16" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12.1221 15.436L12.1221 3.39502" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                            </path>
-                                            <path d="M15.0381 12.5083L12.1221 15.4363L9.20609 12.5083"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                            <path
-                                                d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                        </svg> Download</a>
-                                </td>
-                                <td>
-                                    <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                        href="#offcanvasPatientPayment" aria-controls="offcanvasPatientPayment">
-                                        <span class="text-success">
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <a href="#" class="d-inline-block ps-2 delete-btn">
-                                        <span class="text-danger">
-                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                                <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                                <path
-                                                    d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-              <div class="card-footer pt-0 row">
+                     </a>
+                     <a href="#" class="d-inline-block ps-2 delete-btn">
+                        <span class="text-danger">
+                           <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                 d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round" />
+                              <path d="M13.5312 3.67969H0.812744" stroke="currentColor" stroke-width="1.5"
+                                 stroke-linecap="round" stroke-linejoin="round" />
+                              <path
+                                 d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
+                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                 stroke-linejoin="round" />
+                           </svg>
+                        </span>
+                     </a>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+   <div class="card-footer pt-0 row">
          <div class="d-flex justify-content-start col-md-6 mt-4">
         <button class="btn btn-secondary text-white me-3" type="button">
           <span class="btn-inner">
@@ -1555,73 +863,11 @@
     </div>
 
     </div>
-        </div>
+</div>
+</div>
     </div>
 </div>
-
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientPayment"
-   aria-labelledby="offcanvasPatientPaymentLabel">
-   <div class="offcanvas-header border-bottom">
-      <h3 class="offcanvas-title" id="offcanvasPatientPaymentLabel">Edit Payment</h3>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-   </div>
-   <div class="offcanvas-body">
-      <div class="form-group col-md-12">
-            <label class="form-label" for="Pdf">Pdf Name <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="Pdf">
-        </div>
-        <div class="form-group">
-            <div class="d-flex justify-content-between align-items-center">
-                <label class="form-label" for="upload_pdf">Upload Invoice Pdf</label>
-            </div>
-            <input type="file" class="form-control" id="upload_pdf"
-                accept=".jpeg, .jpg, .png, .gif">
-        </div>
-      <div class="form-group col-md-12">
-         <label class="form-label" for="clinic_name">Clinic Name Transaction <span class="text-danger">*</span></label>
-         <input type="text" class="form-control" id="clinic_name" value="kivicare skin specialist">
-      </div>
-      <div class="form-group col-md-12">
-         <label class="form-label" for="doc_name">Doctor Name <span class="text-danger">*</span></label>
-         <input type="text" class="form-control" id="doc_name" value="Dr. Amine Louis">
-      </div>
-      <div class="form-group col-md-12">
-            <label class="form-label" for="datetime">Date And Time <span class="text-danger">*</span></label>
-            <input type="text" id="datetime" class="form-control date_flatpicker flatpickr-input active" value="2023-04-24" readonly="readonly">
-     </div>
-   </div>
-   <div class="offcanvas-footer border-top">
-      <div class="d-grid d-md-flex gap-3 p-3">
-         <button type="submit" class="btn btn-primary">
-                <span class="btn-inner">
-                    <span class="text d-inline-block align-middle">Update</span>
-                    <span class="icon d-inline-block align-middle ms-1 ps-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                            <path
-                                d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                fill="currentColor" />
-                        </svg>
-                    </span>
-                </span>
-            </button>
-            <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
-                <span class="btn-inner">
-                    <span class="text d-inline-block align-middle">Close</span>
-                    <span class="icon d-inline-block align-middle ms-1 ps-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                            <path
-                                d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                fill="currentColor" />
-                        </svg>
-                    </span>
-                </span>
-            </button>
-      </div>
-   </div>
-</div>
-
-            </div>
-            <!-- Footer Section Start -->
+    <!-- Footer Section Start -->
             <footer class="footer">
                 <div class="footer-body">
                     <ul class="left-panel list-inline mb-0 p-0">
@@ -1639,6 +885,8 @@
                 </div>
             </footer>
             <!-- Footer Section End -->
+            </div>
+            
         </main>
         <!-- Live Customizer start -->
         <!-- Setting offcanvas start here -->
@@ -2441,6 +1689,140 @@
                     </div>
                 </div>
             </div>
+
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientAdd" aria-labelledby="offcanvasPatientAddLabel">
+   <div class="offcanvas-header border-bottom">
+        <h3 class="offcanvas-title" id="offcanvasPatientAddLabel">Add Patient</h3>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form id="addPatient">
+            <div class="form-group col-md-12">
+                <label class="form-label" for="namePatient1">Name Patient <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="namePatient1" required>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="form-label" for="dateOfBirth1">Date Of Birth <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" id="dateOfBirth1" required>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="form-label" for="gender1">Gender <span class="text-danger">*</span></label>
+                <select class="form-control" id="gender1" required>
+                    <option value="" selected>Select Gender</option>
+                    <option value="Nam">Male</option>
+                    <option value="Nữ">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="form-label" for="phonePatient1">Phone Patient <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="phonePatient1" required>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="form-label" for="address1">Address <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="address1" rows="2" required></textarea>
+            </div>
+            <div class="offcanvas-footer border-top">
+                <div class="d-grid d-md-flex gap-3 p-3">
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-inner">
+                            <span class="text d-inline-block align-middle">Add</span>
+                            <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path
+                                        d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+                        </span>
+                    </button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
+                        <span class="btn-inner">
+                            <span class="text d-inline-block align-middle">Close</span>
+                            <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path
+                                        d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--Edit Patient-->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEncounterEditConfirm" aria-labelledby="offcanvasEncounterEditConfirmLabel">
+    <div class="offcanvas-header border-bottom">
+        <h3 class="offcanvas-title" id="offcanvasEncounterEditConfirmLabel">Edit Infor Patient</h3>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form id="editEncounterForm">
+            <div class="form-group col-md-12">
+                <label class="form-label" for="namePatient">Name Patient <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="namePatient" value="Dr. Amine Louis" required>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="form-label" for="dateOfBirth">Date Of Birth <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" id="dateOfBirth" value="Dr. Amine Louis" required>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="form-label" for="gender">Gender <span class="text-danger">*</span></label>
+                <select class="form-control" id="gender" required>
+                    <option value="" selected>Select Gender</option>
+                    <option value="Nam">Male</option>
+                    <option value="Nữ">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="form-label" for="phonePatient">Phone Patient <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="phonePatient" value="Acne Treatment" required>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="form-label" for="address">Address <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="address" rows="2" required>Half Of The Treatment Is Done.</textarea>
+            </div>
+            <!-- Hidden input for patientId -->
+            <input type="hidden" id="patientId" value="">
+            <div class="offcanvas-footer border-top">
+                <div class="d-grid d-md-flex gap-3 p-3">
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-inner">
+                            <span class="text d-inline-block align-middle">Update</span>
+                            <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path
+                                        d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+                        </span>
+                    </button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
+                        <span class="btn-inner">
+                            <span class="text d-inline-block align-middle">Close</span>
+                            <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path
+                                        d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+        <!--API-->
+        <script src="./assets/js/API/main-patient-patient.js"></script>
         <!-- Library Bundle Script -->
         <script src="./assets/js/core/libs.min.js"></script>
         <!-- Plugin Scripts -->
@@ -2462,10 +1844,10 @@
         <script src="./assets/js/plugins/fslightbox.js" defer></script>
         
         
-        <!-- Sweet-alert Script -->
-        <script src="./assets/vendor/sweetalert2/dist/sweetalert2.min.js" async></script>
-        <script src="./assets/js/plugins/sweet-alert.js" defer></script>
         
+        <!-- Choisejs Script -->
+        <script src="./assets/vendor/choiceJS/script/choices.min.js"></script>
+        <script src="./assets/js/plugins/choice.js" defer></script>
         
           <!-- Select2 Script -->
           <script src="./assets/js/plugins/select2.js" defer></script>
@@ -2491,8 +1873,17 @@
         <script src="./assets/js/kivicare.js?v=1.4.1" defer></script>
         <script src="./assets/js/kivicare-advance.js?v=1.4.1" defer></script>
         <script src="./assets/js/sidebar.js?v=1.4.1" defer></script>
-        
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- Icons -->
         <script src="./assets/js/solid-icon-search-filter.js?v=1.4.1" defer></script>
+<!-- Fullcalender Javascript -->
+<script src="./assets/js/plugins/bookappointment.js"></script>
+<script src='./assets/vendor/fullcalendar/core/main.js'></script>
+<script src='./assets/vendor/fullcalendar/daygrid/main.js'></script>
+<script src='./assets/vendor/fullcalendar/timegrid/main.js'></script>
+<script src='./assets/vendor/fullcalendar/list/main.js'></script>
+<script src='./assets/vendor/fullcalendar/interaction/main.js'></script>
+<script src='./assets/vendor/moment.min.js'></script>
+<script src='./assets/js/plugins/calender.js'></script>
     </body>
 </html>
