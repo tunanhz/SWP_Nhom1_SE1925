@@ -1,7 +1,7 @@
 const baseAPI = "http://localhost:8080/SWP_back_war_exploded/api/doctors/";
 
 let currentPage = 1;
-const pageSize = 8;
+let pageSize = 8;
 let currentNameSearch = "";
 let currentDeptSearch = "";
 
@@ -49,6 +49,7 @@ async function displayDoctors(page = 1, nameSearch = currentNameSearch, deptSear
 
     // Show loading state
     const container = document.getElementById("infor_doctor");
+    if (!container) throw new Error("Container element not found");
     container.innerHTML = '<p>Loading doctors...</p>';
 
     // Fetch doctors
@@ -63,8 +64,8 @@ async function displayDoctors(page = 1, nameSearch = currentNameSearch, deptSear
 
     const data = await response.json();
     
-    const doctors = data.doctors;
-    const totalPages = data.totalPages;
+    const doctors = data.doctors || [];
+    const totalPages = data.totalPages || 1;
 
     // Render doctor cards
     let doctorCards = "";
@@ -112,32 +113,46 @@ async function displayDoctors(page = 1, nameSearch = currentNameSearch, deptSear
 
     // Render pagination
     const paginationHTML = `
-      <div class="d-flex justify-content-center mt-4">
-        <button class="btn btn-secondary text-white me-3" type="button"
-          onclick="displayDoctors(${currentPage - 1}, '${currentNameSearch}', '${currentDeptSearch}')"
-          ${currentPage === 1 ? "disabled" : ""}>
-          <span class="btn-inner">
-            <span class="text d-inline-block align-middle">Previous</span>
-            <span class="icon d-inline-block align-middle ms-1 ps-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-              </svg>
+      <div class="card-footer pt-0 row">
+        <div class="d-flex justify-content-start col-md-6 mt-4">
+          <button class="btn btn-secondary text-white me-3" type="button"
+            data-page="${currentPage - 1}"
+            ${currentPage === 1 ? "disabled" : ""}>
+            <span class="btn-inner">
+              <span class="text d-inline-block align-middle">Previous</span>
+              <span class="icon d-inline-block align-middle ms-1 ps-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                </svg>
+              </span>
             </span>
-          </span>
-        </button>
-        <span class="align-self-center me-3">Page ${currentPage} of ${totalPages}</span>
-        <button class="btn btn-primary me-3" type="button"
-          onclick="displayDoctors(${currentPage + 1}, '${currentNameSearch}', '${currentDeptSearch}')"
-          ${currentPage === totalPages ? "disabled" : ""}>
-          <span class="btn-inner">
-            <span class="text d-inline-block align-middle">Next</span>
-            <span class="icon d-inline-block align-middle ms-1 ps-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-              </svg>
+          </button>
+          <span class="align-self-center me-3">Page ${currentPage} of ${totalPages}</span>
+          <button class="btn btn-primary me-3" type="button"
+            data-page="${currentPage + 1}"
+            ${currentPage === totalPages ? "disabled" : ""}>
+            <span class="btn-inner">
+              <span class="text d-inline-block align-middle">Next</span>
+              <span class="icon d-inline-block align-middle ms-1 ps-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </span>
             </span>
-          </span>
-        </button>
+          </button>
+        </div>
+        <div class="col-md-6 d-flex justify-content-center justify-content-md-end mt-4">
+          <div class="input-group input-group-sm w-auto">
+            <label class="input-group-text text-bg-info" for="pageSize">Items per page</label>
+            <select class="form-select" name="page" id="pageSize">
+            <option value="4" ${pageSize === 4 ? 'selected' : ''}>4</option>
+              <option value="8" ${pageSize === 8 ? 'selected' : ''}>8</option>
+              <option value="12" ${pageSize === 12 ? 'selected' : ''}>12</option>
+              <option value="16" ${pageSize === 16 ? 'selected' : ''}>16</option>
+              <option value="90" ${pageSize === 90 ? 'selected' : ''}>All</option>
+            </select>
+          </div>
+        </div>
       </div>
     `;
 
@@ -146,29 +161,48 @@ async function displayDoctors(page = 1, nameSearch = currentNameSearch, deptSear
     if (doctorCards) {
       container.innerHTML += paginationHTML;
     }
+
+    // Attach event listeners for pagination buttons
+    container.querySelectorAll("button[data-page]").forEach(button => {
+      button.addEventListener("click", () => {
+        const newPage = parseInt(button.dataset.page);
+        displayDoctors(newPage, currentNameSearch, currentDeptSearch);
+      });
+    });
+
+    // Attach event listener for page size change
+    const pageSizeSelect = container.querySelector("#pageSize");
+    if (pageSizeSelect) {
+      pageSizeSelect.addEventListener("change", (e) => {
+        pageSize = parseInt(e.target.value) || 30; // Default to 30 if invalid
+        console.log(`Page size changed to: ${pageSize}`); // Debugging
+        displayDoctors(1, currentNameSearch, currentDeptSearch); // Reset to page 1
+      });
+    } else {
+      console.warn("Warning: Could not find element with ID 'pageSize'. Ensure the select element is rendered.");
+    }
+
   } catch (error) {
     console.error("Error fetching or displaying doctors:", error);
     const container = document.getElementById("infor_doctor");
     if (container) {
-      container.innerHTML = `<p class="text-danger">Error: ${error.message}. Please try again later.</p>`;
+      container.innerHTML = `<p class="text-danger">Error: ${error.message}. <button class="btn btn-link p-0" onclick="displayDoctors()">Retry</button></p>`;
       window.location.href = "./errors/error404.html";
     }
   }
 }
 
-
-// khi nút tìm thay đổi giá trị thì tìm luôn
 function setupSearch() {
   const nameInput = document.getElementById("doctor-search");
   const deptInput = document.getElementById("department-search");
 
-  // if (nameInput) {
-  //   nameInput.addEventListener("input", debounce((e) => {
-  //     const nameValue = e.target.value.trim();
-  //     const deptValue = deptInput ? deptInput.value.trim() : currentDeptSearch;
-  //     displayDoctors(1, nameValue, deptValue);
-  //   }, 300));
-  // }
+  if (nameInput) {
+    nameInput.addEventListener("input", debounce((e) => {
+      const nameValue = e.target.value.trim();
+      const deptValue = deptInput ? deptInput.value.trim() : currentDeptSearch;
+      displayDoctors(1, nameValue, deptValue);
+    }, 300));
+  }
 
   if (deptInput) {
     deptInput.addEventListener("input", debounce((e) => {
@@ -177,6 +211,7 @@ function setupSearch() {
       displayDoctors(1, nameValue, deptValue);
     }, 300));
   }
+
 }
 
 function debounce(func, wait) {
@@ -199,4 +234,16 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSearch();
   populateDepartments();
   displayDoctors(1);
+
+  document.getElementById('logoutLink').addEventListener('click', function (event) {
+    event.preventDefault();
+    localStorage.removeItem('account');
+    window.location.href = '/frontend/login.html';
+  });
+
+  document.getElementById('logoutModalLink').addEventListener('click', function (event) {
+    event.preventDefault();
+    localStorage.removeItem('account');
+    window.location.href = '/frontend/login.html';
+  });
 });

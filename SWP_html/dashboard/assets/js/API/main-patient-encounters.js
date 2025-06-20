@@ -2,7 +2,7 @@ const accountString = localStorage.getItem('account');
 const account = JSON.parse(accountString);
 
 const baseAPI = `http://localhost:8080/SWP_back_war_exploded/api/patientAppointment/?accountPatientId=${account.accountPatientId}`;
-const pageSize = 6;
+let pageSize = 6;
 const state = {
     currentPage: 1,
     currentNameSearch: "",
@@ -125,13 +125,17 @@ function createAppointmentRow(appointment, index) {
             <th scope="row">${index + 1}</th>
             <td>
                 <div class="d-flex align-items-center gap-3">
+                    <h5 class="mb-0">${sanitizeHTML(appointment.fullName)}</h5>
+                </div>
+            </td>
+            <td>
+                <div class="d-flex align-items-center gap-3">
                     <img src="${sanitizeHTML(appointment.doctor.img)}" 
                          class="img-fluid flex-shrink-0 icon-40 object-fit-cover"
                          alt="doctor-image">
-                    <h5 class="mb-0">Dr.${sanitizeHTML(appointment.doctor.fullName)}</h5>
+                    <p class="mb-0">Dr.${sanitizeHTML(appointment.doctor.fullName)}</p>
                 </div>
             </td>
-            <td>${sanitizeHTML(appointment.fullName)}</td>
             <td>${sanitizeHTML(appointment.doctor.department)}</td>
             <td>${formatDateTime(appointment.appointmentDateTime)}</td>
             <td>${sanitizeHTML(appointment.note || "N/A")}</td>
@@ -182,8 +186,8 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                         <thead class="table-dark">
                             <tr>
                                 <th scope="col">No.</th>
-                                <th scope="col">Doctors</th>
                                 <th scope="col">Patient</th>
+                                <th scope="col">Doctors</th>
                                 <th scope="col">Clinic Name</th>
                                 <th scope="col">Appointment Date</th>
                                 <th scope="col">Add Note</th>
@@ -202,7 +206,8 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
 
         // Render pagination
         const paginationHTML = `
-            <div class="d-flex justify-content-center mt-4">
+        <div class="card-footer pt-0 row">
+            <div class="d-flex justify-content-start col-md-6 mt-4">
                 <button class="btn btn-secondary text-white me-3" type="button"
                         ${state.currentPage === 1 ? "disabled" : ""}
                         data-page="${state.currentPage - 1}">
@@ -229,6 +234,20 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                     </span>
                 </button>
             </div>
+            <div class="col-md-6 d-flex justify-content-center justify-content-md-end mt-4">
+            <div class="input-group input-group-sm w-auto">
+            <label class="input-group-text text-bg-info" for="pageSize">Items per page</label>
+            <select class="form-select" name="page" id="pageSize">
+                <option value="6" ${pageSize === 6 ? 'selected' : ''}>6</option>
+                <option value="10" ${pageSize === 10 ? 'selected' : ''}>10</option>
+                <option value="15" ${pageSize === 15 ? 'selected' : ''}>15</option>
+                <option value="20" ${pageSize === 20 ? 'selected' : ''}>20</option>
+                <option value="30" ${pageSize === 30 ? 'selected' : ''}>All</option>
+            </select>
+            </div>
+            </div>
+        </div>
+        
         `;
 
         // Update container
@@ -250,7 +269,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
             });
         });
 
-
+        
         // Attach event listeners for edit buttons
         container.querySelectorAll(".view-btn").forEach(button => {
             button.addEventListener("click", function(e) {
@@ -261,36 +280,36 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
 
         // Attach event listeners for delete buttons
         container.querySelectorAll(".delete-btn").forEach(button => {
-            button.addEventListener("click", async function(e) {
-                e.preventDefault();
-                const appointmentId = this.dataset.id;
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You want to delete this appointment?",
-                    icon: "error",
-                    showCancelButton: true,
-                    backdrop: `rgba(60,60,60,0.8)`,
-                    confirmButtonText: "Yes, delete it!",
-                    confirmButtonColor: "#c03221"
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        try {
-                            const response = await fetch(`${baseAPI.split('?')[0]}/${appointmentId}`, {
-                                method: "DELETE"
-                            });
-                            if (!response.ok) {
-                                throw new Error("Failed to delete appointment");
-                            }
-                            Swal.fire("Deleted!", "Your appointment has been deleted.", "success");
-                            await displayAppointment(state.currentPage, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
-                        } catch (error) {
-                            Swal.fire("Error!", "Could not delete appointment. Please try again.", "error");
-                            console.error("Delete error:", error);
-                        }
+        button.addEventListener("click", async function(e) {
+        e.preventDefault();
+        const appointmentId = this.dataset.id;
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this appointment?",
+            icon: "error",
+            showCancelButton: true,
+            backdrop: `rgba(60,60,60,0.8)`,
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonColor: "#c03221"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`${baseAPI.split('?')[0]}/${appointmentId}`, {
+                        method: "DELETE"
+                    });
+                    if (!response.ok) {
+                        throw new Error("Failed to delete appointment");
                     }
-                });
-            });
+                    Swal.fire("Deleted!", "Your appointment has been deleted.", "success");
+                    await displayAppointment(state.currentPage, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
+                } catch (error) {
+                    Swal.fire("Error!", "Could not delete appointment. Please try again.", "error");
+                    console.error("Delete error:", error);
+                }
+            }
         });
+    });
+});
 
         // Attach event listeners for pagination
         container.querySelectorAll("button[data-page]").forEach(button => {
@@ -299,6 +318,14 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                 displayAppointment(newPage, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
             });
         });
+
+        const pageSizeSelect = container.querySelector("#pageSize");
+        if (pageSizeSelect) {
+            pageSizeSelect.addEventListener("change", (e) => {
+                pageSize = parseInt(e.target.value);
+                displayAppointment(1, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
+            });
+        }
 
     } catch (error) {
         console.error("Error fetching or displaying appointments:", error);
@@ -346,7 +373,7 @@ async function handleFormSubmissionConfirm(event) {
     const phonePatient = form.querySelector("#phonePatient").value;
     const address = form.querySelector("#address").value;
 
-
+    
     if (!patientId || isNaN(patientId)) {
         Swal.fire("Error!", "Invalid patient ID", "error");
         return;
@@ -486,7 +513,7 @@ function populateView(appointment) {
     const phoneDoctor1 = document.getElementById("phoneDoctor1");
     const emailDoctor1 = document.getElementById("emailDoctor1");
     const status1 = document.getElementById("status1");
-
+    
     if (namePatient1) namePatient1.value = `${sanitizeHTML(appointment.fullName)}`;
     if (dateOfBirth1) dateOfBirth1.value = formatDateToYYYYMMDD(appointment.dob);
     if (gender1) gender1.value = sanitizeHTML(appointment.gender || "");
@@ -550,4 +577,25 @@ document.addEventListener("DOMContentLoaded", () => {
     if (editForm2) {
         editForm2.addEventListener("submit", handleFormSubmissionPending);
     }
+
+    // Attach event listener for page size change
+    const pageSizeSelect = document.getElementById("pageSize");
+    if (pageSizeSelect) {
+        pageSizeSelect.addEventListener("change", (e) => {
+            pageSize = parseInt(e.target.value);
+            displayAppointment(1, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
+        });
+    }
+
+    document.getElementById('logoutLink').addEventListener('click', function (event) {
+      event.preventDefault();
+      localStorage.removeItem('account'); 
+      window.location.href = '/frontend/login.html'; 
+  });
+
+    document.getElementById('logoutModalLink').addEventListener('click', function (event) {
+      event.preventDefault();
+      localStorage.removeItem('account'); 
+      window.location.href = '/frontend/login.html'; 
+  });
 });
