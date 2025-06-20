@@ -353,8 +353,8 @@ public class DoctorDAO {
 
     public static void main(String[] args) {
         DoctorDAO dao = new DoctorDAO();
-        ArrayList<Doctor> l = dao.searchDoctorsByNameAndDepartment("u", "Nội tổng quát", 1, 8);
-        System.out.println(l);
+        ArrayList<Doctor> l = dao.searchDoctorsByNameAndDepartment("", "", 1, 20);
+        System.out.println(l.size());
     }
 
 
