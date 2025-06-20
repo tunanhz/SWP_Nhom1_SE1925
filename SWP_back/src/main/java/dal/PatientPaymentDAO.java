@@ -123,6 +123,7 @@ public class PatientPaymentDAO {
                 WHERE i.status IN ('Pending', 'Paid')
                     AND ap.account_patient_id = ?
                     AND ap.status = 'Enable'
+                    AND p.status = 'Enable'
                 ORDER BY i.issue_date DESC
                 """;
 
