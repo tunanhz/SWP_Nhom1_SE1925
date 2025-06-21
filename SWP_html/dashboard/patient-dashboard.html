@@ -51,7 +51,23 @@
    <!-- Google Font -->
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">    </head>
+   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">   
+   
+   <style>
+    #userImg {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+    #profileImg {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+</style>
+</head>
 <body class=" full-screen ">
 <!-- loader Start -->
 <div id="loading">
@@ -651,7 +667,7 @@
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="icon-40">
                                          <span class="btn-inner d-inline-block position-relative">
-                                            <img src="./assets/images/avatars/12.png"
+                                            <img id="userImg" src="./assets/images/avatars/12.png"
                                                  class="img-fluid rounded-circle object-fit-cover" alt="icon">
                                             <span
                                                     class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white"></span>
@@ -1533,7 +1549,7 @@
                              class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
                         <div class="d-flex align-items-center gap-3">
                            <div class="flex-shrink-0 d-inline-block position-relative">
-                              <img src="./assets/images/user/amie-steward.png" alt="img-fluid">
+                              <img id="profileImg" src="./assets/images/user/amie-steward.png" alt="img-fluid">
                               <span
                                       class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white me-1 mb-1"></span>
                            </div>

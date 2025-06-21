@@ -56,10 +56,17 @@ public class SignupPatientServlet extends HttpServlet {
                 return;
             }
 
-            if (patientDAO.getAccountByUsernameAndPassword(username, password) != null) {
+            if (patientDAO.isUsernameExists(username)) {
                 LOGGER.warning("Validation failed - Username already exists: " + username);
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
                 out.print("{\"success\": false, \"error\": \"Username already exists\"}");
+                return;
+            }
+
+            if (patientDAO.isEmailExists(email)) {
+                LOGGER.warning("Validation failed - Email already exists: " + email);
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                out.print("{\"success\": false, \"error\": \"Email already exists\"}");
                 return;
             }
 
