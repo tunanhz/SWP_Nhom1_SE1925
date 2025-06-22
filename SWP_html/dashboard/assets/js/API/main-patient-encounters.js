@@ -422,6 +422,11 @@ async function handleFormSubmissionConfirm(event) {
             throw new Error("No response received from server");
         }
 
+        if (response.status == 500) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `Patient already ${patientData.fullName}`);
+        }
+
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
             throw new Error(errorData.error || `HTTP error! Status: ${response.status}`);
