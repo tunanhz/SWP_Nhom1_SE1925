@@ -326,6 +326,11 @@ async function handleFormSubmission(event) {
             body: JSON.stringify(patientData)
         });
 
+        if (response.status == 500) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `Patient already ${patientData.fullName}`);
+        }
+
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
             throw new Error(errorData.error || `HTTP error! Status: ${response.status}`);
@@ -392,6 +397,11 @@ async function handleAddPatientSubmission(event) {
             },
             body: JSON.stringify(patientData)
         });
+
+        if (response.status == 500) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `Patient already ${patientData.fullName}`);
+        }
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));

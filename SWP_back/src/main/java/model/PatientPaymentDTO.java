@@ -1,5 +1,8 @@
 package model;
 
+import dal.DoctorDAO;
+import dal.PatientDAO;
+
 public class PatientPaymentDTO {
     private int invoiceId;
     private int patientId;
@@ -10,6 +13,8 @@ public class PatientPaymentDTO {
     private String medicineDetail;
     private String totalMedicineCost;
     private String invoiceTotalAmount;
+
+    private Patient patient;
 
     public PatientPaymentDTO() {
     }
@@ -97,4 +102,15 @@ public class PatientPaymentDTO {
     public void setInvoiceTotalAmount(String invoiceTotalAmount) {
         this.invoiceTotalAmount = invoiceTotalAmount;
     }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void includePatient() {
+        PatientDAO dao = new PatientDAO();
+        this.patient = dao.getPatientByPatientId(this.patientId);
+
+    }
+
 }

@@ -194,9 +194,9 @@ public class PatientServlet extends HttpServlet {
                         }
                     } else {
                         // Patient is already Enable
-                        response.setStatus(HttpServletResponse.SC_OK); // 200
-                        out.print("{\"message\":\"Patient already enabled\"}");
-                        LOGGER.info("Patient already enabled: " + existingPatient.getFullName());
+                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 400
+                        out.print("{\"message\":\"Patient already\"}");
+                        LOGGER.info("Patient already : " + existingPatient.getFullName());
                     }
                     return;
                 }
@@ -263,20 +263,59 @@ public class PatientServlet extends HttpServlet {
                 }
                 Patient updatedPatient = gson.fromJson(sb.toString(), Patient.class);
 
-                // Validate required fields
-                if (updatedPatient.getFullName() == null || updatedPatient.getFullName().trim().isEmpty() ||
-                        updatedPatient.getDob() == null || updatedPatient.getDob().trim().isEmpty() ||
-                        updatedPatient.getPhone() == null || updatedPatient.getPhone().trim().isEmpty() ||
-                        updatedPatient.getAddress() == null || updatedPatient.getAddress().trim().isEmpty()) {
-                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                    out.print("{\"error\":\"Missing required fields\"}");
-                    out.flush();
+                // Validate input
+                if (updatedPatient.getFullName() == null || updatedPatient.getFullName().isEmpty() ||
+                        updatedPatient.getFullName().length() > 100 || updatedPatient.getFullName().matches(".*\\s{2,}.*")) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                    out.print("{\"error\":\"Invalid full name: must not be empty, max 100 characters, no multiple spaces\"}");
+                    return;
+                }
+
+                if (updatedPatient.getDob() == null || updatedPatient.getDob().isEmpty()) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                    out.print("{\"error\":\"Date of birth is required\"}");
+                    return;
+                }
+
+                if (updatedPatient.getGender() == null || updatedPatient.getGender().isEmpty()) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                    out.print("{\"error\":\"Gender is required\"}");
+                    return;
+                }
+
+                if (updatedPatient.getPhone() == null || !updatedPatient.getPhone().matches("^[0][1-9]{9}$")) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                    out.print("{\"error\":\"Invalid phone number: must be 10 digits starting with 0\"}");
+                    return;
+                }
+
+                if (updatedPatient.getAddress() == null || updatedPatient.getAddress().isEmpty() ||
+                        updatedPatient.getAddress().length() > 225) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                    out.print("{\"error\":\"Invalid address: must not be empty, max 225 characters\"}");
                     return;
                 }
 
                 // Set default gender if not provided
                 String gender = updatedPatient.getGender() != null ? updatedPatient.getGender() : "Unknown";
 
+                // Check for existing patient
+                Patient existingPatient = patientDAO.getPatientByDetails(
+                        updatedPatient.getFullName(),
+                        updatedPatient.getDob(),
+                        gender,
+                        updatedPatient.getPhone(),
+                        updatedPatient.getAddress()
+                );
+
+                if (existingPatient != null) {
+                    // Patient is already Enable
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 200
+                    out.print("{\"message\":\"Patient already\"}");
+                    LOGGER.info("Patient already : " + existingPatient.getFullName());
+                    return;
+                }
+    
                 // Create PatientDAO instance
                 boolean success = patientDAO.updatePatient(
                         patientId,
@@ -293,7 +332,7 @@ public class PatientServlet extends HttpServlet {
                             patientId,
                             updatedPatient.getFullName(),
                             updatedPatient.getDob(),
-                            gender,
+                            updatedPatient.getGender(),
                             updatedPatient.getPhone(),
                             updatedPatient.getAddress(),
                             updatedPatient.getStatus()

@@ -85,7 +85,7 @@ public class PatientDAO {
                                 WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
                                 ELSE ? END)
                     AND (? IS NULL OR p.gender COLLATE SQL_Latin1_General_CP1_CI_AI = ?)
-                ORDER BY p.patient_id
+                ORDER BY p.patient_id DESC
                 OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
                 """;
 
@@ -272,6 +272,40 @@ public class PatientDAO {
             stmt.setNString(4, phone);
             stmt.setNString(5, address);
 
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Patient patient = new Patient();
+                patient.setId(rs.getInt("patient_id"));
+                patient.setFullName(rs.getString("full_name"));
+                patient.setDob(rs.getString("dob"));
+                patient.setGender(rs.getString("gender"));
+                patient.setPhone(rs.getString("phone"));
+                patient.setAddress(rs.getString("address"));
+                patient.setStatus(rs.getString("status"));
+                return patient;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Patient getPatientByPatientId(int patientId) {
+        String sql = """
+                SELECT [patient_id]
+                      ,[full_name]
+                      ,[dob]
+                      ,[gender]
+                      ,[phone]
+                      ,[address]
+                      ,[status]
+                FROM [Patient]
+                WHERE [patient_id] = ?
+                """;
+
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+            stmt.setInt(1, patientId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Patient patient = new Patient();

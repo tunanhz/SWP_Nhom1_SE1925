@@ -78,18 +78,18 @@ public class PatientPaymentDAO {
         return invoices;
     }
 
-    public ArrayList<PatientPaymentDTO> getPatientInvoicesByAccountId(int accountPatientId) {
+    public ArrayList<PatientPaymentDTO> getPatientInvoicesByAccountId(int accountPatientId, String issueDate, String status, int page, int pageSize) {
         String sql = """
                 SELECT 
                     i.invoice_id,
                     p.patient_id,
-                    i.issue_date,
+                    CONVERT(DATE, i.issue_date) as issue_date,
                     i.status AS invoice_status,
                     COALESCE(sv.service_details, 'Không có dịch vụ') AS service_details,
                     COALESCE(sv.total_service_cost, 0) AS total_service_cost,
                     COALESCE(med.medicine_details, 'Không có thuốc') AS medicine_details,
                     COALESCE(med.total_medicine_cost, 0) AS total_medicine_cost,
-                    i.total_amount AS invoice_total_amount
+                    (COALESCE(sv.total_service_cost, 0) + COALESCE(med.total_medicine_cost, 0)) AS total_cost
                 FROM Invoice i
                 JOIN Patient p ON i.patient_id = p.patient_id
                 JOIN Patient_AccountPatient pa ON pa.patient_id = p.patient_id
@@ -124,13 +124,39 @@ public class PatientPaymentDAO {
                     AND ap.account_patient_id = ?
                     AND ap.status = 'Enable'
                     AND p.status = 'Enable'
-                ORDER BY i.issue_date DESC
+                    AND (? IS NULL OR CONVERT(VARCHAR, i.issue_date, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
+                            LIKE CASE
+                            WHEN ? LIKE '[0-9][0-9][0-9][0-9]' THEN ? + '%'
+                            WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                            WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                            ELSE ? END)
+                    AND (? IS NULL OR i.status COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                ORDER BY i.issue_date desc
+                OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
                 """;
 
         ArrayList<PatientPaymentDTO> invoices = new ArrayList<>();
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
             stmt.setInt(1, accountPatientId);
+
+            stmt.setString(2, issueDate);
+            stmt.setString(3, "%" + issueDate + "%");
+            stmt.setString(4, "%" + issueDate + "%");
+            stmt.setString(5, "%" + issueDate + "%");
+            stmt.setString(6, "%" + issueDate + "%");
+            stmt.setString(7, "%" + issueDate + "%");
+            stmt.setString(8, "%" + issueDate + "%");
+            stmt.setString(9, "%" + issueDate + "%");
+
+            // Status filter
+            stmt.setString(10, status);
+            stmt.setString(11, status != null ? "%" + status + "%" : null);
+
+            // Pagination
+            int offset = (page - 1) * pageSize;
+            stmt.setInt(12, offset);
+            stmt.setInt(13, pageSize);
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -143,7 +169,8 @@ public class PatientPaymentDAO {
                 invoice.setTotalServiceCost(rs.getString("total_service_cost"));
                 invoice.setMedicineDetail(rs.getString("medicine_details"));
                 invoice.setTotalMedicineCost(rs.getString("total_medicine_cost"));
-                invoice.setInvoiceTotalAmount(rs.getString("invoice_total_amount"));
+                invoice.setInvoiceTotalAmount(rs.getString("total_cost"));
+                invoice.includePatient();
                 invoices.add(invoice);
             }
         } catch (SQLException e) {
@@ -152,9 +179,55 @@ public class PatientPaymentDAO {
         return invoices;
     }
 
+    public int getTotalInvoices(int accountPatientId, String issueDate, String status) {
+        String sql = """
+                SELECT COUNT(*)
+                FROM Invoice i
+                JOIN Patient p ON i.patient_id = p.patient_id
+                JOIN Patient_AccountPatient pa ON pa.patient_id = p.patient_id
+                JOIN AccountPatient ap ON ap.account_patient_id = pa.account_patient_id
+                WHERE i.status IN ('Pending', 'Paid')
+                    AND ap.account_patient_id = ?
+                    AND ap.status = 'Enable'
+                    AND p.status = 'Enable'
+                    AND (? IS NULL OR CONVERT(VARCHAR, i.issue_date, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
+                            LIKE CASE
+                            WHEN ? LIKE '[0-9][0-9][0-9][0-9]' THEN ? + '%'
+                            WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                            WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                            ELSE ? END)
+                    AND (? IS NULL OR i.status COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                """;
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
+            stmt.setInt(1, accountPatientId);
+
+            stmt.setString(2, issueDate);
+            stmt.setString(3, "%" + issueDate + "%");
+            stmt.setString(4, "%" + issueDate + "%");
+            stmt.setString(5, "%" + issueDate + "%");
+            stmt.setString(6, "%" + issueDate + "%");
+            stmt.setString(7, "%" + issueDate + "%");
+            stmt.setString(8, "%" + issueDate + "%");
+            stmt.setString(9, "%" + issueDate + "%");
+
+            stmt.setString(10, status);
+            stmt.setString(11, status != null ? "%" + status + "%" : null);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public static void main(String[] args) {
-        PatientPaymentDAO appointmentDAO = new PatientPaymentDAO();
-        ArrayList<PatientPaymentDTO> a = appointmentDAO.getPatientInvoicesByAccountId(1);
-        System.out.println(a.size());
+        PatientPaymentDAO dao = new PatientPaymentDAO();
+        ArrayList<PatientPaymentDTO> invoices = dao.getPatientInvoicesByAccountId(1, null, null, 1, 6);
+        System.out.println(invoices.size());
+
+        int a = dao.getTotalInvoices(1, null, null);
+        System.out.println(a);
     }
 }
