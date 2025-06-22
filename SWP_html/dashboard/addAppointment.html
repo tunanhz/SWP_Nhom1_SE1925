@@ -134,6 +134,7 @@
         const yearSelect = document.getElementById('yearSelect');
         const monthSelect = document.getElementById('monthSelect');
         const appointmentForm = document.getElementById('appointmentForm');
+        let doctorWorkingDates = [];
 
         // Populate year options
         function populateYears() {
@@ -178,6 +179,12 @@
             return selected < today;
         }
 
+        // Check if date is a working date
+        function isWorkingDate(year, month, day) {
+            const dateStr = `${year}-${String(parseInt(month) + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            return doctorWorkingDates.includes(dateStr);
+        }
+
         // Generate dynamic calendar
         function generateCalendar(year, month) {
             const firstDay = new Date(year, month, 1);
@@ -193,7 +200,8 @@
                         table += '<td></td>';
                     } else {
                         const isPast = isPastDate(year, month, dayCount);
-                        table += `<td class="${isPast ? 'disabled' : ''}">${dayCount}</td>`;
+                        const isWorking = isWorkingDate(year, month, dayCount);
+                        table += `<td class="${isPast || !isWorking ? 'disabled' : ''}">${dayCount}</td>`;
                         dayCount++;
                     }
                 }
@@ -221,18 +229,51 @@
         }
 
         // Update time slots
-        function updateTimeSlots() {
+        async function updateTimeSlots() {
             const timeSlots = document.querySelectorAll('.time-slot');
             const selectedDateStr = selectedDate.value;
+            const doctorId = doctorSelect.value;
             const today = new Date();
             const isToday = new Date(selectedDateStr).toDateString() === today.toDateString();
 
+            // Reset all slots to enabled
             timeSlots.forEach(slot => {
                 slot.classList.remove('disabled');
                 if (isToday && isPastTime(slot.value, selectedDateStr)) {
                     slot.classList.add('disabled');
                 }
             });
+
+            // Validate parameters
+            if (!doctorId || !selectedDateStr) {
+                console.warn('Skipping fetch: doctorId or date is missing', { doctorId, selectedDateStr });
+                return;
+            }
+
+            try {
+                const url = `http://localhost:8080/SWP_back_war_exploded/api/doctor-availability?doctorId=${encodeURIComponent(doctorId)}&date=${encodeURIComponent(selectedDateStr)}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`Failed to fetch booked times: HTTP ${response.status} - ${response.statusText}`, errorText);
+                    return;
+                }
+
+                const bookedTimes = await response.json();
+                timeSlots.forEach(slot => {
+                    if (bookedTimes.includes(slot.value)) {
+                        slot.classList.add('disabled');
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching booked times:', error.message, error);
+            }
         }
 
         // Reset time selection
@@ -242,6 +283,38 @@
             selectedTime.value = '';
             if (selectedSlot) selectedSlot.classList.remove('selected');
             selectedSlot = null;
+        }
+
+        // Fetch doctor's working dates
+        async function fetchDoctorWorkingDates(doctorId) {
+            if (!doctorId) {
+                doctorWorkingDates = [];
+                generateCalendar(yearSelect.value, monthSelect.value);
+                return;
+            }
+
+            try {
+                const url = `http://localhost:8080/SWP_back_war_exploded/api/doctor-availability?doctorId=${encodeURIComponent(doctorId)}&action=getWorkingDates`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`Failed to fetch working dates: HTTP ${response.status} - ${response.statusText}`, errorText);
+                    doctorWorkingDates = [];
+                } else {
+                    doctorWorkingDates = await response.json();
+                }
+                generateCalendar(yearSelect.value, monthSelect.value);
+            } catch (error) {
+                console.error('Error fetching working dates:', error.message, error);
+                doctorWorkingDates = [];
+                generateCalendar(yearSelect.value, monthSelect.value);
+            }
         }
 
         // Initial setup
@@ -307,11 +380,14 @@
                 const selectedOption = doctorSelect.querySelector(`option[value="${doctorSelect.value}"]`);
                 if (selectedOption) departmentSelect.value = selectedOption.dataset.department;
                 dateForm.style.display = 'block';
+                fetchDoctorWorkingDates(doctorSelect.value);
             } else {
                 dateForm.style.display = 'none';
                 timeForm.style.display = 'none';
                 resetTimeSelection();
                 selectedDate.value = '';
+                doctorWorkingDates = [];
+                generateCalendar(yearSelect.value, monthSelect.value);
             }
         });
 
@@ -328,66 +404,63 @@
         });
 
         appointmentForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+            e.preventDefault();
 
-    if (!doctorSelect.value) {
-        alert('Vui lòng chọn bác sĩ.');
-        return;
-    }
-    if (!selectedDate.value) {
-        alert('Vui lòng chọn ngày.');
-        return;
-    }
-    if (!selectedTime.value) {
-        alert('Vui lòng chọn giờ.');
-        return;
-    }
+            if (!doctorSelect.value) {
+                alert('Vui lòng chọn bác sĩ.');
+                return;
+            }
+            if (!selectedDate.value) {
+                alert('Vui lòng chọn ngày.');
+                return;
+            }
+            if (!selectedTime.value) {
+                alert('Vui lòng chọn giờ.');
+                return;
+            }
 
-    const selectedDateTime = new Date(`${selectedDate.value}T${selectedTime.value}`);
-    if (selectedDateTime < new Date()) {
-        alert('Không thể chọn ngày hoặc giờ trong quá khứ.');
-        return;
-    }
+            const selectedDateTime = new Date(`${selectedDate.value}T${selectedTime.value}`);
+            if (selectedDateTime < new Date()) {
+                alert('Không thể chọn ngày hoặc giờ trong quá khứ.');
+                return;
+            }
 
-    const formData = {
-        doctorId: doctorSelect.value,
-        date: selectedDate.value,
-        time: selectedTime.value,
-        note: document.getElementById('note').value,
-        department: departmentSelect.value
-    };
+            const formData = {
+                doctorId: doctorSelect.value,
+                date: selectedDate.value,
+                time: selectedTime.value,
+                note: document.getElementById('note').value,
+                department: departmentSelect.value
+            };
 
-    try {
-        const response = await fetch(appointmentForm.action, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(formData)
+            try {
+                const response = await fetch(appointmentForm.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Đặt lịch thành công!');
+                    appointmentForm.reset();
+                    dateForm.style.display = 'none';
+                    timeForm.style.display = 'none';
+                    resetTimeSelection();
+                    selectedDate.value = '';
+                    doctorSelect.disabled = true;
+                    doctorWorkingDates = [];
+                    generateCalendar(yearSelect.value, monthSelect.value);
+                } else {
+                    alert(`Lỗi: ${data.error || 'Không thể đặt lịch.'}`);
+                }
+            } catch (error) {
+                alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
+                console.error('Error:', error);
+            }
         });
-        const data = await response.json();
-        if (response.ok) {
-            alert('Đặt lịch thành công!');
-            appointmentForm.reset();
-            dateForm.style.display = 'none';
-            timeForm.style.display = 'none';
-            resetTimeSelection();
-            selectedDate.value = '';
-            doctorSelect.disabled = true;
-        } else {
-            alert(`Lỗi: ${data.error || 'Không thể đặt lịch.'}`);
-        }
-    } catch (error) {
-        alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
-        console.error('Error:', error);
-    }
-});
     </script>
 </body>
 </html>
-
-
-
-<!--phan JS-->
-    <!-- <script src="./assets/js/API/main-addAppointment.js"></script> -->

@@ -6,19 +6,17 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 /**
  * AnhDT
  */
 public class DBContext {
     protected Connection connection;
 
-
     public DBContext() {
+        initializeConnection();
+    }
+
+    private void initializeConnection() {
         try {
             String user = "sa";
             String pass = "123";
@@ -35,16 +33,20 @@ public class DBContext {
         }
     }
 
-    public void closeConnection() {
+    public Connection getConnection() {
         try {
-            if (connection != null && connection.isClosed()) {
-                connection.close();
-                System.out.println("Connection closed successfully.");
+            if (connection == null || connection.isClosed()) {
+                initializeConnection();
             }
         } catch (SQLException e) {
-            System.out.println("Error closing connection: " + e.getMessage());
+            System.err.println("Error checking connection: " + e.getMessage());
+            initializeConnection();
         }
+        return connection;
     }
+
+    // Loại bỏ phương thức closeConnection để tránh đóng kết nối thủ công
+    // Kết nối sẽ được quản lý bởi ứng dụng hoặc connection pool
 
     private static DBContext instance = new DBContext();
 
@@ -52,13 +54,7 @@ public class DBContext {
         return instance;
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
     public static void main(String[] args) {
         DBContext ad = new DBContext();
     }
-
 }
-
