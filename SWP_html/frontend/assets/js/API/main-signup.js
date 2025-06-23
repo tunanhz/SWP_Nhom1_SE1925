@@ -1,63 +1,60 @@
 let baseAPI = 'http://localhost:8080/SWP_back_war_exploded/api';
 
-// Biến trạng thái để theo dõi tính hợp lệ
 let isUsernameValid = false;
 let isEmailValid = false;
+let isPasswordConfirmed = false;
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('signupForm');
     const usernameInput = form.querySelector('input[name="username"]');
     const emailInput = form.querySelector('input[name="email"]');
     const passwordInput = form.querySelector('input[name="password"]');
+    const confirmPasswordInput = document.getElementById('confirm-password');
     const imgInput = form.querySelector('input[name="img"]');
     const submitButton = document.getElementById('submitButton');
     const usernameError = document.getElementById('username-error');
     const usernameValid = document.getElementById('username-valid');
     const emailError = document.getElementById('email-error');
     const emailValid = document.getElementById('email-valid');
+    const confirmPasswordError = document.getElementById('confirm-password-error'); 
+    const confirmPasswordValid = document.getElementById('confirm-password-valid');
 
-    // Hàm hiển thị thông báo lỗi
     function showError(element, message) {
         element.textContent = message;
         element.style.display = 'block';
     }
 
-    // Hàm ẩn thông báo lỗi
     function hideError(element) {
         element.textContent = '';
         element.style.display = 'none';
     }
 
-    // Hàm hiển thị trạng thái hợp lệ
     function showValid(element, message) {
         element.textContent = message;
         element.style.display = 'block';
     }
 
-    // Hàm ẩn trạng thái hợp lệ
     function hideValid(element) {
         element.textContent = '';
         element.style.display = 'none';
     }
 
-    // Hàm kiểm tra form có đầy đủ dữ liệu không
     function isFormComplete() {
         return (
             usernameInput.value.trim() &&
             emailInput.value.trim() &&
             passwordInput.value.trim() &&
+            confirmPasswordInput.value.trim() &&
             imgInput.files.length > 0
         );
     }
 
-    // Hàm cập nhật trạng thái nút submit
     function updateSubmitButton() {
-        const isValid = isUsernameValid && isEmailValid && isFormComplete();
+        const isValid = isUsernameValid && isEmailValid && isPasswordConfirmed && isFormComplete();
         submitButton.disabled = !isValid;
-        console.log('Submit button state:', { isUsernameValid, isEmailValid, isFormComplete: isFormComplete(), disabled: !isValid });
+        console.log('Submit button state:', { isUsernameValid, isEmailValid, isPasswordConfirmed, isFormComplete: isFormComplete(), disabled: !isValid });
     }
 
-    // Hàm kiểm tra trùng lặp
     function checkDuplicate(type, value, errorElement, validElement, validFlag) {
         if (!value.trim()) {
             hideError(errorElement);
@@ -106,7 +103,26 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Hàm debounce để giới hạn tần suất gọi API
+    function checkPasswordConfirmation() {
+        const password = passwordInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value.trim();
+        if (!password || !confirmPassword) {
+            hideError(confirmPasswordError);
+            hideValid(confirmPasswordValid);
+            isPasswordConfirmed = false;
+        } else if (password !== confirmPassword) {
+            showError(confirmPasswordError, 'Passwords do not match');
+            hideValid(confirmPasswordValid);
+            isPasswordConfirmed = false;
+        } else {
+            hideError(confirmPasswordError);
+            showValid(confirmPasswordValid, 'Passwords match');
+            isPasswordConfirmed = true;
+        }
+        updateSubmitButton();
+    }
+
+    // limit call api
     function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -119,19 +135,19 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    // Kiểm tra username khi nhập
     usernameInput.addEventListener('input', debounce(function () {
         const value = usernameInput.value.trim();
         checkDuplicate('Username', value, usernameError, usernameValid, 'isUsernameValid');
     }, 500));
 
-    // Kiểm tra email khi nhập
     emailInput.addEventListener('input', debounce(function () {
         const value = emailInput.value.trim();
         checkDuplicate('Email', value, emailError, emailValid, 'isEmailValid');
     }, 500));
 
-    // Kiểm tra lại khi rời khỏi input (blur)
+    confirmPasswordInput.addEventListener('input', checkPasswordConfirmation);
+    passwordInput.addEventListener('input', checkPasswordConfirmation);
+
     [usernameInput, emailInput].forEach(input => {
         input.addEventListener('blur', function () {
             const value = input.value.trim();
@@ -152,12 +168,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Kiểm tra thủ công khi form hoàn tất
     form.addEventListener('input', function () {
         updateSubmitButton();
     });
 
-    // Hàm upload ảnh lên Cloudinary
     function uploadToCloudinary(file) {
         const url = 'https://api.cloudinary.com/v1_1/dnoyqme5b/image/upload';
         const data = new FormData();
@@ -189,7 +203,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Xử lý submit form
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
@@ -197,6 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = passwordInput.value.trim();
         const email = emailInput.value.trim();
         const imgFile = imgInput.files[0];
+        const confirmPassword = confirmPasswordInput.value.trim();
 
         console.log('Form data before upload:', {
             username: username || 'null',
@@ -204,13 +218,13 @@ document.addEventListener('DOMContentLoaded', function () {
             imgFile: imgFile ? imgFile.name : 'null'
         });
 
-        if (!username || !password || !email || !imgFile) {
+        if (!username || !password || !confirmPassword || !email || !imgFile) {
             showError(usernameError, 'Please fill in all required fields');
             return;
         }
 
-        if (!isUsernameValid || !isEmailValid) {
-            showError(usernameError, 'Please resolve username or email errors');
+        if (!isUsernameValid || !isEmailValid || !isPasswordConfirmed) {
+            showError(usernameError, 'Please resolve username, email, or password errors');
             return;
         }
 
@@ -230,7 +244,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
-    // Gửi form với URL ảnh
     function submitFormWithImageUrl(imageUrl) {
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();

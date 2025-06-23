@@ -4,31 +4,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('loginForm');
 
     form.addEventListener('submit', function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+        event.preventDefault(); 
 
-        // Lấy giá trị từ form
-        const username = form.querySelector('input[name="username"]').value;
+        const identifier = form.querySelector('input[name="identifier"]').value;
         const password = form.querySelector('input[name="pwd"]').value;
 
-        // Kiểm tra nếu trường rỗng
-        if (!username || !password) {
-            alert("Please fill in both username and password!");
+        if (!identifier || !password) {
+            alert("Please fill in both username/email and password!");
             return;
         }
 
-        // Chuẩn bị body dưới dạng JSON
         const requestBody = {
-            username: username,
-            password: password // Sử dụng "password" để khớp với servlet (có thể thay bằng "pwd" nếu cần)
+            identifier: identifier,
+            password: password 
         };
 
-        // Gửi yêu cầu POST đến API với body JSON
         fetch(baseAPI, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json' // Sử dụng JSON
+                'Content-Type': 'application/json' 
             },
-            body: JSON.stringify(requestBody) // Chuyển đổi object thành JSON string
+            body: JSON.stringify(requestBody) 
         })
             .then(response => {
                 if (!response.ok) {
@@ -37,15 +33,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(data => {
-                console.log('Response from server:', data); // Log để debug
+                console.log('Response from server:', data); 
                 localStorage.setItem('account', JSON.stringify(data.account));
 
-                // Kiểm tra phản hồi
                 if (data.success) {
                     const role = data.role.toLowerCase();
                     let redirectUrl;
 
-                    // Xác định URL chuyển hướng dựa trên role
                     switch (role) {
                         case 'doctor':
                         case 'nurse':

@@ -56,22 +56,22 @@ public class LoginServlet extends HttpServlet {
                 }
             }
             JsonObject jsonObject = JsonParser.parseString(jsonBody.toString()).getAsJsonObject();
-            String username = jsonObject.get("username").getAsString();
+            String identifier = jsonObject.get("identifier").getAsString();
             String password = jsonObject.get("password").getAsString();
 
             LOGGER.info("Received POST request at: " + request.getRequestURI());
-            LOGGER.info("Parameters - username: " + username + ", password: " + password);
-            System.out.println("Debug: Username = " + username + ", Password = " + password);
+            LOGGER.info("Parameters - identifier: " + identifier + ", password: " + password);
+            System.out.println("Debug: identifier = " + identifier + ", Password = " + password);
 
-            if (username == null || password == null) {
+            if (identifier == null || password == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.print("{\"error\": \"username and password are required\"}");
+                out.print("{\"error\": \"identifier and password are required\"}");
                 return;
             }
 
-            LOGGER.info("Attempting login for username: " + username);
+            LOGGER.info("Attempting login for username: " + identifier);
 
-            Account account = authenticate(username, password);
+            Account account = authenticate(identifier, password);
 
             if (account != null) {
                 request.getSession().setAttribute("account", account);
@@ -94,24 +94,24 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    private Account authenticate(String username, String password) {
+    private Account authenticate(String identifier, String password) {
         Account account = null;
 
         try {
-            AccountStaff staff = staffDAO.getAccountByUsernameAndPassword(username, password);
+            AccountStaff staff = staffDAO.getAccountByUsernameAndPassword(identifier, password);
             if (staff != null) {
                 account = staff;
             }
 
             if (account == null) {
-                AccountPatient patient = patientDAO.getAccountByUsernameAndPassword(username, password);
+                AccountPatient patient = patientDAO.getAccountByUsernameOrEmailAndPassword(identifier, password);
                 if (patient != null) {
                     account = patient;
                 }
             }
 
             if (account == null) {
-                AccountPharmacist pharmacist = pharmacistDAO.getAccountByUsernameAndPassword(username, password);
+                AccountPharmacist pharmacist = pharmacistDAO.getAccountByUsernameAndPassword(identifier, password);
                 if (pharmacist != null) {
                     account = pharmacist;
                 }
