@@ -35,6 +35,37 @@ public class AccountPatientDAO {
         return account;
     }
 
+    public AccountPatient getAccountByUsernameOrEmailAndPassword(String identifier, String password) {
+        AccountPatient account = null;
+        String sql = """
+                SELECT * FROM [dbo].[AccountPatient] 
+                WHERE (username = ? OR email = ?) AND password = ? AND status = 'Enable'
+                """;
+
+        try {
+            PreparedStatement stmt = dbContext.getConnection().prepareStatement(sql);
+            stmt.setString(1, identifier);
+            stmt.setString(2, identifier);
+            stmt.setString(3, password);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                account = new AccountPatient(
+                        rs.getInt("account_patient_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getBoolean("status"),
+                        rs.getString("img")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return account;
+    }
+
     public void addPatient(AccountPatient patient) {
         String sql = """
                  INSERT INTO [dbo].[AccountPatient] (username, password, email, status, img)
@@ -100,7 +131,7 @@ public class AccountPatientDAO {
 
     public static void main(String[] args) {
         AccountPatientDAO dao = new AccountPatientDAO();
-        AccountPatient patient = dao.getAccountByUsernameAndPassword("phamvannha", "P@ss123");
+        AccountPatient patient = dao.getAccountByUsernameOrEmailAndPassword("pham.nha@gmail.com", "P@ss123");
         System.out.println(patient);
     }
 }
