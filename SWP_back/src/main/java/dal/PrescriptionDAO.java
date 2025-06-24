@@ -3,6 +3,7 @@ package dal;
 
 import model.PrescriptionDTO;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,11 +29,11 @@ public class PrescriptionDAO {
                       JOIN MedicineRecords mr ON p.medicineRecord_id = mr.medicineRecord_id
                       JOIN Patient pt ON mr.patient_id = pt.patient_id
                       JOIN Doctor d ON p.doctor_id = d.doctor_id
-                      WHERE p.status = 'Pending'
+
                 ORDER BY p.prescription_id
                                 OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
                 """;
-
+//                      WHERE p.status = 'Pending'
         try {
             PreparedStatement ps = ad.getConnection().prepareStatement(xSql);
             int offset = (page - 1) * size;
@@ -105,5 +106,134 @@ public class PrescriptionDAO {
 
         return list;
     }
+
+
+    public boolean updatePrescriptionStatus(int prescriptionId, String status, int accountPharmacistId) {
+        Connection conn = null;
+        try {
+            conn = ad.getConnection();
+            conn.setAutoCommit(false);
+
+            // Kiểm tra số lượng thuốc trong kho nếu trạng thái là Dispensed
+            if (status.equals("Dispensed")) {
+                String checkStockSql = """
+                        SELECT m.medicine_id, m.quantity, ms.quantity AS required_quantity
+                        FROM Medicines ms
+                        JOIN Medicine m ON ms.medicine_id = m.medicine_id
+                        JOIN PrescriptionInvoice pi ON ms.prescription_invoice_id = pi.prescription_invoice_id
+                        WHERE pi.prescription_id = ?;
+                        """;
+                try (PreparedStatement ps = conn.prepareStatement(checkStockSql)) {
+                    ps.setInt(1, prescriptionId);
+                    ResultSet rs = ps.executeQuery();
+                    boolean hasInsufficientStock = false;
+                    while (rs.next()) {
+                        int availableQuantity = rs.getInt("quantity");
+                        int requiredQuantity = rs.getInt("required_quantity");
+                        if (availableQuantity < requiredQuantity) {
+                            hasInsufficientStock = true;
+                            System.out.println("Insufficient stock for medicine_id " + rs.getInt("medicine_id") +
+                                    ": Available = " + availableQuantity + ", Required = " + requiredQuantity);
+                        }
+                    }
+                    rs.close();
+                    if (hasInsufficientStock) {
+                        conn.rollback();
+                        return false;
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Error checking stock: " + e.getMessage());
+                    conn.rollback();
+                    return false;
+                }
+            }
+
+            // Cập nhật trạng thái đơn thuốc
+            String updatePrescriptionSql = """
+                    UPDATE Prescription 
+                    SET status = ? 
+                    WHERE prescription_id = ?;
+                    """;
+            PreparedStatement psPrescription = conn.prepareStatement(updatePrescriptionSql);
+            psPrescription.setString(1, status);
+            psPrescription.setInt(2, prescriptionId);
+            int rowsAffected = psPrescription.executeUpdate();
+            psPrescription.close();
+
+            // Nếu trạng thái là Dispensed, cập nhật số lượng thuốc trong kho
+            if (status.equals("Dispensed") && rowsAffected > 0) {
+                String updateStockSql = """
+                        UPDATE m
+                        SET m.quantity = m.quantity - ms.quantity
+                        FROM Medicine m
+                        INNER JOIN Medicines ms ON m.medicine_id = ms.medicine_id
+                        INNER JOIN PrescriptionInvoice pi ON ms.prescription_invoice_id = pi.prescription_invoice_id
+                        WHERE pi.prescription_id = ?;
+                        
+                        """;
+                PreparedStatement psStock = conn.prepareStatement(updateStockSql);
+                psStock.setInt(1, prescriptionId);
+                psStock.executeUpdate();
+                psStock.close();
+            }
+
+            // Ghi log hành động của dược sĩ
+            if (rowsAffected > 0) {
+                String logSql = """
+                        INSERT INTO SystemLog_Pharmacist (account_pharmacist_id, action, action_type, log_time)
+                        VALUES (?, ?, ?, GETDATE());
+                        """;
+                PreparedStatement psLog = conn.prepareStatement(logSql);
+                psLog.setInt(1, accountPharmacistId);
+                psLog.setString(2, "Updated prescription " + prescriptionId + " to " + status);
+                psLog.setString(3, "Prescription_Update");
+                psLog.executeUpdate();
+                psLog.close();
+            }
+
+            conn.commit();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException ex) {
+                System.out.println("Rollback failed: " + ex.getMessage());
+            }
+            return false;
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error closing connection: " + e.getMessage());
+            }
+        }
+    }
+
+
+//    public boolean updatePrescriptionStatus(int prescriptionId, String status) {
+//        String sql = """
+//                UPDATE Prescription
+//                SET status = ?
+//                WHERE prescription_id = ?;
+//                """;
+//
+//        try {
+//            PreparedStatement ps = ad.getConnection().prepareStatement(sql);
+//            ps.setString(1, status);
+//            ps.setInt(2, prescriptionId);
+//            int rowsAffected = ps.executeUpdate();
+//            ps.close();
+//            return rowsAffected > 0;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
+
+
 
 }
