@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+    <div class="container mx-auto max-w-7xl">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">Prescription List</h1>
+        
+        <!-- Error Message -->
+        <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"></div>
+
+        <!-- Table -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Doctor</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="prescription-table" class="divide-y divide-gray-200">
+                    <!-- Table rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-4 flex justify-between items-center">
+            <div>
+                <label for="page-size" class="mr-2">Items per page:</label>
+                <select id="page-size" class="border rounded p-1">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+            <div class="flex space-x-2">
+                <button id="prev-page" class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300" disabled>Previous</button>
+                <span id="page-info" class="px-4 py-2">Page 1</span>
+                <button id="next-page" class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/SWP_back_war_exploded/api/prescription/';
+        let currentPage = 1;
+        let pageSize = 10;
+        let totalItems = 0;
+
+        async function fetchPrescriptions(page, size) {
+            try {
+                const response = await fetch(`${API_URL}?page=${page}&size=${size}`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                displayPrescriptions(data);
+                updatePagination(data.length);
+                hideError();
+            } catch (error) {
+                showError(`Failed to load prescriptions: ${error.message}`);
+                console.error(error);
+            }
+        }
+
+        function displayPrescriptions(prescriptions) {
+            const tableBody = document.getElementById('prescription-table');
+            tableBody.innerHTML = '';
+
+            prescriptions.forEach(p => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${p.prescriptionId}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ${p.patientName}<br>
+                        <span class="text-gray-500">${p.patientPhone}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ${p.doctorName}<br>
+                        <span class="text-gray-500">${p.doctorPhone}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${p.doctorDepartment}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${p.prescriptionDate}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="px-2 py-1 rounded-full text-xs ${
+                            p.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                        }">${p.status}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <button onclick="viewDetails(${p.prescriptionId})" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">View Details</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function viewDetails(prescriptionId) {
+            window.location.href = `prescriptionDetails.html?id=${prescriptionId}`;
+        }
+
+        function updatePagination(itemsReturned) {
+            const prevButton = document.getElementById('prev-page');
+            const nextButton = document.getElementById('next-page');
+            const pageInfo = document.getElementById('page-info');
+
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = itemsReturned < pageSize;
+
+            pageInfo.textContent = `Page ${currentPage}`;
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function hideError() {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.classList.add('hidden');
+        }
+
+        // Event Listeners
+        document.getElementById('page-size').addEventListener('change', (e) => {
+            pageSize = parseInt(e.target.value);
+            currentPage = 1;
+            fetchPrescriptions(currentPage, pageSize);
+        });
+
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                fetchPrescriptions(currentPage, pageSize);
+            }
+        });
+
+        document.getElementById('next-page').addEventListener('click', () => {
+            currentPage++;
+            fetchPrescriptions(currentPage, pageSize);
+        });
+
+        // Initial fetch
+        fetchPrescriptions(currentPage, pageSize);
+    </script>
+</body>
+</html>
