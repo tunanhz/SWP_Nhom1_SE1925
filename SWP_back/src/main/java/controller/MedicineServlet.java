@@ -67,7 +67,7 @@ public class MedicineServlet extends HttpServlet {
 
 
     private void setCORSHeaders(HttpServletResponse resp) {
-        resp.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+        resp.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:*");
         resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
     }
