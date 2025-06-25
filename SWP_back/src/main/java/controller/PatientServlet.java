@@ -315,7 +315,7 @@ public class PatientServlet extends HttpServlet {
                     LOGGER.info("Patient already : " + existingPatient.getFullName());
                     return;
                 }
-    
+
                 // Create PatientDAO instance
                 boolean success = patientDAO.updatePatient(
                         patientId,

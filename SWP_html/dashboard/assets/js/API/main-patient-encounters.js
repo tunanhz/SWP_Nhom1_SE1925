@@ -120,6 +120,16 @@ function createAppointmentRow(appointment, index) {
         }
     };
 
+    const renderStatus = () =>{
+        if(isCompleted){
+            return `<span class="badge bg-success-subtle p-2 text-success">Complete</span>`;
+        } else if (isConfirmed){
+            return `<span class="badge bg-primary-subtle p-2 text-primary">Confirmed</span>`;
+        }else{
+            return `<span class="badge bg-warning-subtle p-2 text-warning">Pending</span>`;
+        }
+    };
+
     return `
         <tr data-item="list">
             <th scope="row">${index + 1}</th>
@@ -140,12 +150,11 @@ function createAppointmentRow(appointment, index) {
             <td>${formatDateTime(appointment.appointmentDateTime)}</td>
             <td>${sanitizeHTML(appointment.note || "N/A")}</td>
             <td>${isCompleted ? formatDateTime(appointment.appointmentDateTime) : "N/A"}</td>
-            <td>${sanitizeHTML(appointment.appointmentStatus)}</td>
+            <td>${renderStatus()}</td>
             <td>
                 ${renderActionButtons()}
             </td>
-        </tr>
-    `;
+        </tr>`;
 }
 
 async function displayAppointment(page = 1, nameSearch = state.currentNameSearch, dateAppointmentSearch = state.currentDateAppointment, statusSearch = state.currentStatus) {
@@ -269,7 +278,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
             });
         });
 
-        
+
         // Attach event listeners for edit buttons
         container.querySelectorAll(".view-btn").forEach(button => {
             button.addEventListener("click", function(e) {
@@ -280,36 +289,36 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
 
         // Attach event listeners for delete buttons
         container.querySelectorAll(".delete-btn").forEach(button => {
-        button.addEventListener("click", async function(e) {
-        e.preventDefault();
-        const appointmentId = this.dataset.id;
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You want to delete this appointment?",
-            icon: "error",
-            showCancelButton: true,
-            backdrop: `rgba(60,60,60,0.8)`,
-            confirmButtonText: "Yes, delete it!",
-            confirmButtonColor: "#c03221"
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const response = await fetch(`${baseAPI.split('?')[0]}/${appointmentId}`, {
-                        method: "DELETE"
-                    });
-                    if (!response.ok) {
-                        throw new Error("Failed to delete appointment");
+            button.addEventListener("click", async function(e) {
+                e.preventDefault();
+                const appointmentId = this.dataset.id;
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You want to delete this appointment?",
+                    icon: "error",
+                    showCancelButton: true,
+                    backdrop: `rgba(60,60,60,0.8)`,
+                    confirmButtonText: "Yes, delete it!",
+                    confirmButtonColor: "#c03221"
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        try {
+                            const response = await fetch(`${baseAPI.split('?')[0]}/${appointmentId}`, {
+                                method: "DELETE"
+                            });
+                            if (!response.ok) {
+                                throw new Error("Failed to delete appointment");
+                            }
+                            Swal.fire("Deleted!", "Your appointment has been deleted.", "success");
+                            await displayAppointment(state.currentPage, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
+                        } catch (error) {
+                            Swal.fire("Error!", "Could not delete appointment. Please try again.", "error");
+                            console.error("Delete error:", error);
+                        }
                     }
-                    Swal.fire("Deleted!", "Your appointment has been deleted.", "success");
-                    await displayAppointment(state.currentPage, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
-                } catch (error) {
-                    Swal.fire("Error!", "Could not delete appointment. Please try again.", "error");
-                    console.error("Delete error:", error);
-                }
-            }
+                });
+            });
         });
-    });
-});
 
         // Attach event listeners for pagination
         container.querySelectorAll("button[data-page]").forEach(button => {
@@ -373,7 +382,7 @@ async function handleFormSubmissionConfirm(event) {
     const phonePatient = form.querySelector("#phonePatient").value;
     const address = form.querySelector("#address").value;
 
-    
+
     if (!patientId || isNaN(patientId)) {
         Swal.fire("Error!", "Invalid patient ID", "error");
         return;
@@ -420,11 +429,6 @@ async function handleFormSubmissionConfirm(event) {
 
         if (!response) {
             throw new Error("No response received from server");
-        }
-
-        if (response.status == 500) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || `Patient already ${patientData.fullName}`);
         }
 
         if (!response.ok) {
@@ -518,7 +522,7 @@ function populateView(appointment) {
     const phoneDoctor1 = document.getElementById("phoneDoctor1");
     const emailDoctor1 = document.getElementById("emailDoctor1");
     const status1 = document.getElementById("status1");
-    
+
     if (namePatient1) namePatient1.value = `${sanitizeHTML(appointment.fullName)}`;
     if (dateOfBirth1) dateOfBirth1.value = formatDateToYYYYMMDD(appointment.dob);
     if (gender1) gender1.value = sanitizeHTML(appointment.gender || "");
@@ -593,14 +597,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.getElementById('logoutLink').addEventListener('click', function (event) {
-      event.preventDefault();
-      localStorage.removeItem('account'); 
-      window.location.href = '/frontend/login.html'; 
-  });
+        event.preventDefault();
+        localStorage.removeItem('account');
+        window.location.href = '/frontend/login.html';
+    });
 
     document.getElementById('logoutModalLink').addEventListener('click', function (event) {
-      event.preventDefault();
-      localStorage.removeItem('account'); 
-      window.location.href = '/frontend/login.html'; 
-  });
+        event.preventDefault();
+        localStorage.removeItem('account');
+        window.location.href = '/frontend/login.html';
+    });
 });
