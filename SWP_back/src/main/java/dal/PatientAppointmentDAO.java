@@ -1,5 +1,6 @@
 package dal;
 
+import dto.AppointmentPatientDTO;
 import model.*;
 
 import java.sql.PreparedStatement;

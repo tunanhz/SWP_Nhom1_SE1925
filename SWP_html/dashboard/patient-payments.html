@@ -844,7 +844,7 @@
             </div>
         </div>
     </div>-->
-    <div class="col-lg-12 mt-5">
+    <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
                 <div class="row align-items-center">
@@ -852,23 +852,59 @@
                         <h4>Payments</h4>
                         <p class="mb-0">Online Transaction History.</p>
                     </div>
-                    <div class="col-sm-6 text-sm-end mt-sm-0 mt-4">
-                        <a href="#" class="btn btn-primary" download><svg height="16" width="16" viewBox="0 0 24 24"
-                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12.1221 15.436L12.1221 3.39502" stroke="currentColor" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path d="M15.0381 12.5083L12.1221 15.4363L9.20609 12.5083" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path
-                                    d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
-                            </svg> Download All</a>
-                    </div>
+                    <div class="row d-flex align-items-center justify-content-start flex-wrap mt-2">
+        <!-- Search Input -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-2 mb-md-0">
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text">
+                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
+                        <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </span>
+                <input type="text" id="invoice-search-date" class="form-control" placeholder="Search Issue Date (dd/mm/yyyy)...">
+            </div>
+        </div>
+        <!-- Gender Select -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-2 mb-md-0">
+            <select id="status-search" class="form-select border text-body rounded" aria-label="Select status">
+                <option value="" selected>All Status</option>
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+            </select>
+        </div>
+        <!-- Find Appointment Button -->
+        <div class="col-lg-2 col-md-4 col-sm-12 text-sm-center">
+            <button class="btn btn-outline-primary w-100 w-md-auto px-4">
+                <span class="btn-inner">
+                    <span class="text d-inline-block align-middle">Find Invoice</span>
+                    <span class="icon d-inline-block align-middle ms-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                            <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
+                        </svg>
+                    </span>
+                </span>
+            </button>
+        </div>
+        <div class="text-sm-end mt-sm-0 col-lg-2 col-md-4">
+        <a href="#" class="btn btn-primary" download><svg height="16" width="16" viewBox="0 0 24 24"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1221 15.436L12.1221 3.39502" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M15.0381 12.5083L12.1221 15.4363L9.20609 12.5083" stroke="currentColor"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path
+                    d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </svg> Download All</a>
+        </div>
+        </div>
+                    
                 </div>
             </div>
             <!--Bảng dữ liệu-->
-            <div class="card-body pt-0">
+            <div class="card-body pt-0" id="infor-payment">
                 <div class="table-responsive">
                     <table class="table border-end border-start align-middle mb-0 rounded">
                         <thead class="table-dark">
@@ -880,6 +916,7 @@
                                 <th scope="col">Service Details</th>
                                 <th scope="col">Medicine Details</th>
                                 <th scope="col">Total Cost</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -891,22 +928,8 @@
                                 <td>Dr. Alexandra Johnson</td>
                                 <td>Dr. Alexandra Johnson</td>
                                 <td>28 Mar At 12:00 PM</td>
-                                <td>
-                                    <a href="#" class="text-body align-middle" download><svg class="me-2" height="16"
-                                            width="16" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12.1221 15.436L12.1221 3.39502" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                            </path>
-                                            <path d="M15.0381 12.5083L12.1221 15.4363L9.20609 12.5083"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                            <path
-                                                d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
-                                        </svg> Download</a>
-                                </td>
+                                <td>Dr. Alexandra Johnson</td>
+                                <td>Paid</td>
                                 <td>
                                     <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
                                         href="#offcanvasPatientPayment" aria-controls="offcanvasPatientPayment">
@@ -950,55 +973,63 @@
                     </table>
                 </div>
             </div>
-
-            <!--Phân trang-->
-            <div class="card-footer pt-0 row">
-         <div class="d-flex justify-content-start col-md-6 mt-4">
-        <button class="btn btn-secondary text-white me-3" type="button">
-          <span class="btn-inner">
-            <span class="text d-inline-block align-middle">Previous</span>
-            <span class="icon d-inline-block align-middle ms-1 ps-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-              </svg>
-            </span>
-          </span>
-        </button>
-        <span class="align-self-center me-3">Page 1 of 8</span>
-        <button class="btn btn-primary me-3" type="button">
-          <span class="btn-inner">
-            <span class="text d-inline-block align-middle">Next</span>
-            <span class="icon d-inline-block align-middle ms-1 ps-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-              </svg>
-            </span>
-          </span>
-        </button>
-      </div> 
-      
-      <div class="col-md-6 d-flex justify-content-center justify-content-md-end mt-4">
-      <div class="input-group input-group-sm w-auto">
-        <label class="input-group-text text-bg-info" for="pageSize">Items per page</label>
-        <select class="form-select" name="page" id="pageSize">
-          <option value="6">6</option>
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-          <option value="999999999999999">All</option>
-        </select>
-      </div>
-    </div>
-
-            </div>
         </div>
     </div>
 </div>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientPayment"
-   aria-labelledby="offcanvasPatientPaymentLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientPaymentPaid"
+   aria-labelledby="offcanvasPatientPaymentPaidLabel">
    <div class="offcanvas-header border-bottom">
-      <h3 class="offcanvas-title" id="offcanvasPatientPaymentLabel">Edit Payment</h3>
+      <h3 class="offcanvas-title" id="offcanvasPatientPaymentPaidLabel">View Infor Payment</h3>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+   </div>
+   <div class="offcanvas-body">
+      <div class="form-group col-md-12">
+            <label class="form-label" for="patient-name">Patinet Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="patient-name" readonly>
+        </div>
+        <div class="form-group col-md-12">
+            <label class="form-label" for="patient-phone">Phone Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="patient-phone" readonly>
+        </div>
+        <div class="form-group col-md-12">
+              <label class="form-label" for="issueDate">Issue Date <span class="text-danger">*</span></label>
+              <input type="text" id="issueDate" class="form-control date_flatpicker flatpickr-input active" value="2023-04-24" readonly="readonly">
+       </div>
+      <div class="form-group col-md-12">
+         <label class="form-label" for="serviceDetail">Service Detail <span class="text-danger">*</span></label>
+         <input type="text" class="form-control" id="serviceDetail" value="kivicare skin specialist" readonly>
+      </div>
+      <div class="form-group col-md-12">
+         <label class="form-label" for="medicineDetail">Medicine Detail <span class="text-danger">*</span></label>
+         <input type="text" class="form-control" id="medicineDetail" value="Dr. Amine Louis" readonly>
+      </div>
+      <div class="form-group col-md-12">
+         <label class="form-label" for="invoiceTotalAmount">Total Cost <span class="text-danger">*</span></label>
+         <input type="text" class="form-control" id="invoiceTotalAmount" value="Dr. Amine Louis" readonly>
+      </div>
+   </div>
+   <div class="offcanvas-footer border-top">
+      <div class="d-grid d-md-flex gap-3 p-3">
+            <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
+                <span class="btn-inner">
+                    <span class="text d-inline-block align-middle">Close</span>
+                    <span class="icon d-inline-block align-middle ms-1 ps-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                            <path
+                                d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                fill="currentColor" />
+                        </svg>
+                    </span>
+                </span>
+            </button>
+      </div>
+   </div>
+</div>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientPaymentPending"
+   aria-labelledby="offcanvasPatientPaymentPendingLabel">
+   <div class="offcanvas-header border-bottom">
+      <h3 class="offcanvas-title" id="offcanvasPatientPaymentPendingLabel">Edit Payment</h3>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
    </div>
    <div class="offcanvas-body">
@@ -1877,6 +1908,10 @@
                     </div>
                 </div>
             </div>
+
+
+        <!--API main-->
+        <script src="./assets/js/API/main-patient-payments.js"></script>    
         <!-- Library Bundle Script -->
         <script src="./assets/js/core/libs.min.js"></script>
         <!-- Plugin Scripts -->
