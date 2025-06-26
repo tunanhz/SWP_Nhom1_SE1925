@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>KiviCare-like Dashboard with Calendar</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            background-color: #f5f6fa;
+        }
+
+        .wrapper {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #sidebar-container {
+            width: 250px;
+            transition: width 0.3s ease;
+        }
+
+        body.collapsed #sidebar-container {
+            width: 60px;
+        }
+
+        .main-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #3498db;
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-x: auto;
+            background-color: #f5f6fa;
+            display: flex;
+            flex-direction: column;
+            min-width: 0; /* Prevent it from shrinking */
+        }
+
+        #appointmentCalendar {
+            flex: 1;
+            min-height: 500px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            min-width: 0; /* Prevent calendar container from shrinking */
+        }
+
+        .fc-toolbar-title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <!-- Sidebar container (loaded dynamically) -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main content area -->
+    <div class="main-section">
+        <div class="header">
+            <div>Welcome</div>
+        </div>
+        <div class="main-content">
+            <h2>Appointment Calendar</h2>
+            <div id="appointmentCalendar"></div>
+        </div>
+    </div>
+</div>
+
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+<script>
+    let calendar;
+
+    // Load sidebar
+    fetch('doctor-sidebar.html')
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('sidebar-container').innerHTML = html;
+
+            // Handle sidebar toggle
+            document.getElementById('toggleSidebar')?.addEventListener('click', () => {
+                document.body.classList.toggle('collapsed');
+                setTimeout(() => {
+                    if (calendar) calendar.updateSize();
+                }, 350);
+            });
+        });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('appointmentCalendar');
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            selectable: true,
+            height: '100%',
+            events: []
+        });
+        calendar.render();
+
+        window.addEventListener('resize', () => {
+            if (calendar) calendar.updateSize();
+        });
+    });
+</script>
+</body>
+</html>

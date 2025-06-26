@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patients Encounter List</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>tailwind.config={theme:{extend:{colors:{primary:'#4169e1',secondary:'#6c757d'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+  <style>
+    :where([class^="ri-"])::before { content: "\f3c2"; }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .date-input::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div id="sidebar-container"></div>
+<header class="bg-primary text-white py-3 px-6 flex justify-between items-center">
+  <div></div>
+  <div class="flex items-center gap-2">
+    <span class="font-medium">DoctorHolmes95</span>
+    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
+      <i class="ri-user-3-line text-white ri-lg"></i>
+    </div>
+  </div>
+</header>
+<main class="container mx-auto p-6 max-w-7xl">
+  <div class="bg-white rounded shadow-sm">
+    <div class="flex justify-between items-center p-4 border-b">
+      <h1 class="text-xl font-semibold text-gray-800">Patients Encounter List</h1>
+      <div class="flex gap-3">
+        <button class="flex items-center gap-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-button whitespace-nowrap">
+          <i class="ri-arrow-left-line ri-lg"></i>
+          Back
+        </button>
+        <button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-button whitespace-nowrap">
+          <i class="ri-add-line ri-lg"></i>
+          Add encounter
+        </button>
+      </div>
+    </div>
+    <div class="p-4">
+      <div class="relative mb-6">
+        <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+          <i class="ri-search-line text-gray-400 ri-lg"></i>
+        </div>
+        <input type="text" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Search encounter data by id, doctor, clinic, patient, date, and status (active or inactive)">
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+          <tr class="border-b">
+            <th class="p-3 text-left">
+              <div class="flex items-center gap-2">
+                <input type="checkbox" class="w-4 h-4 accent-primary">
+              </div>
+            </th>
+            <th class="p-3 text-left">
+              <div class="flex items-center gap-2">
+                <span class="font-medium text-gray-700">ID</span>
+                <i class="ri-arrow-up-down-line text-gray-400 ri-lg"></i>
+              </div>
+            </th>
+            <th class="p-3 text-left">
+              <div class="flex items-center gap-2">
+                <span class="font-medium text-gray-700">Clinic Name</span>
+                <i class="ri-arrow-up-down-line text-gray-400 ri-lg"></i>
+              </div>
+            </th>
+            <th class="p-3 text-left">
+              <div class="flex items-center gap-2">
+                <span class="font-medium text-gray-700">Patient Name</span>
+                <i class="ri-arrow-up-down-line text-gray-400 ri-lg"></i>
+              </div>
+            </th>
+            <th class="p-3 text-left">
+              <div class="flex items-center gap-2">
+                <span class="font-medium text-gray-700">Date</span>
+                <i class="ri-arrow-up-down-line text-gray-400 ri-lg"></i>
+              </div>
+            </th>
+            <th class="p-3 text-left">
+              <div class="flex items-center gap-2">
+                <span class="font-medium text-gray-700">Status</span>
+                <i class="ri-arrow-up-down-line text-gray-400 ri-lg"></i>
+              </div>
+            </th>
+            <th class="p-3 text-left">
+              <div class="flex items-center gap-2">
+                <span class="font-medium text-gray-700">Action</span>
+              </div>
+            </th>
+          </tr>
+          <tr class="border-b bg-gray-50">
+            <th class="p-2"></th>
+            <th class="p-2">
+              <input type="text" class="w-full p-2 border border-gray-300 rounded text-sm" placeholder="ID">
+            </th>
+            <th class="p-2">
+              <input type="text" class="w-full p-2 border border-gray-300 rounded text-sm" placeholder="Filter Encounter by clinic name">
+            </th>
+            <th class="p-2">
+              <input type="text" class="w-full p-2 border border-gray-300 rounded text-sm" placeholder="Filter Encounter by patient name">
+            </th>
+            <th class="p-2">
+              <div class="relative">
+                <input type="date" class="w-full p-2 border border-gray-300 rounded text-sm date-input" placeholder="Date">
+                <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  <i class="ri-close-line ri-lg"></i>
+                </button>
+              </div>
+            </th>
+            <th class="p-2">
+              <select class="w-full p-2 border border-gray-300 rounded text-sm pr-8 appearance-none bg-white">
+                <option value="">Filter by status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </th>
+            <th class="p-2"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="h-60">
+            <td colspan="7" class="text-center text-gray-500">No Data Found</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-between items-center mt-6">
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-600">Rows per page:</span>
+          <div class="relative">
+            <select class="appearance-none bg-white border border-gray-300 rounded p-1 pr-8 text-sm">
+              <option>10</option>
+              <option>25</option>
+              <option>50</option>
+              <option>100</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <i class="ri-arrow-down-s-line text-gray-400"></i>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-gray-600">Page</span>
+          <div class="flex items-center gap-2">
+            <input type="number" value="1" class="w-12 p-1 border border-gray-300 rounded text-center text-sm">
+            <span class="text-sm text-gray-600">of 0</span>
+          </div>
+          <div class="flex">
+            <button class="p-1 border border-gray-300 rounded-l-button text-gray-500 bg-white hover:bg-gray-100 disabled:opacity-50" disabled>
+              <i class="ri-arrow-left-s-line ri-lg w-6 h-6 flex items-center justify-center"></i>
+            </button>
+            <button class="p-1 border border-gray-300 border-l-0 rounded-r-button text-gray-500 bg-white hover:bg-gray-100 disabled:opacity-50" disabled>
+              <i class="ri-arrow-right-s-line ri-lg w-6 h-6 flex items-center justify-center"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script id="selectHandlers">
+  document.addEventListener('DOMContentLoaded', function() {
+    const selects = document.querySelectorAll('select');
+    selects.forEach(select => {
+      const parent = select.parentElement;
+      if (parent.querySelector('.ri-arrow-down-s-line')) {
+        select.addEventListener('change', function() {
+// Handle select change
+        });
+      }
+    });
+  });
+</script>
+<script id="dateInputHandlers">
+  document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.querySelector('.date-input');
+    const clearButton = dateInput.parentElement.querySelector('.ri-close-line').parentElement;
+    function createToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded shadow-lg transform transition-transform duration-300 translate-y-full';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.transform = 'translateY(0)';
+      }, 100);
+      setTimeout(() => {
+        toast.style.transform = 'translateY(100%)';
+        setTimeout(() => {
+          document.body.removeChild(toast);
+        }, 300);
+      }, 3000);
+    }
+    clearButton.addEventListener('click', function() {
+      dateInput.value = '';
+      createToast('Date filter cleared');
+
+      const event = new Event('change');
+      dateInput.dispatchEvent(event);
+    });
+    dateInput.addEventListener('change', function() {
+      // Here you can add the logic to refresh the table data
+      const tbody = document.querySelector('tbody');
+      if (tbody) {
+        const noDataRow = tbody.querySelector('tr');
+        if (noDataRow) {
+          noDataRow.classList.add('animate-pulse');
+          setTimeout(() => {
+            noDataRow.classList.remove('animate-pulse');
+          }, 1000);
+        }
+      }
+    });
+  });
+</script>
+<script id="checkboxHandlers">
+  document.addEventListener('DOMContentLoaded', function() {
+    const headerCheckbox = document.querySelector('thead input[type="checkbox"]');
+    headerCheckbox.addEventListener('change', function() {
+// Toggle all checkboxes
+    });
+  });
+</script>
+
+<script>
+
+  // Load sidebar
+  fetch('doctor-sidebar.html')
+          .then(res => res.text())
+          .then(html => {
+            document.getElementById('sidebar-container').innerHTML = html;
+
+// Handle sidebar toggle
+            document.getElementById('toggleSidebar')?.addEventListener('click', () => {
+              document.body.classList.toggle('collapsed');
+              setTimeout(() => {
+                if (calendar) calendar.updateSize();
+              }, 350);
+            });
+          });
+
+</script>
+
+</body>
+</html>

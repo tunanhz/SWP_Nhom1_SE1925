@@ -1,0 +1,356 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Patient Management System</title>
+        <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+        <style>
+            :where([class^="ri-"])::before { content: "\f3c2"; }
+            .custom-checkbox {
+                appearance: none;
+                width: 18px;
+                height: 18px;
+                border: 2px solid #d1d5db;
+                border-radius: 4px;
+                position: relative;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .custom-checkbox:checked {
+                background-color: #3b82f6;
+                border-color: #3b82f6;
+            }
+            .custom-checkbox:checked::after {
+                content: '';
+                position: absolute;
+                left: 5px;
+                top: 2px;
+                width: 6px;
+                height: 10px;
+                border: solid white;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
+            .pagination-input {
+                width: 40px;
+                text-align: center;
+                border: 1px solid #e5e7eb;
+                border-radius: 4px;
+            }
+            .filter-input {
+                background-color: #f9fafb;
+                border: 1px solid #e5e7eb;
+                border-radius: 4px;
+                padding: 0.5rem;
+                font-size: 0.875rem;
+                width: 100%;
+            }
+            .filter-select {
+                background-color: #f9fafb;
+                border: 1px solid #e5e7eb;
+                border-radius: 4px;
+                padding: 0.5rem;
+                font-size: 0.875rem;
+                width: 100%;
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 0.5rem center;
+                background-size: 1rem;
+                padding-right: 2rem;
+            }
+        </style>
+        <script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',secondary:'#4b5563'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    </head>
+    <body class="bg-gray-50 min-h-screen">
+
+    <div id="sidebar-container"></div>
+
+    <!-- Header -->
+    <header class="bg-primary text-white py-4 px-6 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 flex items-center justify-center">
+                <i class="ri-hospital-line ri-lg"></i>
+            </div>
+
+        </div>
+        <div class="flex items-center space-x-4">
+            <div class="w-8 h-8 flex items-center justify-center">
+                <i class="ri-notification-3-line ri-lg"></i>
+            </div>
+            <div class="w-8 h-8 flex items-center justify-center">
+                <i class="ri-settings-3-line ri-lg"></i>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center text-white">
+                    <span>DR</span>
+                </div>
+                <span>Welcome</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold text-gray-800">Patients Lists</h2>
+            <div class="flex space-x-3">
+                <button id="addPatientBtn" class="bg-primary text-white px-4 py-2 rounded-button flex items-center !rounded-button whitespace-nowrap">
+                    <div class="w-5 h-5 flex items-center justify-center mr-2">
+                        <i class="ri-add-line"></i>
+                    </div>
+                    Add patient
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-6 relative">
+            <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                    <i class="ri-search-line"></i>
+                </div>
+            </div>
+            <input type="text" placeholder="Search patient by ID, name, email and status (active or inactive)" class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
+            <!-- Table Header -->
+            <div class="grid grid-cols-6 border-b border-gray-200 text-gray-700 font-medium text-sm">
+                <div class="p-4 flex items-center">
+                    <input type="checkbox" class="custom-checkbox mr-3">
+                    <span>ID</span>
+                    <div class="w-4 h-4 flex items-center justify-center ml-1">
+                        <i class="ri-arrow-up-s-line text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="p-4 flex items-center">
+                    <span>Name</span>
+                    <div class="w-4 h-4 flex items-center justify-center ml-1">
+                        <i class="ri-arrow-up-s-line text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="p-4 flex items-center">
+                    <span>Email</span>
+                    <div class="w-4 h-4 flex items-center justify-center ml-1">
+                        <i class="ri-arrow-up-s-line text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="p-4 flex items-center">
+                    <span>Mobile</span>
+                </div>
+                <div class="p-4 flex items-center">
+                    <span>Status</span>
+                    <div class="w-4 h-4 flex items-center justify-center ml-1">
+                        <i class="ri-arrow-up-s-line text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="p-4">Action</div>
+            </div>
+
+            <!-- Table Filters -->
+            <div class="grid grid-cols-6 border-b border-gray-200 bg-gray-50 p-2">
+                <div class="px-2">
+                    <input type="text" class="filter-input" placeholder="ID">
+                </div>
+                <div class="px-2">
+                    <input type="text" class="filter-input" placeholder="Filter patient by name">
+                </div>
+                <div class="px-2">
+                    <input type="text" class="filter-input" placeholder="Filter patient by email">
+                </div>
+                <div class="px-2">
+                    <input type="text" class="filter-input" placeholder="Filter patient by mobile">
+                </div>
+                <div class="px-2">
+                    <select class="filter-select">
+                        <option>Filter by status</option>
+                        <option>Active</option>
+                        <option>Inactive</option>
+                    </select>
+                </div>
+                <div class="px-2"></div>
+            </div>
+
+            <!-- Table Content -->
+            <div class="p-8 text-center text-gray-500">
+                <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center text-gray-300">
+                    <i class="ri-file-list-3-line ri-3x"></i>
+                </div>
+                <p class="text-lg font-medium">No Data Found</p>
+                <p class="mt-1 text-sm">Add patients to your list or try a different filter</p>
+            </div>
+        </div>
+
+
+        <!-- Table Footer -->
+            <div class="border-t border-gray-200 px-4 py-3 flex items-center justify-between text-sm">
+                <div class="flex items-center space-x-2">
+                    <span>Rows per page:</span>
+                    <select class="border border-gray-200 rounded px-2 py-1 bg-white">
+                        <option>10</option>
+                        <option>25</option>
+                        <option>50</option>
+                        <option>100</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <span>Page</span>
+                    <div class="flex items-center space-x-1">
+                        <input type="text" value="1" class="pagination-input">
+                        <span>of 0</span>
+                    </div>
+
+                    <div class="flex space-x-1">
+                        <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-400">
+                            <i class="ri-arrow-left-s-line"></i>
+                        </button>
+                        <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-400">
+                            <i class="ri-arrow-right-s-line"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- add patient modal -->
+        <div id="addPatientModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Add New Patient</h3>
+                <form id="addPatientForm">
+                    <div class="mb-4">
+                        <label for="fullName" class="block text-sm font-medium text-gray-600">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter patient's name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="dob" class="block text-sm font-medium text-gray-600">Date of Birth</label>
+                        <input type="date" id="dob" name="dob" class="w-full p-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="gender" class="block text-sm font-medium text-gray-600">Gender</label>
+                        <select id="gender" name="gender" class="w-full p-2 border border-gray-300 rounded-md" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="phone" class="block text-sm font-medium text-gray-600">Phone</label>
+                        <input type="text" id="phone" name="phone" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter patient's phone" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="address" class="block text-sm font-medium text-gray-600">Address</label>
+                        <input type="text" id="address" name="address" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter patient's address" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="status" class="block text-sm font-medium text-gray-600">Status</label>
+                        <select id="status" name="status" class="w-full p-2 border border-gray-300 rounded-md" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-between">
+                        <button type="submit" class="bg-primary text-white px-4 py-2 rounded-md">Add Patient</button>
+                        <button type="button" id="closeModal" class="bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white py-4 px-6 border-t border-gray-200 mt-auto">
+        <div class="container mx-auto flex justify-between items-center text-sm text-gray-500">
+            <div>© 2025 MedicalCare. All rights reserved.</div>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:text-primary">Privacy Policy</a>
+                <a href="#" class="hover:text-primary">Terms of Service</a>
+                <a href="#" class="hover:text-primary">Help Center</a>
+            </div>
+        </div>
+    </footer>
+
+    <script id="checkbox-handler">
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.custom-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    this.classList.toggle('checked', this.checked);
+                });
+            });
+        });
+    </script>
+    <script id="filter-handlers">
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterInputs = document.querySelectorAll('.filter-input, .filter-select');
+            filterInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    console.log('Filtering with value:', this.value);
+                    // In a real app, this would trigger filtering logic
+                });
+            });
+        });
+    </script>
+    <script>
+        fetch('doctor-sidebar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('sidebar-container').innerHTML = html;
+
+                // Toggle sidebar
+                document.getElementById('toggleSidebar')?.addEventListener('click', () => {
+                    document.body.classList.toggle('collapsed');
+                });
+
+                // Active link based on current URL
+                const current = location.pathname.split("/").pop();
+                document.querySelectorAll('.sidebar nav a').forEach(link => {
+                    if (link.getAttribute('href') === current) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            });
+    </script>
+
+    <script>
+        // Open Modal
+        document.getElementById('addPatientBtn').addEventListener('click', function() {
+            document.getElementById('addPatientModal').classList.remove('hidden');
+        });
+
+        // Close Modal
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('addPatientModal').classList.add('hidden');
+        });
+
+        // Submit Form
+        document.getElementById('addPatientForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Add patient logic (API call)
+            alert('Patient Added');
+            document.getElementById('addPatientModal').classList.add('hidden');
+        });
+
+    </script>
+    <script>
+        fetch('/SWP_back_war_exploded/api/patients')
+            .then(res => res.json())
+            .then(data => {
+                console.log(data); // Hiển thị danh sách bệnh nhân
+            });
+    </script>
+    </body>
+    </html>

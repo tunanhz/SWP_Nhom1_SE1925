@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Appointment List with Sidebar</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            background-color: #f5f6fa;
+        }
+
+        .wrapper {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .main-section {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        body.collapsed .main-section {
+            margin-left: 60px;
+        }
+
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .tabs button {
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .tabs .active {
+            background: #4e73df;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: #f8f9fc;
+            color: #6e707e;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px 20px;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .pagination button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .header {
+            background-color: #3498db;
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <!-- Sidebar Placeholder -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content -->
+    <div class="main-section">
+
+        <!-- Filters -->
+        <div class="filter-bar">
+            <strong style="font-size: 16px;">Filters</strong>
+            <button style="background-color: #4e73df; color: white; border: none; border-radius: 6px; padding: 10px 16px; font-weight: bold;">+ Apply filters</button>
+        </div>
+
+        <!-- Appointment Header & Actions -->
+        <div class="appointment-header">
+            <div>
+                <h3 style="margin-bottom: 10px; font-size: 18px;">Appointment</h3>
+                <div class="tabs">
+                    <button class="tab active">UPCOMING</button>
+                    <button class="tab">ALL</button>
+                    <button class="tab">PAST</button>
+                </div>
+            </div>
+            <div>
+                <button style="background-color: #4e73df; color: white; border: none; border-radius: 6px; padding: 10px 16px; font-weight: bold; margin-right: 10px;">+ Add appointment</button>
+                <button style="background-color: #e8f0fe; color: #2e59d9; border: none; border-radius: 6px; padding: 10px 16px; font-weight: bold;">📥 Import data</button>
+            </div>
+        </div>
+
+        <!-- Appointment Table -->
+        <div style="background: #fff; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); overflow-x: auto;">
+            <table>
+                <thead>
+                <tr>
+                    <th>PATIENT NAME</th>
+                    <th>SERVICES</th>
+                    <th>CHARGES</th>
+                    <th>PAYMENT MODE</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px; color: #858796;">No Appointments Found</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button style="border: 2px solid #4e73df; background: white; color: #4e73df;">Prev</button>
+            <button style="background-color: #4e73df; color: white;">1</button>
+            <button style="border: 2px solid #4e73df; background: white; color: #4e73df;">Next</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    fetch('doctor-sidebar.html')
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('sidebar-container').innerHTML = html;
+
+            // Toggle sidebar
+            document.getElementById('toggleSidebar')?.addEventListener('click', () => {
+                document.body.classList.toggle('collapsed');
+            });
+
+            // Active link based on current URL
+            const current = location.pathname.split("/").pop();
+            document.querySelectorAll('.sidebar nav a').forEach(link => {
+                if (link.getAttribute('href') === current) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+</script>
+</body>
+</html>
