@@ -1,6 +1,7 @@
 package controller;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dal.MedicineDAO;
 import model.MedicineDTO;
 import com.google.gson.Gson;
@@ -10,12 +11,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 
-@WebServlet("/api/medicine/*")
+@WebServlet("/api/medicines/*")
 public class MedicineServlet extends HttpServlet {
 
     private final MedicineDAO dao = new MedicineDAO();
@@ -32,31 +35,104 @@ public class MedicineServlet extends HttpServlet {
 
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setHeader("Access-Control-Allow-Origin", "*");
-        resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        setCORSHeaders(resp);
+        resp.setContentType("application/json");
+        PrintWriter out = resp.getWriter();
+        String pathInfo = req.getPathInfo();
+        String searchName = req.getParameter("name");
+        try {
+            if (pathInfo == null || pathInfo.equals("/")) {
+
+                if (searchName != null && !searchName.trim().isEmpty()) {
+                    // Search by name
+                    ArrayList<MedicineDTO> medicines = dao.searchMedicinesByName(searchName);
+                    out.println(gson.toJson(medicines));
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                } else {
+                    // Paginated list
+                    int page = getIntParameter(req, "page", 1);
+                    int size = getIntParameter(req, "size", 10);
+                    if (page < 1 || size < 1) {
+                        sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid page or size parameters");
+                        return;
+                    }
+                    ArrayList<MedicineDTO> medicines = dao.getMedicinesByPage(page, size);
+                    out.println(gson.toJson(medicines));
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                }
+
+//                int page = getIntParameter(req, "page", 1);
+//                int size = getIntParameter(req, "size", 10);
+//                if (page < 1 || size < 1) {
+//                    sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid page or size parameters");
+//                    return;
+//                }
+//                // Giả định MedicineDAO có getMedicinesByPage
+//                // Cần phát triển phương thức này trong MedicineDAO
+//                // Ví dụ: ArrayList<MedicineDTO> getMedicinesByPage(int page, int size)
+//                ArrayList<MedicineDTO> medicines = dao.getMedicinesByPage(page, size); // Placeholder
+//                out.println(gson.toJson(medicines));
+//                resp.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                String idStr = pathInfo.substring(1);
+                int medicineId = Integer.parseInt(idStr);
+                if (medicineId < 1) {
+                    sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid medicine ID");
+                    return;
+                }
+                MedicineDTO medicine = dao.getMedicineById(medicineId);
+                if (medicine == null) {
+                    sendError(resp, HttpServletResponse.SC_NOT_FOUND, "Medicine not found");
+                    return;
+                }
+                out.println(gson.toJson(medicine));
+                resp.setStatus(HttpServletResponse.SC_OK);
+            }
+        } catch (NumberFormatException e) {
+            sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid parameter format");
+        } catch (Exception e) {
+            sendError(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Server error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setCORSHeaders(resp);
         resp.setContentType("application/json");
         PrintWriter out = resp.getWriter();
         String pathInfo = req.getPathInfo();
 
         try {
-            if (pathInfo == null || pathInfo.equals("/")) {
-                // Get paginated prescriptions
-                int page = getIntParameter(req, "page", 1);
-                int size = getIntParameter(req, "size", 10);
+            if (pathInfo != null && pathInfo.length() > 1) {
+                String idStr = pathInfo.substring(1);
+                int medicineId = Integer.parseInt(idStr);
 
-                if (page < 1 || size < 1) {
-                    sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid page or size parameters");
+                if (medicineId < 1) {
+                    sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid medicine ID");
                     return;
                 }
 
-                MedicineDTO medicines = dao.getMedicineById(9);
-                out.println(gson.toJsonTree(medicines));
+                BufferedReader reader = req.getReader();
+                JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+                int newQuantity = json.get("quantity").getAsInt();
+
+                if (newQuantity < 0) {
+                    sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Quantity cannot be negative");
+                    return;
+                }
+
+                boolean updated = dao.updateMedicineQuantity(medicineId, newQuantity);
+                if (!updated) {
+                    sendError(resp, HttpServletResponse.SC_NOT_FOUND, "Medicine not found or update failed");
+                    return;
+                }
+
+                JsonObject response = new JsonObject();
+                response.addProperty("message", "Medicine quantity updated successfully");
+                out.println(gson.toJson(response));
                 resp.setStatus(HttpServletResponse.SC_OK);
             } else {
-                // Single prescription retrieval not supported by current DAO
-                sendError(resp, HttpServletResponse.SC_NOT_FOUND, "Individual prescription retrieval not supported");
+                sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Medicine ID is required");
             }
         } catch (NumberFormatException e) {
             sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid parameter format");

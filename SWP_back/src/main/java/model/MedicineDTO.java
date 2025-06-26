@@ -11,16 +11,17 @@ public class MedicineDTO {
     private String usage;
     private String preservation;
     private Date manuDate;
-    private String expDate;
+    private Date expDate;
     private int quantity;
     private double price;
     private int warehouseId;
+
 
     public MedicineDTO() {
     }
 
     public MedicineDTO(int medicineId, String name, int unitId, int categoryId, String ingredient,
-                    String usage, String preservation, Date manuDate, String expDate,
+                    String usage, String preservation, Date manuDate, Date expDate,
                     int quantity, double price, int warehouseId) {
         this.medicineId = medicineId;
         this.name = name;
@@ -100,11 +101,11 @@ public class MedicineDTO {
         this.manuDate = manuDate;
     }
 
-    public String getExpDate() {
+    public Date getExpDate() {
         return expDate;
     }
 
-    public void setExpDate(String expDate) {
+    public void setExpDate(Date expDate) {
         this.expDate = expDate;
     }
 
@@ -134,6 +135,7 @@ public class MedicineDTO {
 
     private String warehouseName;
 
+    private String warehouseLocation;
     public MedicineDTO(int medicineId, String name, int quantity, double price, String warehouseName) {
         this.medicineId = medicineId;
         this.name = name;
@@ -141,4 +143,25 @@ public class MedicineDTO {
         this.price = price;
         this.warehouseName = warehouseName;
     }
+
+    public String getWarehouseLocation() { return warehouseLocation; }
+    public MedicineDTO(int medicineId, String name, String ingredient, String usage, String preservation,
+                       int quantity, Date manuDate, Date expDate, double price, String warehouseName,
+                       String warehouseLocation) {
+        this.medicineId = medicineId;
+        this.name = name;
+        this.ingredient = ingredient;
+        this.usage = usage;
+        this.preservation = preservation;
+        this.quantity = quantity;
+        this.manuDate = manuDate;
+        this.expDate = expDate;
+        this.price = price;
+        this.warehouseName = warehouseName;
+        this.warehouseLocation = warehouseLocation;
+    }
+
+
+
+
 }
