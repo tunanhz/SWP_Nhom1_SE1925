@@ -1,6 +1,7 @@
-package model;
+package dto;
 
 import dal.DoctorDAO;
+import model.Doctor;
 
 import java.sql.Date;
 

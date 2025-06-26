@@ -1,6 +1,6 @@
 package dal;
 
-import model.MedicineDTO;
+import dto.MedicineDTO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,25 +15,25 @@ public class MedicineDAO {
     public ArrayList<MedicineDTO> getMedicinesByPage(int page, int size) {
         ArrayList<MedicineDTO> medicines = new ArrayList<>();
         String sql = """
-            SELECT
-                m.medicine_id,
-                m.name,
-                m.ingredient,
-                m.usage,
-                m.preservation,
-                m.quantity,
-                m.manuDate,
-                m.expDate,
-                m.price,
-                w.name AS warehouse_name,
-                w.location AS warehouse_location,
-                c.categoryName
-            FROM Medicine m
-            JOIN Warehouse w ON m.warehouse_id = w.warehouse_id
-            LEFT JOIN Category c ON m.category_id = c.category_id
-            ORDER BY m.medicine_id
-            OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
-            """;
+                SELECT
+                    m.medicine_id,
+                    m.name,
+                    m.ingredient,
+                    m.usage,
+                    m.preservation,
+                    m.quantity,
+                    m.manuDate,
+                    m.expDate,
+                    m.price,
+                    w.name AS warehouse_name,
+                    w.location AS warehouse_location,
+                    c.categoryName
+                FROM Medicine m
+                JOIN Warehouse w ON m.warehouse_id = w.warehouse_id
+                LEFT JOIN Category c ON m.category_id = c.category_id
+                ORDER BY m.medicine_id
+                OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
+                """;
 
         try {
             PreparedStatement ps = ad.getConnection().prepareStatement(sql);
@@ -108,10 +108,10 @@ public class MedicineDAO {
 
     public boolean updateMedicineQuantity(int medicineId, int newQuantity) {
         String sql = """
-            UPDATE Medicine
-            SET quantity = ?
-            WHERE medicine_id = ?;
-            """;
+                UPDATE Medicine
+                SET quantity = ?
+                WHERE medicine_id = ?;
+                """;
 
         try {
             PreparedStatement ps = ad.getConnection().prepareStatement(sql);
@@ -129,25 +129,25 @@ public class MedicineDAO {
     public ArrayList<MedicineDTO> searchMedicinesByName(String name) {
         ArrayList<MedicineDTO> medicines = new ArrayList<>();
         String sql = """
-            SELECT
-                m.medicine_id,
-                m.name,
-                m.ingredient,
-                m.usage,
-                m.preservation,
-                m.quantity,
-                m.manuDate,
-                m.expDate,
-                m.price,
-                w.name AS warehouse_name,
-                w.location AS warehouse_location,
-                c.categoryName
-            FROM Medicine m
-            JOIN Warehouse w ON m.warehouse_id = w.warehouse_id
-            LEFT JOIN Category c ON m.category_id = c.category_id
-            WHERE LOWER(m.name) LIKE LOWER(?)
-            ORDER BY m.medicine_id;
-            """;
+                SELECT
+                    m.medicine_id,
+                    m.name,
+                    m.ingredient,
+                    m.usage,
+                    m.preservation,
+                    m.quantity,
+                    m.manuDate,
+                    m.expDate,
+                    m.price,
+                    w.name AS warehouse_name,
+                    w.location AS warehouse_location,
+                    c.categoryName
+                FROM Medicine m
+                JOIN Warehouse w ON m.warehouse_id = w.warehouse_id
+                LEFT JOIN Category c ON m.category_id = c.category_id
+                WHERE LOWER(m.name) LIKE LOWER(?)
+                ORDER BY m.medicine_id;
+                """;
 
         try {
             PreparedStatement ps = ad.getConnection().prepareStatement(sql);

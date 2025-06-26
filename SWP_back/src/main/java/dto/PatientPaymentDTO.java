@@ -1,7 +1,7 @@
-package model;
+package dto;
 
-import dal.DoctorDAO;
 import dal.PatientDAO;
+import model.Patient;
 
 public class PatientPaymentDTO {
     private int invoiceId;

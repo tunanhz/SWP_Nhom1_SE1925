@@ -3,7 +3,7 @@ package controller;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dal.MedicineDAO;
-import model.MedicineDTO;
+import dto.MedicineDTO;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
