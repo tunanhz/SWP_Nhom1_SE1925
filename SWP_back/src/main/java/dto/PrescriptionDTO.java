@@ -1,5 +1,5 @@
-package model;
-import model.Prescription;
+package dto;
+
 import java.util.Date;
 
 public class PrescriptionDTO {
@@ -13,16 +13,14 @@ public class PrescriptionDTO {
     }
 
 
-
     public PrescriptionDTO(int prescriptionId, int medicineRecordId, int doctorId,
-                        Date prescriptionDate, String status) {
+                           Date prescriptionDate, String status) {
         this.prescriptionId = prescriptionId;
         this.medicineRecordId = medicineRecordId;
         this.doctorId = doctorId;
         this.prescriptionDate = prescriptionDate;
         this.status = status;
     }
-
 
 
     public int getPrescriptionId() {
@@ -66,14 +64,11 @@ public class PrescriptionDTO {
     }
 
 
-
-
     private String patientName;
     private String patientPhone;
     private String doctorName;
     private String doctorDepartment;
     private String doctorPhone;
-
 
 
     public PrescriptionDTO(int prescriptionId, Date prescriptionDate, String status, String patientName, String patientPhone, String doctorName, String doctorDepartment, String doctorPhone) {

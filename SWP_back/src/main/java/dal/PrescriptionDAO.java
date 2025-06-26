@@ -1,7 +1,7 @@
 package dal;
 
 
-import model.PrescriptionDTO;
+import dto.PrescriptionDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,7 +29,7 @@ public class PrescriptionDAO {
                       JOIN MedicineRecords mr ON p.medicineRecord_id = mr.medicineRecord_id
                       JOIN Patient pt ON mr.patient_id = pt.patient_id
                       JOIN Doctor d ON p.doctor_id = d.doctor_id
-
+                
                 ORDER BY p.prescription_id
                                 OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
                 """;
@@ -233,7 +233,6 @@ public class PrescriptionDAO {
 //            return false;
 //        }
 //    }
-
 
 
 }

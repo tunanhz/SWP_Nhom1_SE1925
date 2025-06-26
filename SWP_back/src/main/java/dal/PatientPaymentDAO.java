@@ -1,6 +1,6 @@
 package dal;
 
-import model.PatientPaymentDTO;
+import dto.PatientPaymentDTO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
