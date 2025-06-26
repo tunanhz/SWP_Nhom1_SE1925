@@ -129,6 +129,21 @@ public class AccountPatientDAO {
         return false;
     }
 
+    public void updatePassword(String email, String password) {
+        String sql = """
+            UPDATE [dbo].[AccountPatient]
+            SET password = ?
+            WHERE email = ?
+        """;
+        try (PreparedStatement stmt = dbContext.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, password);
+            stmt.setString(2, email);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating password: " + e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         AccountPatientDAO dao = new AccountPatientDAO();
         AccountPatient patient = dao.getAccountByUsernameOrEmailAndPassword("pham.nha@gmail.com", "P@ss123");
