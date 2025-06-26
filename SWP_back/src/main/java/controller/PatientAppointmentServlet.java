@@ -3,7 +3,7 @@ package controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dal.PatientAppointmentDAO;
-import model.AppointmentDTO;
+import dto.AppointmentDTO;
 import dto.AppointmentPatientDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

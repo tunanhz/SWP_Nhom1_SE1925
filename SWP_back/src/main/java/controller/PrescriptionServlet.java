@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import model.PrescriptionDTO;
+import dto.PrescriptionDTO;
 
 
 import java.io.IOException;

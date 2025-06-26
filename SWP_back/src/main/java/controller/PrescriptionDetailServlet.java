@@ -3,7 +3,7 @@ package controller;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dal.PrescriptionDAO;
-import model.PrescriptionDTO;
+import dto.PrescriptionDTO;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

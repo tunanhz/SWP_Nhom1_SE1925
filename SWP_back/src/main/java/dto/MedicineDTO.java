@@ -1,4 +1,5 @@
-package model;
+package dto;
+
 import java.util.Date;
 
 
@@ -21,8 +22,8 @@ public class MedicineDTO {
     }
 
     public MedicineDTO(int medicineId, String name, int unitId, int categoryId, String ingredient,
-                    String usage, String preservation, Date manuDate, Date expDate,
-                    int quantity, double price, int warehouseId) {
+                       String usage, String preservation, Date manuDate, Date expDate,
+                       int quantity, double price, int warehouseId) {
         this.medicineId = medicineId;
         this.name = name;
         this.unitId = unitId;
@@ -136,6 +137,7 @@ public class MedicineDTO {
     private String warehouseName;
 
     private String warehouseLocation;
+
     public MedicineDTO(int medicineId, String name, int quantity, double price, String warehouseName) {
         this.medicineId = medicineId;
         this.name = name;
@@ -144,7 +146,10 @@ public class MedicineDTO {
         this.warehouseName = warehouseName;
     }
 
-    public String getWarehouseLocation() { return warehouseLocation; }
+    public String getWarehouseLocation() {
+        return warehouseLocation;
+    }
+
     public MedicineDTO(int medicineId, String name, String ingredient, String usage, String preservation,
                        int quantity, Date manuDate, Date expDate, double price, String warehouseName,
                        String warehouseLocation) {
@@ -160,8 +165,6 @@ public class MedicineDTO {
         this.warehouseName = warehouseName;
         this.warehouseLocation = warehouseLocation;
     }
-
-
 
 
 }
