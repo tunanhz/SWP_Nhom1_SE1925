@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dal.PatientAppointmentDAO;
 import model.AppointmentDTO;
-import model.AppointmentPatientDTO;
+import dto.AppointmentPatientDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
