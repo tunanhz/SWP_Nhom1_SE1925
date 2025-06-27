@@ -416,9 +416,6 @@ async function handleFormSubmissionConfirm(event) {
             address: address
         };
         const url = `http://localhost:8080/SWP_back_war_exploded/api/patient/${patientId}`;
-        console.log("Sending PUT to:", url);
-        console.log("Data:", patientData);
-
         const response = await fetch(url, {
             method: "PUT",
             headers: {

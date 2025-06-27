@@ -222,6 +222,23 @@ public class PatientPaymentDAO {
         return 0;
     }
 
+    public boolean updateInvoice(int invoiceId) {
+        String sql = """
+                UPDATE [dbo].[Invoice]
+                SET [status] = 'Paid'
+                WHERE invoice_id = ?
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+            stmt.setInt(1, invoiceId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static void main(String[] args) {
         PatientPaymentDAO dao = new PatientPaymentDAO();
         ArrayList<PatientPaymentDTO> invoices = dao.getPatientInvoicesByAccountId(1, null, null, 1, 6);
