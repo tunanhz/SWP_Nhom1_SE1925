@@ -1,0 +1,189 @@
+/* General styles for the calendar container */
+#calendar {
+    font-family: 'Arial', sans-serif;
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Table styles */
+#calendar table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+/* Header (days of the week) */
+#calendar th {
+    background-color: #4a90e2;
+    color: #ffffff;
+    padding: 12px;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Table cells (days) */
+#calendar td {
+    padding: 12px;
+    font-size: 16px;
+    color: #333333;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Empty cells */
+#calendar td:empty {
+    background-color: #f5f5f5;
+    cursor: default;
+}
+
+/* Disabled cells (past or non-working days) */
+#calendar td.disabled {
+    background-color: #f0f0f0;
+    color: #aaaaaa;
+    cursor: not-allowed;
+}
+
+/* Hover effect for selectable days */
+#calendar td:not(.disabled):hover {
+    background-color: #e6f0fa;
+}
+
+/* Selected day */
+#calendar td.selected {
+    background-color: #4a90e2;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+/* Focus state for accessibility */
+#calendar td[role="button"]:focus {
+    outline: 2px solid #4a90e2;
+    outline-offset: 2px;
+}
+
+/*Thời gian css*/
+/* General styles for the time form */
+#timeForm.form-group1 {
+    font-family: 'Arial', sans-serif;
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Section headers (Morning, Afternoon, Evening) */
+#timeForm h3 {
+    color: #4a90e2;
+    font-size: 18px;
+    margin: 20px 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+/* Table styles */
+#timeForm table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    margin-bottom: 20px;
+}
+
+/* Table cells */
+#timeForm td {
+    padding: 6px;
+    text-align: center;
+}
+
+/* Time slot buttons */
+#timeForm .time-slot {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    color: #333333;
+    background-color: #f9f9f9;
+    border: 1px solid #d0d0d0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Hover effect for available time slots */
+#timeForm .time-slot:not(.disabled):hover {
+    background-color: #e6f0fa;
+    color: #4a90e2;
+    border-color: #4a90e2;
+    transform: translateY(-2px);
+}
+
+/* Selected time slot */
+#timeForm .time-slot.selected {
+    background-color: #4a90e2;
+    color: #ffffff;
+    border-color: #4a90e2;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Disabled time slot */
+#timeForm .time-slot.disabled {
+    background-color: #e0e0e0;
+    color: #aaaaaa;
+    border-color: #e0e0e0;
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Focus state for accessibility */
+#timeForm .time-slot:focus {
+    outline: 2px solid #4a90e2;
+    outline-offset: 2px;
+}
+
+/* Hidden input field */
+#timeForm #selectedTime {
+    display: none;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    #calendar {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    #calendar th,
+    #calendar td {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    #timeForm.form-group1 {
+        padding: 10px;
+    }
+
+    #timeForm h3 {
+        font-size: 16px;
+    }
+
+    #timeForm .time-slot {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    #timeForm td {
+        padding: 6px;
+    }
+}

@@ -6,6 +6,33 @@ public class AppointmentRequest {
     private String time;
     private String note;
     private String department;
+    private String shift;
+    private Integer receptionistId;
+    private Integer patientId;
+
+    public Integer getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Integer patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getShift() {
+        return shift;
+    }
+
+    public void setShift(String shift) {
+        this.shift = shift;
+    }
+
+    public Integer getReceptionistId() {
+        return receptionistId;
+    }
+
+    public void setReceptionistId(Integer receptionistId) {
+        this.receptionistId = receptionistId;
+    }
 
     // Getters and setters
     public String getDoctorId() {
