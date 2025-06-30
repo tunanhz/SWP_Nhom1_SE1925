@@ -20,6 +20,24 @@ if (account) {
     }
 }
 
+function formatDateTimeConfirm(dateTime) {
+    if (!dateTime) return "N/A";
+
+    const date = new Date(dateTime);
+    if (isNaN(date)) return "Invalid date";
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+}
+
+function formatToVND(numberString) {
+    const formatted = Math.floor(parseFloat(numberString)).toLocaleString('vi-VN');
+    return `${formatted} VND`;
+}
+
 function createAppointmentCompletedRow(appointment, index) {
   return `<tr>
         <td>${index + 1}</td>
@@ -42,7 +60,11 @@ async function displayThreeAppointment() {
     const container = document.getElementById("three-Appointment");
     container.innerHTML = "<p>No Upcoming Appointment...</p>";
 
-    const container1 = document.getElementById("three-AppointmentCompleted");//---
+    const container1 = document.getElementById("three-AppointmentCompleted");
+    container1.innerHTML = "<p>No No Complete Appointment...</p>";
+
+    const container2 = document.getElementById('infor-three-payment');
+    container2.innerHTML = "<p>No Payment...</p>";
 
     const response = await fetch(baseAPI, {
       method: "GET",
@@ -56,10 +78,9 @@ async function displayThreeAppointment() {
     }
 
     const data = await response.json();
-
     const threeAppointmentsUpcomings = data.threeAppointmentsUpcoming;
     const threeCompletedAppointments = data.threeAppointmentComplete;
-
+    const threePaymentPendings = data.threePaymentPending;
 
     let threeAppointmentCards = "";
     threeAppointmentsUpcomings.forEach((ap) => {
@@ -87,6 +108,45 @@ async function displayThreeAppointment() {
 
       container.innerHTML = threeAppointmentCards || '<p>No Upcoming Appointment.</p>';
     });
+
+    let threePaymentCards = "";
+    threePaymentPendings.forEach((pd) =>{
+        threePaymentCards += `<li class="d-flex flex-sm-row flex-column align-items-sm-center align-items-start justify-content-between flex-wrap gap-1 mb-4 bg-primary-subtle py-3 px-4 rounded">
+                        <div class="d-flex flex-sm-row flex-column align-items-sm-center align-items-start flex-wrap gap-4">
+                           <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                              <g clip-path="url(#clip0_483_2650)">
+                                 <path
+                                         d="M22 11C22 10.7348 22.1054 10.4804 22.2929 10.2929C22.4804 10.1054 22.7348 10 23 10H27C27.2652 10 27.5196 10.1054 27.7071 10.2929C27.8946 10.4804 28 10.7348 28 11V13C28 13.2652 27.8946 13.5196 27.7071 13.7071C27.5196 13.8946 27.2652 14 27 14H23C22.7348 14 22.4804 13.8946 22.2929 13.7071C22.1054 13.5196 22 13.2652 22 13V11Z"
+                                         fill="currentColor" />
+                                 <path
+                                         d="M4 4C2.93913 4 1.92172 4.42143 1.17157 5.17157C0.421427 5.92172 0 6.93913 0 8L0 24C0 25.0609 0.421427 26.0783 1.17157 26.8284C1.92172 27.5786 2.93913 28 4 28H28C29.0609 28 30.0783 27.5786 30.8284 26.8284C31.5786 26.0783 32 25.0609 32 24V8C32 6.93913 31.5786 5.92172 30.8284 5.17157C30.0783 4.42143 29.0609 4 28 4H4ZM30 8V18H2V8C2 7.46957 2.21071 6.96086 2.58579 6.58579C2.96086 6.21071 3.46957 6 4 6H28C28.5304 6 29.0391 6.21071 29.4142 6.58579C29.7893 6.96086 30 7.46957 30 8ZM28 26H4C3.46957 26 2.96086 25.7893 2.58579 25.4142C2.21071 25.0391 2 24.5304 2 24V22H30V24C30 24.5304 29.7893 25.0391 29.4142 25.4142C29.0391 25.7893 28.5304 26 28 26Z"
+                                         fill="currentColor" />
+                              </g>
+                              <defs>
+                                 <clipPath id="clip0_483_2650">
+                                    <rect width="32" height="32" fill="white" />
+                                 </clipPath>
+                              </defs>
+                           </svg>
+                           <div>
+                              <h5 class="mb-0">${pd.patient.fullName}</h5>
+                              <h6 class="text-body fw-normal mb-0 mt-2">${formatDateTimeConfirm(pd.issueDate)}</h6>
+                           </div>
+                        </div>
+                        <h5 class="mb-0 text-primary mt-sm-0 mt-3">${formatToVND(pd.invoiceTotalAmount)}</h5>
+                        <div class="dropdown text-end">
+                           <button class="dropdown btn border-0 p-0">
+                              <svg width="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                 <path d="M8.5 5L15.5 12L8.5 19" stroke="currentColor" stroke-width="1.5"
+                                       stroke-linecap="round" stroke-linejoin="round"></path>
+                              </svg>
+                           </button>
+                        </div>
+                     </li>`;
+                     container2.innerHTML = threePaymentCards || '<p>No Payment.</p>';
+    });
+
 
 
     // Render table

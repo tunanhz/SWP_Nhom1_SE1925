@@ -153,8 +153,7 @@ async function displayDoctors(page = 1, nameSearch = currentNameSearch, deptSear
             </select>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
 
     // Update container
     container.innerHTML = doctorCards || '<p>No doctors found.</p>';
@@ -174,9 +173,8 @@ async function displayDoctors(page = 1, nameSearch = currentNameSearch, deptSear
     const pageSizeSelect = container.querySelector("#pageSize");
     if (pageSizeSelect) {
       pageSizeSelect.addEventListener("change", (e) => {
-        pageSize = parseInt(e.target.value) || 30; // Default to 30 if invalid
-        console.log(`Page size changed to: ${pageSize}`); // Debugging
-        displayDoctors(1, currentNameSearch, currentDeptSearch); // Reset to page 1
+        pageSize = parseInt(e.target.value) || 30; 
+        displayDoctors(1, currentNameSearch, currentDeptSearch);
       });
     } else {
       console.warn("Warning: Could not find element with ID 'pageSize'. Ensure the select element is rendered.");
