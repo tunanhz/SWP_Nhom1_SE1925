@@ -690,7 +690,7 @@
       <div class="d-flex justify-content-between align-items-center mb-5 gap-3 flex-wrap">
          <div>
             <h1 class="mt-5">Appointments</h1>
-            <span class="mb-4">Your All Appointment Schedule Is Here.Check Now!</span>
+            <span class="mb-4">All your upcoming appointments are here. Check now!</span>
          </div>
          <button class="btn btn-primary " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddAppointment"
                  aria-controls="offcanvasAddAppointment">
@@ -937,6 +937,15 @@
                                  </div>
                                  <div class="row g-3 align-items-center form-group">
                                     <div class="col-2">
+                                       <label for="pt-name-1" class="col-form-label">Patient Name</label>
+                                    </div>
+                                    <div class="col-10">
+                                       <input type="text" id="pt-name-1" class="form-control"
+                                              aria-describedby="pt-name-1">
+                                    </div>
+                                 </div>
+                                 <div class="row g-3 align-items-center form-group">
+                                    <div class="col-2">
                                        <label class="col-form-label">
                                           <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
                                                xmlns="http://www.w3.org/2000/svg">
@@ -974,13 +983,9 @@
                                           </svg>
                                        </label>
                                     </div>
-                                    <div class="col-5">
-                                       <input type="text" name="start_date" class="form-control date_flatpicker"
+                                    <div class="col-10">
+                                       <input type="text" name="date" class="form-control date_flatpicker"
                                               placeholder="Select Start Date ">
-                                    </div>
-                                    <div class="col-5">
-                                       <input type="text" name="end_date" class="form-control date_flatpicker"
-                                              placeholder="Select End Date ">
                                     </div>
                                  </div>
                                  <div class="row g-3 align-items-center form-group">
@@ -999,9 +1004,7 @@
                                        </label>
                                     </div>
                                     <div class="col-10 d-flex align-items-center justify-content-center">
-                                       <input type="text" name="start_time" class="form-control time_flatpicker">
-                                       <span class="mx-2">To</span>
-                                       <input type="text" name="end_time" class="form-control time_flatpicker">
+                                       <input type="text" name="time" class="form-control time_flatpicker">
                                     </div>
                                  </div>
                                  <div class="row g-3 align-items-center form-group">
@@ -1023,8 +1026,7 @@
                                        </label>
                                     </div>
                                     <div class="col-10">
-                                       <select name="service" class="form-select choices-multiple-remove-button"
-                                               multiple>
+                                       <select name="service" class="form-select">
                                           <option disabled>Select Services</option>
                                           <option value="Anesthetics">Anesthetics</option>
                                           <option value="Cardiology">Cardiology</option>
@@ -1103,8 +1105,7 @@
                   <div class="row align-items-center">
                      <div class="col-lg-6 col-md-4">
                         <div class="dropdown f-none">
-                           <button class="dropdown btn border text-body p-33 mb-3 mb-md-0 rounded"
-                                   id="dropdownMenuAppointment" data-bs-toggle="dropdown" aria-expanded="false">
+                           <a class="dropdown btn border text-body p-33 mb-3 mb-md-0 rounded" href="./patient-encounters.html">
                               <svg class="icon-30 bg-primary-subtle p-1 me-2" viewBox="0 0 24 24" fill="none"
                                    xmlns="http://www.w3.org/2000/svg">
                                  <path fill-rule="evenodd" clip-rule="evenodd"
@@ -1127,15 +1128,7 @@
                                        d="M6 5.08579L10.2929 0.792893C10.6834 0.402369 11.3166 0.402369 11.7071 0.792893C12.0976 1.18342 12.0976 1.81658 11.7071 2.20711L6.70711 7.20711C6.31658 7.59763 5.68342 7.59763 5.29289 7.20711L0.292893 2.20711C-0.0976311 1.81658 -0.0976311 1.18342 0.292893 0.792893C0.683418 0.402369 1.31658 0.402369 1.70711 0.792893L6 5.08579Z"
                                        fill="currentColor"></path>
                               </svg>
-                           </button>
-                           <ul class="dropdown-menu dropdown-menu-soft-primary"
-                               aria-labelledby="dropdownMenuAppointment">
-                              <li><a class="dropdown-item active" href="#">View</a></li>
-                              <li><a class="dropdown-item" href="#">Edit</a></li>
-                              <li><a class="dropdown-item" href="#">Delete</a></li>
-                              <li><a class="dropdown-item" href="#">Update</a></li>
-                              <li><a class="dropdown-item" href="#">Download</a></li>
-                           </ul>
+                           </a>
                         </div>
                      </div>
                      <div class="col-lg-6 col-md-8 text-sm-start text-md-end">
@@ -1180,66 +1173,6 @@
          </div>
       </div>
 
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddAppointment" aria-labelledby="offcanvasAddAppointmentLabel">
-         <div class="offcanvas-header border-bottom">
-            <h3 class="offcanvas-title" id="offcanvasAddAppointmentLabel">Add Appointment</h3>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-         </div>
-         <div class="offcanvas-body">
-            <div class="form-group col-md-12">
-               <label class="form-label" >Title <span class="text-danger">*</span></label>
-               <input type="text" class="form-control">
-               <span class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-12">
-               <label class="form-label" >Doctor Name <span class="text-danger">*</span></label>
-               <input type="text" class="form-control">
-               <span class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-12">
-               <label class="form-label" >Date And Time <span class="text-danger">*</span></label>
-               <input type="text" class="form-control date_flatpicker flatpickr-input active" readonly="readonly">
-            </div>
-            <div class="form-group">
-               <label class="form-label">Select Services <span class="text-danger">*</span></label>
-               <select class="form-control select2-basic-single" >
-                  <option>Select</option>
-                  <option>Anesthetics</option>
-                  <option>Cardiology</option>
-                  <option>ENT</option>
-                  <option>Gastroenterology</option>
-               </select>
-            </div>
-            <div class="form-group col-md-12">
-               <label class="form-label" for="add_note">Description </label>
-               <textarea class="form-control" rows="2">Provide Description</textarea>
-            </div>
-         </div>
-         <div class="offcanvas-footer border-top">
-            <div class="d-grid d-md-flex gap-3 p-3">
-               <button type="reset" class="btn btn-primary d-block">
-                <span class="btn-inner">
-                    <span class="text d-inline-block align-middle">Save</span>
-                    <span class="icon d-inline-block align-middle ms-1 ps-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                            <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
-                        </svg>
-                    </span>
-                </span>
-               </button>
-               <button class="btn btn-secondary d-block" type="button" data-bs-dismiss="offcanvas">
-                <span class="btn-inner">
-                    <span class="text d-inline-block align-middle">Close</span>
-                    <span class="icon d-inline-block align-middle ms-1 ps-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                            <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
-                        </svg>
-                    </span>
-                </span>
-               </button>
-            </div>
-         </div>
-      </div>
    </div>
    <!-- Footer Section Start -->
    <footer class="footer">

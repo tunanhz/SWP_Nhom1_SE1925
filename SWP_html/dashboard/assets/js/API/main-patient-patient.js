@@ -107,7 +107,8 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
 
         // Render table
         let patientTable = `
-            <div class="card-body pt-0">
+        <div class="card-body pt-0">
+            <div class="table-responsive">
                 <table class="table border-end border-start align-middle mb-0 rounded">
                     <thead class="table-dark">
                         <tr>
@@ -125,6 +126,7 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
                     </tbody>
                 </table>
             </div>
+        </div>
         `;
 
         // Render pagination

@@ -85,12 +85,14 @@ public class PatientAppointmentServlet extends HttpServlet {
                 ArrayList<AppointmentPatientDTO> appointmentPatientDTOS = appointmentDAO.getThreeAppointmentsUpcoming(accountPatientId);
                 ArrayList<AppointmentDTO> threeAppointmentComplete = appointmentDAO.getTop3CompletedAppointments(accountPatientId);
                 ArrayList<PatientPaymentDTO> threePaymentPending = appointmentDAO.getTop3Payment(1);
+                ArrayList<AppointmentPatientDTO> allAppointment = appointmentDAO.getAllAppointments(accountPatientId);
                 // Build response JSON
                 JsonObject responseJson = new JsonObject();
                 responseJson.add("appointments", gson.toJsonTree(appointments));
                 responseJson.add("threeAppointmentsUpcoming", gson.toJsonTree(appointmentPatientDTOS));
                 responseJson.add("threeAppointmentComplete", gson.toJsonTree(threeAppointmentComplete));
                 responseJson.add("threePaymentPending", gson.toJsonTree(threePaymentPending));
+                responseJson.add("allAppointment", gson.toJsonTree(allAppointment));
                 responseJson.addProperty("totalPages", totalPages);
                 responseJson.addProperty("currentPage", page);
                 responseJson.addProperty("pageSize", pageSize);
@@ -251,7 +253,7 @@ public class PatientAppointmentServlet extends HttpServlet {
         }
         out.flush();
     }
-    
+
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         setCORSHeaders(response);
