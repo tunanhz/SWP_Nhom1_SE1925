@@ -559,7 +559,7 @@ public class PatientAppointmentDAO {
             }
 
             errorMessage = stmt.getString(8);
-            
+
             if (errorMessage != null && !errorMessage.contains("thành công")) {
                 throw new SQLException(errorMessage);
             }
@@ -574,6 +574,75 @@ public class PatientAppointmentDAO {
             throw new SQLException("Lỗi khi cập nhật cuộc hẹn: " + e.getMessage(), e);
         }
     }
+
+    public ArrayList<AppointmentPatientDTO> getAllAppointments(int accountPatientId) {
+        ArrayList<AppointmentPatientDTO> appointmentDTOS = new ArrayList<>();
+
+        String query = """
+                                                                SELECT
+                                                                ap.account_patient_id,
+                                                                p.patient_id,
+                                                                a.doctor_id,
+                                                                a.appointment_id,
+                                                                a.receptionist_id,
+                                                                d.full_name AS doctorName,
+                                                            	CONVERT(varchar, a.appointment_datetime, 103) AS appointment_date,
+                                                                CONVERT(varchar, a.appointment_datetime, 108) AS appointment_time,
+                                                                DATEDIFF(DAY, GETDATE(), a.appointment_datetime) AS days_until_appointment,
+                                                                CAST(DATEDIFF(DAY, GETDATE(), a.appointment_datetime) AS varchar) + ' days left, at ' + CONVERT(varchar, a.appointment_datetime, 108) AS message,
+                                                                a.[shift],
+                                                                a.status AS appointment_status,
+                                                                a.note
+                                                            FROM AccountPatient ap
+                                                            JOIN Patient_AccountPatient pa
+                                                                ON pa.account_patient_id = ap.account_patient_id
+                                                            JOIN Patient p
+                                                                ON p.patient_id = pa.patient_id
+                                                            JOIN Appointment a
+                                                                ON a.patient_id = p.patient_id
+                                                            JOIN Doctor d on a.doctor_id = d.doctor_id
+                                                            JOIN AccountStaff acs on acs.account_staff_id = d.account_staff_id
+                                                            WHERE ap.account_patient_id = ?
+                                                                AND a.appointment_datetime IS NOT NULL
+                                                                AND ap.status = 'Enable'
+                                                                AND acs.status = 'Enable'
+                                                                AND p.status = 'Enable'
+                                                            	ORDER BY a.appointment_datetime ASC
+                """;
+
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(query);
+
+            // Account patient ID
+            stmt.setInt(1, accountPatientId);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                AppointmentPatientDTO dto = new AppointmentPatientDTO(
+                        rs.getInt("account_patient_id"),
+                        rs.getInt("patient_id"),
+                        rs.getInt("doctor_id"),
+                        rs.getInt("appointment_id"),
+                        rs.getInt("receptionist_id"),
+                        rs.getString("doctorName"),
+                        rs.getString("appointment_date"),
+                        rs.getString("appointment_time"),
+                        rs.getString("days_until_appointment"),
+                        rs.getString("message"),
+                        rs.getString("appointment_status"),
+                        rs.getString("shift"),
+                        rs.getString("note")
+                );
+                dto.includePatient();
+                appointmentDTOS.add(dto);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error fetching appointments: " + e.getMessage());
+            throw new RuntimeException("Failed to fetch appointments", e);
+        }
+        return appointmentDTOS;
+    }
+
 
     public static void main(String[] args) {
         PatientAppointmentDAO dao = new PatientAppointmentDAO();
