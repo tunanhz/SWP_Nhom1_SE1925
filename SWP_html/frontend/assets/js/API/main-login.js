@@ -42,9 +42,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     switch (role) {
                         case 'doctor':
+                            window.location.href = "/dashboard/dashboadtest.html";
+                            break;
                         case 'nurse':
+                            window.location.href = "/dashboard/patient-dashboard.html";
+                            break;
                         case 'receptionist':
-                            window.location.href = "./front-end/index.html";
+                            window.location.href = "/dashboard/receptionist-dashboard.html";
                             break;
                         case 'patient':
                             window.location.href = '/dashboard/patient-dashboard.html';
