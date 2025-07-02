@@ -58,17 +58,17 @@ function createPaymentRow(payment, index) {
             return `<a class="d-inline-block pe-2 edit-btn1" data-bs-toggle="offcanvas"
                 href="#offcanvasPatientPaymentPending" aria-controls="offcanvasPatientPaymentPending"
                 data-payment='${JSON.stringify(payment)}'>
-                <span class="btn btn-outline-primary">
-                    pay
-                </span>
+                <button class="btn btn-primary text-white select-patient-btn" data-action="view">
+                <i class="fas fa-edit me-1"></i>Pay
+                </button>
             </a>`;
         } else {
             return `<a class="d-inline-block pe-2 edit-btn2" data-bs-toggle="offcanvas"
                 href="#offcanvasPatientPaymentPaid" aria-controls="offcanvasPatientPaymentPaid"
                 data-payment='${JSON.stringify(payment)}'>
-                <span class="btn btn-outline-success">
-                    View
-                </span>
+                <button class="btn btn-success text-white select-patient-btn" data-action="view">
+                <i class="fas fa-eye me-1"></i>View
+                </button>
             </a>`;
         }
     }
@@ -110,7 +110,7 @@ async function displayPayment(page = 1, issueDateSearch = state.currentIssueDate
         const data = await response.json();
         const payments = data.invoices || [];
         const totalPages = data.totalPages || 1;
-
+        const totalInvoice = data.totalInvoice;
         let paymentTable = `
             <div class="table-responsive">
                 <table class="table border-end border-start align-middle mb-0 rounded">
@@ -168,7 +168,7 @@ async function displayPayment(page = 1, issueDateSearch = state.currentIssueDate
                         <option value="10" ${pageSize === 10 ? 'selected' : ''}>10</option>
                         <option value="15" ${pageSize === 15 ? 'selected' : ''}>15</option>
                         <option value="20" ${pageSize === 20 ? 'selected' : ''}>20</option>
-                        <option value="30" ${pageSize === 30 ? 'selected' : ''}>All</option>
+                        <option value="${totalInvoice}" ${pageSize === totalInvoice ? 'selected' : ''}>All</option>
                     </select>
                 </div>
             </div>
@@ -177,14 +177,14 @@ async function displayPayment(page = 1, issueDateSearch = state.currentIssueDate
         container.innerHTML = payments.length ? paymentTable + paginationHTML : '<p>No Payment found.</p>';
 
         container.querySelectorAll(".edit-btn1").forEach(button => {
-            button.addEventListener("click", function(e) {
+            button.addEventListener("click", function (e) {
                 const payment = JSON.parse(this.dataset.payment);
                 populateView2(payment);
             });
         });
 
         container.querySelectorAll(".edit-btn2").forEach(button => {
-            button.addEventListener("click", function(e) {
+            button.addEventListener("click", function (e) {
                 const payment = JSON.parse(this.dataset.payment);
                 populateView1(payment);
             });
@@ -321,19 +321,19 @@ async function checkPaid(price, content) {
     const api_get_paid = 'https://oauth.casso.vn/v2/transactions';
     try {
         const response = await fetch(`${api_get_paid}/?sort=DESC`, {
-            headers :{
-                Authorization : `apikey ${api_KEY}`,
-                "Content-Type" : "application/json"
+            headers: {
+                Authorization: `apikey ${api_KEY}`,
+                "Content-Type": "application/json"
             }
-            },
+        },
         );
         if (!response.ok) {
             throw new Error("Failed to fetch payment data");
         }
         const data = await response.json();
         const records = data.data.records;
-        const isPaid = records.some(record => 
-            record.amount === price && 
+        const isPaid = records.some(record =>
+            record.amount === price &&
             record.description.toLowerCase().includes(content.toLowerCase())
         );
         return isPaid;
@@ -444,7 +444,7 @@ async function startCountdown(seconds) {
     countdownInterval = setTimeout(checkPayment, 1000);
 }
 
-document.getElementById("qrCodeModal").addEventListener("hidden.bs.modal", function() {
+document.getElementById("qrCodeModal").addEventListener("hidden.bs.modal", function () {
     isModalOpen = false;
     if (countdownInterval) {
         clearTimeout(countdownInterval);
@@ -453,7 +453,7 @@ document.getElementById("qrCodeModal").addEventListener("hidden.bs.modal", funct
     Swal.close();
 });
 
-document.getElementById("payButton").addEventListener("click", async function() {
+document.getElementById("payButton").addEventListener("click", async function () {
     const errorElement = document.getElementById("error");
     const loadingElement = document.getElementById("loading");
     const qrImage = document.getElementById("qrImage");
@@ -513,7 +513,7 @@ document.getElementById("payButton").addEventListener("click", async function() 
     }
 });
 
-document.getElementById("confirmPayment").addEventListener("click", async function() {
+document.getElementById("confirmPayment").addEventListener("click", async function () {
     clearTimeout(countdownInterval);
     const modal = bootstrap.Modal.getInstance(document.getElementById("qrCodeModal"));
     modal.hide();
@@ -542,7 +542,7 @@ document.getElementById("confirmPayment").addEventListener("click", async functi
 async function handleFormSubmission(event) {
     const form = event.target;
     const invoiceIdInput = form.querySelector("#invoiceId");
-    const invoiceId = invoiceIdInput.value.trim(); 
+    const invoiceId = invoiceIdInput.value.trim();
     try {
         const url = `${baseAPI.split('?')[0].replace(/\/+$/, '')}/${invoiceId}`;
         const response = await fetch(url, {

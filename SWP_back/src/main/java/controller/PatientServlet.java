@@ -86,6 +86,7 @@ public class PatientServlet extends HttpServlet {
                 responseJson.addProperty("totalPages", totalPages);
                 responseJson.addProperty("currentPage", page);
                 responseJson.addProperty("pageSize", pageSize);
+                responseJson.addProperty("totalPatient", totalPatient);
                 out.print(gson.toJson(responseJson));
             } catch (NumberFormatException e) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

@@ -345,6 +345,22 @@ public class PatientAppointmentDAO {
         }
     }
 
+    public boolean cancelAppointmentById(int appointmentId) {
+        String sql = """
+                DELETE FROM [dbo].[Appointment]
+                WHERE [appointment_id] = ?
+                """;
+
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
+            stmt.setInt(1, appointmentId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ArrayList<AppointmentDTO> getTop3CompletedAppointments(int accountPatientId) {
         ArrayList<AppointmentDTO> appointments = new ArrayList<>();
         String query = """
@@ -607,6 +623,7 @@ public class PatientAppointmentDAO {
                                                                 AND ap.status = 'Enable'
                                                                 AND acs.status = 'Enable'
                                                                 AND p.status = 'Enable'
+                                                                AND a.status = 'Confirmed'
                                                             	ORDER BY a.appointment_datetime ASC
                 """;
 
