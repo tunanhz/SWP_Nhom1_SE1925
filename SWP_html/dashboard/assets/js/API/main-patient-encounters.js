@@ -197,7 +197,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
         const data = await response.json();
         const appointments = data.appointments || [];
         const totalPages = data.totalPages || 1;
-
+        const totalAppointment = data.totalAppointment;
         // Render table
         let appointmentTable = `
             <div class="card-body">
@@ -262,7 +262,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                 <option value="10" ${pageSize === 10 ? 'selected' : ''}>10</option>
                 <option value="15" ${pageSize === 15 ? 'selected' : ''}>15</option>
                 <option value="20" ${pageSize === 20 ? 'selected' : ''}>20</option>
-                <option value="30" ${pageSize === 30 ? 'selected' : ''}>All</option>
+                <option value="${totalAppointment}" ${pageSize === totalAppointment ? 'selected' : ''}>All</option>
             </select>
             </div>
             </div>

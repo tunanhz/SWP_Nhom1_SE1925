@@ -2,12 +2,12 @@ const accountString = localStorage.getItem("account");
 const account = JSON.parse(accountString);
 const baseAPI = `http://localhost:8080/SWP_back_war_exploded/api/patientAppointment/?accountPatientId=${account.accountPatientId}`;
 
-let imagePath = account?.img ;
+let imagePath = account?.img;
 
 if (account) {
-  document.getElementById('username').innerHTML = `Hello! ${account.username}`;
+    document.getElementById('username').innerHTML = `Hello! ${account.username}`;
 
-  const userImgElement = document.getElementById('userImg');
+    const userImgElement = document.getElementById('userImg');
     if (userImgElement) {
         userImgElement.src = imagePath;
         userImgElement.alt = `Profile of ${account.username || 'User'}`;
@@ -39,7 +39,7 @@ function formatToVND(numberString) {
 }
 
 function createAppointmentCompletedRow(appointment, index) {
-  return `<tr>
+    return `<tr>
         <td>${index + 1}</td>
         <td>
             <div class="d-flex align-items-center gap-3">
@@ -55,36 +55,36 @@ function createAppointmentCompletedRow(appointment, index) {
 
 
 async function displayThreeAppointment() {
-  try {
+    try {
 
-    const container = document.getElementById("three-Appointment");
-    container.innerHTML = "<p>No Upcoming Appointment...</p>";
+        const container = document.getElementById("three-Appointment");
+        container.innerHTML = "<p>No Upcoming Appointment...</p>";
 
-    const container1 = document.getElementById("three-AppointmentCompleted");
-    container1.innerHTML = "<p>No No Complete Appointment...</p>";
+        const container1 = document.getElementById("three-AppointmentCompleted");
+        container1.innerHTML = "<p>No No Complete Appointment...</p>";
 
-    const container2 = document.getElementById('infor-three-payment');
-    container2.innerHTML = "<p>No Payment...</p>";
+        const container2 = document.getElementById('infor-three-payment');
+        container2.innerHTML = "<p>No Payment...</p>";
 
-    const response = await fetch(baseAPI, {
-      method: "GET",
-    });
+        const response = await fetch(baseAPI, {
+            method: "GET",
+        });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-          errorData.error || `HTTP error! Status: ${response.status}`
-      );
-    }
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(
+                errorData.error || `HTTP error! Status: ${response.status}`
+            );
+        }
 
-    const data = await response.json();
-    const threeAppointmentsUpcomings = data.threeAppointmentsUpcoming;
-    const threeCompletedAppointments = data.threeAppointmentComplete;
-    const threePaymentPendings = data.threePaymentPending;
+        const data = await response.json();
+        const threeAppointmentsUpcomings = data.threeAppointmentsUpcoming;
+        const threeCompletedAppointments = data.threeAppointmentComplete;
+        const threePaymentPendings = data.threePaymentPending;
 
-    let threeAppointmentCards = "";
-    threeAppointmentsUpcomings.forEach((ap) => {
-      threeAppointmentCards += `<li class="d-flex mb-4 align-items-center pb-5 mb-5 border-bottom">
+        let threeAppointmentCards = "";
+        threeAppointmentsUpcomings.forEach((ap) => {
+            threeAppointmentCards += `<li class="d-flex mb-4 align-items-center pb-5 mb-5 border-bottom">
                                 <div class="ms-4 flex-grow-1">
                                     <h5>Skin Treatment</h5>
                                     <ul class="list-inline m-0 p-0 d-flex gap-2 align-items-center flex-wrap">
@@ -106,12 +106,12 @@ async function displayThreeAppointment() {
                                 </div>
                             </li>`;
 
-      container.innerHTML = threeAppointmentCards || '<p>No Upcoming Appointment.</p>';
-    });
+            container.innerHTML = threeAppointmentCards || '<p>No Upcoming Appointment.</p>';
+        });
 
-    let threePaymentCards = "";
-    threePaymentPendings.forEach((pd) =>{
-        threePaymentCards += `<li class="d-flex flex-sm-row flex-column align-items-sm-center align-items-start justify-content-between flex-wrap gap-1 mb-4 bg-primary-subtle py-3 px-4 rounded">
+        let threePaymentCards = "";
+        threePaymentPendings.forEach((pd) => {
+            threePaymentCards += `<li class="d-flex flex-sm-row flex-column align-items-sm-center align-items-start justify-content-between flex-wrap gap-1 mb-4 bg-primary-subtle py-3 px-4 rounded">
                         <div class="d-flex flex-sm-row flex-column align-items-sm-center align-items-start flex-wrap gap-4">
                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -144,13 +144,13 @@ async function displayThreeAppointment() {
                            </button>
                         </div>
                      </li>`;
-                     container2.innerHTML = threePaymentCards || '<p>No Payment.</p>';
-    });
+            container2.innerHTML = threePaymentCards || '<p>No Payment.</p>';
+        });
 
 
 
-    // Render table
-    let appointmentTable = `
+        // Render table
+        let appointmentTable = `
         <div class="card-header d-flex  align-items-center justify-content-between flex-wrap gap-2 mb-3">
                 <div>
                     <h4 class="mb-0">Visited Doctors</h4>
@@ -184,34 +184,32 @@ async function displayThreeAppointment() {
             </div>
         `;
 
-    container1.innerHTML = appointmentTable;
+        container1.innerHTML = appointmentTable;
 
 
-  } catch (error) {
-    const container = document.getElementById("three-Appointment");
-    if (container) {
-      container.innerHTML = `<p class="text-danger">Error: ${error.message}. Please try again later.</p>`;
-      window.location.href = "./errors/error404.html";
+    } catch (error) {
+        const container = document.getElementById("three-Appointment");
+        if (container) {
+            container.innerHTML = `<p class="text-danger">Error: ${error.message}. Please try again later.</p>`;
+            window.location.href = "./errors/error404.html";
+        }
     }
-  }
 }
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  displayThreeAppointment();
+    displayThreeAppointment();
 
+    document.getElementById('logoutLink').addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('account');
+        window.location.href = '/frontend/login.html';
+    });
 
-
-  document.getElementById('logoutLink').addEventListener('click', function (event) {
-    event.preventDefault();
-    localStorage.removeItem('account');
-    window.location.href = '/frontend/login.html';
-  });
-
-  document.getElementById('logoutModalLink').addEventListener('click', function (event) {
-    event.preventDefault();
-    localStorage.removeItem('account');
-    window.location.href = '/frontend/login.html';
-  });
+    document.getElementById('logoutModalLink').addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('account');
+        window.location.href = '/frontend/login.html';
+    });
 });

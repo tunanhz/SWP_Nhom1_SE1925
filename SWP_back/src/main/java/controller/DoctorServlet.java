@@ -102,6 +102,7 @@ public class DoctorServlet extends HttpServlet {
             responseJson.add("doctors", gson.toJsonTree(doctors));
             responseJson.addProperty("totalPages", totalPages);
             responseJson.addProperty("currentPage", page);
+            responseJson.addProperty("totalDoctors", totalDoctors);
             if (hasName || hasDepartment) {
                 JsonObject searchKeywords = new JsonObject();
                 if (hasName) searchKeywords.addProperty("name", name);

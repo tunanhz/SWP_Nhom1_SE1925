@@ -96,6 +96,7 @@ public class PatientAppointmentServlet extends HttpServlet {
                 responseJson.addProperty("totalPages", totalPages);
                 responseJson.addProperty("currentPage", page);
                 responseJson.addProperty("pageSize", pageSize);
+                responseJson.addProperty("totalAppointment", totalAppointment);
                 out.print(gson.toJson(responseJson));
 
             } catch (NumberFormatException e) {

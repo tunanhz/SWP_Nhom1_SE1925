@@ -71,7 +71,7 @@ public class PatientPaymentServlet extends HttpServlet {
                 JsonObject responseJson = new JsonObject();
                 responseJson.add("invoices", gson.toJsonTree(invoices));
                 responseJson.addProperty("totalPages", totalPages);
-
+                responseJson.addProperty("totalInvoice", totalInvoice);
                 out.print(gson.toJson(responseJson));
             } else {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
