@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let pageSize = 10;
     fetchAppointments(currentPage, pageSize);
 
+    flatpickr('#startDate', { dateFormat: 'Y-m-d' });
+    flatpickr('#endDate', { dateFormat: 'Y-m-d' });
     // Event delegation for check-in buttons
     document.getElementById('checkin-table-body').addEventListener('click', function (event) {
         if (event.target.classList.contains('btn-checkin')) {
@@ -106,9 +108,9 @@ function renderAppointments(appointments) {
             <td>${appt.note || '-'}</td>
             <td><span class="status-badge ${statusClass}">${appt.status || '-'}</span></td>
             <td>
-                ${appt.status === 'Pending' ? 
-                    `<button class="btn btn-checkin" data-appointment-id="${appt.appointmentId || 0}">Check-in</button>` 
-                    : '-'}
+                ${appt.status === 'Pending' ?
+                `<button class="btn btn-checkin" data-appointment-id="${appt.appointmentId || 0}">Check-in</button>`
+                : '-'}
             </td>
         `;
         tbody.appendChild(row);
@@ -137,7 +139,7 @@ function handleCheckIn(appointmentId, button) {
         .then(data => {
             if (data.success) {
                 alert('Check-in successful!');
-                fetchAppointments(currentPage, pageSize); // Refresh the table
+                fetchAppointments(1, 6); // Refresh the table
             } else {
                 showError(data.message || 'Check-in failed!');
                 button.disabled = false;
@@ -201,3 +203,15 @@ function updatePagination(totalPages, currentPage, pageSize, totalAppointments) 
     if (nextPage) nextPage.classList.toggle('disabled', currentPage >= (totalPages || 1));
     document.getElementById('itemsPerPage').value = pageSize;
 }
+
+document.getElementById('logoutLink').addEventListener('click', function (event) {
+    event.preventDefault();
+    localStorage.removeItem('account');
+    window.location.href = '/frontend/login.html';
+});
+
+document.getElementById('logoutModalLink').addEventListener('click', function (event) {
+    event.preventDefault();
+    localStorage.removeItem('account');
+    window.location.href = '/frontend/login.html';
+});
