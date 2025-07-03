@@ -25,7 +25,6 @@ public class ReceptionistCheckInDTO {
         this.note = note;
     }
 
-    // Getters and Setters
     public int getAppointmentId() {
         return appointmentId;
     }
