@@ -1,5 +1,6 @@
 package dal;
 
+import dto.DoctorScheduleDTO;
 import model.DoctorSchedule;
 
 import java.sql.*;
@@ -55,6 +56,78 @@ public class DoctorScheduleDAO {
             }
         }
         return createdSchedule;
+    }
+
+
+    public List<DoctorScheduleDTO> getDoctorSchedules(String doctorId, String startDate, String endDate, String shift, String department) throws SQLException {
+        StringBuilder sql = new StringBuilder(
+                "SELECT ds.schedule_id, d.full_name AS doctor_name, d.department AS doctor_department, " +
+                        "ds.working_date, ds.shift, r.room_name, r.department AS room_department, " +
+                        "CASE ds.is_available WHEN 1 THEN 'Available' ELSE 'Not Available' END AS availability, ds.note " +
+                        "FROM DoctorSchedule ds " +
+                        "JOIN Doctor d ON ds.doctor_id = d.doctor_id " +
+                        "LEFT JOIN Room r ON ds.room_id = r.room_id " +
+                        "JOIN AccountStaff a ON d.account_staff_id = a.account_staff_id " +
+                        "WHERE a.status = 'Enable'"
+        );
+
+        List<Object> params = new ArrayList<>();
+        if (doctorId != null && !doctorId.isEmpty()) {
+            sql.append(" AND ds.doctor_id = ?");
+            params.add(Integer.parseInt(doctorId));
+        }
+        if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
+            sql.append(" AND ds.working_date BETWEEN ? AND ?");
+            params.add(startDate);
+            params.add(endDate);
+        }
+        if (shift != null && !shift.isEmpty()) {
+            sql.append(" AND ds.shift = ?");
+            params.add(shift);
+        }
+        if (department != null && !department.isEmpty()) {
+            sql.append(" AND d.department = ?");
+            params.add(department);
+        }
+        sql.append(" ORDER BY ds.working_date, ds.shift, d.full_name");
+
+        List<DoctorScheduleDTO> schedules = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = db.getConnection();
+            stmt = conn.prepareStatement(sql.toString());
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+
+            LOGGER.info("Executing query: " + sql.toString());
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                DoctorScheduleDTO schedule = new DoctorScheduleDTO();
+                schedule.setScheduleId(rs.getInt("schedule_id"));
+                schedule.setDoctorName(rs.getString("doctor_name"));
+                schedule.setDoctorDepartment(rs.getString("doctor_department"));
+                schedule.setWorkingDate(rs.getString("working_date"));
+                schedule.setShift(rs.getString("shift"));
+                schedule.setRoomName(rs.getString("room_name"));
+                schedule.setRoomDepartment(rs.getString("room_department"));
+                schedule.setAvailability(rs.getString("availability"));
+                schedule.setNote(rs.getString("note"));
+                schedules.add(schedule);
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("SQL Error: " + e.getMessage());
+            throw e;
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException e) { LOGGER.severe(e.getMessage()); }
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { LOGGER.severe(e.getMessage()); }
+            if (conn != null) try { conn.close(); } catch (SQLException e) { LOGGER.severe(e.getMessage()); }
+        }
+        return schedules;
     }
 
     public List<String> getBookedAppointmentTimes(int doctorId, String date) throws SQLException {

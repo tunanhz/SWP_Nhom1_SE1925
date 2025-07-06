@@ -93,7 +93,7 @@ public class PrescriptionDetailServlet extends HttpServlet {
                 }
 
                 // Update status in database
-                boolean updated = dao.updatePrescriptionStatus(prescriptionId, newStatus, 6);
+                boolean updated = dao.updatePrescriptionStatus(prescriptionId, newStatus, 1);
                 if (!updated) {
                     sendError(resp, HttpServletResponse.SC_NOT_FOUND, "Prescription not found or update failed");
                     return;

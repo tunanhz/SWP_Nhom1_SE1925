@@ -20,13 +20,12 @@
         <!-- Filter and Search -->
         <div class="bg-white shadow-md rounded-lg p-4 mb-6 flex space-x-4 items-center">
             <input type="text" id="search" placeholder="Tìm kiếm theo tên thuốc..." class="border rounded p-2 w-1/3">
-            <select id="categoryFilter" class="border rounded p-2 w-1/4">
-                <option value="">Tất cả danh mục</option>
+            <select id="usageFilter" class="border rounded p-2 w-1/4">
+                <option value="">Tất cả công dụng</option>
             </select>
             <select id="warehouseFilter" class="border rounded p-2 w-1/4">
                 <option value="">Tất cả kho</option>
             </select>
-            <button id="filterBtn" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Lọc</button>
             <button id="refreshBtn" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Làm mới</button>
         </div>
 
@@ -74,34 +73,68 @@
         const API_URL = 'http://localhost:8080/SWP_back_war_exploded/api/medicines';
         let currentPage = 1;
         const pageSize = 10;
-        let totalPages = 1; // Sẽ được cập nhật sau khi lấy tổng số bản ghi
+        let totalPages = 1;
 
-        async function loadMedicines(search = "", page = 1) {
+        // Tải danh sách warehouseName
+        async function loadWarehouseFilter() {
+            try {
+                const response = await fetch(`${API_URL}?getWarehouses=true`);
+                const warehouseNames = await response.json();
+                const warehouseFilter = document.getElementById("warehouseFilter");
+                warehouseNames.forEach(name => {
+                    const option = document.createElement("option");
+                    option.value = name;
+                    option.textContent = name;
+                    warehouseFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Lỗi khi tải danh sách kho:", error);
+            }
+        }
+
+        // Tải danh sách usage
+        async function loadUsageFilter() {
+            try {
+                const response = await fetch(`${API_URL}?getUsages=true`);
+                const usages = await response.json();
+                const usageFilter = document.getElementById("usageFilter");
+                usages.forEach(usage => {
+                    const option = document.createElement("option");
+                    option.value = usage;
+                    option.textContent = usage;
+                    usageFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Lỗi khi tải danh sách công dụng:", error);
+            }
+        }
+
+        async function loadMedicines(search = "", usage = "", warehouseName = "", page = 1) {
             const messageDiv = document.getElementById("message");
-            messageDiv.className = "mb-4 hidden"; // Ẩn thông báo lỗi trước đó
+            messageDiv.className = "mb-4 hidden";
 
             try {
-                // Gọi API với page và size
-                const response = await fetch(`${API_URL}?page=${page}&size=${pageSize}`);
+                // Xây dựng URL với các tham số lọc
+                let url = `${API_URL}?page=${page}&size=${pageSize}`;
+                if (search) url += `&name=${encodeURIComponent(search)}`;
+                if (usage) url += `&usage=${encodeURIComponent(usage)}`;
+                if (warehouseName) url += `&warehouseName=${encodeURIComponent(warehouseName)}`;
+
+                const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error(`Lỗi API: ${response.status} - ${response.statusText}`);
                 }
                 const data = await response.json();
                 const table = document.getElementById("medicineTable");
-                table.innerHTML = ""; // Xóa nội dung bảng trước khi hiển thị
+                table.innerHTML = "";
 
-                // Nếu không có dữ liệu
                 if (!data || data.length === 0) {
                     table.innerHTML = `<tr><td colspan="9" class="text-center py-4">Không có dữ liệu</td></tr>`;
                     updatePagination(0, page);
                     return;
                 }
 
-                // Lọc theo tìm kiếm
-                let hasResults = false;
                 data.forEach(med => {
-                    if (search && !med.name.toLowerCase().includes(search.toLowerCase())) return;
-                    hasResults = true;
                     const row = `
                         <tr>
                             <td class="px-4 py-2">${med.medicineId}</td>
@@ -120,12 +153,6 @@
                     table.innerHTML += row;
                 });
 
-                if (!hasResults) {
-                    table.innerHTML = `<tr><td colspan="9" class="text-center py-4">Không tìm thấy thuốc nào</td></tr>`;
-                }
-
-                // Giả định server trả về tổng số bản ghi trong header hoặc cần API riêng
-                // Tạm thời tính tổng số trang dựa trên dữ liệu trả về
                 totalPages = data.length < pageSize ? page : page + 1; // Cần API riêng để lấy tổng số bản ghi
                 updatePagination(data.length, page);
             } catch (error) {
@@ -140,11 +167,8 @@
             const nextBtn = document.getElementById("nextPageBtn");
             const pageInfo = document.getElementById("pageInfo");
 
-            // Cập nhật trạng thái nút
             prevBtn.disabled = page === 1;
-            nextBtn.disabled = dataLength < pageSize; // Không có dữ liệu tiếp theo
-
-            // Cập nhật thông tin trang
+            nextBtn.disabled = dataLength < pageSize;
             pageInfo.textContent = `Trang ${page}${totalPages > 1 ? ` / ${totalPages}` : ''}`;
             currentPage = page;
         }
@@ -168,39 +192,66 @@
                 const result = await res.json();
                 msg.textContent = result.message || result.error;
                 msg.className = result.message ? "text-green-600" : "text-red-600";
-                loadMedicines(document.getElementById("search").value, currentPage);
+                loadMedicines(
+                    document.getElementById("search").value,
+                    document.getElementById("usageFilter").value,
+                    document.getElementById("warehouseFilter").value,
+                    currentPage
+                );
             } catch (e) {
                 msg.textContent = "Cập nhật thất bại";
                 msg.className = "text-red-600";
             }
         });
 
-        document.getElementById("filterBtn").addEventListener("click", () => {
-            currentPage = 1; // Reset về trang 1 khi lọc
+        // Lắng nghe sự kiện onchange cho các bộ lọc
+        function applyFilters() {
+            currentPage = 1;
             const searchVal = document.getElementById("search").value;
-            loadMedicines(searchVal, currentPage);
-        });
+            const usageVal = document.getElementById("usageFilter").value;
+            const warehouseVal = document.getElementById("warehouseFilter").value;
+            loadMedicines(searchVal, usageVal, warehouseVal, currentPage);
+        }
+
+        document.getElementById("search").addEventListener("input", applyFilters);
+        document.getElementById("usageFilter").addEventListener("change", applyFilters);
+        document.getElementById("warehouseFilter").addEventListener("change", applyFilters);
 
         document.getElementById("refreshBtn").addEventListener("click", () => {
             document.getElementById("search").value = "";
-            currentPage = 1; // Reset về trang 1
-            loadMedicines("", currentPage);
+            document.getElementById("usageFilter").value = "";
+            document.getElementById("warehouseFilter").value = "";
+            currentPage = 1;
+            loadMedicines("", "", "", currentPage);
         });
 
-        // Xử lý sự kiện phân trang
         document.getElementById("prevPageBtn").addEventListener("click", () => {
             if (currentPage > 1) {
                 currentPage--;
-                loadMedicines(document.getElementById("search").value, currentPage);
+                loadMedicines(
+                    document.getElementById("search").value,
+                    document.getElementById("usageFilter").value,
+                    document.getElementById("warehouseFilter").value,
+                    currentPage
+                );
             }
         });
 
         document.getElementById("nextPageBtn").addEventListener("click", () => {
             currentPage++;
-            loadMedicines(document.getElementById("search").value, currentPage);
+            loadMedicines(
+                document.getElementById("search").value,
+                document.getElementById("usageFilter").value,
+                document.getElementById("warehouseFilter").value,
+                currentPage
+            );
         });
 
-        window.onload = () => loadMedicines("", currentPage);
+        window.onload = () => {
+            loadWarehouseFilter();
+            loadUsageFilter();
+            loadMedicines("", "", "", currentPage);
+        };
     </script>
 </body>
 </html>

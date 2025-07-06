@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Thêm Flatpickr CSS và JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        .hidden {
+            display: none !important;
+        }
+
+        .img-preview {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-6 text-center">Account Management</h1>
+
+        <!-- Tabs for account types -->
+        <div class="flex justify-center mb-4">
+            <button class="px-4 py-2 mx-2 bg-blue-500 text-white rounded"
+                onclick="showTab('patients', 'patient')">Patients</button>
+            <button class="px-4 py-2 mx-2 bg-blue-500 text-white rounded" onclick="showTab('staff', 'staff')">Staff</button>
+            <button class="px-4 py-2 mx-2 bg-blue-500 text-white rounded"
+                onclick="showTab('pharmacists', 'pharmacist')">Pharmacists</button>
+        </div>
+
+        <!-- Account Lists -->
+        <div id="patients" class="account-tab">
+            <h2 class="text-2xl font-semibold mb-4">Patients</h2>
+            <div id="patient-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+        <div id="staff" class="account-tab hidden">
+            <h2 class="text-2xl font-semibold mb-4">Staff</h2>
+            <div id="staff-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+        <div id="pharmacists" class="account-tab hidden">
+            <h2 class="text-2xl font-semibold mb-4">Pharmacists</h2>
+            <div id="pharmacist-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- Add Account Form -->
+        <div class="mt-8 bg-white p-6 rounded shadow" id="add-account-form-container">
+            <h2 class="text-2xl font-semibold mb-4">Add New Account</h2>
+            <form id="add-account-form" enctype="multipart/form-data" action="/SWP_back_war_exploded/api/account-management/" method="POST">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Account Type</label>
+                    <select id="add-account-type" name="accountType"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required disabled>
+                        <option value="" disabled>Select account type</option>
+                        <option value="patient" selected>Patient</option>
+                        <option value="staff">Staff</option>
+                        <option value="pharmacist">Pharmacist</option>
+                    </select>
+                </div>
+
+                <!-- Common Fields -->
+                <div id="common-fields">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" id="add-username" name="username"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="add-password" name="password"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="add-email" name="email"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Profile Image</label>
+                        <input type="file" id="add-img" name="img" accept="image/*"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <img id="add-img-preview" class="img-preview mt-2 hidden" alt="Image Preview">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Status</label>
+                        <select id="add-status" name="status"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                            <option value="true">Enable</option>
+                            <option value="false">Disable</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Patient Specific Fields -->
+                <div id="patient-fields">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" id="add-fullName" name="fullName"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                        <input type="text" id="add-dob" name="dobDisplay"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required
+                            placeholder="dd-MM-yyyy">
+                        <!-- Trường ẩn để gửi giá trị yyyy-MM-dd -->
+                        <input type="hidden" id="add-dob-hidden" name="dob">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Gender</label>
+                        <select id="add-gender" name="gender"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Phone</label>
+                        <input type="text" id="add-phone" name="phone"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Address</label>
+                        <input type="text" id="add-address" name="address"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                </div>
+
+                <!-- Staff Specific Fields -->
+                <div id="staff-fields" class="hidden">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Role</label>
+                        <select id="add-role" name="role" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                            required>
+                            <option value="Doctor">Doctor</option>
+                            <option value="Nurse">Nurse</option>
+                            <option value="Receptionist">Receptionist</option>
+                            <option value="AdminBusiness">Admin Business</option>
+                            <option value="AdminSys">Admin System</option>
+                        </select>
+                    </div>
+                    <!-- Doctor/Nurse Fields -->
+                    <div id="doctor-nurse-fields" class="hidden">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" id="add-staffFullNameDn" name="staffFullNameDn"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Phone</label>
+                            <input type="text" id="add-staffPhoneDn" name="staffPhoneDn"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Department</label>
+                            <input type="text" id="add-departmentDn" name="departmentDn"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Education Level</label>
+                            <input type="text" id="add-eduLevelDn" name="eduLevelDn"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                    </div>
+                    <!-- Receptionist Fields -->
+                    <div id="receptionist-fields" class="hidden">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" id="add-staffFullNameR" name="staffFullNameR"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Phone</label>
+                            <input type="text" id="add-staffPhoneR" name="staffPhoneR"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                    </div>
+                    <!-- Admin Fields -->
+                    <div id="admin-fields" class="hidden">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" id="add-staffFullNameA" name="staffFullNameA"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Phone</label>
+                            <input type="text" id="add-staffPhoneA" name="staffPhoneA"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Department</label>
+                            <input type="text" id="add-departmentA" name="departmentA"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pharmacist Specific Fields -->
+                <div id="pharmacist-fields" class="hidden">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" id="add-pharmacistFullName" name="pharmacistFullName"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Phone</label>
+                        <input type="text" id="add-pharmacistPhone" name="pharmacistPhone"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Education Level</label>
+                        <input type="text" id="add-pharmacistEduLevel" name="pharmacistEduLevel"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+                </div>
+
+                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                    id="submit-button">Add Account</button>
+            </form>
+        </div>
+
+        <!-- Update Account Form -->
+        <div class="mt-8 bg-white p-6 rounded shadow hidden" id="update-account-form-container">
+            <h2 class="text-2xl font-semibold mb-4">Update Account</h2>
+            <form id="update-account-form" enctype="multipart/form-data">
+                <input type="hidden" id="update-account-id" name="accountId">
+                <input type="hidden" id="update-account-type" name="accountType">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" id="update-username" name="username"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="update-email" name="email"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Current Image</label>
+                    <img id="current-img" src="" alt="Current Image" class="img-preview mt-2 hidden">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">New Profile Image</label>
+                    <input type="file" id="update-img" name="img" accept="image/*"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                    <img id="update-img-preview" class="img-preview mt-2 hidden" alt="Image Preview">
+                </div>
+                <div class="mb-4" id="update-role-container">
+                    <label class="block text-sm font-medium text-gray-700">Role (Staff only)</label>
+                    <select id="update-role" name="role" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="Doctor">Doctor</option>
+                        <option value="Nurse">Nurse</option>
+                        <option value="Receptionist">Receptionist</option>
+                        <option value="AdminBusiness">Admin Business</option>
+                        <option value="AdminSys">Admin System</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <select id="update-status" name="status"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="true">Enable</option>
+                        <option value="false">Disable</option>
+                    </select>
+                </div>
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Update
+                    Account</button>
+                <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                    onclick="cancelUpdate()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/SWP_back_war_exploded/api/account-management/';
+        const IMAGE_URL = 'http://localhost:8080/SWP_back_war_exploded/images/';
+
+        // Khởi tạo Flatpickr cho trường Date of Birth
+        flatpickr("#add-dob", {
+            dateFormat: "d-m-Y", // Hiển thị định dạng dd-MM-yyyy
+            onChange: function(selectedDates, dateStr, instance) {
+                // Chuyển đổi ngày sang định dạng yyyy-MM-dd để gửi
+                if (selectedDates.length > 0) {
+                    const date = selectedDates[0];
+                    const yyyyMMdd = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                    document.getElementById('add-dob-hidden').value = yyyyMMdd;
+                } else {
+                    document.getElementById('add-dob-hidden').value = '';
+                }
+            }
+        });
+
+        // Show/hide tabs and control add form
+        function showTab(tabId, accountType) {
+            // Hide all account tabs
+            document.querySelectorAll('.account-tab').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // Show add account form container
+            const formContainer = document.getElementById('add-account-form-container');
+            formContainer.classList.remove('hidden');
+
+            // Set account type in the form and trigger field display
+            const accountTypeSelect = document.getElementById('add-account-type');
+            accountTypeSelect.value = accountType;
+
+            // Update selected attribute for dropdown options
+            accountTypeSelect.querySelectorAll('option').forEach(option => {
+                option.removeAttribute('selected');
+                if (option.value === accountType) {
+                    option.setAttribute('selected', 'selected');
+                }
+            });
+
+            resetForm(); // Reset form to clear previous inputs
+            toggleFormFields(accountType); // Show relevant fields
+
+            // Fetch accounts to update the list
+            fetchAccounts();
+        }
+
+        // Toggle form fields based on account type
+        function toggleFormFields(accountType) {
+            const commonFields = document.getElementById('common-fields');
+            const patientFields = document.getElementById('patient-fields');
+            const staffFields = document.getElementById('staff-fields');
+            const pharmacistFields = document.getElementById('pharmacist-fields');
+            const submitButton = document.getElementById('submit-button');
+
+            // Hide all fields initially
+            commonFields.classList.add('hidden');
+            patientFields.classList.add('hidden');
+            staffFields.classList.add('hidden');
+            pharmacistFields.classList.add('hidden');
+            submitButton.classList.add('hidden');
+
+            // Remove required from all specific fields when hidden
+            document.getElementById('add-fullName').removeAttribute('required');
+            document.getElementById('add-dob').removeAttribute('required');
+            document.getElementById('add-gender').removeAttribute('required');
+            document.getElementById('add-phone').removeAttribute('required');
+            document.getElementById('add-address').removeAttribute('required');
+            document.getElementById('add-pharmacistFullName').removeAttribute('required');
+            document.getElementById('add-pharmacistPhone').removeAttribute('required');
+            document.getElementById('add-pharmacistEduLevel').removeAttribute('required');
+
+            if (accountType) {
+                commonFields.classList.remove('hidden');
+                submitButton.classList.remove('hidden');
+                if (accountType === 'patient') {
+                    patientFields.classList.remove('hidden');
+                    document.getElementById('add-img').removeAttribute('required');
+                    // Add required for patient fields
+                    document.getElementById('add-fullName').setAttribute('required', 'required');
+                    document.getElementById('add-dob').setAttribute('required', 'required');
+                    document.getElementById('add-gender').setAttribute('required', 'required');
+                    document.getElementById('add-phone').setAttribute('required', 'required');
+                    document.getElementById('add-address').setAttribute('required', 'required');
+                } else if (accountType === 'staff') {
+                    staffFields.classList.remove('hidden');
+                    document.getElementById('add-img').setAttribute('required', 'required');
+                    toggleStaffFields(document.getElementById('add-role').value);
+                } else if (accountType === 'pharmacist') {
+                    pharmacistFields.classList.remove('hidden');
+                    document.getElementById('add-img').setAttribute('required', 'required');
+                    // Add required for pharmacist fields
+                    document.getElementById('add-pharmacistFullName').setAttribute('required', 'required');
+                    document.getElementById('add-pharmacistPhone').setAttribute('required', 'required');
+                    document.getElementById('add-pharmacistEduLevel').setAttribute('required', 'required');
+                }
+            }
+        }
+
+        // Fetch all accounts
+        async function fetchAccounts() {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    displayAccounts('patient-list', data.patients, 'patient');
+                    displayAccounts('staff-list', data.staff, 'staff');
+                    displayAccounts('pharmacist-list', data.pharmacists, 'pharmacist');
+                } else {
+                    alert(data.error || 'Failed to fetch accounts');
+                }
+            } catch (error) {
+                alert('Error fetching accounts: ' + error.message);
+            }
+        }
+
+        // Display accounts in a list
+        function displayAccounts(containerId, accounts, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            accounts.forEach(account => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-4 rounded shadow';
+                card.innerHTML = `
+                    <p><strong>ID:</strong> ${account.accountPatientId || account.accountStaffId || account.accountPharmacistId}</p>
+                    <p><strong>Username:</strong> ${account.username}</p>
+                    <p><strong>Email:</strong> ${account.email}</p>
+                    ${type === 'staff' ? `<p><strong>Role:</strong> ${account.role}</p>` : ''}
+                    <p><strong>Status:</strong> ${account.status ? 'Enable' : 'Disable'}</p>
+                    ${account.img ? `<img src="${IMAGE_URL}${account.img.split('/').pop()}" alt="Profile" class="img-preview mt-2">` : '<p>No image</p>'}
+                    <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="fetchAndShowUpdateForm('${type}', ${account.accountPatientId || account.accountStaffId || account.accountPharmacistId})">Update</button>
+                    <button class="mt-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600" onclick="disableAccount('${type}', ${account.accountPatientId || account.accountStaffId || account.accountPharmacistId})">Disable</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Fetch account details and show update form
+        async function fetchAndShowUpdateForm(type, id) {
+            try {
+                const response = await fetch(`${API_URL}${type}/${id}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const account = await response.json();
+                if (response.ok) {
+                    showUpdateForm(type, account);
+                } else {
+                    alert(account.error || 'Failed to fetch account details');
+                }
+            } catch (error) {
+                alert('Error fetching account details: ' + error.message);
+            }
+        }
+
+        // Show update form
+        function showUpdateForm(type, account) {
+            document.getElementById('update-account-form-container').classList.remove('hidden');
+            document.getElementById('update-account-id').value = account.accountPatientId || account.accountStaffId || account.accountPharmacistId || '';
+            document.getElementById('update-account-type').value = type;
+            document.getElementById('update-username').value = account.username || '';
+            document.getElementById('update-email').value = account.email || '';
+            const currentImg = document.getElementById('current-img');
+            if (account.img) {
+                currentImg.src = `${IMAGE_URL}${account.img.split('/').pop()}`;
+                currentImg.classList.remove('hidden');
+            } else {
+                currentImg.classList.add('hidden');
+            }
+            document.getElementById('update-status').value = account.status ? 'true' : 'false';
+            if (type === 'staff') {
+                document.getElementById('update-role-container').classList.remove('hidden');
+                document.getElementById('update-role').value = account.role || 'Doctor';
+            } else {
+                document.getElementById('update-role-container').classList.add('hidden');
+            }
+        }
+
+        // Image preview for add form
+        document.getElementById('add-img').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('add-img-preview');
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+        });
+
+        // Image preview for update form
+        document.getElementById('update-img').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('update-img-preview');
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+        });
+
+        // Toggle staff fields based on role
+        document.getElementById('add-role').addEventListener('change', function () {
+            toggleStaffFields(this.value);
+        });
+
+        function toggleStaffFields(role) {
+            const doctorNurseFields = document.getElementById('doctor-nurse-fields');
+            const receptionistFields = document.getElementById('receptionist-fields');
+            const adminFields = document.getElementById('admin-fields');
+
+            // Hide all fields
+            doctorNurseFields.classList.add('hidden');
+            receptionistFields.classList.add('hidden');
+            adminFields.classList.add('hidden');
+
+            // Remove required from all fields
+            document.getElementById('add-staffFullNameDn').removeAttribute('required');
+            document.getElementById('add-staffPhoneDn').removeAttribute('required');
+            document.getElementById('add-departmentDn').removeAttribute('required');
+            document.getElementById('add-eduLevelDn').removeAttribute('required');
+            document.getElementById('add-staffFullNameR').removeAttribute('required');
+            document.getElementById('add-staffPhoneR').removeAttribute('required');
+            document.getElementById('add-staffFullNameA').removeAttribute('required');
+            document.getElementById('add-staffPhoneA').removeAttribute('required');
+            document.getElementById('add-departmentA').removeAttribute('required');
+
+            // Show and add required for corresponding fields
+            if (role === 'Doctor' || role === 'Nurse') {
+                doctorNurseFields.classList.remove('hidden');
+                document.getElementById('add-staffFullNameDn').setAttribute('required', 'required');
+                document.getElementById('add-staffPhoneDn').setAttribute('required', 'required');
+                document.getElementById('add-departmentDn').setAttribute('required', 'required');
+                document.getElementById('add-eduLevelDn').setAttribute('required', 'required');
+            } else if (role === 'Receptionist') {
+                receptionistFields.classList.remove('hidden');
+                document.getElementById('add-staffFullNameR').setAttribute('required', 'required');
+                document.getElementById('add-staffPhoneR').setAttribute('required', 'required');
+            } else if (role === 'AdminBusiness' || role === 'AdminSys') {
+                adminFields.classList.remove('hidden');
+                document.getElementById('add-staffFullNameA').setAttribute('required', 'required');
+                document.getElementById('add-staffPhoneA').setAttribute('required', 'required');
+                document.getElementById('add-departmentA').setAttribute('required', 'required');
+            }
+        }
+
+        // Reset form
+        function resetForm() {
+            const form = document.getElementById('add-account-form');
+            form.reset();
+            document.getElementById('add-img-preview').classList.add('hidden');
+            document.getElementById('common-fields').classList.add('hidden');
+            document.getElementById('patient-fields').classList.add('hidden');
+            document.getElementById('staff-fields').classList.add('hidden');
+            document.getElementById('pharmacist-fields').classList.add('hidden');
+            document.getElementById('submit-button').classList.add('hidden');
+            // Reset Flatpickr
+            flatpickr("#add-dob").clear();
+            document.getElementById('add-dob-hidden').value = '';
+        }
+
+        // Add new account
+        document.getElementById('add-account-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const form = event.target;
+            const accountType = document.getElementById('add-account-type').value;
+
+            // Check accountType
+            if (!accountType || accountType === '') {
+                alert('Please select a valid account type.');
+                return;
+            }
+
+            // Collect form data
+            const formData = new FormData(form);
+            const username = document.getElementById('add-username').value;
+            const password = document.getElementById('add-password').value;
+            const email = document.getElementById('add-email').value;
+
+            // Log FormData for debugging
+            console.log('FormData contents:');
+            for (const pair of formData.entries()) {
+                console.log(`${pair[0]}: ${pair[1]}`);
+            }
+
+            // Check required common fields
+            if (!username || !password || !email) {
+                alert('Username, password, and email are required.');
+                return;
+            }
+
+            // Check specific fields based on accountType
+            if (accountType === 'patient') {
+                const fullName = document.getElementById('add-fullName').value;
+                const dob = document.getElementById('add-dob-hidden').value;
+                const gender = document.getElementById('add-gender').value;
+                const phone = document.getElementById('add-phone').value;
+                const address = document.getElementById('add-address').value;
+                if (!fullName || !dob || !gender || !phone || !address) {
+                    alert('All patient fields are required.');
+                    return;
+                }
+            } else if (accountType === 'staff') {
+                const role = document.getElementById('add-role').value;
+                if (!role) {
+                    alert('Role is required for staff accounts.');
+                    return;
+                }
+                if (role === 'Doctor' || role === 'Nurse') {
+                    const fullName = document.getElementById('add-staffFullNameDn').value;
+                    const phone = document.getElementById('add-staffPhoneDn').value;
+                    const department = document.getElementById('add-departmentDn').value;
+                    const eduLevel = document.getElementById('add-eduLevelDn').value;
+                    if (!fullName || !phone || !department || !eduLevel) {
+                        alert('All Doctor/Nurse fields are required.');
+                        return;
+                    }
+                } else if (role === 'Receptionist') {
+                    const fullName = document.getElementById('add-staffFullNameR').value;
+                    const phone = document.getElementById('add-staffPhoneR').value;
+                    if (!fullName || !phone) {
+                        alert('All Receptionist fields are required.');
+                        return;
+                    }
+                } else if (role === 'AdminBusiness' || role === 'AdminSys') {
+                    const fullName = document.getElementById('add-staffFullNameA').value;
+                    const phone = document.getElementById('add-staffPhoneA').value;
+                    const department = document.getElementById('add-departmentA').value;
+                    if (!fullName || !phone || !department) {
+                        alert('All Admin fields are required.');
+                        return;
+                    }
+                }
+                // Check image for staff
+                const imgInput = document.getElementById('add-img');
+                if (!imgInput.files || imgInput.files.length === 0) {
+                    alert('Profile image is required for staff accounts.');
+                    return;
+                }
+            } else if (accountType === 'pharmacist') {
+                const fullName = document.getElementById('add-pharmacistFullName').value;
+                const phone = document.getElementById('add-pharmacistPhone').value;
+                const eduLevel = document.getElementById('add-pharmacistEduLevel').value;
+                if (!fullName || !phone || !eduLevel) {
+                    alert('All pharmacist fields are required.');
+                    return;
+                }
+                // Check image for pharmacist
+                const imgInput = document.getElementById('add-img');
+                if (!imgInput.files || imgInput.files.length === 0) {
+                    alert('Profile image is required for pharmacist accounts.');
+                    return;
+                }
+            }
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                console.log('Server response:', data);
+                if (response.ok) {
+                    alert('Account created successfully');
+                    resetForm();
+                    fetchAccounts();
+                } else {
+                    alert(data.error || 'Failed to create account');
+                }
+            } catch (error) {
+                console.error('Error creating account:', error);
+                alert('Error creating account: ' + error.message);
+            }
+        });
+
+        // Cancel update
+        function cancelUpdate() {
+            document.getElementById('update-account-form-container').classList.add('hidden');
+            document.getElementById('update-account-form').reset();
+            document.getElementById('current-img').classList.add('hidden');
+            document.getElementById('update-img-preview').classList.add('hidden');
+        }
+
+        // Update account
+        document.getElementById('update-account-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const accountId = document.getElementById('update-account-id').value;
+            const accountType = document.getElementById('update-account-type').value;
+
+            // Log FormData for debugging
+            console.log('Update FormData contents:');
+            for (const pair of formData.entries()) {
+                console.log(`${pair[0]}: ${pair[1]}`);
+            }
+
+            try {
+                const response = await fetch(`${API_URL}${accountType}/${accountId}`, {
+                    method: 'PUT',
+                    body: formData
+                });
+                const data = await response.json();
+                console.log('Server response:', data);
+                if (response.ok) {
+                    alert('Account updated successfully');
+                    cancelUpdate();
+                    fetchAccounts();
+                } else {
+                    alert(data.error || 'Failed to update account');
+                }
+            } catch (error) {
+                console.error('Error updating account:', error);
+                alert('Error updating account: ' + error.message);
+            }
+        });
+
+        // Disable account
+        async function disableAccount(type, id) {
+            if (!confirm('Are you sure you want to disable this account?')) return;
+            try {
+                const response = await fetch(`${API_URL}${type}/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    alert('Account disabled successfully');
+                    fetchAccounts();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to disable account');
+                }
+            } catch (error) {
+                console.error('Error disabling account:', error);
+                alert('Error disabling account: ' + error.message);
+            }
+        }
+
+        // Initialize page with Patients tab and form
+        function initializePage() {
+            showTab('patients', 'patient');
+            fetchAccounts();
+        }
+
+        // Call initialization on page load
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+
+</html>

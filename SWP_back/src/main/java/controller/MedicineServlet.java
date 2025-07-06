@@ -40,23 +40,35 @@ public class MedicineServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
         String pathInfo = req.getPathInfo();
         String searchName = req.getParameter("name");
+        String usage = req.getParameter("usage");
+        String warehouseName = req.getParameter("warehouseName");
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
 
-                if (searchName != null && !searchName.trim().isEmpty()) {
-                    // Search by name
+                if (req.getParameter("getWarehouses") != null) {
+                    // Lấy danh sách warehouseName
+                    ArrayList<String> warehouseNames = dao.getWarehouseNames();
+                    out.println(gson.toJson(warehouseNames));
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                } else if (req.getParameter("getUsages") != null) {
+                    // Lấy danh sách usage
+                    ArrayList<String> usages = dao.getUniqueUsages();
+                    out.println(gson.toJson(usages));
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                } else if (searchName != null && !searchName.trim().isEmpty()) {
+                    // Tìm kiếm theo tên
                     ArrayList<MedicineDTO> medicines = dao.searchMedicinesByName(searchName);
                     out.println(gson.toJson(medicines));
                     resp.setStatus(HttpServletResponse.SC_OK);
                 } else {
-                    // Paginated list
+                    // Lấy danh sách thuốc với phân trang và lọc
                     int page = getIntParameter(req, "page", 1);
                     int size = getIntParameter(req, "size", 10);
                     if (page < 1 || size < 1) {
                         sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid page or size parameters");
                         return;
                     }
-                    ArrayList<MedicineDTO> medicines = dao.getMedicinesByPage(page, size);
+                    ArrayList<MedicineDTO> medicines = dao.getMedicinesByPage(page, size, usage, warehouseName);
                     out.println(gson.toJson(medicines));
                     resp.setStatus(HttpServletResponse.SC_OK);
                 }
@@ -73,7 +85,8 @@ public class MedicineServlet extends HttpServlet {
 //                ArrayList<MedicineDTO> medicines = dao.getMedicinesByPage(page, size); // Placeholder
 //                out.println(gson.toJson(medicines));
 //                resp.setStatus(HttpServletResponse.SC_OK);
-            } else {
+            }
+            else {
                 String idStr = pathInfo.substring(1);
                 int medicineId = Integer.parseInt(idStr);
                 if (medicineId < 1) {
@@ -143,7 +156,8 @@ public class MedicineServlet extends HttpServlet {
 
 
     private void setCORSHeaders(HttpServletResponse resp) {
-        resp.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:*");
+        resp.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+
         resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
     }
