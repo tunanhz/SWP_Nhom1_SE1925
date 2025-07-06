@@ -104,10 +104,11 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
         const data = await response.json();
         const patients = (data.patients || []).filter(patient => patient.status !== 'Disable'); // Lọc ở frontend
         const totalPages = data.totalPages || 1;
-
+        const totalPatient = data.totalPatient;
         // Render table
         let patientTable = `
-            <div class="card-body pt-0">
+        <div class="card-body pt-0">
+            <div class="table-responsive">
                 <table class="table border-end border-start align-middle mb-0 rounded">
                     <thead class="table-dark">
                         <tr>
@@ -125,6 +126,7 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
                     </tbody>
                 </table>
             </div>
+        </div>
         `;
 
         // Render pagination
@@ -165,7 +167,7 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
                 <option value="10" ${pageSize === 10 ? 'selected' : ''}>10</option>
                 <option value="15" ${pageSize === 15 ? 'selected' : ''}>15</option>
                 <option value="20" ${pageSize === 20 ? 'selected' : ''}>20</option>
-                <option value="30" ${pageSize === 30 ? 'selected' : ''}>All</option>
+                <option value="${totalPatient}" ${pageSize === totalPatient ? 'selected' : ''}>All</option>
             </select>
             </div>
             </div>

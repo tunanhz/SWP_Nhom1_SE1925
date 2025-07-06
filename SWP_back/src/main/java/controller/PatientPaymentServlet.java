@@ -2,6 +2,7 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import dal.PatientPaymentDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,7 +10,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dto.PatientPaymentDTO;
+import model.Patient;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -23,37 +26,33 @@ public class PatientPaymentServlet extends HttpServlet {
     private final PatientPaymentDAO patientPaymentDAO = new PatientPaymentDAO();
     private final Gson gson = new Gson();
 
-    @Override
-    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        setCORSHeaders(resp);
-        resp.setStatus(HttpServletResponse.SC_OK);
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        setCORSHeaders(response, request);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        setCORSHeaders(response);
+        setCORSHeaders(response, request);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         String pathInfo = request.getPathInfo();
 
         try (PrintWriter out = response.getWriter()) {
             if (pathInfo == null || pathInfo.equals("/")) {
-                // Validate required parameters
                 if (request.getParameter("accountPatientId") == null) {
                     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                     out.print("{\"error\": \"Missing accountPatientId parameter\"}");
                     return;
                 }
 
-                // Parse parameters
                 int accountPatientId = Integer.parseInt(request.getParameter("accountPatientId"));
                 String issueDate = request.getParameter("issueDate");
                 String status = request.getParameter("status");
                 int page = Integer.parseInt(request.getParameter("page") != null ? request.getParameter("page") : "1");
                 int pageSize = Integer.parseInt(request.getParameter("pageSize") != null ? request.getParameter("pageSize") : "6");
 
-                // Validate page and pageSize
                 if (page < 1 || pageSize < 1) {
                     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                     out.print("{\"error\": \"Page and pageSize must be positive\"}");
@@ -62,21 +61,17 @@ public class PatientPaymentServlet extends HttpServlet {
 
                 String dateValid = parseDateTime(issueDate);
 
-                // Fetch invoices
                 ArrayList<PatientPaymentDTO> invoices = patientPaymentDAO.getPatientInvoicesByAccountId(
                         accountPatientId, dateValid, status, page, pageSize
                 );
 
-                // Calculate total pages
                 int totalInvoice = patientPaymentDAO.getTotalInvoices(accountPatientId, dateValid, status);
                 int totalPages = (int) Math.ceil((double) totalInvoice / pageSize);
 
-                // Build response
                 JsonObject responseJson = new JsonObject();
                 responseJson.add("invoices", gson.toJsonTree(invoices));
                 responseJson.addProperty("totalPages", totalPages);
-
-                // Write response
+                responseJson.addProperty("totalInvoice", totalInvoice);
                 out.print(gson.toJson(responseJson));
             } else {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -96,10 +91,56 @@ public class PatientPaymentServlet extends HttpServlet {
         }
     }
 
-    private void setCORSHeaders(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        setCORSHeaders(response, request);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        String pathInfo = request.getPathInfo();
+        PrintWriter out = response.getWriter();
+
+        if (pathInfo != null && pathInfo.split("/").length == 2) {
+            try {
+                int invoiceId = Integer.parseInt(pathInfo.split("/")[1].replaceAll("^/+", "")); // Remove leading slashes
+                if (invoiceId <= 0) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.print("{\"status\":\"error\",\"message\":\"Invoice ID must be positive\"}");
+                    out.flush();
+                    return;
+                }
+                boolean updated = patientPaymentDAO.updateInvoice(invoiceId);
+                if (updated) {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    out.print("{\"status\":\"success\",\"message\":\"Invoice updated successfully\"}");
+                } else {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    out.print("{\"status\":\"error\",\"message\":\"Invoice not found\"}");
+                }
+            } catch (NumberFormatException e) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.print("{\"status\":\"error\",\"message\":\"Invalid invoice ID format\"}");
+            } finally {
+                out.flush();
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"status\":\"error\",\"message\":\"Invalid path\"}");
+            out.flush();
+        }
+    }
+
+    private void setCORSHeaders(HttpServletResponse response, HttpServletRequest request) {
+        String origin = request.getHeader("Origin");
+        // Allow only the specific origin where your client is running
+        if (origin != null && origin.equals("http://127.0.0.1:5500")) {
+            response.setHeader("Access-Control-Allow-Origin", origin);
+        } else {
+            response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // Default to your client origin
+        }
+        response.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        response.setHeader("Access-Control-Allow-Credentials", "true"); // Allow credentials
+        response.setHeader("Access-Control-Max-Age", "3600"); // Cache preflight response for 1 hour
     }
 
     public static String parseDateTime(String input) {

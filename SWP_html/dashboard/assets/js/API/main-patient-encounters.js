@@ -55,7 +55,7 @@ function createAppointmentRow(appointment, index) {
     const status = appointment.appointmentStatus;
     const isCompleted = status === "Completed";
     const isConfirmed = status === "Confirmed";
-
+    const isPending = status === "Pending";
     const renderActionButtons = () => {
         if (isCompleted) {
             return `
@@ -90,7 +90,7 @@ function createAppointmentRow(appointment, index) {
                     </span>
                 </a>
             `;
-        } else {
+        } else if(isPending) {
             return `
                 <a class="d-inline-block pe-2 edit-btn2" data-bs-toggle="offcanvas"
                    href="#offcanvasEncounterEditPending" aria-controls="offcanvasEncounterEditPending" aria-label="Edit Appointment"
@@ -117,6 +117,15 @@ function createAppointmentRow(appointment, index) {
                     </span>
                 </a>
             `;
+        } else {
+            return `<a class="d-inline-block pe-2" data-bs-toggle="offcanvas">
+                    <span class="text-warning">
+                    <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path opacity="0.4" d="M4.72251 21.1672C4.70951 21.1672 4.69751 21.1672 4.68351 21.1662C4.36851 21.1502 4.05951 21.0822 3.76551 20.9632C2.31851 20.3752 1.62051 18.7222 2.20751 17.2762L9.52851 4.45025C9.78051 3.99425 10.1625 3.61225 10.6285 3.35425C11.9935 2.59825 13.7195 3.09525 14.4745 4.45925L21.7475 17.1872C21.9095 17.5682 21.9785 17.8782 21.9955 18.1942C22.0345 18.9502 21.7765 19.6752 21.2705 20.2362C20.7645 20.7972 20.0695 21.1282 19.3145 21.1662L4.79451 21.1672H4.72251Z" fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1245 10.0208C11.1245 9.53875 11.5175 9.14575 11.9995 9.14575C12.4815 9.14575 12.8745 9.53875 12.8745 10.0208V12.8488C12.8745 13.3318 12.4815 13.7238 11.9995 13.7238C11.5175 13.7238 11.1245 13.3318 11.1245 12.8488V10.0208ZM11.1245 16.2699C11.1245 15.7849 11.5175 15.3899 11.9995 15.3899C12.4815 15.3899 12.8745 15.7799 12.8745 16.2589C12.8745 16.7519 12.4815 17.1449 11.9995 17.1449C11.5175 17.1449 11.1245 16.7519 11.1245 16.2699Z" fill="currentColor"></path>
+                    </svg>
+                    </span>
+                </a>`
         }
     };
 
@@ -125,8 +134,10 @@ function createAppointmentRow(appointment, index) {
             return `<span class="badge bg-success-subtle p-2 text-success">Complete</span>`;
         } else if (isConfirmed){
             return `<span class="badge bg-primary-subtle p-2 text-primary">Confirmed</span>`;
-        }else{
+        }else if(isPending){
             return `<span class="badge bg-warning-subtle p-2 text-warning">Pending</span>`;
+        }else{
+            return `<span class="badge bg-danger-subtle p-2 text-danger">Cancelled</span>`;
         }
     };
 
@@ -186,7 +197,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
         const data = await response.json();
         const appointments = data.appointments || [];
         const totalPages = data.totalPages || 1;
-
+        const totalAppointment = data.totalAppointment;
         // Render table
         let appointmentTable = `
             <div class="card-body">
@@ -251,7 +262,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                 <option value="10" ${pageSize === 10 ? 'selected' : ''}>10</option>
                 <option value="15" ${pageSize === 15 ? 'selected' : ''}>15</option>
                 <option value="20" ${pageSize === 20 ? 'selected' : ''}>20</option>
-                <option value="30" ${pageSize === 30 ? 'selected' : ''}>All</option>
+                <option value="${totalAppointment}" ${pageSize === totalAppointment ? 'selected' : ''}>All</option>
             </select>
             </div>
             </div>
@@ -274,7 +285,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
         container.querySelectorAll(".edit-btn2").forEach(button => {
             button.addEventListener("click", function(e) {
                 const appointment = JSON.parse(this.dataset.appointment);
-                populateEditFormPending(appointment);
+                populateEditForm(appointment);
             });
         });
 
@@ -416,9 +427,6 @@ async function handleFormSubmissionConfirm(event) {
             address: address
         };
         const url = `http://localhost:8080/SWP_back_war_exploded/api/patient/${patientId}`;
-        console.log("Sending PUT to:", url);
-        console.log("Data:", patientData);
-
         const response = await fetch(url, {
             method: "PUT",
             headers: {
@@ -443,71 +451,6 @@ async function handleFormSubmissionConfirm(event) {
     } catch (error) {
         console.error("Update error:", error);
         Swal.fire("Error!", `Could not update patient: ${error.message}`, "error");
-    }
-}
-
-function populateEditFormPending(appointment) {
-    // Populate form fields
-    const appointmentDateTime = document.getElementById("appointmentDateTime");
-    const note = document.getElementById("note");
-    const appointmentStatus = document.getElementById("appointmentStatus");
-
-    const form = document.querySelector("#editPendingAppointmentForm");
-
-    if (appointmentDateTime) {
-        // Convert appointmentDateTime to datetime-local format (YYYY-MM-DDTHH:MM)
-        const date = new Date(appointment.appointmentDateTime);
-        if (!isNaN(date)) {
-            const formattedDateTime = date.toISOString().slice(0, 16); // e.g., 2025-06-15T10:30
-            appointmentDateTime.value = formattedDateTime;
-        } else {
-            appointmentDateTime.value = "";
-        }
-    }
-    if (note) note.value = sanitizeHTML(appointment.note || "");
-    if (appointmentStatus) appointmentStatus.value = sanitizeHTML(appointment.appointmentStatus || "");
-
-    // Store appointment ID in a hidden input
-    let hiddenIdInput = form ? form.querySelector("#appointmentId") : null;
-    if (!hiddenIdInput && form) {
-        hiddenIdInput = document.createElement("input");
-        hiddenIdInput.type = "hidden";
-        hiddenIdInput.id = "appointmentId";
-        form.appendChild(hiddenIdInput);
-    }
-    if (hiddenIdInput) hiddenIdInput.value = appointment.appointmentId;
-}
-
-async function handleFormSubmissionPending(event) {
-    event.preventDefault();
-    const form = event.target;
-    const appointmentId = form.querySelector("#appointmentId").value;
-    const appointmentDateTime = form.querySelector("#appointmentDateTime").value;
-    const note = form.querySelector("#note").value;
-    const appointmentStatus = form.querySelector("#appointmentStatus").value;
-
-    try {
-        const formData = new FormData();
-        formData.append("appointmentDateTime", appointmentDateTime);
-        formData.append("note", note);
-        formData.append("appointmentStatus", appointmentStatus);
-
-        const response = await fetch(`${baseAPI.split('?')[0]}/${appointmentId}`, {
-            method: "PUT",
-            body: formData
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || "Failed to update appointment");
-        }
-
-        Swal.fire("Success!", "Appointment updated successfully.", "success");
-        bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasEncounterEditPending")).hide();
-        displayAppointment(state.currentPage); // Refresh table
-    } catch (error) {
-        Swal.fire("Error!", `Could not update appointment: ${error.message}`, "error");
-        console.error("Update error:", error);
     }
 }
 
@@ -580,13 +523,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (editForm1) {
         editForm1.addEventListener("submit", handleFormSubmissionConfirm);
     }
-
-    // Attach form submission handler for pending appointments
-    const editForm2 = document.querySelector("#editPendingAppointmentForm");
-    if (editForm2) {
-        editForm2.addEventListener("submit", handleFormSubmissionPending);
-    }
-
     // Attach event listener for page size change
     const pageSizeSelect = document.getElementById("pageSize");
     if (pageSizeSelect) {
@@ -607,4 +543,485 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem('account');
         window.location.href = '/frontend/login.html';
     });
+});
+
+
+const API_BASE_URL = 'http://localhost:8080/SWP_back_war_exploded/api';
+// DOM elements
+const departmentSelect = document.getElementById('departmentSelect');
+const doctorSelect = document.getElementById('doctorSelect');
+const dateForm = document.getElementById('dateForm');
+const timeForm = document.getElementById('timeForm');
+const selectedTime = document.getElementById('selectedTime');
+const selectedDate = document.getElementById('selectedDate');
+const calendar = document.getElementById('calendar');
+const yearSelect = document.getElementById('yearSelect');
+const monthSelect = document.getElementById('monthSelect');
+const editPendingAppointmentForm = document.getElementById('editPendingAppointmentForm');
+const appointmentIdInput = document.getElementById('appointmentId');
+const noteInput = document.getElementById('note');
+
+const patientIdInput = document.getElementById('patientId9');
+const shiftSelect = document.getElementById('shiftSelect');
+const receptionistIdInput = document.getElementById('receptionistId');
+
+let doctorWorkingDates = [];
+let selectedSlot = null;
+
+// Populate year options
+function populateYears() {
+    const currentYear = new Date().getFullYear();
+    for (let i = currentYear; i <= currentYear + 1; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        yearSelect.appendChild(option);
+    }
+    yearSelect.value = currentYear;
+}
+
+// Populate month options
+function populateMonths() {
+    const months = [
+        'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
+        'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
+    ];
+    const currentMonth = new Date().getMonth();
+    months.forEach((month, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = month;
+        monthSelect.appendChild(option);
+    });
+    monthSelect.value = currentMonth;
+}
+
+// Check if date is in the past
+function isPastDate(year, month, day) {
+    const selectedDate = new Date(Date.UTC(year, month, day));
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    return selectedDate < today;
+}
+
+// Check if time is in the past for today
+function isPastTime(time, selectedDateStr) {
+    const today = new Date();
+    const selected = new Date(`${selectedDateStr}T${time}:00+07:00`);
+    return selected < today;
+}
+
+// Check if date is a working date
+function isWorkingDate(year, month, day) {
+    const dateStr = `${year}-${String(parseInt(month) + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return doctorWorkingDates.includes(dateStr);
+}
+
+// Generate dynamic calendar
+function generateCalendar(year, month) {
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDay = firstDay.getDay();
+    let table = '<table><tr><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>CN</th></tr><tr>';
+    let dayCount = 1;
+
+    for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 7; j++) {
+            if ((i === 0 && j < startingDay) || dayCount > daysInMonth) {
+                table += '<td></td>';
+            } else {
+                const isPast = isPastDate(year, month, dayCount);
+                const isWorking = isWorkingDate(year, month, dayCount);
+                table += `<td role="button" tabindex="0" class="${isPast || !isWorking ? 'disabled' : ''}">${dayCount}</td>`;
+                dayCount++;
+            }
+        }
+        table += '</tr><tr>';
+        if (dayCount > daysInMonth) break;
+    }
+    table += '</tr></table>';
+    calendar.innerHTML = table;
+
+    const days = document.querySelectorAll('#calendar table td');
+    days.forEach(day => {
+        if (day.textContent && !day.classList.contains('disabled')) {
+            const handleSelection = () => {
+                days.forEach(d => d.classList.remove('selected'));
+                day.classList.add('selected');
+                timeForm.style.display = 'block';
+                resetTimeSelection();
+                const selectedDay = day.textContent.padStart(2, '0');
+                const selectedMonth = String(parseInt(month) + 1).padStart(2, '0');
+                selectedDate.value = `${year}-${selectedMonth}-${selectedDay}`;
+                updateTimeSlots();
+            };
+            day.addEventListener('click', handleSelection);
+            day.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleSelection();
+                }
+            });
+        }
+    });
+}
+
+// Debounce function to prevent rapid API calls
+function debounce(func, wait) {
+    let timeout;
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
+// Update time slots
+async function updateTimeSlots() {
+    const timeSlots = document.querySelectorAll('.time-slot');
+    const selectedDateStr = selectedDate.value;
+    const doctorId = doctorSelect.value;
+    const today = new Date();
+    const isToday = new Date(selectedDateStr).toDateString() === today.toDateString();
+
+    timeSlots.forEach(slot => {
+        slot.classList.remove('disabled');
+        if (isToday && isPastTime(slot.value, selectedDateStr)) {
+            slot.classList.add('disabled');
+        }
+    });
+
+    if (!doctorId || !selectedDateStr) {
+        console.warn('Skipping fetch: doctorId or date is missing', { doctorId, selectedDateStr });
+        return;
+    }
+
+    try {
+        const url = `${API_BASE_URL}/doctor-availability?doctorId=${encodeURIComponent(doctorId)}&date=${encodeURIComponent(selectedDateStr)}`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+        }
+
+        const bookedTimes = await response.json();
+        timeSlots.forEach(slot => {
+            if (bookedTimes.includes(slot.value)) {
+                slot.classList.add('disabled');
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching booked times:', error.message, error);
+        alert('Không thể tải khung giờ. Vui lòng thử lại sau.');
+    }
+}
+
+const debouncedUpdateTimeSlots = debounce(updateTimeSlots, 300);
+
+// Reset time selection
+function resetTimeSelection() {
+    const timeSlots = document.querySelectorAll('.time-slot');
+    timeSlots.forEach(slot => slot.classList.remove('selected'));
+    selectedTime.value = '';
+    if (selectedSlot) selectedSlot.classList.remove('selected');
+    selectedSlot = null;
+}
+
+// Fetch doctor's working dates
+async function fetchDoctorWorkingDates(doctorId) {
+    if (!doctorId) {
+        doctorWorkingDates = [];
+        generateCalendar(yearSelect.value, monthSelect.value);
+        return;
+    }
+
+    try {
+        const url = `${API_BASE_URL}/doctor-availability?doctorId=${encodeURIComponent(doctorId)}&action=getWorkingDates`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+        }
+
+        doctorWorkingDates = await response.json();
+        generateCalendar(yearSelect.value, monthSelect.value);
+    } catch (error) {
+        console.error('Error fetching working dates:', error.message, error);
+        alert('Không thể tải ngày làm việc. Vui lòng thử lại sau.');
+        doctorWorkingDates = [];
+        generateCalendar(yearSelect.value, monthSelect.value);
+    }
+}
+
+// Load doctors
+async function loadDoctors(department = "") {
+    doctorSelect.innerHTML = '<option value="">Đang tải...</option>';
+    doctorSelect.disabled = true;
+
+    let url = `${API_BASE_URL}/all-doctors`;
+    if (department) url += `?department=${encodeURIComponent(department)}`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+        }
+        const data = await response.json();
+        doctorSelect.innerHTML = '<option value="">-- Chọn bác sĩ --</option>';
+        data.doctors.forEach(doc => {
+            const option = document.createElement('option');
+            option.value = doc.ID;
+            option.textContent = doc.fullName;
+            option.dataset.department = doc.department;
+            doctorSelect.appendChild(option);
+        });
+        doctorSelect.disabled = false;
+    } catch (error) {
+        console.error('Error loading doctors:', error.message, error);
+        alert('Không thể tải danh sách bác sĩ. Vui lòng thử lại sau.');
+        doctorSelect.innerHTML = '<option value="">-- Chọn bác sĩ --</option>';
+    }
+}
+
+function populateEditForm(appointment) {
+    appointmentIdInput.value = appointment.appointmentId || '';
+    noteInput.value = appointment.note || '';
+    const department = appointment.doctor?.department || '';
+    departmentSelect.value = department;
+    shiftSelect.value = appointment.shift || '';
+    patientIdInput.value = appointment.patientId || '';
+    receptionistIdInput.value = appointment.receptionistId || '';
+
+    loadDoctors(department).then(() => {
+        doctorSelect.value = appointment.doctor?.ID || '';
+        doctorSelect.disabled = false;
+
+        fetchDoctorWorkingDates(appointment.doctor?.ID).then(() => {
+    
+            if (appointment.appointmentDateTime) {
+                const date = new Date(appointment.appointmentDateTime);
+                if (isNaN(date)) {
+                    console.error('Invalid appointmentDateTime:', appointment.appointmentDateTime);
+                    return;
+                }
+
+                yearSelect.value = date.getFullYear();
+                monthSelect.value = date.getMonth();
+
+                
+                generateCalendar(yearSelect.value, monthSelect.value);
+
+                
+                const day = String(date.getDate());
+                const selectedMonth = String(date.getMonth() + 1).padStart(2, '0');
+                selectedDate.value = `${date.getFullYear()}-${selectedMonth}-${day}`;
+
+                const dayCell = Array.from(document.querySelectorAll('#calendar td')).find(
+                    td => td.textContent === day && !td.classList.contains('disabled')
+                );
+                if (dayCell) {
+                    dayCell.classList.add('selected');
+                    dateForm.style.display = 'block';
+                    timeForm.style.display = 'block';
+                } else {
+                    console.warn('Selected day is disabled or not found:', day);
+                }
+
+                debouncedUpdateTimeSlots().then(() => {
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    const timeValue = `${hours}:${minutes}`;
+                    const slot = Array.from(document.querySelectorAll('.time-slot')).find(
+                        slot => slot.value === timeValue && !slot.classList.contains('disabled')
+                    );
+                    if (slot) {
+                        slot.classList.add('selected');
+                        selectedSlot = slot;
+                        selectedTime.value = timeValue;
+                    } else {
+                        console.warn('Selected time slot is disabled or not found:', timeValue);
+                    }
+                });
+            }
+        });
+    });
+}
+
+function resetEditForm() {
+    editPendingAppointmentForm.reset();
+    appointmentIdInput.value = '';
+    departmentSelect.value = '';
+    doctorSelect.innerHTML = '<option value="">-- Chọn bác sĩ --</option>';
+    doctorSelect.disabled = true;
+    dateForm.style.display = 'none';
+    timeForm.style.display = 'none';
+    resetTimeSelection();
+    selectedDate.value = '';
+    doctorWorkingDates = [];
+    generateCalendar(yearSelect.value, monthSelect.value);
+}
+
+populateYears();
+populateMonths();
+generateCalendar(new Date().getFullYear(), new Date().getMonth());
+
+fetch(`${API_BASE_URL}/doctors/departments`)
+    .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        return res.json();
+    })
+    .then(data => {
+        data.forEach(dept => {
+            const option = document.createElement('option');
+            option.value = dept;
+            option.textContent = dept;
+            departmentSelect.appendChild(option);
+        });
+    })
+    .catch(error => {
+        console.error('Error loading departments:', error.message, error);
+        alert('Không thể tải danh sách chuyên khoa. Vui lòng thử lại sau.');
+    });
+
+departmentSelect.addEventListener('change', () => {
+    loadDoctors(departmentSelect.value);
+});
+
+doctorSelect.addEventListener('change', () => {
+    if (doctorSelect.value) {
+        const selectedOption = doctorSelect.querySelector(`option[value="${doctorSelect.value}"]`);
+        if (selectedOption) departmentSelect.value = selectedOption.dataset.department;
+        dateForm.style.display = 'block';
+        fetchDoctorWorkingDates(doctorSelect.value);
+    } else {
+        dateForm.style.display = 'none';
+        timeForm.style.display = 'none';
+        resetTimeSelection();
+        selectedDate.value = '';
+        doctorWorkingDates = [];
+        generateCalendar(yearSelect.value, monthSelect.value);
+    }
+});
+
+yearSelect.addEventListener('change', () => {
+    generateCalendar(yearSelect.value, monthSelect.value);
+    timeForm.style.display = 'none';
+    resetTimeSelection();
+    selectedDate.value = '';
+});
+
+monthSelect.addEventListener('change', () => {
+    generateCalendar(yearSelect.value, monthSelect.value);
+    timeForm.style.display = 'none';
+    resetTimeSelection();
+    selectedDate.value = '';
+});
+
+const timeSlots = document.querySelectorAll('.time-slot');
+timeSlots.forEach(slot => {
+    slot.addEventListener('click', () => {
+        if (slot.classList.contains('disabled')) return;
+        if (selectedSlot) selectedSlot.classList.remove('selected');
+        slot.classList.add('selected');
+        selectedSlot = slot;
+        selectedTime.value = slot.value;
+    });
+});
+
+
+editPendingAppointmentForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!doctorSelect.value) {
+        Swal.fire("Error!", "Please select a doctor", "error");
+        return;
+    }
+    if (!selectedDate.value) {
+        Swal.fire("Error!", "Please select a date", "error");
+        return;
+    }
+    if (!selectedTime.value) {
+        Swal.fire("Error!", "Please select time", "error");
+        return;
+    }
+    if (noteInput.value.length > 500) {
+        Swal.fire("Error!", "Notes must not exceed 500 characters", "error");
+        return;
+    }
+
+    const dateTimeString = `${selectedDate.value} ${selectedTime.value}`;
+    let selectedDateTime;
+    try {
+        selectedDateTime = new Date(`${dateTimeString}:00+07:00`);
+        if (isNaN(selectedDateTime.getTime())) {
+            throw new Error("Invalid date or time format");
+        }
+    } catch (error) {
+        Swal.fire("Error!", "Invalid date or time format", "error");
+        return;
+    }
+
+    const currentDateTime = new Date();
+    if (selectedDateTime <= currentDateTime) {
+        Swal.fire("Error!", "Cannot select date or time in the past", "error");
+        return;
+    }
+
+    const formData = {
+        appointmentId: appointmentIdInput.value,
+        doctorId: doctorSelect.value,
+        patientId: patientIdInput?.value || null, 
+        date: selectedDate.value, 
+        time: selectedTime.value, 
+        shift: shiftSelect?.value || null, 
+        receptionistId: receptionistIdInput?.value || null, 
+        note: noteInput.value || null
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/patientAppointment/${appointmentIdInput.value}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            Swal.fire("Success!", "Appointment update successful.", "success");
+            bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasEncounterEditPending')).hide();
+            resetEditForm();
+            displayAppointment();
+        } else {
+            // Hiển thị thông báo lỗi chi tiết từ server
+            Swal.fire("Error!", data.error || "Unable to update appointment", "error");
+        }
+    } catch (error) {
+        Swal.fire("Error!", `Unable to update appointment: ${error.message}`, "error");
+        console.error('Unable to update appointment:', error);
+    }
+});
+
+document.getElementById('offcanvasEncounterEditPending').addEventListener('show.bs.offcanvas', (event) => {
+    const appointmentData = event.relatedTarget.dataset.appointment
+        ? JSON.parse(event.relatedTarget.dataset.appointment)
+        : {};
+    populateEditForm(appointmentData);
+});
+
+document.getElementById('offcanvasEncounterEditPending').addEventListener('hidden.bs.offcanvas', () => {
+    resetEditForm();
 });

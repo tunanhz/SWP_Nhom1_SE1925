@@ -5,18 +5,25 @@ import com.google.gson.JsonObject;
 import dal.PatientAppointmentDAO;
 import dto.AppointmentDTO;
 import dto.AppointmentPatientDTO;
+import dto.PatientPaymentDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Appointment;
+import model.AppointmentRequest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,11 +34,6 @@ public class PatientAppointmentServlet extends HttpServlet {
     private final PatientAppointmentDAO appointmentDAO = new PatientAppointmentDAO();
     private final Gson gson = new Gson();
 
-    @Override
-    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        setCORSHeaders(resp);
-        resp.setStatus(HttpServletResponse.SC_OK);
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -82,14 +84,19 @@ public class PatientAppointmentServlet extends HttpServlet {
 
                 ArrayList<AppointmentPatientDTO> appointmentPatientDTOS = appointmentDAO.getThreeAppointmentsUpcoming(accountPatientId);
                 ArrayList<AppointmentDTO> threeAppointmentComplete = appointmentDAO.getTop3CompletedAppointments(accountPatientId);
+                ArrayList<PatientPaymentDTO> threePaymentPending = appointmentDAO.getTop3Payment(1);
+                ArrayList<AppointmentPatientDTO> allAppointment = appointmentDAO.getAllAppointments(accountPatientId);
                 // Build response JSON
                 JsonObject responseJson = new JsonObject();
                 responseJson.add("appointments", gson.toJsonTree(appointments));
                 responseJson.add("threeAppointmentsUpcoming", gson.toJsonTree(appointmentPatientDTOS));
                 responseJson.add("threeAppointmentComplete", gson.toJsonTree(threeAppointmentComplete));
+                responseJson.add("threePaymentPending", gson.toJsonTree(threePaymentPending));
+                responseJson.add("allAppointment", gson.toJsonTree(allAppointment));
                 responseJson.addProperty("totalPages", totalPages);
                 responseJson.addProperty("currentPage", page);
                 responseJson.addProperty("pageSize", pageSize);
+                responseJson.addProperty("totalAppointment", totalAppointment);
                 out.print(gson.toJson(responseJson));
 
             } catch (NumberFormatException e) {
@@ -142,7 +149,7 @@ public class PatientAppointmentServlet extends HttpServlet {
 
         if (pathInfo != null && pathInfo.split("/").length == 2) {
             try {
-                Long id = Long.parseLong(pathInfo.split("/")[1]);
+                int id = Integer.parseInt(pathInfo.split("/")[1]);
                 // Đọc JSON từ request body
                 StringBuilder sb = new StringBuilder();
                 try (BufferedReader reader = request.getReader()) {
@@ -151,24 +158,67 @@ public class PatientAppointmentServlet extends HttpServlet {
                         sb.append(line);
                     }
                 }
-//                User updatedUser = gson.fromJson(sb.toString(), User.class);
-//                User existingUser = users.stream().filter(u -> u.getId().equals(id)).findFirst().orElse(null);
-//
-//                if (existingUser != null) {
-//                    existingUser.setName(updatedUser.getName());
-//                    existingUser.setEmail(updatedUser.getEmail());
-//                    out.print(gson.toJson(existingUser));
-//                } else {
-//                    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//                    out.print("{\"error\":\"User not found\"}");
-//                }
+                String jsonData = sb.toString();
+                AppointmentRequest appointmentRequestUpdate = gson.fromJson(jsonData, AppointmentRequest.class);
+
+                if (appointmentRequestUpdate.getDoctorId() == null || appointmentRequestUpdate.getDate() == null || appointmentRequestUpdate.getTime() == null) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.println("{\"error\": \"Missing required fields: doctorId, date, or time\"}");
+                    return;
+                }
+
+                if (!appointmentRequestUpdate.getDoctorId().matches("\\d+")) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.println("{\"error\": \"Invalid doctorId format\"}");
+                    return;
+                }
+
+                int doctorId = Integer.parseInt(appointmentRequestUpdate.getDoctorId());
+                String date = appointmentRequestUpdate.getDate();
+                String time = appointmentRequestUpdate.getTime();
+                String note = appointmentRequestUpdate.getNote();
+                String shift = appointmentRequestUpdate.getShift();
+                Integer receptionistId = appointmentRequestUpdate.getReceptionistId();
+                Integer patientId = appointmentRequestUpdate.getPatientId();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Date appointmentDateTime;
+
+                try {
+                    appointmentDateTime = sdf.parse(date + " " + time);
+                } catch (ParseException e) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.println("{\"error\": \"Invalid date or time format\"}");
+                    return;
+                }
+
+                Date currentDate = new Date();
+                if (appointmentDateTime.before(currentDate)) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.println("{\"error\": \"Appointment date must be in the future\"}");
+                    return;
+                }
+
+                // Gọi hàm updateAppointment từ AppointmentDAO
+                Appointment updatedAppointment;
+                try {
+                    updatedAppointment = appointmentDAO.updateAppointment(
+                            id, doctorId, patientId, appointmentDateTime, shift, receptionistId, note
+                    );
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    out.println(gson.toJson(updatedAppointment));
+                } catch (SQLException e) {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    out.println("{\"error\": \"Failed to update appointment: " + e.getMessage() + "\"}");
+                }
+
             } catch (NumberFormatException e) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.print("{\"error\":\"Invalid ID\"}");
+                out.println("{\"error\": \"Invalid ID\"}");
             }
         } else {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            out.print("{\"error\":\"Invalid request\"}");
+            out.println("{\"error\": \"Invalid request\"}");
         }
         out.flush();
     }
@@ -205,11 +255,17 @@ public class PatientAppointmentServlet extends HttpServlet {
         out.flush();
     }
 
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        setCORSHeaders(response);
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
 
     private void setCORSHeaders(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+        response.setHeader("Access-Control-Max-Age", "86400");
     }
 
     public static String parseDateTime(String input) {

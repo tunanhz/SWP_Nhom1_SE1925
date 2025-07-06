@@ -1,5 +1,10 @@
 package dto;
 
+import dal.DoctorDAO;
+import dal.PatientDAO;
+import model.Doctor;
+import model.Patient;
+
 public class AppointmentPatientDTO {
     private int accountPatientId;
     private int patientId;
@@ -14,6 +19,8 @@ public class AppointmentPatientDTO {
     private String appointmentStatus;
     private String shift;
     private String note;
+
+    private Patient patient;
 
     public AppointmentPatientDTO() {
     }
@@ -139,5 +146,14 @@ public class AppointmentPatientDTO {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void includePatient() {
+        PatientDAO dao = new PatientDAO();
+        this.patient = dao.getPatientByPatientId(this.patientId);
     }
 }

@@ -63,10 +63,10 @@ async function displayDoctors(page = 1, nameSearch = currentNameSearch, deptSear
     }
 
     const data = await response.json();
-    
+
     const doctors = data.doctors || [];
     const totalPages = data.totalPages || 1;
-
+    const totalDoctors = data.totalDoctors;
     // Render doctor cards
     let doctorCards = "";
     doctors.forEach((doctor) => {
@@ -149,12 +149,11 @@ async function displayDoctors(page = 1, nameSearch = currentNameSearch, deptSear
               <option value="8" ${pageSize === 8 ? 'selected' : ''}>8</option>
               <option value="12" ${pageSize === 12 ? 'selected' : ''}>12</option>
               <option value="16" ${pageSize === 16 ? 'selected' : ''}>16</option>
-              <option value="90" ${pageSize === 90 ? 'selected' : ''}>All</option>
+              <option value="${totalDoctors}" ${pageSize === totalDoctors ? 'selected' : ''}>All</option>
             </select>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
 
     // Update container
     container.innerHTML = doctorCards || '<p>No doctors found.</p>';
@@ -174,9 +173,8 @@ async function displayDoctors(page = 1, nameSearch = currentNameSearch, deptSear
     const pageSizeSelect = container.querySelector("#pageSize");
     if (pageSizeSelect) {
       pageSizeSelect.addEventListener("change", (e) => {
-        pageSize = parseInt(e.target.value) || 30; // Default to 30 if invalid
-        console.log(`Page size changed to: ${pageSize}`); // Debugging
-        displayDoctors(1, currentNameSearch, currentDeptSearch); // Reset to page 1
+        pageSize = parseInt(e.target.value) || 30;
+        displayDoctors(1, currentNameSearch, currentDeptSearch);
       });
     } else {
       console.warn("Warning: Could not find element with ID 'pageSize'. Ensure the select element is rendered.");

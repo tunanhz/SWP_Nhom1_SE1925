@@ -879,9 +879,6 @@
                 <span class="btn-inner">
                     <span class="text d-inline-block align-middle">Find Invoice</span>
                     <span class="icon d-inline-block align-middle ms-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                            <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
-                        </svg>
                     </span>
                 </span>
             </button>
@@ -989,12 +986,12 @@
             <input type="text" class="form-control" id="patient-name" readonly>
         </div>
         <div class="form-group col-md-12">
-            <label class="form-label" for="patient-phone">Phone Name <span class="text-danger">*</span></label>
+            <label class="form-label" for="patient-phone">Patinet Phone <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="patient-phone" readonly>
         </div>
         <div class="form-group col-md-12">
               <label class="form-label" for="issueDate">Issue Date <span class="text-danger">*</span></label>
-              <input type="text" id="issueDate" class="form-control date_flatpicker flatpickr-input active" value="2023-04-24" readonly="readonly">
+              <input type="text" id="issueDate" class="form-control" value="2023-04-24" readonly>
        </div>
       <div class="form-group col-md-12">
          <label class="form-label" for="serviceDetail">Service Detail <span class="text-danger">*</span></label>
@@ -1007,6 +1004,10 @@
       <div class="form-group col-md-12">
          <label class="form-label" for="invoiceTotalAmount">Total Cost <span class="text-danger">*</span></label>
          <input type="text" class="form-control" id="invoiceTotalAmount" value="Dr. Amine Louis" readonly>
+      </div>
+      <div class="form-group col-md-12">
+         <label class="form-label" for="status">Status <span class="text-danger">*</span></label>
+         <input type="text" class="form-control" id="status" value="Dr. Amine Louis" readonly>
       </div>
    </div>
    <div class="offcanvas-footer border-top">
@@ -1026,65 +1027,118 @@
       </div>
    </div>
 </div>
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientPaymentPending"
-   aria-labelledby="offcanvasPatientPaymentPendingLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientPaymentPending" aria-labelledby="offcanvasPatientPaymentPendingLabel">
    <div class="offcanvas-header border-bottom">
-      <h3 class="offcanvas-title" id="offcanvasPatientPaymentPendingLabel">Edit Payment</h3>
+      <h3 class="offcanvas-title" id="offcanvasPatientPaymentPendingLabel">Payment</h3>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
    </div>
    <div class="offcanvas-body">
-      <div class="form-group col-md-12">
-            <label class="form-label" for="Pdf">Pdf Name <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="Pdf">
-        </div>
-        <div class="form-group">
-            <div class="d-flex justify-content-between align-items-center">
-                <label class="form-label" for="upload_pdf">Upload Invoice Pdf</label>
-            </div>
-            <input type="file" class="form-control" id="upload_pdf"
-                accept=".jpeg, .jpg, .png, .gif">
-        </div>
-      <div class="form-group col-md-12">
-         <label class="form-label" for="clinic_name">Clinic Name Transaction <span class="text-danger">*</span></label>
-         <input type="text" class="form-control" id="clinic_name" value="kivicare skin specialist">
-      </div>
-      <div class="form-group col-md-12">
-         <label class="form-label" for="doc_name">Doctor Name <span class="text-danger">*</span></label>
-         <input type="text" class="form-control" id="doc_name" value="Dr. Amine Louis">
-      </div>
-      <div class="form-group col-md-12">
-            <label class="form-label" for="datetime">Date And Time <span class="text-danger">*</span></label>
-            <input type="text" id="datetime" class="form-control date_flatpicker flatpickr-input active" value="2023-04-24" readonly="readonly">
-     </div>
-   </div>
-   <div class="offcanvas-footer border-top">
-      <div class="d-grid d-md-flex gap-3 p-3">
-         <button type="submit" class="btn btn-primary">
-                <span class="btn-inner">
-                    <span class="text d-inline-block align-middle">Update</span>
-                    <span class="icon d-inline-block align-middle ms-1 ps-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                            <path
-                                d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                fill="currentColor" />
-                        </svg>
-                    </span>
-                </span>
+      <form id="paymentForm">
+         <div class="form-group col-md-12">
+            <label class="form-label" for="patient-name1">Patient Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="patient-name1" readonly aria-describedby="patient-name-desc">
+         </div>
+         <div class="form-group col-md-12">
+            <label class="form-label" for="patient-phone1">Patient Phone <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="patient-phone1" readonly>
+         </div>
+         <div class="form-group col-md-12">
+            <label class="form-label" for="appointmentDateTime">Issue Date <span class="text-danger">*</span></label>
+            <input type="text" id="appointmentDateTime" class="form-control" value="2023-04-24" readonly>
+         </div>
+         <div class="form-group col-md-12">
+            <label class="form-label" for="serviceDetail1">Service Detail <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="serviceDetail1" value="Kivicare Skin Specialist" readonly>
+         </div>
+         <div class="form-group col-md-12">
+            <label class="form-label" for="medicineDetail1">Medicine Detail <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="medicineDetail1" value="Prescription: Antibiotics" readonly>
+         </div>
+         <div class="form-group col-md-12">
+            <label class="form-label" for="invoiceTotalAmount1">Total Cost <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="invoiceTotalAmount1" value="$150.00" readonly>
+         </div>
+         <!-- QR Form Fields -->
+         <div class="form-group col-md-12">
+            <input type="hidden" class="form-control" id="bankCode" name="bankCode" value="MB" readonly>
+         </div>
+         <div class="form-group col-md-12">
+            <input type="hidden" class="form-control" id="bankAccount" name="bankAccount" value="0981546618" readonly>
+         </div>
+         <div class="form-group col-md-12">
+            <input type="hidden" class="form-control" id="amount" name="amount" value="150000" readonly>
+         </div>
+         <div class="form-group col-md-12">
+            <input type="hidden" class="form-control" id="message" name="message" value="Appointment 12345" readonly>
+         </div>
+         <div class="form-group col-md-12">
+            <input type="hidden" class="form-control" id="invoiceId" name="invoiceId" value="12" readonly>
+         </div>
+      </form>
+      <div class="offcanvas-footer border-top">
+         <div class="d-grid d-md-flex gap-3 p-3">
+            <button type="button" class="btn btn-primary" id="payButton">
+               <span class="btn-inner">
+                  <span class="text d-inline-block align-middle">Pay</span>
+                  <span class="icon d-inline-block align-middle ms-1 ps-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                        <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
+                     </svg>
+                  </span>
+               </span>
             </button>
             <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
-                <span class="btn-inner">
-                    <span class="text d-inline-block align-middle">Close</span>
-                    <span class="icon d-inline-block align-middle ms-1 ps-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                            <path
-                                d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                fill="currentColor" />
-                        </svg>
-                    </span>
-                </span>
+               <span class="btn-inner">
+                  <span class="text d-inline-block align-middle">Close</span>
+                  <span class="icon d-inline-block align-middle ms-1 ps-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                        <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
+                     </svg>
+                  </span>
+               </span>
             </button>
+         </div>
       </div>
    </div>
+</div>
+
+<div class="modal fade" id="qrCodeModal" tabindex="-1" aria-labelledby="qrCodeModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="qrCodeModalLabel">Scan QR Code to Pay</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body text-center">
+            <div id="loading" style="display: none;">Loading...</div>
+            <div id="error" style="display: none; color: red;"></div>
+            <img id="qrImage" src="" alt="QR Code" class="img-fluid mb-3 hidden" style="max-width: 200px;">
+            <div class="payment-details mt-3">
+               <p><strong>Bank Code:</strong> <span id="qrBankCode"></span></p>
+               <p><strong>Bank Account:</strong> <span id="qrBankAccount"></span></p>
+               <p><strong>Amount:</strong> <span id="qrAmount"></span></p>
+               <p><strong>Message:</strong> <span id="qrMessage"></span></p>
+            </div>
+            <p>Checking payment status... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></p>
+            <p>Time remaining: <span id="countdown">60</span> seconds</p>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="confirmPayment">Confirm Payment</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+         </div>
+      </div>
+   </div>
+</div>
+
+<style>
+   .hidden {
+      display: none;
+   }
+   .payment-details p {
+      margin: 5px 0;
+      font-size: 0.9rem;
+   }
+</style>
 </div>
 
             </div>
@@ -1909,7 +1963,7 @@
                 </div>
             </div>
 
-
+            
         <!--API main-->
         <script src="./assets/js/API/main-patient-payments.js"></script>    
         <!-- Library Bundle Script -->
