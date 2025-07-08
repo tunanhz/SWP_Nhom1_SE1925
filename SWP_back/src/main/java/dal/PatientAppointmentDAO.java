@@ -624,6 +624,7 @@ public class PatientAppointmentDAO {
                                                                 AND acs.status = 'Enable'
                                                                 AND p.status = 'Enable'
                                                                 AND a.status = 'Confirmed'
+                                                                AND a.appointment_datetime > GETDATE()
                                                             	ORDER BY a.appointment_datetime ASC
                 """;
 

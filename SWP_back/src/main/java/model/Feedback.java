@@ -1,28 +1,24 @@
 package model;
+
 public class Feedback {
-    private int feedbackId;
     private int patientId;
     private String content;
-    private String createdAt;
+    private int serviceRating;
+    private int doctorRating;
+    private int receptionistRating;
+    private int pharmacistRating;
 
-    public Feedback() {
-    }
-
-    public Feedback(int feedbackId, int patientId, String content, String createdAt) {
-        this.feedbackId = feedbackId;
+    // Constructor
+    public Feedback(int patientId, String content, int serviceRating, int doctorRating, int receptionistRating, int pharmacistRating) {
         this.patientId = patientId;
         this.content = content;
-        this.createdAt = createdAt;
+        this.serviceRating = serviceRating;
+        this.doctorRating = doctorRating;
+        this.receptionistRating = receptionistRating;
+        this.pharmacistRating = pharmacistRating;
     }
 
-    public int getFeedbackId() {
-        return feedbackId;
-    }
-
-    public void setFeedbackId(int feedbackId) {
-        this.feedbackId = feedbackId;
-    }
-
+    // Getters and Setters
     public int getPatientId() {
         return patientId;
     }
@@ -39,11 +35,35 @@ public class Feedback {
         this.content = content;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public int getServiceRating() {
+        return serviceRating;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setServiceRating(int serviceRating) {
+        this.serviceRating = serviceRating;
+    }
+
+    public int getDoctorRating() {
+        return doctorRating;
+    }
+
+    public void setDoctorRating(int doctorRating) {
+        this.doctorRating = doctorRating;
+    }
+
+    public int getReceptionistRating() {
+        return receptionistRating;
+    }
+
+    public void setReceptionistRating(int receptionistRating) {
+        this.receptionistRating = receptionistRating;
+    }
+
+    public int getPharmacistRating() {
+        return pharmacistRating;
+    }
+
+    public void setPharmacistRating(int pharmacistRating) {
+        this.pharmacistRating = pharmacistRating;
     }
 }
