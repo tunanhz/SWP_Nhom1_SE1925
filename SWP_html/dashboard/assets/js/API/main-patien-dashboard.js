@@ -196,8 +196,6 @@ async function displayThreeAppointment() {
     }
 }
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
     displayThreeAppointment();
 
