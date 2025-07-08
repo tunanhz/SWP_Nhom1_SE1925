@@ -2,17 +2,20 @@ package dal;
 
 import dto.ReceptionistCheckInDTO;
 import dto.WaitlistDTO;
+import model.Patient;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
+
 
 public class ReceptionistDAO {
     private static final Logger LOGGER = Logger.getLogger(ReceptionistDAO.class.getName());
@@ -187,6 +190,30 @@ public class ReceptionistDAO {
             LOGGER.severe("Error counting appointments: " + e.getMessage() + "\nSQL State: " + e.getSQLState() +
                     "\nError Code: " + e.getErrorCode());
             throw new RuntimeException("Failed to count appointments", e);
+        }
+    }
+
+    public int getReceptionistByAccountStaffId(int accountStaffId) {
+        String sql = "SELECT receptionist_id FROM Receptionist WHERE account_staff_id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountStaffId);
+            LOGGER.info("Executing SQL: " + sql + " with account_staff_id=" + accountStaffId);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int receptionistId = rs.getInt("receptionist_id");
+                LOGGER.info("Found receptionist_id=" + receptionistId + " for account_staff_id=" + accountStaffId);
+                return receptionistId;
+            } else {
+                LOGGER.warning("No receptionist found for account_staff_id=" + accountStaffId);
+                return -1; // Or throw an exception, depending on your use case
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error fetching receptionist for account_staff_id=" + accountStaffId + ": " +
+                    e.getMessage() + "\nSQL State: " + e.getSQLState() + "\nError Code: " + e.getErrorCode());
+            throw new RuntimeException("Failed to fetch receptionist by account_staff_id", e);
         }
     }
 
@@ -403,6 +430,175 @@ public class ReceptionistDAO {
             throw new RuntimeException("Failed to update estimated_time", e);
         }
     }
+
+    //book be half
+    public ArrayList<Patient> getPatients(
+            String searchQuery, String dob, String gender,
+            int page, int pageSize, String sortBy, String sortOrder) {
+        ArrayList<Patient> patients = new ArrayList<>();
+
+        String sql = """
+            SELECT 
+                patient_id,
+                full_name,
+                dob,
+                gender,
+                phone,
+                address
+            FROM 
+                Patient
+            WHERE 
+                status = 'Enable'
+                AND (? IS NULL OR COALESCE(full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? 
+                    OR COALESCE(phone, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                AND (? IS NULL OR CONVERT(VARCHAR, dob, 23) LIKE ? + '%')
+                AND (? IS NULL OR gender = ?)
+            """;
+
+        String sortColumn;
+        switch (sortBy != null ? sortBy.toLowerCase() : "patient_id") {
+            case "full_name":
+                sortColumn = "full_name";
+                break;
+            case "dob":
+                sortColumn = "dob";
+                break;
+            case "phone":
+                sortColumn = "phone";
+                break;
+            default:
+                sortColumn = "patient_id";
+        }
+
+        String sortDirection = "DESC".equalsIgnoreCase(sortOrder) ? "DESC" : "ASC";
+        sql += " ORDER BY " + sortColumn + " " + sortDirection +
+                " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+        inputFormat.setLenient(false);
+        SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            LOGGER.info("Executing SQL: " + sql.replace("\n", " ").replaceAll("\\s+", " "));
+            String searchQueryParam = searchQuery != null && !searchQuery.trim().isEmpty()
+                    ? searchQuery.trim().replaceAll("\\s+", " ") : null;
+            stmt.setString(1, searchQueryParam);
+            stmt.setString(2, searchQueryParam != null ? "%" + searchQueryParam + "%" : null);
+            stmt.setString(3, searchQueryParam != null ? "%" + searchQueryParam + "%" : null);
+
+            String dobParam = (dob != null && !dob.trim().isEmpty()) ? dob.trim() : null;
+            stmt.setString(4, dobParam);
+            stmt.setString(5, dobParam != null ? dobParam : null);
+
+            String genderParam = (gender != null && !gender.trim().isEmpty() &&
+                    !"All Gender".equalsIgnoreCase(gender)) ? gender : null;
+            stmt.setString(6, genderParam);
+            stmt.setString(7, genderParam);
+
+            int offset = (page - 1) * pageSize;
+            stmt.setInt(8, offset);
+            stmt.setInt(9, pageSize);
+
+            LOGGER.info("Parameters: searchQuery=" + searchQueryParam + ", dob=" + dobParam +
+                    ", gender=" + genderParam + ", offset=" + offset + ", pageSize=" + pageSize);
+
+            ResultSet rs = stmt.executeQuery();
+            int rowCount = 0;
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+            while (rs.next()) {
+                rowCount++;
+                Patient patient = new Patient();
+                patient.setId(rs.getInt("patient_id"));
+                patient.setFullName(rs.getString("full_name"));
+                java.sql.Date dbDob = rs.getDate("dob");
+                patient.setDob(dbDob != null ? outputFormat.format(dbDob) : null);
+                patient.setGender(rs.getString("gender"));
+                patient.setPhone(rs.getString("phone"));
+                patient.setAddress(rs.getString("address"));
+                patients.add(patient);
+                LOGGER.fine("Mapped patient: ID=" + patient.getId() + ", Name=" + patient.getFullName());
+            }
+            LOGGER.info("Fetched " + rowCount + " rows, returned " + patients.size() + " patients");
+        } catch (SQLException e) {
+            LOGGER.severe("SQL Error: " + e.getMessage() + "\nSQL State: " + e.getSQLState() +
+                    "\nError Code: " + e.getErrorCode());
+            throw new RuntimeException("Failed to fetch patients", e);
+        }
+        return patients;
+    }
+
+    public int countPatients(String searchQuery, String dob, String gender) {
+        String sql = """
+            SELECT COUNT(*) AS total
+            FROM 
+                Patient
+            WHERE 
+                status = 'Enable'
+                AND (? IS NULL OR COALESCE(full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? 
+                    OR COALESCE(phone, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                AND (? IS NULL OR CONVERT(VARCHAR, dob, 23) LIKE ? + '%')
+                AND (? IS NULL OR gender = ?)
+        """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            String searchQueryParam = searchQuery != null && !searchQuery.trim().isEmpty()
+                    ? searchQuery.trim().replaceAll("\\s+", " ") : null;
+            stmt.setString(1, searchQueryParam);
+            stmt.setString(2, searchQueryParam != null ? "%" + searchQueryParam + "%" : null);
+            stmt.setString(3, searchQueryParam != null ? "%" + searchQueryParam + "%" : null);
+
+            String dobParam = (dob != null && !dob.trim().isEmpty()) ? dob.trim() : null;
+            stmt.setString(4, dobParam);
+            stmt.setString(5, dobParam != null ? dobParam : null);
+
+            String genderParam = (gender != null && !gender.trim().isEmpty() &&
+                    !"All Gender".equalsIgnoreCase(gender)) ? gender : null;
+            stmt.setString(6, genderParam);
+            stmt.setString(7, genderParam);
+
+            LOGGER.info("Parameters for count: searchQuery=" + searchQueryParam + ", dob=" + dobParam +
+                    ", gender=" + genderParam);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException e) {
+            LOGGER.severe("Error counting patients: " + e.getMessage() + "\nSQL State: " + e.getSQLState() +
+                    "\nError Code: " + e.getErrorCode());
+            throw new RuntimeException("Failed to count patients", e);
+        }
+    }
+
+    public boolean addPatient(Patient patient) throws SQLException {
+        String sql = """
+            INSERT INTO [dbo].[Patient] ([full_name], [dob], [gender], [phone], [address], [status])
+            VALUES (?, ?, ?, ?, ?, ?)
+        """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, patient.getFullName());
+            stmt.setDate(2, patient.getDob() != null ? java.sql.Date.valueOf(patient.getDob()) : null);
+            stmt.setString(3, patient.getGender());
+            stmt.setString(4, patient.getPhone());
+            stmt.setString(5, patient.getAddress());
+            stmt.setString(6, "Enable"); // Default status
+            int rowsAffected = stmt.executeUpdate();
+            boolean success = rowsAffected > 0;
+            LOGGER.info("Adding patient: Name=" + patient.getFullName() + ", Success=" + success);
+            return success;
+        } catch (SQLException e) {
+            LOGGER.severe("Error adding patient: " + e.getMessage() + "\nSQL State: " + e.getSQLState() +
+                    "\nError Code: " + e.getErrorCode());
+            throw new RuntimeException("Failed to add patient", e);
+        }
+    }
+
+
 
     public static void main(String[] args) {
         ReceptionistDAO dao = new ReceptionistDAO();
