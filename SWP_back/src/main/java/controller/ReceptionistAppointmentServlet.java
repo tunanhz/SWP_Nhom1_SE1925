@@ -138,15 +138,15 @@ public class ReceptionistAppointmentServlet extends HttpServlet {
             }
 
             JsonObject jsonObject = gson.fromJson(jsonBody.toString(), JsonObject.class);
-            if (!jsonObject.has("appointmentId") || !jsonObject.has("receptionistId")) {
+            if (!jsonObject.has("appointmentId") || !jsonObject.has("accountStaffId")) {
                 sendError(response, HttpServletResponse.SC_BAD_REQUEST,
                         "MISSING_FIELDS", "appointmentId and receptionistId are required");
                 return;
             }
 
             int appointmentId = jsonObject.get("appointmentId").getAsInt();
-            int receptionistId = jsonObject.get("receptionistId").getAsInt();
-
+            int accountStaffId = jsonObject.get("accountStaffId").getAsInt();
+            int receptionistId = receptionistDAO.getReceptionistByAccountStaffId(accountStaffId);
             if (appointmentId <= 0 || receptionistId <= 0) {
                 sendError(response, HttpServletResponse.SC_BAD_REQUEST,
                         "INVALID_IDS", "appointmentId and receptionistId must be positive integers");
