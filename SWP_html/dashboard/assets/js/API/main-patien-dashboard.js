@@ -1,23 +1,8 @@
 const accountString = localStorage.getItem("account");
 const account = JSON.parse(accountString);
 const baseAPI = `http://localhost:8080/SWP_back_war_exploded/api/patientAppointment/?accountPatientId=${account.accountPatientId}`;
-
-let imagePath = account?.img;
-
-if (account) {
+if(account){
     document.getElementById('username').innerHTML = `Hello! ${account.username}`;
-
-    const userImgElement = document.getElementById('userImg');
-    if (userImgElement) {
-        userImgElement.src = imagePath;
-        userImgElement.alt = `Profile of ${account.username || 'User'}`;
-    }
-
-    const profileImgElement = document.getElementById('profileImg');
-    if (profileImgElement) {
-        profileImgElement.src = imagePath;
-        profileImgElement.alt = `Profile of ${account.username || 'User'}`;
-    }
 }
 
 function formatDateTimeConfirm(dateTime) {
@@ -198,16 +183,4 @@ async function displayThreeAppointment() {
 
 document.addEventListener("DOMContentLoaded", () => {
     displayThreeAppointment();
-
-    document.getElementById('logoutLink').addEventListener('click', function (event) {
-        event.preventDefault();
-        localStorage.removeItem('account');
-        window.location.href = '/frontend/login.html';
-    });
-
-    document.getElementById('logoutModalLink').addEventListener('click', function (event) {
-        event.preventDefault();
-        localStorage.removeItem('account');
-        window.location.href = '/frontend/login.html';
-    });
 });

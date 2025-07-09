@@ -1,3 +1,5 @@
+const accountString = localStorage.getItem("account");
+const account = JSON.parse(accountString);
 const baseAPI = "http://localhost:8080/SWP_back_war_exploded/api/doctors/";
 
 let currentPage = 1;
@@ -232,16 +234,4 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSearch();
   populateDepartments();
   displayDoctors(1);
-
-  document.getElementById('logoutLink').addEventListener('click', function (event) {
-    event.preventDefault();
-    localStorage.removeItem('account');
-    window.location.href = '/frontend/login.html';
-  });
-
-  document.getElementById('logoutModalLink').addEventListener('click', function (event) {
-    event.preventDefault();
-    localStorage.removeItem('account');
-    window.location.href = '/frontend/login.html';
-  });
 });

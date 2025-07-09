@@ -27,6 +27,26 @@
    <!-- flaticon css -->
    <link rel="stylesheet" href="./assets/vendor/flaticon/css/flaticon.css" />
 
+   <style>
+      .icon-40 {
+         width: 40px;
+         height: 40px;
+         overflow: hidden;
+      }
+      #userImg {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         display: block;
+      }
+      #profileImg {
+         width: 100px;
+         height: 100px;
+         object-fit: cover;
+         border-radius: 50%;
+      }
+   </style>
+   
    <!-- font-awesome css -->
    <link rel="stylesheet" href="./assets/vendor/font-awesome/css/all.min.css" />
 
@@ -79,7 +99,7 @@
          <!--Nav Start-->
          <nav class="nav navbar navbar-expand-xl navbar-light iq-navbar patient-header">
             <div class="container-fluid navbar-inner">
-               <a href="./index.html" class="navbar-brand ms-0 me-5">
+                <a href="./patient-dashboard.html" class="navbar-brand ms-0 me-5">
                   <!--Logo start-->
                   <div class="logo-main">
                      <img class="logo-normal img-fluid" src="./assets/images/logo.png" height="30" alt="logo" />
@@ -368,11 +388,11 @@
                      </li>
                      <li class="nav-item dropdown">
                         <a href="#" class="nav-link" id="notification-drop" data-bs-toggle="dropdown">
-                           <div class="nav-list-icon">
-                              <div class="btn-inner">
+                           <div class="btn-action position-relative nav-list-icon">
+                              <span class="btn-inner">
                                  <svg class="icon-20" width="19" height="22" viewBox="0 0 19 22" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
-                                    <mask style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="19"
+                                    <mask style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="19"
                                        height="18">
                                        <path fill-rule="evenodd" clip-rule="evenodd"
                                           d="M9.15527e-05 0H18.497V17.348H9.15527e-05V0Z" fill="white" />
@@ -385,31 +405,28 @@
                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                        d="M9.1983 21.5001H9.1963C8.0753 21.4991 7.0143 21.0051 6.2093 20.1081C5.9323 19.8011 5.9573 19.3261 6.2653 19.0501C6.5733 18.7721 7.0473 18.7971 7.3243 19.1061C7.8423 19.6831 8.5073 20.0001 9.1973 20.0001H9.1983C9.8913 20.0001 10.5593 19.6831 11.0783 19.1051C11.3563 18.7981 11.8303 18.7731 12.1373 19.0501C12.4453 19.3271 12.4703 19.8021 12.1933 20.1091C11.3853 21.0061 10.3223 21.5001 9.1983 21.5001Z"
                                        fill="currentColor" />
-                                 </svg>
-                                 <span class="bg-danger dots"></span>
-                              </div>
+                                    </svg>
+                              </span>
+                              <span class="badge-notification">4</span>
                            </div>
                         </a>
                         <div class="p-0 sub-drop dropdown-menu dropdown-menu-end" aria-labelledby="notification-drop">
                            <div class="m-0 shadow-none card">
                               <div class="py-3 card-header d-flex justify-content-between bg-primary mb-0">
                                  <div class="header-title">
-                                    <h5 class="mb-0 text-white">All
-                                       Notifications</h5>
+                                    <h5 class="mb-0 text-white">All Notifications</h5>
                                  </div>
                               </div>
-                              <div class="p-0 card-body">
+                              <div class="p-0 card-body max-17 scroll-thin">
                                  <a href="#" class="iq-sub-card">
                                     <div class="d-flex align-items-center">
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/01.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">Emma Watson
-                                             Bni</h6>
+                                          <h6 class="mb-0 ">Emma Watson Bni</h6>
                                           <p class="mb-0">95 MB</p>
                                        </div>
-                                       <small class="float-end font-size-12">Just
-                                          Now</small>
+                                       <small class="float-end font-size-12">Just Now</small>
                                     </div>
                                  </a>
                                  <a href="#" class="iq-sub-card">
@@ -417,12 +434,10 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/02.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">New customer is
-                                             join</h6>
+                                          <h6 class="mb-0 ">New customer is join</h6>
                                           <p class="mb-0">Cyst Bni</p>
                                        </div>
-                                       <small class="float-end font-size-12">5
-                                          days ago</small>
+                                       <small class="float-end font-size-12">5 days ago</small>
                                     </div>
                                  </a>
                                  <a href="#" class="iq-sub-card">
@@ -430,12 +445,10 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/03.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">Two customer is
-                                             left</h6>
+                                          <h6 class="mb-0 ">Two customer is left</h6>
                                           <p class="mb-0">Cyst Bni</p>
                                        </div>
-                                       <small class="float-end font-size-12">2
-                                          days ago</small>
+                                       <small class="float-end font-size-12">2 days ago</small>
                                     </div>
                                  </a>
                                  <a href="#" class="iq-sub-card">
@@ -443,19 +456,22 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/04.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">New Mail from
-                                             Fenny</h6>
+                                          <h6 class="mb-0 ">New Mail from Fenny</h6>
                                           <p class="mb-0">Cyst Bni</p>
                                        </div>
-                                       <small class="float-end font-size-12">3
-                                          days ago</small>
+                                       <small class="float-end font-size-12">3 days ago</small>
                                     </div>
                                  </a>
+                              </div>
+                              <div class="card-footer p-0 text-center">
+                                 <div class="d-grid">
+                                    <a href="#" class="btn btn-primary">View All</a>
+                                 </div>
                               </div>
                            </div>
                         </div>
                      </li>
-                     <li class="nav-item dropdown">
+                     <!-- <li class="nav-item dropdown">
                         <a href="#" class="nav-link" id="notification-cart" data-bs-toggle="dropdown">
                            <div class="btn-action position-relative nav-list-icon">
                               <span class="btn-inner">
@@ -485,8 +501,7 @@
                            <div class="m-0 shadow-none card">
                               <div class="py-3 card-header d-flex justify-content-between bg-primary mb-0">
                                  <div class="header-title">
-                                    <h5 class="mb-0 text-white">All
-                                       Carts</h5>
+                                    <h5 class="mb-0 text-white">All Carts</h5>
                                  </div>
                               </div>
                               <div class="p-0 card-body max-17 scroll-thin">
@@ -495,8 +510,7 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/01.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">Biker’s
-                                             Jacket</h6>
+                                          <h6 class="mb-0 ">Biker’s Jacket</h6>
                                           <p class="mb-0">$56.00</p>
                                        </div>
                                        <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -518,7 +532,7 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/02.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">Casual Shoes</h6>
+                                          <h6 class="mb-0 ">Casual Shoes</h6>
                                           <p class="mb-0">$56.00</p>
                                        </div>
                                        <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -540,7 +554,7 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/03.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">Knitted Shrug</h6>
+                                          <h6 class="mb-0 ">Knitted Shrug</h6>
                                           <p class="mb-0">$56.00</p>
                                        </div>
                                        <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -562,7 +576,7 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/04.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">Blue Handbag</h6>
+                                          <h6 class="mb-0 ">Blue Handbag</h6>
                                           <p class="mb-0">$56.00</p>
                                        </div>
                                        <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -584,8 +598,7 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/01.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">Biker’s
-                                             Jacket</h6>
+                                          <h6 class="mb-0 ">Biker’s Jacket</h6>
                                           <p class="mb-0">$56.00</p>
                                        </div>
                                        <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -607,7 +620,7 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/02.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">Casual Shoes</h6>
+                                          <h6 class="mb-0 ">Casual Shoes</h6>
                                           <p class="mb-0">$56.00</p>
                                        </div>
                                        <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -629,7 +642,7 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/03.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">Knitted Shrug</h6>
+                                          <h6 class="mb-0 ">Knitted Shrug</h6>
                                           <p class="mb-0">$56.00</p>
                                        </div>
                                        <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -651,7 +664,7 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/04.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0">Blue Handbag</h6>
+                                          <h6 class="mb-0 ">Blue Handbag</h6>
                                           <p class="mb-0">$56.00</p>
                                        </div>
                                        <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -671,13 +684,12 @@
                               </div>
                               <div class="card-footer p-0 text-center">
                                  <div class="d-grid">
-                                    <a href="#" class="btn btn-primary">View
-                                       All</a>
+                                    <a href="#" class="btn btn-primary">View All</a>
                                  </div>
                               </div>
                            </div>
                         </div>
-                     </li>
+                     </li> -->
                      <li class="nav-item iq-full-screen d-none d-xl-block" id="fullscreen-item">
                         <a href="#" class="nav-link" id="btnFullscreen" data-bs-toggle="dropdown">
                            <div class="icon nav-list-icon">
@@ -713,7 +725,7 @@
                            data-bs-toggle="dropdown" aria-expanded="false">
                            <div class="icon-40">
                               <span class="btn-inner d-inline-block position-relative">
-                                 <img src="./assets/images/avatars/12.png"
+                                 <img id="userImg" src="./assets/images/avatars/12.png"
                                     class="img-fluid rounded-circle object-fit-cover" alt="icon" />
                                  <span
                                     class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white"></span>
@@ -1861,7 +1873,7 @@
                            class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
                            <div class="d-flex align-items-center gap-3">
                               <div class="flex-shrink-0 d-inline-block position-relative">
-                                 <img src="./assets/images/user/amie-steward.png" alt="img-fluid" />
+                                  <img id="profileImg" src="./assets/images/user/amie-steward.png" alt="img-fluid">
                                  <span
                                     class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white me-1 mb-1"></span>
                               </div>
@@ -2009,6 +2021,10 @@
          </div>
       </div>
    </div>
+
+   <script src="./assets/js/plugins/bookappointment.js"></script>
+   <script src="./assets/js/API/main-logout-img-edit.js"></script>
+
    <!-- Library Bundle Script -->
    <script src="./assets/js/core/libs.min.js"></script>
    <!-- Plugin Scripts -->
@@ -2055,7 +2071,8 @@
    <!-- Icons -->
    <script src="./assets/js/solid-icon-search-filter.js?v=1.4.1" defer></script>
    <!-- Fullcalender Javascript -->
-   <script src="./assets/js/plugins/bookappointment.js"></script>
+
+
    <script src="./assets/vendor/fullcalendar/core/main.js"></script>
    <script src="./assets/vendor/fullcalendar/daygrid/main.js"></script>
    <script src="./assets/vendor/fullcalendar/timegrid/main.js"></script>

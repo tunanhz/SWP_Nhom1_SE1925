@@ -1,3 +1,6 @@
+const accountString = localStorage.getItem("account");
+const account = JSON.parse(accountString);
+
 const baseAPI = 'http://localhost:8080/SWP_back_war_exploded/api/patient_records';
 let currentPage = 1;
 let pageSize = 10;
@@ -50,14 +53,12 @@ function fetchPatientRecords(page, pageSize) {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
     const gender = document.getElementById('filterGender').value;
-    const accountPatientId = localStorage.getItem('accountPatientId') || '1';
-
     if (!validateDates(startDate, endDate)) {
         tbody.innerHTML = '';
         return;
     }
 
-    const url = `${baseAPI}?accountPatientId=${encodeURIComponent(accountPatientId)}` +
+    const url = `${baseAPI}?accountPatientId=${account.accountPatientId}` +
                 `&page=${encodeURIComponent(page)}` +
                 `&size=${encodeURIComponent(pageSize)}` +
                 `&patientName=${encodeURIComponent(searchQuery || '')}` +
@@ -94,7 +95,7 @@ async function renderPatientRecords(records, totalRecords, totalPages) {
     tbody.innerHTML = '<tr><td colspan="8" class="text-center">Loading...</td></tr>';
 
     if (!records || records.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No patient records found</td></tr>';
+        document.getElementById('null-data').innerHTML = '<h3 class="text-center" >No patient records found.</h3>'
         return;
     }
 

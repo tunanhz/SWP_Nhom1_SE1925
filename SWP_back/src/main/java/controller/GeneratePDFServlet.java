@@ -138,7 +138,7 @@ public class GeneratePDFServlet extends HttpServlet {
                 .setFontSize(12)
                 .setTextAlignment(TextAlignment.CENTER)
                 .setMarginTop(20));
-        document.add(new Paragraph("Ngày: 26/07/2025")
+        document.add(new Paragraph("Ngày: 27/07/2025")
                 .setFont(font)
                 .setFontSize(12)
                 .setTextAlignment(TextAlignment.CENTER));
@@ -196,7 +196,7 @@ public class GeneratePDFServlet extends HttpServlet {
                 patientData);
 
         // Hospital name and date
-        document.add(new Paragraph("\nNgày 26 tháng 07 năm 2025")
+        document.add(new Paragraph("\nNgày 27 tháng 07 năm 2025")
                 .setFont(font)
                 .setFontSize(12)
                 .setTextAlignment(TextAlignment.RIGHT)

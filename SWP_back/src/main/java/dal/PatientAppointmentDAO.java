@@ -670,7 +670,7 @@ public class PatientAppointmentDAO {
         ArrayList<AppointmentDTO> appointments = dao.getAppointmentsByAccountPatientId(1, "", "", "", 1, 20);
         System.out.println(appointments.size());
 
-        ArrayList<PatientPaymentDTO> c = dao.getTop3Payment(1);
+        ArrayList<PatientPaymentDTO> c = dao.getTop3Payment(2);
         System.out.println(c.size());
 
     }

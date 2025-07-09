@@ -1,3 +1,6 @@
+const accountString = localStorage.getItem("account");
+const account = JSON.parse(accountString);
+
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   const doctorId = params.get('id');
@@ -17,8 +20,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('doctor-eduLevel').textContent = doctorData.eduLevel || 'N/A';
       document.getElementById('doctor-email').innerHTML = `<a href="mailto:${doctorData.email}"> ${doctorData.email}</a>` || 'N/A';
       document.getElementById('doctor-phone').innerHTML = `<a href="tel:${doctorData.phone}">${doctorData.phone}</a>` || 'N/A';
-      document.getElementById('doctor-location').textContent = doctorData.address || 'N/A';
-      document.getElementById('doctor-age').textContent = doctorData.age || 'N/A';
+      // document.getElementById('doctor-location').textContent = doctorData.address || 'N/A';
+      // document.getElementById('doctor-age').textContent = doctorData.age || 'N/A';
 
     } catch (error) {
       console.error('Lỗi khi lấy dữ liệu bác sĩ:', error);
