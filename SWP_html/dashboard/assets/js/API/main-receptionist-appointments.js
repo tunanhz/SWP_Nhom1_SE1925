@@ -123,12 +123,12 @@ function handleCheckIn(appointmentId, button) {
     errorMessage.style.display = 'none';
 
     const account = JSON.parse(localStorage.getItem('account'));
-    const receptionistId = account?.accountStaffId || 1; // Fallback to 1 if not found
+    const accountStaffId = account?.accountStaffId || 1; // Fallback to 1 if not found
 
     fetch(`${baseAPI}/checkin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ appointmentId: Number(appointmentId), receptionistId })
+        body: JSON.stringify({ appointmentId: Number(appointmentId), accountStaffId })
     })
         .then(response => {
             if (!response.ok) {
