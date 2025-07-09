@@ -2,13 +2,10 @@ package dal;
 
 import dto.ReceptionistCheckInDTO;
 import dto.WaitlistDTO;
+import model.Appointment;
 import model.Patient;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -597,6 +594,49 @@ public class ReceptionistDAO {
             throw new RuntimeException("Failed to add patient", e);
         }
     }
+
+    public Appointment createAppointment(Appointment appointment, int receptionistId) throws SQLException {
+        String sql = "{call CreateAppointment(?, ?, ?, ?, ?, ?)}";
+        Appointment createdAppointment = null;
+        Connection conn = null;
+        CallableStatement stmt = null;
+        try {
+            conn = getConnection();
+            stmt = conn.prepareCall(sql);
+
+            stmt.setInt(1, appointment.getDoctorId());
+            stmt.setInt(2, appointment.getPatientId());
+            stmt.setTimestamp(3, new Timestamp(appointment.getAppointmentDatetime().getTime()));
+            stmt.setInt(4, receptionistId);
+            stmt.setString(5, appointment.getNote());
+            stmt.registerOutParameter(6, java.sql.Types.NVARCHAR);
+
+            LOGGER.info("Executing stored procedure: " + sql + " with parameters: doctorId=" + appointment.getDoctorId() +
+                    ", patientId=" + appointment.getPatientId() + ", datetime=" + appointment.getAppointmentDatetime() +
+                    ", receptionistId=" + receptionistId + ", note=" + appointment.getNote());
+            stmt.execute();
+
+            String message = stmt.getString(6);
+            LOGGER.info("Stored Procedure Message: " + message);
+
+            if (message != null && message.contains("thành công")) {
+                createdAppointment = appointment;
+            } else {
+                throw new SQLException("Stored Procedure failed: " + message);
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("SQL Error in createAppointment: " + e.getMessage() + ", SQL State: " + e.getSQLState() +
+                    ", Error Code: " + e.getErrorCode());
+            throw e;
+        } finally {
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { LOGGER.severe("Error closing statement: " + e.getMessage()); }
+            if (conn != null) try { conn.close(); } catch (SQLException e) { LOGGER.severe("Error closing connection: " + e.getMessage()); }
+        }
+        return createdAppointment;
+    }
+
+
+
 
 
 

@@ -114,7 +114,7 @@ function renderAppointments(appointments) {
             </td>
         `;
         tbody.appendChild(row);
-    });
+    }); 
 }
 
 function handleCheckIn(appointmentId, button) {
