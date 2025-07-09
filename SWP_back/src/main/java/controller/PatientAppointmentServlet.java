@@ -84,7 +84,7 @@ public class PatientAppointmentServlet extends HttpServlet {
 
                 ArrayList<AppointmentPatientDTO> appointmentPatientDTOS = appointmentDAO.getThreeAppointmentsUpcoming(accountPatientId);
                 ArrayList<AppointmentDTO> threeAppointmentComplete = appointmentDAO.getTop3CompletedAppointments(accountPatientId);
-                ArrayList<PatientPaymentDTO> threePaymentPending = appointmentDAO.getTop3Payment(1);
+                ArrayList<PatientPaymentDTO> threePaymentPending = appointmentDAO.getTop3Payment(accountPatientId);
                 ArrayList<AppointmentPatientDTO> allAppointment = appointmentDAO.getAllAppointments(accountPatientId);
                 // Build response JSON
                 JsonObject responseJson = new JsonObject();

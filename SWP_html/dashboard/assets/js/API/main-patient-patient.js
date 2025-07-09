@@ -176,7 +176,12 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
         `;
 
         // Update container
-        container.innerHTML = patients.length ? patientTable + paginationHTML : '<p>No Patients found.</p>';
+        container.innerHTML = patients.length ? patientTable + paginationHTML : '';
+        if(patients.length === 0){
+            document.getElementById('null-data').innerHTML = '<h3 class="text-center" >No Patients found.</h3>'
+        }
+        
+
 
         // Attach event listeners for edit buttons
         container.querySelectorAll(".edit-btn1").forEach(button => {
@@ -477,16 +482,4 @@ document.addEventListener("DOMContentLoaded", () => {
             displayPatient(1, state1.currentNameSearch, state1.currentDob, state1.currentGender);
         });
     }
-
-    document.getElementById('logoutLink').addEventListener('click', function (event) {
-        event.preventDefault();
-        localStorage.removeItem('account'); 
-        window.location.href = '/frontend/login.html'; 
-    });
-
-    document.getElementById('logoutModalLink').addEventListener('click', function (event) {
-        event.preventDefault();
-        localStorage.removeItem('account'); 
-        window.location.href = '/frontend/login.html'; 
-    });
 });
