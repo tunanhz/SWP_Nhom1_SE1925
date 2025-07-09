@@ -988,6 +988,58 @@
             padding: 20px;
             color: #555;
          }
+
+          #calendar table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+   }
+   #calendar th, #calendar td {
+      border: 1px solid #e9ecef;
+      padding: 8px;
+      text-align: center;
+      font-size: 0.9rem;
+   }
+   #calendar th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      color: #333;
+   }
+   #calendar td {
+      cursor: pointer;
+      color: #555;
+   }
+   #calendar td.disabled {
+      background-color: #f1f3f5;
+      color: #adb5bd;
+      cursor: not-allowed;
+   }
+   #calendar td.selected {
+      background-color: #007bff;
+      color: #fff;
+   }
+   .time-slot {
+      padding: 6px 12px;
+      margin: 5px;
+      font-size: 0.85rem;
+      border-radius: 4px;
+      border: 1px solid #dee2e6;
+      background-color: #fff;
+      transition: background-color 0.3s ease;
+   }
+   .time-slot:hover:not(.disabled) {
+      background-color: #f1f3f5;
+   }
+   .time-slot.selected {
+      background-color: #007bff;
+      color: #fff;
+      border-color: #007bff;
+   }
+   .time-slot.disabled {
+      background-color: #f1f3f5;
+      color: #adb5bd;
+      cursor: not-allowed;
+   }
       </style>
       </head>
 
@@ -1739,6 +1791,147 @@
                <button type="submit" class="btn btn-primary">
                   <span class="btn-inner">
                      <span class="text d-inline-block align-middle">Add</span>
+                     <span class="icon d-inline-block align-middle ms-1 ps-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                           <path
+                              d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                              fill="currentColor" />
+                        </svg>
+                     </span>
+                  </span>
+               </button>
+               <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
+                  <span class="btn-inner">
+                     <span class="text d-inline-block align-middle">Close</span>
+                     <span class="icon d-inline-block align-middle ms-1 ps-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none">
+                           <path
+                              d="M6 18L18 6M6 6l12 12"
+                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                     </span>
+                  </span>
+               </button>
+            </div>
+         </div>
+      </form>
+   </div>
+</div>
+
+
+<!-- appoiment book -->
+ <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAppointmentBook" aria-labelledby="offcanvasAppointmentBookLabel">
+   <div class="offcanvas-header border-bottom">
+      <h3 class="offcanvas-title" id="offcanvasAppointmentBookLabel">Book Appointment</h3>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+   </div>
+   <div class="offcanvas-body">
+      <form id="appointmentForm" action="http://localhost:8080/SWP_back_war_exploded/api/receptionist/book-appointment" method="POST">
+         <input type="hidden" id="patientId" name="patientId">
+         <div class="form-group col-md-12">
+            <label class="form-label" for="departmentSelect">Department <span class="text-danger">*</span></label>
+            <select class="form-control" id="departmentSelect" name="department" required>
+               <option value="">-- Select Department --</option>
+            </select>
+            <div class="invalid-feedback">Please select a department.</div>
+         </div>
+         <div class="form-group col-md-12">
+            <label class="form-label" for="doctorSelect">Doctor <span class="text-danger">*</span></label>
+            <select class="form-control" id="doctorSelect" name="doctorId" disabled required>
+               <option value="">-- Select Doctor --</option>
+            </select>
+            <div class="invalid-feedback">Please select a doctor.</div>
+         </div>
+         <div class="form-group col-md-12">
+            <label class="form-label" for="note">Note</label>
+            <textarea class="form-control" id="note" name="note" rows="2" placeholder="Enter note (e.g., symptoms, special requests)"></textarea>
+         </div>
+         <div id="dateForm" class="form-group col-md-12" style="display: none;">
+            <label class="form-label">Select Month and Year</label>
+            <div class="row">
+               <div class="col-md-6">
+                  <select class="form-control" id="yearSelect"></select>
+               </div>
+               <div class="col-md-6">
+                  <select class="form-control" id="monthSelect"></select>
+               </div>
+            </div>
+            <div id="calendar"></div>
+            <input type="hidden" id="selectedDate" name="date">
+         </div>
+         <div id="timeForm" class="form-group col-md-12" style="display: none;">
+            <h4 class="mb-2">Morning</h4>
+            <table class="table">
+               <tr>
+                  <td><button type="button" class="time-slot" value="06:00">06:00</button></td>
+                  <td><button type="button" class="time-slot" value="06:15">06:15</button></td>
+                  <td><button type="button" class="time-slot" value="06:30">06:30</button></td>
+                  <td><button type="button" class="time-slot" value="06:45">06:45</button></td>
+               </tr>
+               <tr>
+                  <td><button type="button" class="time-slot" value="07:00">07:00</button></td>
+                  <td><button type="button" class="time-slot" value="07:15">07:15</button></td>
+                  <td><button type="button" class="time-slot" value="07:30">07:30</button></td>
+                  <td><button type="button" class="time-slot" value="07:45">07:45</button></td>
+               </tr>
+               <tr>
+                  <td><button type="button" class="time-slot" value="08:00">08:00</button></td>
+                  <td><button type="button" class="time-slot" value="08:15">08:15</button></td>
+                  <td><button type="button" class="time-slot" value="08:30">08:30</button></td>
+                  <td><button type="button" class="time-slot" value="08:45">08:45</button></td>
+               </tr>
+               <tr>
+                  <td><button type="button" class="time-slot" value="09:00">09:00</button></td>
+                  <td><button type="button" class="time-slot" value="09:15">09:15</button></td>
+                  <td><button type="button" class="time-slot" value="09:30">09:30</button></td>
+                  <td><button type="button" class="time-slot" value="09:45">09:45</button></td>
+               </tr>
+               <tr>
+                  <td><button type="button" class="time-slot" value="10:00">10:00</button></td>
+                  <td><button type="button" class="time-slot" value="10:15">10:15</button></td>
+                  <td><button type="button" class="time-slot" value="10:30">10:30</button></td>
+                  <td><button type="button" class="time-slot" value="10:45">10:45</button></td>
+               </tr>
+               <tr>
+                  <td><button type="button" class="time-slot" value="11:00">11:00</button></td>
+                  <td><button type="button" class="time-slot" value="11:15">11:15</button></td>
+                  <td><button type="button" class="time-slot" value="11:30">11:30</button></td>
+                  <td><button type="button" class="time-slot" value="11:45">11:45</button></td>
+               </tr>
+            </table>
+            <h4 class="mb-2">Afternoon</h4>
+            <table class="table">
+               <tr>
+                  <td><button type="button" class="time-slot" value="13:30">13:30</button></td>
+                  <td><button type="button" class="time-slot" value="13:45">13:45</button></td>
+                  <td><button type="button" class="time-slot" value="14:00">14:00</button></td>
+                  <td><button type="button" class="time-slot" value="14:15">14:15</button></td>
+               </tr>
+               <tr>
+                  <td><button type="button" class="time-slot" value="14:30">14:30</button></td>
+                  <td><button type="button" class="time-slot" value="14:45">14:45</button></td>
+                  <td><button type="button" class="time-slot" value="15:00">15:00</button></td>
+                  <td><button type="button" class="time-slot" value="15:15">15:15</button></td>
+               </tr>
+               <tr>
+                  <td><button type="button" class="time-slot" value="15:30">15:30</button></td>
+                  <td><button type="button" class="time-slot" value="15:45">15:45</button></td>
+                  <td><button type="button" class="time-slot" value="16:00">16:00</button></td>
+               </tr>
+            </table>
+            <h4 class="mb-2">Evening</h4>
+            <table class="table">
+               <tr>
+                  <td><button type="button" class="time-slot" value="16:15">16:15</button></td>
+               </tr>
+            </table>
+            <input type="hidden" id="selectedTime" name="time">
+         </div>
+         <div class="offcanvas-footer border-top">
+            <div class="d-grid d-md-flex gap-3 p-3">
+               <button type="submit" class="btn btn-primary">
+                  <span class="btn-inner">
+                     <span class="text d-inline-block align-middle">Book Appointment</span>
                      <span class="icon d-inline-block align-middle ms-1 ps-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
                            <path
