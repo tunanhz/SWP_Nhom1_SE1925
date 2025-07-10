@@ -324,6 +324,125 @@ public class PatientDAO {
         return null;
     }
 
+    // Method to get all patients for admin/staff view (not limited by account)
+    public ArrayList<Patient> getAllPatients(String fullName, String dob, String gender, int page, int pageSize) {
+        Logger LOGGER = Logger.getLogger(this.getClass().getName());
+        String sql = """
+                SELECT
+                    p.patient_id,
+                    p.full_name,
+                    p.dob,
+                    p.gender,
+                    p.phone,
+                    p.[address],
+                    p.status
+                FROM Patient p
+                WHERE p.status = 'Enable'
+                    AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                    AND (? IS NULL OR CONVERT(VARCHAR, p.dob, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
+                                LIKE CASE
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]' THEN ? + '%'
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                                WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                                ELSE ? END)
+                    AND (? IS NULL OR p.gender COLLATE SQL_Latin1_General_CP1_CI_AI = ?)
+                ORDER BY p.patient_id DESC
+                OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+                """;
+
+        ArrayList<Patient> patients = new ArrayList<>();
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
+            // FullName
+            stmt.setNString(1, fullName);
+            stmt.setNString(2, fullName != null ? "%" + fullName + "%" : null);
+
+            // DOB
+            stmt.setNString(3, dob);
+            stmt.setNString(4, dob);
+            stmt.setNString(5, dob);
+            stmt.setNString(6, dob);
+            stmt.setNString(7, dob);
+            stmt.setNString(8, dob);
+            stmt.setNString(9, dob);
+            stmt.setNString(10, dob);
+
+            // Gender
+            stmt.setNString(11, gender);
+            stmt.setNString(12, gender);
+
+            // Pagination
+            int offset = (page - 1) * pageSize;
+            stmt.setInt(13, offset);
+            stmt.setInt(14, pageSize);
+
+            // Execute query
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Patient patient = new Patient();
+                patient.setId(rs.getInt("patient_id"));
+                patient.setFullName(rs.getString("full_name"));
+                patient.setDob(rs.getString("dob"));
+                patient.setGender(rs.getString("gender"));
+                patient.setPhone(rs.getString("phone"));
+                patient.setAddress(rs.getString("address"));
+                patient.setStatus(rs.getString("status"));
+                patients.add(patient);
+            }
+            LOGGER.info("Fetched " + patients.size() + " patients (all patients view)");
+        } catch (SQLException e) {
+            LOGGER.severe("Error fetching all patients: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return patients;
+    }
+
+    // Method to count all patients for admin/staff view
+    public int countAllPatients(String fullName, String dob, String gender) {
+        String query = """
+                    SELECT COUNT(*) AS total
+                    FROM Patient p
+                    WHERE p.status = 'Enable'
+                        AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                        AND (? IS NULL OR
+                            CONVERT(VARCHAR, p.dob, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
+                            LIKE CASE
+                            WHEN ? LIKE '[0-9][0-9][0-9][0-9]' THEN ? + '%'
+                            WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                            WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
+                            ELSE ? END)
+                        AND (? IS NULL OR p.gender COLLATE SQL_Latin1_General_CP1_CI_AI = ?)
+                """;
+
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(query)) {
+            // Full name filter
+            stmt.setString(1, fullName);
+            stmt.setString(2, fullName != null ? "%" + fullName + "%" : null);
+
+            // dob year filter
+            stmt.setString(3, dob);
+            stmt.setString(4, dob);
+            stmt.setString(5, dob);
+            stmt.setString(6, dob);
+            stmt.setString(7, dob);
+            stmt.setString(8, dob);
+            stmt.setString(9, dob);
+            stmt.setString(10, dob);
+
+            // Gender filter
+            stmt.setString(11, gender);
+            stmt.setString(12, gender);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error counting all patients: " + e.getMessage());
+            throw new RuntimeException("Failed to count all patients", e);
+        }
+    }
+
     public static void main(String[] args) {
         PatientDAO patientDAO = new PatientDAO();
         ArrayList<Patient> patients = patientDAO.getAllPatientsByAccountPatientId(1, "", "", "", 1, 10);
