@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Doctor;
 import model.Patient;
 
 import java.io.BufferedReader;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -59,16 +61,38 @@ public class PatientServlet extends HttpServlet {
                 out.print("{\"error\": \"Failed to fetch patients\"}");
                 LOGGER.severe("Error processing request: " + e.getMessage());
             }
+        } else {
+            // Lấy patient theo ID
+            String[] splits = pathInfo.split("/");
+
+            if (splits.length == 2) {
+                try {
+                    int id = Integer.parseInt(splits[1]);
+                    Patient patient = patientDAO.getPatientByPatientId(id);
+                    if (patient != null) {
+                        JsonObject responseJson = new JsonObject();
+                        responseJson.add("patient", gson.toJsonTree(patient));
+                        out.print(gson.toJson(responseJson));
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        out.print("{\"error\":\"Doctor not found\"}");
+                    }
+                } catch (NumberFormatException e) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.print("{\"error\":\"Invalid path\"}");
+                }
+            }
         }
     }
 
     private void handleGetAllPatients(HttpServletRequest request, HttpServletResponse response, PrintWriter out) {
         try {
+            int page = Integer.parseInt(request.getParameter("page") != null ? request.getParameter("page") : "1");
+            int pageSize = Integer.parseInt(request.getParameter("pageSize") != null ? request.getParameter("pageSize") : "8");
             String fullName = request.getParameter("name");
             String dob = request.getParameter("dob");
             String gender = request.getParameter("gender");
-            int page = Integer.parseInt(request.getParameter("page") != null ? request.getParameter("page") : "1");
-            int pageSize = Integer.parseInt(request.getParameter("pageSize") != null ? request.getParameter("pageSize") : "8");
+            String status = request.getParameter("status");
 
             // Validate pagination parameters
             if (page < 1 || pageSize <= 0 || pageSize > 100) {
@@ -81,11 +105,11 @@ public class PatientServlet extends HttpServlet {
 
             // Log request for debugging
             LOGGER.info("Fetching all patients: fullName=" + fullName + ", dob=" + dobValid +
-                    ", gender=" + gender + ", page=" + page + ", pageSize=" + pageSize);
+                    ", gender=" + gender + ", status=" + status + ", page=" + page + ", pageSize=" + pageSize);
 
             // Get all patients and total count
-            ArrayList<Patient> patients = patientDAO.getAllPatients(fullName, dobValid, gender, page, pageSize);
-            int totalPatient = patientDAO.countAllPatients(fullName, dobValid, gender);
+            ArrayList<Patient> patients = patientDAO.getAllPatients(fullName, dobValid, gender, status, page, pageSize);
+            int totalPatient = patientDAO.countAllPatients(fullName, dobValid, gender, status);
             int totalPages = (int) Math.ceil((double) totalPatient / pageSize);
 
             // Build response JSON
@@ -207,6 +231,20 @@ public class PatientServlet extends HttpServlet {
                 if (addPatient.getDob() == null || addPatient.getDob().isEmpty()) {
                     response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
                     out.print("{\"error\":\"Date of birth is required\"}");
+                    return;
+                }
+
+                try {
+                    LocalDate dob = LocalDate.parse(addPatient.getDob(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    LocalDate today = LocalDate.now();
+                    if (dob.isAfter(today)) {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                        out.print("{\"error\":\"Date of birth cannot be in the future\"}");
+                        return;
+                    }
+                } catch (DateTimeParseException e) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                    out.print("{\"error\":\"Invalid date of birth format\"}");
                     return;
                 }
 
@@ -336,6 +374,20 @@ public class PatientServlet extends HttpServlet {
                     return;
                 }
 
+                try {
+                    LocalDate dob = LocalDate.parse(updatedPatient.getDob(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    LocalDate today = LocalDate.now();
+                    if (dob.isAfter(today)) {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                        out.print("{\"error\":\"Date of birth cannot be in the future\"}");
+                        return;
+                    }
+                } catch (DateTimeParseException e) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                    out.print("{\"error\":\"Invalid date of birth format\"}");
+                    return;
+                }
+
                 if (updatedPatient.getGender() == null || updatedPatient.getGender().isEmpty()) {
                     response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
                     out.print("{\"error\":\"Gender is required\"}");
@@ -459,13 +511,8 @@ public class PatientServlet extends HttpServlet {
 
     public static String parseDateTime(String input) {
         // Return null if input is null
-        if (input == null) {
+        if (input == null || input.trim().isEmpty()) {
             return null;
-        }
-
-        // Check for empty input
-        if (input.trim().isEmpty()) {
-            return "Error: Năm là bắt buộc. Vui lòng nhập năm.";
         }
 
         // Normalize input: replace / with - and trim spaces

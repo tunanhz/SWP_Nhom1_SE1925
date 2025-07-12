@@ -1786,7 +1786,7 @@
             </nav> <!--Nav End-->
         </div>
         <div class="content-inner container-fluid pb-0" id="page_layout">
-
+            
             <div class="d-flex align-items-center mb-4 mb-4 pb-3 pt-3">
                 <svg class="icon-18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -1820,7 +1820,58 @@
                         </span>
                     </button>
                 </div>
+                
                 <div class="card-body pt-0">
+                    <div class="row d-flex align-items-center justify-content-start flex-wrap mb-4">
+                <!-- Search Input -->
+                <div class="col-lg-3 mb-2 mb-md-0">
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round"></circle>
+                                <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </span>
+                        <input type="text" id="patient-search-name" class="form-control"
+                            placeholder="Search Name Patient...">
+                    </div>
+                </div>
+                <div class="col-lg-3 mb-2 mb-md-0">
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round"></circle>
+                                <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </span>
+                        <input type="text" id="patient-search-date" class="form-control"
+                            placeholder="Search Date Of Birth (dd/mm/yyyy)...">
+                    </div>
+                </div>
+                <!-- Gender Select -->
+                <div class="col-lg-3 mb-2 mb-md-0">
+                    <select id="gender-search" class="form-select border text-body rounded" aria-label="Select status">
+                        <option value="" selected>All Gender</option>
+                        <option value="Nam">Male</option>
+                        <option value="Nữ">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <!-- Find Appointment Button -->
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-2 mb-md-0">
+                    <select id="status-search" class="form-select border text-body rounded" aria-label="Select status">
+                        <option value="" selected>All Status</option>
+                        <option value="Enable">Enable</option>
+                        <option value="Disable">Disable</option>
+                    </select>
+                </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table border-end border-start align-middle mb-0 rounded">
                             <thead class="table-dark">
@@ -1830,28 +1881,25 @@
                                     <th>Patient Name</th>
                                     <th>Age</th>
                                     <th>Phone Number</th>
-                                    <th>Date & Time</th>
+                                    <th>Date Of Birth</th>
                                     <th>Gender</th>
-                                    <th>Reason</th>
-                                    <th>Blood Group</th>
-                                    <th>Doctor Name</th>
+                                    <th>Address</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="patient_infor">
                                 <tr data-item="list">
                                     <th scope="row">1</th>
                                     <td>#14356</td>
                                     <td>
-                                        <h6 class="mb-0 text-body fw-normal">Isabella Brown</h6>
+                                        <h6 class="mb-0 text-body fw-500">Isabella Brown</h6>
                                     </td>
                                     <td>23</td>
                                     <td>+1 345 675 345</td>
                                     <td>24 May - 10:00 AM</td>
                                     <td>Female</td>
                                     <td>Vaccination</td>
-                                    <td>O +ve</td>
-                                    <td>Dr. David Johnson</td>
                                     <td>
                                         <a data-bs-toggle="offcanvas" href="#offcanvasPatientEdit"
                                             aria-controls="offcanvasPatientEdit" class="d-inline-block pe-2">
@@ -1895,14 +1943,12 @@
                                     <th scope="row">2</th>
                                     <td>#14678</td>
                                     <td>
-                                        <h6 class="mb-0 text-body fw-normal">Daniel White</h6>
+                                        <h6 class="mb-0 text-body fw-500">Daniel White</h6>
                                     </td>
                                     <td>25</td>
                                     <td>+1 555-123-4567</td>
                                     <td>30 May - 10:00 AM</td>
                                     <td>Male</td>
-                                    <td>Gen. Check-Up</td>
-                                    <td>O +ve</td>
                                     <td>Dr. Benjamin Davis</td>
                                     <td>
                                         <a data-bs-toggle="offcanvas" href="#offcanvasPatientEdit"
@@ -1943,7 +1989,7 @@
                                         </a>
                                     </td>
                                 </tr>
-                                <tr data-item="list">
+                                <!-- <tr data-item="list">
                                     <th scope="row">3</th>
                                     <td>#12431</td>
                                     <td>
@@ -2202,238 +2248,206 @@
                                             </span>
                                         </a>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="card-footer pt-0 row">
-                <div class="d-flex justify-content-start col-md-6">
-                    <button class="btn btn-secondary text-white me-3" type="button" id="prevPage">
-                        <span class="btn-inner">
-                            <span class="text d-inline-block align-middle">Previous</span>
-                            <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                        d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
-                                </svg>
-                            </span>
-                        </span>
-                    </button>
-                    <span class="align-self-center me-3" id="pageInfo">Page 1 of 8</span>
-                    <button class="btn btn-primary me-3" type="button" id="nextPage">
-                        <span class="btn-inner">
-                            <span class="text d-inline-block align-middle">Next</span>
-                            <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                                </svg>
-                            </span>
-                        </span>
-                    </button>
+                        <div class="d-flex justify-content-start col-md-6 mt-4">
+                           <button class="btn btn-secondary text-white me-3" type="button" id="prevPage">
+                              <span class="btn-inner">
+                                 <span class="text d-inline-block align-middle">Previous</span>
+                                 <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                       viewBox="0 0 16 16">
+                                       <path fill-rule="evenodd"
+                                          d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                                    </svg>
+                                 </span>
+                              </span>
+                           </button>
+                           <span class="align-self-center me-3" id="pageInfo">Page 1 of 8</span>
+                           <button class="btn btn-primary me-3" type="button" id="nextPage">
+                              <span class="btn-inner">
+                                 <span class="text d-inline-block align-middle">Next</span>
+                                 <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                       viewBox="0 0 16 16">
+                                       <path fill-rule="evenodd"
+                                          d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                 </span>
+                              </span>
+                           </button>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-center justify-content-md-end mt-4">
+                           <div class="input-group input-group-sm w-auto">
+                              <label class="input-group-text text-bg-info" for="itemsPerPage">Items per page</label>
+                              <select class="form-select" name="page" id="itemsPerPage">
+                                 <option value="5">5</option>
+                                 <option value="10" selected>10</option>
+                                 <option value="15">15</option>
+                                 <option value="20">20</option>
+                                 <option id="all_patient">All</option>
+                              </select>
+                           </div>
+                        </div>
                 </div>
-                <div class="col-md-6 d-flex justify-content-center justify-content-md-end">
-                    <div class="input-group input-group-sm w-auto">
-                        <label class="input-group-text text-bg-info" for="itemsPerPage">Items per page</label>
-                        <select class="form-select" name="page" id="itemsPerPage">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="90">All</option>
-                        </select>
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientEdit"
+                    aria-labelledby="offcanvasPatientEditLabel">
+                    <div class="offcanvas-header border-bottom">
+                        <h3 class="offcanvas-title" id="offcanvasPatientEditLabel">Edit Patient</h3>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <form id="editPatientForm">
+                            <div class="form-group">
+                                <label class="form-label" for="patientId">Patient Id <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="patientId" value="#14356" readonly>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label" for="namePatient">Name Patient <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="namePatient" value="Dr. Amine Louis"
+                                    required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label" for="dateOfBirth">Date Of Birth <span
+                                        class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="dateOfBirth" value="Dr. Amine Louis"
+                                    required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label" for="gender">Gender <span class="text-danger">*</span></label>
+                                <select class="form-control" id="gender" required>
+                                    <option value="" selected>Select Gender</option>
+                                    <option value="Nam">Male</option>
+                                    <option value="Nữ">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label" for="phonePatient">Phone Patient <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="phonePatient" value="Acne Treatment"
+                                    required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label" for="address">Address <span
+                                        class="text-danger">*</span></label>
+                                <textarea class="form-control" id="address" rows="2"
+                                    required>Half Of The Treatment Is Done.</textarea>
+                            </div>
+                            <!-- Hidden input for patientId -->
+                            <div class="offcanvas-footer border-top">
+                                <div class="d-grid d-md-flex gap-3 p-3">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="btn-inner">
+                                            <span class="text d-inline-block align-middle">Update</span>
+                                            <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                                    viewBox="0 0 8 8" fill="none">
+                                                    <path
+                                                        d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                                        fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    </button>
+                                    <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
+                                        <span class="btn-inner">
+                                            <span class="text d-inline-block align-middle">Close</span>
+                                            <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                                    viewBox="0 0 8 8" fill="none">
+                                                    <path
+                                                        d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                                        fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientAdd"
+                    aria-labelledby="offcanvasPatientAddLabel">
+                    <div class="offcanvas-header border-bottom">
+                        <h3 class="offcanvas-title" id="offcanvasPatientAddLabel">Add Patient</h3>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <form id="addPatient">
+                            <div class="form-group col-md-12">
+                                <label class="form-label" for="namePatient1">Name Patient <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="namePatient1" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label" for="dateOfBirth1">Date Of Birth <span
+                                        class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="dateOfBirth1" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label" for="gender1">Gender <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-control" id="gender1" required>
+                                    <option value="" selected>Select Gender</option>
+                                    <option value="Nam">Male</option>
+                                    <option value="Nữ">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label" for="phonePatient1">Phone Patient <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="phonePatient1" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label" for="address1">Address <span
+                                        class="text-danger">*</span></label>
+                                <textarea class="form-control" id="address1" rows="2" required></textarea>
+                            </div>
+                            <div class="offcanvas-footer border-top">
+                                <div class="d-grid d-md-flex gap-3 p-3">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="btn-inner">
+                                            <span class="text d-inline-block align-middle">Add</span>
+                                            <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                                    viewBox="0 0 8 8" fill="none">
+                                                    <path
+                                                        d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                                        fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    </button>
+                                    <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
+                                        <span class="btn-inner">
+                                            <span class="text d-inline-block align-middle">Close</span>
+                                            <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                                    viewBox="0 0 8 8" fill="none">
+                                                    <path
+                                                        d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                                        fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientEdit"
-                aria-labelledby="offcanvasPatientEditLabel">
-                <div class="offcanvas-header border-bottom">
-                    <h3 class="offcanvas-title" id="offcanvasPatientEditLabel">Edit Patient</h3>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <div class="form-group">
-                        <label class="form-label" for="Id">Patient Id <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="Id" value="#14356">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="Name">Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="Name" value="Isabella Brown">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="Age">Age </label>
-                        <input type="text" class="form-control" id="Age" value="23">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="PnoneNumber">Phone Number <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="PnoneNumber" value="+1 345 675 345">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="datetime">Date And Time <span
-                                class="text-danger">*</span></label>
-                        <input type="text" id="datetime" class="form-control date_flatpicker flatpickr-input active"
-                            value="2023-05-24" readonly="readonly">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label d-block">Gender <span class="text-danger">*</span></label>
-                        <div class="form-check d-inline-block">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="male2">
-                            <label class="form-check-label" for="male2">
-                                Male
-                            </label>
-                        </div>
-                        <div class="form-check d-inline-block ms-3">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="female2" checked>
-                            <label class="form-check-label" for="female2">
-                                Female
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="reason">Reason <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="reason" value="Vaccination">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="reason">Blood Group <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="BloodGroup" value="O +ve">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="Name">Doctor Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="Doctorname" value="Dr. David Johnson">
-                    </div>
-                </div>
-                <div class="offcanvas-footer border-top">
-                    <div class="d-grid d-md-flex gap-3 p-3">
-                        <button type="submit" class="btn btn-primary d-block">
-                            <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Update</span>
-                                <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <path
-                                            d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                            </span>
-                        </button>
-                        <button class="btn btn-secondary d-block" type="button" data-bs-dismiss="offcanvas">
-                            <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Close</span>
-                                <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <path
-                                            d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientAdd"
-                aria-labelledby="offcanvasPatientAddLabel">
-                <div class="offcanvas-header border-bottom">
-                    <h3 class="offcanvas-title" id="offcanvasPatientAddLabel">Add Patient</h3>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <div class="form-group">
-                        <label class="form-label" for="add_id">Patient Id <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="add_id">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="add_Name">Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="add_Name">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="add_age">Age </label>
-                        <input type="text" class="form-control" id="add_age">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="AddPnoneNumber">Phone Number <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="AddPnoneNumber">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="adddatetime">Date And Time <span
-                                class="text-danger">*</span></label>
-                        <input type="text" id="adddatetime" class="form-control date_flatpicker flatpickr-input active"
-                            readonly="readonly">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label d-block" for="Name">Gender <span class="text-danger">*</span></label>
-                        <div class="form-check d-inline-block">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="male">
-                            <label class="form-check-label" for="male">
-                                Male
-                            </label>
-                        </div>
-                        <div class="form-check d-inline-block ms-3">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="female">
-                            <label class="form-check-label" for="female">
-                                Female
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="add_reason">Reason <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="add_reason">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="AddBloodGroup">Blood Group <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="AddBloodGroup">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="AddDoctorname">Doctor Name <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="AddDoctorname">
-                    </div>
-                </div>
-                <div class="offcanvas-footer border-top">
-                    <div class="d-grid d-md-flex gap-3 p-3">
-                        <button type="submit" class="btn btn-primary d-block">
-                            <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Save</span>
-                                <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <path
-                                            d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                            </span>
-                        </button>
-                        <button class="btn btn-secondary d-block" type="button" data-bs-dismiss="offcanvas">
-                            <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Close</span>
-                                <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <path
-                                            d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
         </div>
         <!-- Footer Section Start -->
         <footer class="footer">
@@ -3275,6 +3289,8 @@
     <!-- Wrapper End-->
 
 
+    <!--API-->
+    <script src="./assets/js/API/main-adminbusiness-patient.js"></script>
     <!-- Library Bundle Script -->
     <script src="./assets/js/core/libs.min.js"></script>
     <!-- Plugin Scripts -->
