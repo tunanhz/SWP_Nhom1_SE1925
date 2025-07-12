@@ -257,6 +257,26 @@ public class PatientDAO {
         }
     }
 
+    public boolean enablePatient(int patientId) {
+        String sql = """
+                UPDATE [dbo].[Patient]
+                SET [status] = 'Enable'
+                WHERE patient_id = ?;
+                """;
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
+            stmt.setInt(1, patientId);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public Patient getPatientByDetails(String fullName, String dob, String gender, String phone, String address) {
         String sql = """
                 SELECT [patient_id], [full_name], [dob], [gender], [phone], [address], [status]
@@ -325,10 +345,10 @@ public class PatientDAO {
     }
 
     // Method to get all patients for admin/staff view (not limited by account)
-    public ArrayList<Patient> getAllPatients(String fullName, String dob, String gender, int page, int pageSize) {
+    public ArrayList<Patient> getAllPatients(String fullName, String dob, String gender, String status, int page, int pageSize) {
         Logger LOGGER = Logger.getLogger(this.getClass().getName());
         String sql = """
-                SELECT
+                 SELECT
                     p.patient_id,
                     p.full_name,
                     p.dob,
@@ -337,15 +357,16 @@ public class PatientDAO {
                     p.[address],
                     p.status
                 FROM Patient p
-                WHERE p.status = 'Enable'
-                    AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                WHERE 
+                    (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                     AND (? IS NULL OR CONVERT(VARCHAR, p.dob, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
                                 LIKE CASE
                                 WHEN ? LIKE '[0-9][0-9][0-9][0-9]' THEN ? + '%'
                                 WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
                                 WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
                                 ELSE ? END)
-                    AND (? IS NULL OR p.gender COLLATE SQL_Latin1_General_CP1_CI_AI = ?)
+                    AND (? IS NULL OR p.gender COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                    AND (? IS NULL OR p.status COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                 ORDER BY p.patient_id DESC
                 OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
                 """;
@@ -368,12 +389,15 @@ public class PatientDAO {
 
             // Gender
             stmt.setNString(11, gender);
-            stmt.setNString(12, gender);
+            stmt.setNString(12, gender != null ? "%" + gender + "%" : null);
+
+            stmt.setNString(13, status);
+            stmt.setNString(14, status != null ? "%" + status + "%" : null);
 
             // Pagination
             int offset = (page - 1) * pageSize;
-            stmt.setInt(13, offset);
-            stmt.setInt(14, pageSize);
+            stmt.setInt(15, offset);
+            stmt.setInt(16, pageSize);
 
             // Execute query
             ResultSet rs = stmt.executeQuery();
@@ -397,12 +421,12 @@ public class PatientDAO {
     }
 
     // Method to count all patients for admin/staff view
-    public int countAllPatients(String fullName, String dob, String gender) {
+    public int countAllPatients(String fullName, String dob, String gender, String status) {
         String query = """
                     SELECT COUNT(*) AS total
                     FROM Patient p
-                    WHERE p.status = 'Enable'
-                        AND (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                    WHERE 
+                        (? IS NULL OR p.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                         AND (? IS NULL OR
                             CONVERT(VARCHAR, p.dob, 120) COLLATE SQL_Latin1_General_CP1_CI_AI
                             LIKE CASE
@@ -410,7 +434,8 @@ public class PatientDAO {
                             WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]' THEN ? + '%'
                             WHEN ? LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' THEN ? + '%'
                             ELSE ? END)
-                        AND (? IS NULL OR p.gender COLLATE SQL_Latin1_General_CP1_CI_AI = ?)
+                        AND (? IS NULL OR p.gender COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                        AND (? IS NULL OR p.status COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
                 """;
 
         try (PreparedStatement stmt = ad.getConnection().prepareStatement(query)) {
@@ -430,7 +455,10 @@ public class PatientDAO {
 
             // Gender filter
             stmt.setString(11, gender);
-            stmt.setString(12, gender);
+            stmt.setString(12, gender != null ? "%" + gender + "%" : null);
+
+            stmt.setNString(13, status);
+            stmt.setNString(14, status != null ? "%" + status + "%" : null);
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -445,7 +473,7 @@ public class PatientDAO {
 
     public static void main(String[] args) {
         PatientDAO patientDAO = new PatientDAO();
-        ArrayList<Patient> patients = patientDAO.getAllPatientsByAccountPatientId(1, "", "", "", 1, 10);
+        ArrayList<Patient> patients = patientDAO.getAllPatients(null, null, "", "", 1, 50);
         System.out.println(patients.size());
     }
 }
