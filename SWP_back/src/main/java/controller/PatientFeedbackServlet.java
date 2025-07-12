@@ -47,15 +47,6 @@ public class PatientFeedbackServlet extends HttpServlet {
                 boolean eligible = feedbackDAO.checkEligibility(patientId);
                 JsonObject json = new JsonObject();
                 json.addProperty("eligible", eligible);
-//                if (!eligible) {
-//                    // Check if feedback already exists
-//                    boolean hasFeedback = feedbackDAO.hasFeedback(patientId);
-//                    if (hasFeedback) {
-//                        json.addProperty("error", "Feedback already submitted");
-//                    } else {
-//                        json.addProperty("error", "No completed appointments");
-//                    }
-//                }
                 out.print(gson.toJson(json));
             } catch (NumberFormatException e) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
