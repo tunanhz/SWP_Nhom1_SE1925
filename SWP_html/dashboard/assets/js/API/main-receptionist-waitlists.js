@@ -129,19 +129,20 @@ function renderWaitlistEntries(entries) {
     tbody.innerHTML = '';
 
     if (entries.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No waitlist entries found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center">No waitlist entries found</td></tr>';
         return;
     }
 
-    console.log('Rendering waitlist entries:', entries.length); // Debug rendered count
-    entries.forEach(entry => {
+    console.log('Rendering waitlist entries:', entries.length);
+    entries.forEach((entry, index) => {
         if (!entry || !entry.waitlistId) {
-            console.warn('Skipping invalid waitlist entry:', entry); // Debug invalid rows
+            console.warn('Skipping invalid waitlist entry:', entry);
             return;
         }
-        const row = document.createElement('tr');
         const statusClass = getStatusClass(entry.status);
+        const row = document.createElement('tr');
         row.innerHTML = `
+            <td>${index + 1}</td>
             <td>${entry.patientName || '-'}</td>
             <td>${entry.doctorName || '-'}</td>
             <td>${entry.roomName || '-'}</td>
