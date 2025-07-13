@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-fs-sm" data-bs-theme="light" data-bs-theme-color="default" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Doctor Waitlist - KiviCare</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./assets/images/favicon.ico" />
+
+    <!-- Library / Plugin Css Build -->
+    <link rel="stylesheet" href="./assets/css/core/libs.min.css" />
+
+    <!-- flaticon css -->
+    <link rel="stylesheet" href="./assets/vendor/flaticon/css/flaticon.css" />
+
+    <!-- font-awesome css -->
+    <link rel="stylesheet" href="./assets/vendor/font-awesome/css/all.min.css" />
+
+    <!-- Flatpickr css -->
+    <link rel="stylesheet" href="./assets/vendor/flatpickr/dist/flatpickr.min.css" />
+
+    <!-- Kivicare Design System Css -->
+    <link rel="stylesheet" href="./assets/css/kivicare.min.css?v=1.4.1" />
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="./assets/css/custom.min.css?v=1.4.1" />
+
+    <!-- RTL Css -->
+    <link rel="stylesheet" href="./assets/css/rtl.min.css?v=1.4.1" />
+
+    <!-- Customizer Css -->
+    <link rel="stylesheet" href="./assets/css/customizer.min.css?v=1.4.1" />
+
+    <style>
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-buttons .btn {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-waiting {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-inprogress {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-skipped {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body class="full-screen">
+    <!-- loader Start -->
+    <div id="loading">
+        <div class="loader simple-loader">
+            <div class="loader-body">
+                <img src="./assets/images/loader.gif" alt="loader" class="light-loader img-fluid" width="200">
+            </div>
+        </div>
+    </div>
+    <!-- loader END -->
+
+    <main class="main-content">
+        <div class="position-relative">
+            <!--Nav Start-->
+            <nav class="nav navbar navbar-expand-xl navbar-light iq-navbar">
+                <div class="container-fluid navbar-inner">
+                    <a href="./doctor-dashboard.html" class="navbar-brand ms-0 me-5">
+                        <div class="logo-main">
+                            <img class="logo-normal img-fluid" src="./assets/images/logo.png" height="30" alt="logo">
+                        </div>
+                    </a>
+                    <div class="breadcrumb-title border-end me-3 pe-3 d-none d-xl-block">
+                        <small class="mb-0 text-capitalize">Patient Waitlist</small>
+                    </div>
+                    <div class="navbar-nav navbar-nav-last">
+                        <ul class="navbar-nav navbar-list">
+                            <li class="nav-item dropdown">
+                                <a class="py-0 nav-link d-flex align-items-center" href="#" id="navbarDropdown"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="./assets/images/dashboard/draminelouis.png" alt="User-Profile"
+                                        class="img-fluid avatar-50 avatar-rounded" id="userImg">
+                                    <div class="caption ms-3 d-none d-md-block">
+                                        <h6 class="mb-0 caption-title" id="username">Dr. Amine Louis</h6>
+                                        <p class="mb-0 caption-sub-title">Doctor</p>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="./app/user-profile.html">Profile</a></li>
+                                    <li><a class="dropdown-item" href="./app/user-privacy-setting.html">Privacy Setting</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" id="logoutLink" href="">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!--Nav End-->
+        </div>
+
+        <div class="content-inner container-fluid pb-0" id="page_layout">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">Patient Waitlist</h4>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-primary" onclick="refreshWaitlist()">
+                                    <i class="fas fa-sync-alt"></i> Refresh
+                                </button>
+                                <button class="btn btn-sm btn-primary" onclick="window.location.href='./doctor-dashboard.html'">
+                                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Filter Section -->
+                        <div class="card-body">
+                            <div class="filter-section">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="statusFilter" class="form-label">Filter by Status:</label>
+                                        <select class="form-select" id="statusFilter" onchange="applyFilters()">
+                                            <option value="">All Statuses</option>
+                                            <option value="Waiting">Waiting</option>
+                                            <option value="InProgress">In Progress</option>
+                                            <option value="Completed">Completed</option>
+                                            <option value="Skipped">Skipped</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="visitTypeFilter" class="form-label">Filter by Visit Type:</label>
+                                        <select class="form-select" id="visitTypeFilter" onchange="applyFilters()">
+                                            <option value="">All Types</option>
+                                            <option value="Initial">Initial</option>
+                                            <option value="Result">Result</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="sortBy" class="form-label">Sort by:</label>
+                                        <select class="form-select" id="sortBy" onchange="applyFilters()">
+                                            <option value="waitlist_id">Waitlist ID</option>
+                                            <option value="registered_at">Registered Time</option>
+                                            <option value="estimated_time">Estimated Time</option>
+                                            <option value="status">Status</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="sortOrder" class="form-label">Sort Order:</label>
+                                        <select class="form-select" id="sortOrder" onchange="applyFilters()">
+                                            <option value="ASC">Ascending</option>
+                                            <option value="DESC">Descending</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Waitlist Table -->
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Patient Name</th>
+                                            <th>Room</th>
+                                            <th>Registered At</th>
+                                            <th>Estimated Time</th>
+                                            <th>Visit Type</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="waitlist-table-body">
+                                        <!-- Data will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <span id="pagination-info">Page 1 of 1</span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-secondary" id="prevPage">
+                                        <i class="fas fa-chevron-left"></i> Previous
+                                    </button>
+                                    <button class="btn btn-primary" id="nextPage">
+                                        Next <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Library Bundle Script -->
+    <script src="./assets/js/core/libs.min.js"></script>
+    <!-- Plugin Scripts -->
+    <script src="./assets/vendor/flatpickr/dist/flatpickr.min.js"></script>
+    <!-- Kivicare Script -->
+    <script src="./assets/js/kivicare.js" defer></script>
+
+    <script>
+        // Global variables
+        let currentPage = 1;
+        let totalPages = 1;
+        let pageSize = 10;
+        let doctorId = null;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            loadWaitlist();
+            setupEventListeners();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(loadWaitlist, 30000);
+        });
+
+        function checkAuthentication() {
+            const userRole = sessionStorage.getItem('userRole');
+            const accountStaffId = sessionStorage.getItem('account_staff_id');
+            
+            if (!userRole || userRole !== 'Doctor' || !accountStaffId) {
+                alert('Access denied. Please login as a doctor.');
+                window.location.href = '../frontend/login.html';
+                return;
+            }
+            
+            const username = sessionStorage.getItem('username') || 'Doctor';
+            document.getElementById('username').textContent = `Dr. ${username}`;
+        }
+
+        function setupEventListeners() {
+            document.getElementById('prevPage').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    loadWaitlist();
+                }
+            });
+
+            document.getElementById('nextPage').addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    loadWaitlist();
+                }
+            });
+
+            document.getElementById('logoutLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+        }
+
+        function loadWaitlist() {
+            const loadingElement = document.getElementById('loading');
+            if (loadingElement) loadingElement.style.display = 'block';
+
+            // Get filter values
+            const statusFilter = document.getElementById('statusFilter').value;
+            const visitTypeFilter = document.getElementById('visitTypeFilter').value;
+            const sortBy = document.getElementById('sortBy').value;
+            const sortOrder = document.getElementById('sortOrder').value;
+
+            // Build query parameters
+            const params = new URLSearchParams({
+                page: currentPage,
+                pageSize: pageSize,
+                sortBy: sortBy,
+                sortOrder: sortOrder
+            });
+
+            if (statusFilter) params.append('status', statusFilter);
+            if (visitTypeFilter) params.append('visitType', visitTypeFilter);
+
+            fetch(`/SWP_back/api/doctor/waitlist?${params.toString()}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                doctorId = data.doctorId;
+                totalPages = data.totalPages || 1;
+                currentPage = data.currentPage || 1;
+                
+                displayWaitlist(data.waitlistEntries || []);
+                updatePagination();
+            })
+            .catch(error => {
+                console.error('Error loading waitlist:', error);
+                showError('Failed to load waitlist: ' + error.message);
+            })
+            .finally(() => {
+                if (loadingElement) loadingElement.style.display = 'none';
+            });
+        }
+
+        function displayWaitlist(waitlistEntries) {
+            const tbody = document.getElementById('waitlist-table-body');
+            tbody.innerHTML = '';
+
+            if (waitlistEntries.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center">No patients in waitlist</td></tr>';
+                return;
+            }
+
+            waitlistEntries.forEach(entry => {
+                const row = document.createElement('tr');
+                
+                const registeredAt = entry.registeredAt ? new Date(entry.registeredAt).toLocaleString() : 'N/A';
+                const estimatedTime = entry.estimatedTime ? new Date(entry.estimatedTime).toLocaleString() : 'N/A';
+                
+                const statusClass = getStatusClass(entry.status);
+                const actionButtons = getActionButtons(entry);
+                
+                row.innerHTML = `
+                    <td>${entry.waitlistId}</td>
+                    <td>${entry.patientName || 'Unknown'}</td>
+                    <td>${entry.roomName || 'N/A'}</td>
+                    <td>${registeredAt}</td>
+                    <td>${estimatedTime}</td>
+                    <td>${entry.visitType || 'N/A'}</td>
+                    <td><span class="status-badge ${statusClass}">${entry.status || 'Unknown'}</span></td>
+                    <td>${actionButtons}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function getStatusClass(status) {
+            switch (status?.toLowerCase()) {
+                case 'waiting': return 'status-waiting';
+                case 'inprogress': return 'status-inprogress';
+                case 'completed': return 'status-completed';
+                case 'skipped': return 'status-skipped';
+                default: return '';
+            }
+        }
+
+        function getActionButtons(entry) {
+            const isInitialWaiting = entry.visitType === 'Initial' && entry.status === 'Waiting';
+            
+            let buttons = `
+                <div class="action-buttons">
+                    <button class="btn btn-sm btn-info" onclick="viewMedicalRecord(${entry.waitlistId}, '${entry.patientName}')">
+                        <i class="fas fa-eye"></i> View Record
+                    </button>
+            `;
+            
+            if (isInitialWaiting) {
+                buttons += `
+                    <button class="btn btn-sm btn-primary" onclick="diagnose(${entry.waitlistId}, '${entry.patientName}')">
+                        <i class="fas fa-stethoscope"></i> Diagnose
+                    </button>
+                `;
+            } else if (entry.visitType === 'Initial' && entry.status !== 'Waiting') {
+                buttons += `
+                    <button class="btn btn-sm btn-secondary" onclick="viewDiagnosis(${entry.waitlistId}, '${entry.patientName}')">
+                        <i class="fas fa-file-medical"></i> View Diagnosis
+                    </button>
+                `;
+            }
+            
+            buttons += '</div>';
+            return buttons;
+        }
+
+        function updatePagination() {
+            document.getElementById('pagination-info').textContent = `Page ${currentPage} of ${totalPages}`;
+            
+            document.getElementById('prevPage').disabled = currentPage <= 1;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages;
+        }
+
+        function applyFilters() {
+            currentPage = 1; // Reset to first page when applying filters
+            loadWaitlist();
+        }
+
+        function refreshWaitlist() {
+            loadWaitlist();
+        }
+
+        function viewMedicalRecord(waitlistId, patientName) {
+            updateWaitlistStatus(waitlistId, 'InProgress');
+            window.location.href = `./doctor-medical-record.html?waitlistId=${waitlistId}&patientName=${encodeURIComponent(patientName)}`;
+        }
+
+        function diagnose(waitlistId, patientName) {
+            updateWaitlistStatus(waitlistId, 'InProgress');
+            window.location.href = `./doctor-diagnose.html?waitlistId=${waitlistId}&patientName=${encodeURIComponent(patientName)}`;
+        }
+
+        function viewDiagnosis(waitlistId, patientName) {
+            window.location.href = `./doctor-view-diagnosis.html?waitlistId=${waitlistId}&patientName=${encodeURIComponent(patientName)}`;
+        }
+
+        function updateWaitlistStatus(waitlistId, newStatus) {
+            fetch('/SWP_back/api/doctor/waitlist', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    waitlistId: waitlistId,
+                    status: newStatus
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                console.log('Status updated successfully:', data);
+                setTimeout(loadWaitlist, 1000);
+            })
+            .catch(error => {
+                console.error('Error updating status:', error);
+                showError('Failed to update status: ' + error.message);
+            });
+        }
+
+        function showError(message) {
+            alert('Error: ' + message);
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = '../frontend/login.html';
+        }
+    </script>
+</body>
+</html>

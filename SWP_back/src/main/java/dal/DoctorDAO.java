@@ -1,11 +1,14 @@
 package dal;
 
+import dto.WaitlistDTO;
 import model.Doctor;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Logger;
 
 public class DoctorDAO {
@@ -349,6 +352,166 @@ public class DoctorDAO {
         }
 
         return doctors;
+    }
+
+    /**
+     * Get doctor_id by account_staff_id
+     * @param accountStaffId the account staff ID
+     * @return doctor_id if found, -1 if not found
+     */
+    public int getDoctorByAccountStaffId(int accountStaffId) {
+        String sql = "SELECT doctor_id FROM Doctor WHERE account_staff_id = ?";
+
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
+            stmt.setInt(1, accountStaffId);
+            Logger.getLogger(getClass().getName()).info("Executing SQL: " + sql + " with account_staff_id=" + accountStaffId);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int doctorId = rs.getInt("doctor_id");
+                Logger.getLogger(getClass().getName()).info("Found doctor_id=" + doctorId + " for account_staff_id=" + accountStaffId);
+                return doctorId;
+            } else {
+                Logger.getLogger(getClass().getName()).warning("No doctor found for account_staff_id=" + accountStaffId);
+                return -1;
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error getting doctor by account_staff_id: " + e.getMessage());
+            throw new RuntimeException("Failed to get doctor by account_staff_id", e);
+        }
+    }
+
+    /**
+     * Update waitlist status
+     * @param waitlistId the waitlist ID
+     * @param newStatus the new status
+     * @return true if update successful, false otherwise
+     */
+    public boolean updateWaitlistStatus(int waitlistId, String newStatus) {
+        String sql = "UPDATE Waitlist SET status = ? WHERE waitlist_id = ?";
+
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, newStatus);
+            stmt.setInt(2, waitlistId);
+
+            int rowsAffected = stmt.executeUpdate();
+            Logger.getLogger(getClass().getName()).info("Updated waitlist " + waitlistId + " status to " + newStatus + ". Rows affected: " + rowsAffected);
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error updating waitlist status: " + e.getMessage());
+            throw new RuntimeException("Failed to update waitlist status", e);
+        }
+    }
+
+    /**
+     * Get waitlist entries for a specific doctor
+     * @param doctorId the doctor ID
+     * @param page page number (1-based)
+     * @param pageSize number of entries per page
+     * @param sortBy field to sort by
+     * @param sortOrder ASC or DESC
+     * @return list of waitlist entries for the doctor
+     */
+    public ArrayList<WaitlistDTO> getWaitlistEntriesForDoctor(int doctorId, int page, int pageSize, String sortBy, String sortOrder) {
+        ArrayList<WaitlistDTO> waitlistEntries = new ArrayList<>();
+
+        String sql = """
+            SELECT
+                w.waitlist_id,
+                COALESCE(p.full_name, 'Unknown Patient') AS patient_name,
+                COALESCE(d.full_name, 'Unknown Doctor') AS doctor_name,
+                r.room_name,
+                w.registered_at,
+                w.estimated_time,
+                w.visittype,
+                w.status
+            FROM
+                Waitlist w
+                INNER JOIN Patient p ON w.patient_id = p.patient_id
+                INNER JOIN Doctor d ON w.doctor_id = d.doctor_id
+                LEFT JOIN Room r ON w.room_id = r.room_id
+            WHERE
+                w.doctor_id = ?
+                AND w.status IN ('Waiting', 'InProgress', 'Skipped', 'Completed')
+            """;
+
+        String sortColumn;
+        switch (sortBy != null ? sortBy.toLowerCase() : "waitlist_id") {
+            case "registered_at":
+                sortColumn = "w.registered_at";
+                break;
+            case "estimated_time":
+                sortColumn = "w.estimated_time";
+                break;
+            case "status":
+                sortColumn = "w.status";
+                break;
+            default:
+                sortColumn = "w.waitlist_id";
+        }
+
+        String sortDirection = "DESC".equalsIgnoreCase(sortOrder) ? "DESC" : "ASC";
+        sql += " ORDER BY " + sortColumn + " " + sortDirection +
+                " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
+            stmt.setInt(1, doctorId);
+            stmt.setInt(2, (page - 1) * pageSize);
+            stmt.setInt(3, pageSize);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                WaitlistDTO entry = new WaitlistDTO();
+                entry.setWaitlistId(rs.getInt("waitlist_id"));
+                entry.setPatientName(rs.getString("patient_name"));
+                entry.setDoctorName(rs.getString("doctor_name"));
+                entry.setRoomName(rs.getString("room_name"));
+                Timestamp registeredAt = rs.getTimestamp("registered_at");
+                entry.setRegisteredAt(registeredAt != null ? new Date(registeredAt.getTime()) : null);
+                Timestamp estimatedTime = rs.getTimestamp("estimated_time");
+                entry.setEstimatedTime(estimatedTime != null ? new Date(estimatedTime.getTime()) : null);
+                entry.setVisitType(rs.getString("visittype"));
+                entry.setStatus(rs.getString("status"));
+                waitlistEntries.add(entry);
+            }
+            Logger.getLogger(getClass().getName()).info("Fetched " + waitlistEntries.size() + " waitlist entries for doctor " + doctorId);
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error getting waitlist entries for doctor: " + e.getMessage());
+            throw new RuntimeException("Failed to get waitlist entries for doctor", e);
+        }
+        return waitlistEntries;
+    }
+
+    /**
+     * Count waitlist entries for a specific doctor
+     * @param doctorId the doctor ID
+     * @return total count of waitlist entries for the doctor
+     */
+    public int countWaitlistEntriesForDoctor(int doctorId) {
+        String sql = """
+            SELECT COUNT(*) AS total
+            FROM
+                Waitlist w
+                INNER JOIN Patient p ON w.patient_id = p.patient_id
+                INNER JOIN Doctor d ON w.doctor_id = d.doctor_id
+                LEFT JOIN Room r ON w.room_id = r.room_id
+            WHERE
+                w.doctor_id = ?
+                AND w.status IN ('Waiting', 'InProgress', 'Skipped', 'Completed')
+            """;
+
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
+            stmt.setInt(1, doctorId);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error counting waitlist entries for doctor: " + e.getMessage());
+            throw new RuntimeException("Failed to count waitlist entries for doctor", e);
+        }
     }
 
     public static void main(String[] args) {
