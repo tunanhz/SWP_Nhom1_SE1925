@@ -108,7 +108,7 @@ function fetchPatients(page, pageSize, sortBy, sortOrder) {
                 updatePagination(data.totalPages, data.currentPage, data.pageSize, data.totalPatients);
             } else {
                 showError(data.message || 'Failed to fetch patients');
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center">No patients found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No patients found</td></tr>';
                 if (prevPage) prevPage.disabled = currentPage <= 1;
                 if (nextPage) nextPage.disabled = currentPage >= totalPages;
             }
@@ -116,7 +116,7 @@ function fetchPatients(page, pageSize, sortBy, sortOrder) {
         .catch(error => {
             showError(`Error fetching patients: ${error.message}`);
             console.error('Error:', error);
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center">Error loading patients</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Error loading patients</td></tr>';
             if (prevPage) prevPage.disabled = currentPage <= 1;
             if (nextPage) nextPage.disabled = true;
         });
@@ -127,18 +127,19 @@ function renderPatients(patients) {
     tbody.innerHTML = '';
 
     if (patients.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="text-center">No patients found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No patients found</td></tr>';
         return;
     }
 
     console.log('Rendering patients:', patients.length);
-    patients.forEach(patient => {
+    patients.forEach((patient, index) => {
         if (!patient || !patient.id) {
             console.warn('Skipping invalid patient:', patient);
             return;
         }
         const row = document.createElement('tr');
         row.innerHTML = `
+            <td>${index + 1}</td>
             <td>${patient.fullName || '-'}</td>
             <td>${patient.dob || '-'}</td>
             <td>${patient.gender || '-'}</td>

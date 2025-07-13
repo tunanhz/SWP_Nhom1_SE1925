@@ -4,6 +4,7 @@ import dto.ReceptionistCheckInDTO;
 import dto.WaitlistDTO;
 import model.Appointment;
 import model.Patient;
+import model.Waitlist;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -11,12 +12,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 public class ReceptionistDAO {
     private static final Logger LOGGER = Logger.getLogger(ReceptionistDAO.class.getName());
     private final DBContext db = new DBContext();
+    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Connection getConnection() throws SQLException {
         return db.getConnection();
@@ -214,27 +218,230 @@ public class ReceptionistDAO {
         }
     }
 
-    public boolean checkInAppointment(int appointmentId, int receptionistId) {
+    private Appointment getAppointmentById(int appointmentId, Connection conn) throws SQLException {
         String sql = """
-            UPDATE Appointment
-            SET status = 'Confirmed', receptionist_id = ?
-            WHERE appointment_id = ? AND status = 'Pending';
+            SELECT 
+                a.appointment_id,
+                a.patient_id,
+                a.doctor_id,
+                a.appointment_datetime,
+                a.shift,
+                a.status,
+                a.note
+            FROM 
+                Appointment a
+            WHERE 
+                a.appointment_id = ?
         """;
 
-        try (Connection conn = db.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, receptionistId);
-            stmt.setInt(2, appointmentId);
-            int rowsAffected = stmt.executeUpdate();
-            boolean success = rowsAffected > 0;
-            LOGGER.info("Check-in appointment ID " + appointmentId + " by receptionist ID " + receptionistId + ": " + (success ? "Success" : "Failed"));
-            return success;
-        } catch (SQLException e) {
-            LOGGER.severe("Error checking in appointment ID " + appointmentId + ": " + e.getMessage() + "\nSQL State: " + e.getSQLState() +
-                    "\nError Code: " + e.getErrorCode());
-            throw new RuntimeException("Failed to check-in appointment", e);
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, appointmentId);
+            LOGGER.info("Executing SQL to get appointment: " + sql + " with appointment_id=" + appointmentId);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Appointment appt = new Appointment();
+                appt.setAppointmentId(rs.getInt("appointment_id"));
+                appt.setPatientId(rs.getInt("patient_id"));
+                appt.setDoctorId(rs.getInt("doctor_id"));
+                Timestamp timestamp = rs.getTimestamp("appointment_datetime");
+                appt.setAppointmentDatetime(timestamp != null ? new Date(timestamp.getTime()) : null);
+                appt.setShift(rs.getString("shift"));
+                appt.setStatus(rs.getString("status"));
+                appt.setNote(rs.getString("note"));
+                LOGGER.info("Found appointment: ID=" + appt.getAppointmentId());
+                return appt;
+            } else {
+                LOGGER.warning("No appointment found for appointment_id=" + appointmentId);
+                return null;
+            }
         }
     }
+
+    // Get room_id from DoctorSchedule based on doctor_id, appointment_datetime, and shift
+    private Integer getRoomIdForAppointment(int doctorId, Date appointmentDatetime, String shift, Connection conn) throws SQLException {
+        String sql = """
+            SELECT 
+                ds.room_id
+            FROM 
+                Appointment a
+                INNER JOIN Doctor d ON a.doctor_id = d.doctor_id
+                INNER JOIN DoctorSchedule ds ON a.doctor_id = ds.doctor_id
+                    AND CAST(a.appointment_datetime AS DATE) = ds.working_date
+                    AND a.shift = ds.shift
+            WHERE 
+                a.doctor_id = ?
+                AND a.appointment_datetime = ?
+                AND a.shift = ?
+        """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, doctorId);
+            stmt.setTimestamp(2, new Timestamp(appointmentDatetime.getTime()));
+            stmt.setString(3, shift);
+            LOGGER.info("Executing SQL to get room_id: " + sql + " with doctor_id=" + doctorId +
+                    ", appointment_datetime=" + appointmentDatetime + ", shift=" + shift);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int roomId = rs.getInt("room_id");
+                LOGGER.info("Found room_id=" + roomId);
+                return roomId;
+            } else {
+                LOGGER.warning("No room_id found for doctor_id=" + doctorId + ", appointment_datetime=" +
+                        appointmentDatetime + ", shift=" + shift);
+                return null;
+            }
+        }
+    }
+
+    // Add record to Waitlist
+    private boolean addToWaitlist(Waitlist waitlist, Connection conn) throws SQLException {
+        String sql = """
+            INSERT INTO [dbo].[Waitlist]
+                ([patient_id], [doctor_id], [room_id], [registered_at], [estimated_time], [visittype], [status])
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, waitlist.getPatientId());
+            stmt.setInt(2, waitlist.getDoctorId());
+            stmt.setInt(3, waitlist.getRoomId());
+            String registeredAtStr = waitlist.getRegisteredAt();
+            String estimatedTimeStr = waitlist.getEstimatedTime();
+            LOGGER.info("Adding to waitlist: registered_at=" + registeredAtStr + ", estimated_time=" + estimatedTimeStr);
+            stmt.setTimestamp(4, Timestamp.valueOf(registeredAtStr));
+            stmt.setTimestamp(5, Timestamp.valueOf(estimatedTimeStr));
+            stmt.setString(6, waitlist.getVisittype());
+            stmt.setString(7, waitlist.getStatus());
+
+            LOGGER.info("Executing SQL to add waitlist: patient_id=" + waitlist.getPatientId() +
+                    ", doctor_id=" + waitlist.getDoctorId() + ", room_id=" + waitlist.getRoomId());
+
+            int rowsAffected = stmt.executeUpdate();
+            boolean success = rowsAffected > 0;
+            LOGGER.info("Add to waitlist: " + (success ? "Success" : "Failed"));
+            return success;
+        }
+    }
+
+    // Updated checkInAppointment to update Appointment and add to Waitlist
+    public boolean checkInAppointment(int appointmentId, int receptionistId) {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            conn.setAutoCommit(false); // Start transaction
+
+            // Step 1: Update Appointment status to Confirmed
+            String updateSql = """
+                UPDATE Appointment
+                SET status = 'Confirmed', receptionist_id = ?
+                WHERE appointment_id = ? AND status = 'Pending'
+            """;
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+                updateStmt.setInt(1, receptionistId);
+                updateStmt.setInt(2, appointmentId);
+                int rowsAffected = updateStmt.executeUpdate();
+                if (rowsAffected == 0) {
+                    LOGGER.warning("Failed to update appointment ID " + appointmentId +
+                            ": Appointment not found or not in Pending status");
+                    conn.rollback();
+                    return false;
+                }
+                LOGGER.info("Updated appointment ID " + appointmentId + " to Confirmed");
+            }
+
+            // Step 2: Get Appointment details
+            Appointment appointment = getAppointmentById(appointmentId, conn);
+            if (appointment == null) {
+                LOGGER.warning("Appointment not found for ID " + appointmentId);
+                conn.rollback();
+                return false;
+            }
+
+            // Step 3: Get room_id from DoctorSchedule
+            Integer roomId = getRoomIdForAppointment(
+                    appointment.getDoctorId(),
+                    appointment.getAppointmentDatetime(),
+                    appointment.getShift(),
+                    conn
+            );
+            if (roomId == null) {
+                LOGGER.warning("No room_id found for appointment ID " + appointmentId);
+                conn.rollback();
+                return false;
+            }
+
+            // Step 4: Create Waitlist entry
+            Waitlist waitlist = new Waitlist();
+            waitlist.setPatientId(appointment.getPatientId());
+            waitlist.setDoctorId(appointment.getDoctorId());
+            waitlist.setRoomId(roomId);
+            waitlist.setRegisteredAt(LocalDateTime.now().format(TIMESTAMP_FORMATTER));
+            waitlist.setEstimatedTime(new Timestamp(appointment.getAppointmentDatetime().getTime())
+                    .toLocalDateTime().format(TIMESTAMP_FORMATTER));
+            waitlist.setVisittype("Initial");
+            waitlist.setStatus("Waiting");
+
+            if (!addToWaitlist(waitlist, conn)) {
+                LOGGER.warning("Failed to add to waitlist for appointment ID " + appointmentId);
+                conn.rollback();
+                return false;
+            }
+
+            conn.commit(); // Commit transaction
+            LOGGER.info("Check-in successful for appointment ID " + appointmentId);
+            return true;
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                    LOGGER.info("Transaction rolled back for appointment ID " + appointmentId);
+                } catch (SQLException rollbackEx) {
+                    LOGGER.severe("Error during rollback: " + rollbackEx.getMessage() +
+                            "\nSQL State: " + rollbackEx.getSQLState() + "\nError Code: " + rollbackEx.getErrorCode());
+                }
+            }
+            LOGGER.severe("Error checking in appointment ID " + appointmentId + ": " + e.getMessage() +
+                    "\nSQL State: " + e.getSQLState() + "\nError Code: " + e.getErrorCode());
+            throw new RuntimeException("Failed to check-in appointment: " + e.getMessage(), e);
+        } finally {
+            if (conn != null) {
+                try {
+                    if (!conn.isClosed()) {
+                        conn.setAutoCommit(true);
+                        conn.close();
+                        LOGGER.info("Connection closed successfully for appointment ID " + appointmentId);
+                    }
+                } catch (SQLException e) {
+                    LOGGER.severe("Error closing connection: " + e.getMessage() +
+                            "\nSQL State: " + e.getSQLState() + "\nError Code: " + e.getErrorCode());
+                }
+            }
+        }
+    }
+
+//    public boolean checkInAppointment(int appointmentId, int receptionistId) {
+//        String sql = """
+//            UPDATE Appointment
+//            SET status = 'Confirmed', receptionist_id = ?
+//            WHERE appointment_id = ? AND status = 'Pending';
+//        """;
+//
+//        try (Connection conn = db.getConnection();
+//             PreparedStatement stmt = conn.prepareStatement(sql)) {
+//            stmt.setInt(1, receptionistId);
+//            stmt.setInt(2, appointmentId);
+//            int rowsAffected = stmt.executeUpdate();
+//            boolean success = rowsAffected > 0;
+//            LOGGER.info("Check-in appointment ID " + appointmentId + " by receptionist ID " + receptionistId + ": " + (success ? "Success" : "Failed"));
+//            return success;
+//        } catch (SQLException e) {
+//            LOGGER.severe("Error checking in appointment ID " + appointmentId + ": " + e.getMessage() + "\nSQL State: " + e.getSQLState() +
+//                    "\nError Code: " + e.getErrorCode());
+//            throw new RuntimeException("Failed to check-in appointment", e);
+//        }
+//    }
 
 
     //waitlist
@@ -635,9 +842,99 @@ public class ReceptionistDAO {
         return createdAppointment;
     }
 
+    public List<ReceptionistCheckInDTO> getTop3AppointmentsPerDay(String startDate, String endDate) {
+        List<ReceptionistCheckInDTO> appointments = new ArrayList<>();
+        String sql = "SELECT DISTINCT appointment_date, appointment_id, patient_name, doctor_name, appointment_datetime, shift, status, note " +
+                "FROM (SELECT CONVERT(date, a.appointment_datetime) AS appointment_date, a.appointment_id AS appointment_id, " +
+                "COALESCE(p.full_name, 'Unknown Patient') AS patient_name, COALESCE(d.full_name, 'Unknown Doctor') AS doctor_name, " +
+                "a.appointment_datetime, a.shift, a.status, a.note, " +
+                "ROW_NUMBER() OVER (PARTITION BY CONVERT(date, a.appointment_datetime) ORDER BY a.appointment_datetime) AS row_num " +
+                "FROM Appointment a " +
+                "LEFT JOIN Patient p ON a.patient_id = p.patient_id " +
+                "LEFT JOIN Doctor d ON a.doctor_id = d.doctor_id " +
+                "WHERE a.appointment_datetime BETWEEN ? AND ? " +
+                "AND a.status = 'Pending') AS ranked_appointments " +
+                "WHERE row_num <= 3 " +
+                "ORDER BY appointment_date, appointment_datetime";
 
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, startDate + " 00:00:00");
+            stmt.setString(2, endDate + " 23:59:59");
+            ResultSet rs = stmt.executeQuery();
 
+            while (rs.next()) {
+                ReceptionistCheckInDTO appointment = new ReceptionistCheckInDTO();
+                appointment.setAppointmentId(rs.getInt("appointment_id"));
+                appointment.setPatientName(rs.getString("patient_name"));
+                appointment.setDoctorName(rs.getString("doctor_name"));
+                Timestamp timestamp = rs.getTimestamp("appointment_datetime");
+                appointment.setAppointmentDatetime(timestamp != null ? new Date(timestamp.getTime()) : null);
+                appointment.setShift(rs.getString("shift"));
+                appointment.setStatus(rs.getString("status"));
+                appointment.setNote(rs.getString("note"));
+                appointments.add(appointment);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(ReceptionistDAO.class.getName()).log(Level.SEVERE, "Error fetching top 3 pending appointments per day", e);
+            throw new RuntimeException("Failed to fetch top 3 appointments", e);
+        }
+        return appointments;
+    }
 
+    public List<WaitlistDTO> getTop3WaitlistEntriesPerDay(String startDate, String endDate) {
+        List<WaitlistDTO> waitlistEntries = new ArrayList<>();
+        String sql = """
+            SELECT DISTINCT waitlist_date, waitlist_id, patient_name, doctor_name, room_name, estimated_time, visittype, status
+            FROM (
+                SELECT 
+                    CONVERT(date, w.estimated_time) AS waitlist_date,
+                    w.waitlist_id AS waitlist_id,
+                    COALESCE(p.full_name, 'Unknown Patient') AS patient_name,
+                    COALESCE(d.full_name, 'Unknown Doctor') AS doctor_name,
+                    COALESCE(r.room_name, 'Unknown Room') AS room_name,
+                    w.estimated_time,
+                    w.visittype,
+                    w.status,
+                    ROW_NUMBER() OVER (PARTITION BY CONVERT(date, w.estimated_time) ORDER BY w.estimated_time) AS row_num
+                FROM Waitlist w
+                INNER JOIN Patient p ON w.patient_id = p.patient_id
+                INNER JOIN Doctor d ON w.doctor_id = d.doctor_id
+                LEFT JOIN Room r ON w.room_id = r.room_id
+                WHERE w.estimated_time BETWEEN ? AND ?
+                AND w.visittype = 'Initial'
+                AND w.status = 'Waiting'
+            ) AS ranked_waitlist
+            WHERE row_num <= 3
+            ORDER BY waitlist_date, estimated_time
+        """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, startDate + " 00:00:00");
+            stmt.setString(2, endDate + " 23:59:59");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                WaitlistDTO entry = new WaitlistDTO();
+                entry.setWaitlistId(rs.getInt("waitlist_id"));
+                entry.setPatientName(rs.getString("patient_name"));
+                entry.setDoctorName(rs.getString("doctor_name"));
+                entry.setRoomName(rs.getString("room_name"));
+                Timestamp timestamp = rs.getTimestamp("estimated_time");
+                entry.setEstimatedTime(timestamp != null ? new Date(timestamp.getTime()) : null);
+                entry.setVisitType(rs.getString("visittype"));
+                entry.setStatus(rs.getString("status"));
+                waitlistEntries.add(entry);
+            }
+            LOGGER.info("Fetched " + waitlistEntries.size() + " top 3 waitlist entries for date range: " + startDate + " to " + endDate);
+        } catch (SQLException e) {
+            LOGGER.severe("Error fetching top 3 waitlist entries per day: " + e.getMessage() +
+                    "\nSQL State: " + e.getSQLState() + "\nError Code: " + e.getErrorCode());
+            throw new RuntimeException("Failed to fetch top 3 waitlist entries", e);
+        }
+        return waitlistEntries;
+    }
 
 
     public static void main(String[] args) {
