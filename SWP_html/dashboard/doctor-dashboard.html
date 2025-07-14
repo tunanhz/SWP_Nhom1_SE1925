@@ -162,6 +162,53 @@
             background-color: #f8d7da;
             color: #721c24;
         }
+
+        .content-section {
+            margin-bottom: 2rem;
+        }
+
+        .search-results {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .search-result-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #fff;
+            transition: box-shadow 0.2s;
+        }
+
+        .search-result-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-result-header {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 5px;
+        }
+
+        .search-result-type {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .schedule-available {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .schedule-unavailable {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
     </style>
 </head>
 
@@ -171,9 +218,11 @@
             <img src="./assets/images/logo.png" alt="KiviCare logo">
         </div>
         <ul class="sidebar-menu">
-            <li class="active"><i class="fas fa-th"></i> Dashboard</li>
-            <li><i class="fas fa-users"></i> Patient Waitlist</li>
-            <li><i class="fas fa-file-medical"></i> Medical Records</li>
+            <li class="active" onclick="showSection('dashboard')"><i class="fas fa-th"></i> Dashboard</li>
+            <li onclick="showSection('waitlist')"><i class="fas fa-users"></i> Patient Waitlist</li>
+            <li onclick="showSection('search')"><i class="fas fa-search"></i> Search Patients</li>
+            <li onclick="showSection('schedule')"><i class="fas fa-calendar"></i> My Schedule</li>
+            <li onclick="showSection('records')"><i class="fas fa-file-medical"></i> Medical Records</li>
         </ul>
     </aside>
 
@@ -183,38 +232,141 @@
             <span>Have a nice day. Ready to help your patients.</span>
         </div>
 
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="mb-0">Patient Waitlist</h3>
-                <button class="btn btn-sm btn-outline-primary" onclick="refreshWaitlist()">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-            </div>
-            <div class="card-body pt-0">
-                <div class="table-responsive">
-                    <table class="table waitlist-table">
-                        <thead>
-                            <tr>
-                                <th>Patient Name</th>
-                                <th>Room</th>
-                                <th>Registered At</th>
-                                <th>Estimated Time</th>
-                                <th>Visit Type</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="waitlist-table-body"></tbody>
-                    </table>
+        <!-- Dashboard Overview Section -->
+        <div id="dashboard-section" class="content-section">
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Today's Patients</h5>
+                            <h2 class="text-primary" id="todayPatientsCount">-</h2>
+                        </div>
+                    </div>
                 </div>
-                <div class="row mt-4">
-                    <div class="col-md-6 d-flex justify-content-start">
-                        <button class="btn btn-secondary me-3" id="prevPage">Previous</button>
-                        <button class="btn btn-primary" id="nextPage">Next</button>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Pending Appointments</h5>
+                            <h2 class="text-warning" id="pendingAppointmentsCount">-</h2>
+                        </div>
                     </div>
-                    <div class="col-md-6 d-flex justify-content-end align-items-center">
-                        <span id="pagination-info">Page 1 of 1</span>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Completed Today</h5>
+                            <h2 class="text-success" id="completedTodayCount">-</h2>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Waitlist Section -->
+        <div id="waitlist-section" class="content-section">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Patient Waitlist</h3>
+                    <button class="btn btn-sm btn-outline-primary" onclick="refreshWaitlist()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table waitlist-table">
+                            <thead>
+                                <tr>
+                                    <th>Patient Name</th>
+                                    <th>Room</th>
+                                    <th>Registered At</th>
+                                    <th>Estimated Time</th>
+                                    <th>Visit Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="waitlist-table-body"></tbody>
+                        </table>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6 d-flex justify-content-start">
+                            <button class="btn btn-secondary me-3" id="prevPage">Previous</button>
+                            <button class="btn btn-primary" id="nextPage">Next</button>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end align-items-center">
+                            <span id="pagination-info">Page 1 of 1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div id="search-section" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Search Patients & Records</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search by patient name, phone, or ID...">
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary w-100" onclick="performSearch()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                    <div id="searchResults" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Section -->
+        <div id="schedule-section" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">My Schedule</h3>
+                    <div>
+                        <input type="date" id="scheduleStartDate" class="form-control d-inline-block me-2" style="width: auto;">
+                        <input type="date" id="scheduleEndDate" class="form-control d-inline-block me-2" style="width: auto;">
+                        <button class="btn btn-outline-primary" onclick="loadSchedule()">
+                            <i class="fas fa-sync-alt"></i> Load
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Shift</th>
+                                    <th>Room</th>
+                                    <th>Status</th>
+                                    <th>Note</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-table-body">
+                                <tr>
+                                    <td colspan="5" class="text-center">Select date range and click Load to view schedule</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medical Records Section -->
+        <div id="records-section" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Medical Records</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Medical records functionality will be implemented here.</p>
                 </div>
             </div>
         </div>
@@ -231,8 +383,43 @@
             checkAuthentication();
             loadWaitlist();
             setupEventListeners();
+            setupDateInputs();
+            loadDashboardStats();
             setInterval(loadWaitlist, 30000);
         });
+
+        function setupDateInputs() {
+            const today = new Date().toISOString().split('T')[0];
+            const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            document.getElementById('scheduleStartDate').value = today;
+            document.getElementById('scheduleEndDate').value = nextWeek;
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.style.display = 'none');
+
+            // Remove active class from all menu items
+            const menuItems = document.querySelectorAll('.sidebar-menu li');
+            menuItems.forEach(item => item.classList.remove('active'));
+
+            // Show selected section
+            const targetSection = document.getElementById(sectionName + '-section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+
+            // Add active class to clicked menu item
+            event.target.closest('li').classList.add('active');
+
+            // Load data for specific sections
+            if (sectionName === 'schedule') {
+                loadSchedule();
+            } else if (sectionName === 'dashboard') {
+                loadDashboardStats();
+            }
+        }
 
         function checkAuthentication() {
             document.getElementById('doctorWelcome').textContent = `Hello! Dr. ${account.username}`;
@@ -358,6 +545,176 @@
         function refreshWaitlist() {
             loadWaitlist();
         }
+
+        function loadDashboardStats() {
+            // Load dashboard statistics
+            const url = `http://localhost:8080/SWP_back_war_exploded/api/doctor/waitlist?account_staff_id=${account.accountStaffId}&page=1&pageSize=100`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const entries = data.waitlistEntries || [];
+                    const today = new Date().toDateString();
+
+                    const todayPatients = entries.filter(entry =>
+                        new Date(entry.registeredAt).toDateString() === today
+                    ).length;
+
+                    const pendingAppointments = entries.filter(entry =>
+                        entry.status === 'Waiting'
+                    ).length;
+
+                    const completedToday = entries.filter(entry =>
+                        entry.status === 'Completed' &&
+                        new Date(entry.registeredAt).toDateString() === today
+                    ).length;
+
+                    document.getElementById('todayPatientsCount').textContent = todayPatients;
+                    document.getElementById('pendingAppointmentsCount').textContent = pendingAppointments;
+                    document.getElementById('completedTodayCount').textContent = completedToday;
+                })
+                .catch(error => {
+                    console.error('Error loading dashboard stats:', error);
+                });
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                alert('Please enter a search term');
+                return;
+            }
+
+            const url = `http://localhost:8080/SWP_back_war_exploded/api/doctor/search?doctorId=${account.accountStaffId}&query=${encodeURIComponent(query)}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    displaySearchResults(data);
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                    document.getElementById('searchResults').innerHTML =
+                        '<div class="alert alert-danger">Error performing search</div>';
+                });
+        }
+
+        function displaySearchResults(data) {
+            const resultsContainer = document.getElementById('searchResults');
+            let html = '';
+
+            if (data.patients && data.patients.length > 0) {
+                html += '<h5>Patients</h5>';
+                data.patients.forEach(patient => {
+                    html += `
+                        <div class="search-result-item">
+                            <div class="d-flex justify-content-between">
+                                <div class="search-result-header">${patient.fullName}</div>
+                                <span class="search-result-type">Patient</span>
+                            </div>
+                            <div>ID: ${patient.patientId} | Phone: ${patient.phone || 'N/A'}</div>
+                            <div>DOB: ${patient.dob || 'N/A'} | Gender: ${patient.gender || 'N/A'}</div>
+                        </div>
+                    `;
+                });
+            }
+
+            if (data.medicalRecords && data.medicalRecords.length > 0) {
+                html += '<h5 class="mt-3">Medical Records</h5>';
+                data.medicalRecords.forEach(record => {
+                    html += `
+                        <div class="search-result-item">
+                            <div class="d-flex justify-content-between">
+                                <div class="search-result-header">Record #${record.medicineRecordId}</div>
+                                <span class="search-result-type">Medical Record</span>
+                            </div>
+                            <div>Patient: ${record.patientName} | Date: ${new Date(record.recordDate).toLocaleDateString()}</div>
+                        </div>
+                    `;
+                });
+            }
+
+            if (data.appointments && data.appointments.length > 0) {
+                html += '<h5 class="mt-3">Appointments</h5>';
+                data.appointments.forEach(appointment => {
+                    html += `
+                        <div class="search-result-item">
+                            <div class="d-flex justify-content-between">
+                                <div class="search-result-header">Appointment #${appointment.appointmentId}</div>
+                                <span class="search-result-type">Appointment</span>
+                            </div>
+                            <div>Patient: ${appointment.patientName} | Date: ${new Date(appointment.appointmentDatetime).toLocaleString()}</div>
+                            <div>Status: ${appointment.status}</div>
+                        </div>
+                    `;
+                });
+            }
+
+            if (!html) {
+                html = '<div class="alert alert-info">No results found for your search.</div>';
+            }
+
+            resultsContainer.innerHTML = `<div class="search-results">${html}</div>`;
+        }
+
+        function loadSchedule() {
+            const startDate = document.getElementById('scheduleStartDate').value;
+            const endDate = document.getElementById('scheduleEndDate').value;
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates');
+                return;
+            }
+
+            const url = `http://localhost:8080/SWP_back_war_exploded/api/Add_doctor_schedule?doctorId=${account.accountStaffId}&startDate=${startDate}&endDate=${endDate}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    displaySchedule(data);
+                })
+                .catch(error => {
+                    console.error('Error loading schedule:', error);
+                    document.getElementById('schedule-table-body').innerHTML =
+                        '<tr><td colspan="5" class="text-center text-danger">Error loading schedule</td></tr>';
+                });
+        }
+
+        function displaySchedule(schedules) {
+            const tbody = document.getElementById('schedule-table-body');
+
+            if (!schedules || schedules.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">No schedule found for the selected date range</td></tr>';
+                return;
+            }
+
+            let html = '';
+            schedules.forEach(schedule => {
+                const statusClass = schedule.isAvailable ? 'schedule-available' : 'schedule-unavailable';
+                const statusText = schedule.isAvailable ? 'Available' : 'Not Available';
+
+                html += `
+                    <tr>
+                        <td>${new Date(schedule.workingDate).toLocaleDateString()}</td>
+                        <td>${schedule.shift}</td>
+                        <td>${schedule.roomId || 'N/A'}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${schedule.note || '-'}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        // Add Enter key support for search
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        });
     </script>
 </body>
 
