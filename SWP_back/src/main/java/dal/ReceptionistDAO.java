@@ -1,9 +1,11 @@
 package dal;
 
 import dto.ReceptionistCheckInDTO;
+import dto.ReceptionistDTO;
 import dto.WaitlistDTO;
 import model.Appointment;
 import model.Patient;
+import model.Receptionist;
 import model.Waitlist;
 
 import java.sql.*;
@@ -934,6 +936,175 @@ public class ReceptionistDAO {
             throw new RuntimeException("Failed to fetch top 3 waitlist entries", e);
         }
         return waitlistEntries;
+    }
+
+    public ReceptionistDTO getReceptionistInfoByAccountStaffId(int accountStaffId) throws SQLException {
+        String sql = """
+            SELECT r.receptionist_id, r.full_name, r.phone, r.account_staff_id, a.img
+            FROM [dbo].[Receptionist] r
+            JOIN [dbo].[AccountStaff] a ON r.account_staff_id = a.account_staff_id
+            WHERE r.account_staff_id = ? AND a.status = 'Enable'
+        """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountStaffId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                ReceptionistDTO receptionist = new ReceptionistDTO();
+                receptionist.setReceptionistId(rs.getInt("receptionist_id"));
+                receptionist.setFullName(rs.getString("full_name"));
+                receptionist.setPhone(rs.getString("phone"));
+                receptionist.setAccountStaffId(rs.getInt("account_staff_id"));
+                receptionist.setImg(rs.getString("img"));
+                LOGGER.info("Fetched receptionist for account_staff_id=" + accountStaffId);
+                return receptionist;
+            }
+            LOGGER.warning("No receptionist found for account_staff_id=" + accountStaffId);
+            return null;
+        } catch (SQLException e) {
+            LOGGER.severe("Error fetching receptionist: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    public void updateReceptionistProfile(int receptionistId, String fullName, String phone, String imgUrl) throws SQLException {
+        if (phone != null && !phone.matches("^0[0-9]{9}$")) {
+            throw new SQLException("Phone number must be 10 digits starting with 0");
+        }
+
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            conn.setAutoCommit(false);
+
+            if (fullName != null || phone != null) {
+                String updateReceptionistSql = """
+                UPDATE [dbo].[Receptionist]
+                SET full_name = COALESCE(?, full_name), phone = COALESCE(?, phone)
+                WHERE receptionist_id = ?
+            """;
+                try (PreparedStatement stmt = conn.prepareStatement(updateReceptionistSql)) {
+                    stmt.setString(1, fullName);
+                    stmt.setString(2, phone);
+                    stmt.setInt(3, receptionistId);
+                    int rowsAffected = stmt.executeUpdate();
+                    if (rowsAffected == 0) {
+                        LOGGER.warning("No receptionist found with receptionist_id=" + receptionistId);
+                        throw new SQLException("No receptionist found");
+                    }
+                    LOGGER.info("Receptionist profile updated: receptionist_id=" + receptionistId);
+                }
+            }
+
+            if (imgUrl != null) {
+                String updateAccountStaffSql = """
+                UPDATE [dbo].[AccountStaff]
+                SET img = ?
+                WHERE account_staff_id = (SELECT account_staff_id FROM [dbo].[Receptionist] WHERE receptionist_id = ?)
+            """;
+                try (PreparedStatement stmt = conn.prepareStatement(updateAccountStaffSql)) {
+                    stmt.setString(1, imgUrl);
+                    stmt.setInt(2, receptionistId);
+                    int rowsAffected = stmt.executeUpdate();
+                    if (rowsAffected == 0) {
+                        LOGGER.warning("No account_staff found for receptionist_id=" + receptionistId);
+                        throw new SQLException("No AccountStaff found for receptionist");
+                    }
+                    LOGGER.info("Image updated in AccountStaff for receptionist_id=" + receptionistId);
+                }
+            }
+
+            conn.commit();
+            LOGGER.info("Receptionist profile updated successfully for receptionist_id=" + receptionistId);
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                    LOGGER.info("Transaction rolled back for receptionist_id=" + receptionistId);
+                } catch (SQLException rollbackEx) {
+                    LOGGER.severe("Error during rollback: " + rollbackEx.getMessage());
+                }
+            }
+            LOGGER.severe("Error updating receptionist profile: " + e.getMessage());
+            throw e;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    LOGGER.severe("Error closing connection: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    public void updatePassword(int accountStaffId, String currentPassword, String newPassword) throws SQLException {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            conn.setAutoCommit(false);
+
+            // Kiểm tra mật khẩu hiện tại
+            String checkPasswordSql = """
+                SELECT password FROM [dbo].[AccountStaff] WHERE account_staff_id = ?
+            """;
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkPasswordSql)) {
+                checkStmt.setInt(1, accountStaffId);
+                try (ResultSet rs = checkStmt.executeQuery()) {
+                    if (!rs.next()) {
+                        LOGGER.warning("No account found with account_staff_id=" + accountStaffId);
+                        throw new SQLException("No account found");
+                    }
+                    String storedPassword = rs.getString("password");
+                    if (!storedPassword.equals(currentPassword)) { // Giả sử mật khẩu được lưu dưới dạng plain text (nên mã hóa trong thực tế)
+                        LOGGER.warning("Current password mismatch for account_staff_id=" + accountStaffId);
+                        throw new SQLException("Current password is incorrect");
+                    }
+                }
+            }
+
+            // Cập nhật mật khẩu mới
+            String updatePasswordSql = """
+                UPDATE [dbo].[AccountStaff]
+                SET password = ?
+                WHERE account_staff_id = ?
+            """;
+            try (PreparedStatement stmt = conn.prepareStatement(updatePasswordSql)) {
+                stmt.setString(1, newPassword);
+                stmt.setInt(2, accountStaffId);
+                int rowsAffected = stmt.executeUpdate();
+                if (rowsAffected == 0) {
+                    LOGGER.warning("No account updated for account_staff_id=" + accountStaffId);
+                    throw new SQLException("Failed to update password");
+                }
+                LOGGER.info("Password updated successfully for account_staff_id=" + accountStaffId);
+            }
+
+            conn.commit();
+            LOGGER.info("Password update transaction committed for account_staff_id=" + accountStaffId);
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                    LOGGER.info("Transaction rolled back for account_staff_id=" + accountStaffId);
+                } catch (SQLException rollbackEx) {
+                    LOGGER.severe("Error during rollback: " + rollbackEx.getMessage());
+                }
+            }
+            LOGGER.severe("Error updating password: " + e.getMessage());
+            throw e;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    LOGGER.severe("Error closing connection: " + e.getMessage());
+                }
+            }
+        }
     }
 
 
