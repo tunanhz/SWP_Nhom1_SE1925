@@ -56,61 +56,16 @@ public class DiagnosisServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            // Get parameters
-            String doctorIdParam = request.getParameter("doctorId");
-            String pageParam = request.getParameter("page");
-            String pageSizeParam = request.getParameter("pageSize");
+            // Check if diagnosis ID is provided in URL path
+            String pathInfo = request.getPathInfo();
 
-            // Validate required parameters
-            if (doctorIdParam == null || doctorIdParam.trim().isEmpty()) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.print("{\"error\": \"doctorId parameter is required\"}");
-                return;
+            if (pathInfo != null && pathInfo.length() > 1) {
+                // Handle GET by diagnosis ID: /api/doctor/diagnosis/{id}
+                handleGetDiagnosisById(request, response, out, pathInfo);
+            } else {
+                // Handle GET by doctor ID with pagination: /api/doctor/diagnosis?doctorId=X
+                handleGetDiagnosisByDoctorId(request, response, out);
             }
-
-            // Parse parameters with defaults
-            int doctorId;
-            int page = 1;
-            int pageSize = 10;
-
-            try {
-                doctorId = Integer.parseInt(doctorIdParam);
-                if (pageParam != null && !pageParam.trim().isEmpty()) {
-                    page = Integer.parseInt(pageParam);
-                }
-                if (pageSizeParam != null && !pageSizeParam.trim().isEmpty()) {
-                    pageSize = Integer.parseInt(pageSizeParam);
-                }
-            } catch (NumberFormatException e) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.print("{\"error\": \"Invalid number format in parameters\"}");
-                return;
-            }
-
-            // Validate page and pageSize
-            if (page < 1) page = 1;
-            if (pageSize < 1) pageSize = 10;
-            if (pageSize > 100) pageSize = 100; // Limit max page size
-
-            LOGGER.info("Fetching diagnosis for doctorId=" + doctorId +
-                    ", page=" + page + ", pageSize=" + pageSize);
-
-            // Get diagnosis data
-            ArrayList<DiagnosisResponseDTO> diagnosisList = diagnosisDAO.getDiagnosisByDoctorId(doctorId, page, pageSize);
-            int totalRecords = diagnosisDAO.countDiagnosisByDoctorId(doctorId);
-            int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
-
-            // Build response JSON
-            JsonObject responseJson = new JsonObject();
-            responseJson.add("diagnosis", gson.toJsonTree(diagnosisList));
-            responseJson.addProperty("totalPages", totalPages);
-            responseJson.addProperty("currentPage", page);
-            responseJson.addProperty("pageSize", pageSize);
-            responseJson.addProperty("totalRecords", totalRecords);
-
-            out.print(gson.toJson(responseJson));
-
-            LOGGER.info("Successfully returned " + diagnosisList.size() + " diagnosis records");
 
         } catch (Exception e) {
             LOGGER.severe("Error processing diagnosis request: " + e.getMessage());
@@ -120,6 +75,102 @@ public class DiagnosisServlet extends HttpServlet {
         } finally {
             out.flush();
         }
+    }
+
+    /**
+     * Handle GET request for a single diagnosis by ID
+     */
+    private void handleGetDiagnosisById(HttpServletRequest request, HttpServletResponse response,
+                                        PrintWriter out, String pathInfo) throws Exception {
+        String diagnosisIdStr = pathInfo.substring(1); // Remove leading "/"
+        int diagnosisId;
+
+        try {
+            diagnosisId = Integer.parseInt(diagnosisIdStr);
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\": \"Invalid diagnosis ID format\"}");
+            return;
+        }
+
+        LOGGER.info("Fetching diagnosis by ID=" + diagnosisId);
+
+        // Get diagnosis by ID
+        Diagnosis diagnosis = diagnosisDAO.getDiagnosisById(diagnosisId);
+
+        if (diagnosis == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            out.print("{\"error\": \"Diagnosis not found\"}");
+            return;
+        }
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        out.print(gson.toJson(diagnosis));
+
+        LOGGER.info("Successfully returned diagnosis with ID: " + diagnosisId);
+    }
+
+    /**
+     * Handle GET request for diagnoses by doctor ID with pagination
+     */
+    private void handleGetDiagnosisByDoctorId(HttpServletRequest request, HttpServletResponse response,
+                                              PrintWriter out) throws Exception {
+        // Get parameters
+        String doctorIdParam = request.getParameter("doctorId");
+        String pageParam = request.getParameter("page");
+        String pageSizeParam = request.getParameter("pageSize");
+
+        // Validate required parameters
+        if (doctorIdParam == null || doctorIdParam.trim().isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\": \"doctorId parameter is required\"}");
+            return;
+        }
+
+        // Parse parameters with defaults
+        int doctorId;
+        int page = 1;
+        int pageSize = 10;
+
+        try {
+            doctorId = Integer.parseInt(doctorIdParam);
+            if (pageParam != null && !pageParam.trim().isEmpty()) {
+                page = Integer.parseInt(pageParam);
+            }
+            if (pageSizeParam != null && !pageSizeParam.trim().isEmpty()) {
+                pageSize = Integer.parseInt(pageSizeParam);
+            }
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\": \"Invalid number format in parameters\"}");
+            return;
+        }
+
+        // Validate page and pageSize
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 10;
+        if (pageSize > 100) pageSize = 100; // Limit max page size
+
+        LOGGER.info("Fetching diagnosis for doctorId=" + doctorId +
+                ", page=" + page + ", pageSize=" + pageSize);
+
+        // Get diagnosis data
+        ArrayList<DiagnosisResponseDTO> diagnosisList = diagnosisDAO.getDiagnosisByDoctorId(doctorId, page, pageSize);
+        int totalRecords = diagnosisDAO.countDiagnosisByDoctorId(doctorId);
+        int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
+
+        // Build response JSON
+        JsonObject responseJson = new JsonObject();
+        responseJson.add("diagnosis", gson.toJsonTree(diagnosisList));
+        responseJson.addProperty("totalPages", totalPages);
+        responseJson.addProperty("currentPage", page);
+        responseJson.addProperty("pageSize", pageSize);
+        responseJson.addProperty("totalRecords", totalRecords);
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        out.print(gson.toJson(responseJson));
+
+        LOGGER.info("Successfully returned " + diagnosisList.size() + " diagnosis records");
     }
 
     @Override
@@ -175,8 +226,18 @@ public class DiagnosisServlet extends HttpServlet {
 
         } catch (SQLException e) {
             LOGGER.severe("Database error creating diagnosis: " + e.getMessage());
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.print("{\"error\": \"Database error: " + e.getMessage().replace("\"", "\\\"") + "\"}");
+
+            // Check for specific business rule violations
+            if (e.getMessage().contains("does not have access")) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                out.print("{\"error\": \"" + e.getMessage().replace("\"", "\\\"") + "\"}");
+            } else if (e.getMessage().contains("not found")) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                out.print("{\"error\": \"" + e.getMessage().replace("\"", "\\\"") + "\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.print("{\"error\": \"Database error: " + e.getMessage().replace("\"", "\\\"") + "\"}");
+            }
         } catch (Exception e) {
             LOGGER.severe("Error creating diagnosis: " + e.getMessage());
             e.printStackTrace();
@@ -265,8 +326,18 @@ public class DiagnosisServlet extends HttpServlet {
 
         } catch (SQLException e) {
             LOGGER.severe("Database error updating diagnosis: " + e.getMessage());
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.print("{\"error\": \"Database error: " + e.getMessage().replace("\"", "\\\"") + "\"}");
+
+            // Check for specific business rule violations
+            if (e.getMessage().contains("does not have access") || e.getMessage().contains("does not have permission")) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                out.print("{\"error\": \"" + e.getMessage().replace("\"", "\\\"") + "\"}");
+            } else if (e.getMessage().contains("not found")) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                out.print("{\"error\": \"" + e.getMessage().replace("\"", "\\\"") + "\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.print("{\"error\": \"Database error: " + e.getMessage().replace("\"", "\\\"") + "\"}");
+            }
         } catch (Exception e) {
             LOGGER.severe("Error updating diagnosis: " + e.getMessage());
             e.printStackTrace();

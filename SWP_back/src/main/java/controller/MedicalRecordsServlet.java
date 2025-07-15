@@ -56,61 +56,16 @@ public class MedicalRecordsServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            // Get parameters
-            String doctorIdParam = request.getParameter("doctorId");
-            String pageParam = request.getParameter("page");
-            String pageSizeParam = request.getParameter("pageSize");
+            // Check if medical record ID is provided in URL path
+            String pathInfo = request.getPathInfo();
 
-            // Validate required parameters
-            if (doctorIdParam == null || doctorIdParam.trim().isEmpty()) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.print("{\"error\": \"doctorId parameter is required\"}");
-                return;
+            if (pathInfo != null && pathInfo.length() > 1) {
+                // Handle GET by medical record ID: /api/doctor/medical-records/{id}
+                handleGetMedicalRecordById(request, response, out, pathInfo);
+            } else {
+                // Handle GET by doctor ID with pagination: /api/doctor/medical-records?doctorId=X
+                handleGetMedicalRecordsByDoctorId(request, response, out);
             }
-
-            // Parse parameters with defaults
-            int doctorId;
-            int page = 1;
-            int pageSize = 10;
-
-            try {
-                doctorId = Integer.parseInt(doctorIdParam);
-                if (pageParam != null && !pageParam.trim().isEmpty()) {
-                    page = Integer.parseInt(pageParam);
-                }
-                if (pageSizeParam != null && !pageSizeParam.trim().isEmpty()) {
-                    pageSize = Integer.parseInt(pageSizeParam);
-                }
-            } catch (NumberFormatException e) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.print("{\"error\": \"Invalid number format in parameters\"}");
-                return;
-            }
-
-            // Validate page and pageSize
-            if (page < 1) page = 1;
-            if (pageSize < 1) pageSize = 10;
-            if (pageSize > 100) pageSize = 100; // Limit max page size
-
-            LOGGER.info("Fetching medical records for doctorId=" + doctorId +
-                    ", page=" + page + ", pageSize=" + pageSize);
-
-            // Get medical records data
-            ArrayList<MedicalRecordResponseDTO> recordsList = medicalRecordsDAO.getMedicalRecordsByDoctorId(doctorId, page, pageSize);
-            int totalRecords = medicalRecordsDAO.countMedicalRecordsByDoctorId(doctorId);
-            int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
-
-            // Build response JSON
-            JsonObject responseJson = new JsonObject();
-            responseJson.add("records", gson.toJsonTree(recordsList));
-            responseJson.addProperty("totalPages", totalPages);
-            responseJson.addProperty("currentPage", page);
-            responseJson.addProperty("pageSize", pageSize);
-            responseJson.addProperty("totalRecords", totalRecords);
-
-            out.print(gson.toJson(responseJson));
-
-            LOGGER.info("Successfully returned " + recordsList.size() + " medical records");
 
         } catch (Exception e) {
             LOGGER.severe("Error processing medical records request: " + e.getMessage());
@@ -120,6 +75,102 @@ public class MedicalRecordsServlet extends HttpServlet {
         } finally {
             out.flush();
         }
+    }
+
+    /**
+     * Handle GET request for a single medical record by ID
+     */
+    private void handleGetMedicalRecordById(HttpServletRequest request, HttpServletResponse response,
+                                            PrintWriter out, String pathInfo) throws Exception {
+        String recordIdStr = pathInfo.substring(1); // Remove leading "/"
+        int recordId;
+
+        try {
+            recordId = Integer.parseInt(recordIdStr);
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\": \"Invalid medical record ID format\"}");
+            return;
+        }
+
+        LOGGER.info("Fetching medical record by ID=" + recordId);
+
+        // Get detailed medical record by ID
+        MedicalRecordResponseDTO record = medicalRecordsDAO.getDetailedMedicalRecordById(recordId);
+
+        if (record == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            out.print("{\"error\": \"Medical record not found\"}");
+            return;
+        }
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        out.print(gson.toJson(record));
+
+        LOGGER.info("Successfully returned medical record with ID: " + recordId);
+    }
+
+    /**
+     * Handle GET request for medical records by doctor ID with pagination
+     */
+    private void handleGetMedicalRecordsByDoctorId(HttpServletRequest request, HttpServletResponse response,
+                                                   PrintWriter out) throws Exception {
+        // Get parameters
+        String doctorIdParam = request.getParameter("doctorId");
+        String pageParam = request.getParameter("page");
+        String pageSizeParam = request.getParameter("pageSize");
+
+        // Validate required parameters
+        if (doctorIdParam == null || doctorIdParam.trim().isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\": \"doctorId parameter is required\"}");
+            return;
+        }
+
+        // Parse parameters with defaults
+        int doctorId;
+        int page = 1;
+        int pageSize = 10;
+
+        try {
+            doctorId = Integer.parseInt(doctorIdParam);
+            if (pageParam != null && !pageParam.trim().isEmpty()) {
+                page = Integer.parseInt(pageParam);
+            }
+            if (pageSizeParam != null && !pageSizeParam.trim().isEmpty()) {
+                pageSize = Integer.parseInt(pageSizeParam);
+            }
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\": \"Invalid number format in parameters\"}");
+            return;
+        }
+
+        // Validate page and pageSize
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 10;
+        if (pageSize > 100) pageSize = 100; // Limit max page size
+
+        LOGGER.info("Fetching medical records for doctorId=" + doctorId +
+                ", page=" + page + ", pageSize=" + pageSize);
+
+        // Get medical records data
+        ArrayList<MedicalRecordResponseDTO> recordsList = medicalRecordsDAO.getMedicalRecordsByDoctorId(doctorId, page, pageSize);
+        int totalRecords = medicalRecordsDAO.countMedicalRecordsByDoctorId(doctorId);
+        int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
+
+        // Build response JSON
+        JsonObject responseJson = new JsonObject();
+        responseJson.add("records", gson.toJsonTree(recordsList));
+        responseJson.addProperty("totalPages", totalPages);
+        responseJson.addProperty("currentPage", page);
+        responseJson.addProperty("pageSize", pageSize);
+        responseJson.addProperty("totalRecords", totalRecords);
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        out.print(gson.toJson(responseJson));
+
+        LOGGER.info("Successfully returned " + recordsList.size() + " medical records");
     }
 
     @Override

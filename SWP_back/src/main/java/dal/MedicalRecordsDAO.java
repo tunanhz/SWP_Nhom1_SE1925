@@ -29,15 +29,20 @@ public class MedicalRecordsDAO {
         String sql = """
                 SELECT DISTINCT
                     mr.medicineRecord_id AS record_id,
+                    mr.patient_id,
                     p.full_name AS patient_name,
+                    p.dob AS patient_dob,
+                    p.gender AS patient_gender,
+                    p.phone AS patient_phone,
+                    p.address AS patient_address,
                     COALESCE(pr.prescription_date, a.appointment_datetime) AS record_date,
-                    CASE 
+                    CASE
                         WHEN d.diagnosis_id IS NOT NULL THEN 'Diagnosis'
                         WHEN er.exam_result_id IS NOT NULL THEN 'Examination'
                         WHEN pr.prescription_id IS NOT NULL THEN 'Prescription'
                         ELSE 'General Record'
                     END AS type,
-                    CASE 
+                    CASE
                         WHEN pr.status = 'Completed' THEN 'Completed'
                         WHEN pr.status = 'Pending' THEN 'In Progress'
                         WHEN a.status = 'Completed' THEN 'Completed'
@@ -69,9 +74,20 @@ public class MedicalRecordsDAO {
             while (rs.next()) {
                 MedicalRecordResponseDTO record = new MedicalRecordResponseDTO();
                 record.setRecordId(rs.getInt("record_id"));
+                record.setPatientId(rs.getInt("patient_id"));
                 record.setPatientName(rs.getString("patient_name"));
 
-                // Handle date conversion
+                // Handle patient DOB
+                java.sql.Date patientDobSql = rs.getDate("patient_dob");
+                if (patientDobSql != null) {
+                    record.setPatientDob(patientDobSql.toLocalDate());
+                }
+
+                record.setPatientGender(rs.getString("patient_gender"));
+                record.setPatientPhone(rs.getString("patient_phone"));
+                record.setPatientAddress(rs.getString("patient_address"));
+
+                // Handle record date conversion
                 java.sql.Date sqlDate = rs.getDate("record_date");
                 if (sqlDate != null) {
                     record.setDate(sqlDate.toLocalDate());
@@ -295,6 +311,86 @@ public class MedicalRecordsDAO {
             }
         } catch (SQLException e) {
             LOGGER.severe("Error getting medical record by ID: " + e.getMessage());
+            throw e;
+        }
+        return null;
+    }
+
+    /**
+     * Get detailed medical record information by ID
+     * @param recordId the medical record ID
+     * @return the MedicalRecordResponseDTO with complete information or null if not found
+     * @throws SQLException if database operation fails
+     */
+    public MedicalRecordResponseDTO getDetailedMedicalRecordById(int recordId) throws SQLException {
+        String sql = """
+                SELECT
+                    mr.medicineRecord_id AS record_id,
+                    mr.patient_id,
+                    p.full_name AS patient_name,
+                    p.dob AS patient_dob,
+                    p.gender AS patient_gender,
+                    p.phone AS patient_phone,
+                    p.address AS patient_address,
+                    COALESCE(pr.prescription_date, a.appointment_datetime, GETDATE()) AS record_date,
+                    CASE
+                        WHEN d.diagnosis_id IS NOT NULL THEN 'Diagnosis'
+                        WHEN er.exam_result_id IS NOT NULL THEN 'Examination'
+                        WHEN pr.prescription_id IS NOT NULL THEN 'Prescription'
+                        ELSE 'General Record'
+                    END AS type,
+                    CASE
+                        WHEN pr.status = 'Completed' THEN 'Completed'
+                        WHEN pr.status = 'Pending' THEN 'In Progress'
+                        WHEN a.status = 'Completed' THEN 'Completed'
+                        WHEN a.status = 'Confirmed' THEN 'Active'
+                        ELSE 'Active'
+                    END AS status
+                FROM MedicineRecords mr
+                JOIN Patient p ON mr.patient_id = p.patient_id
+                LEFT JOIN Diagnosis d ON mr.medicineRecord_id = d.medicineRecord_id
+                LEFT JOIN ExamResult er ON mr.medicineRecord_id = er.medicineRecord_id
+                LEFT JOIN Prescription pr ON mr.medicineRecord_id = pr.medicineRecord_id
+                LEFT JOIN Appointment a ON p.patient_id = a.patient_id
+                WHERE mr.medicineRecord_id = ?
+                """;
+
+        try (PreparedStatement ps = dbContext.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, recordId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    MedicalRecordResponseDTO record = new MedicalRecordResponseDTO();
+                    record.setRecordId(rs.getInt("record_id"));
+                    record.setPatientId(rs.getInt("patient_id"));
+                    record.setPatientName(rs.getString("patient_name"));
+
+                    // Handle patient DOB
+                    java.sql.Date patientDobSql = rs.getDate("patient_dob");
+                    if (patientDobSql != null) {
+                        record.setPatientDob(patientDobSql.toLocalDate());
+                    }
+
+                    record.setPatientGender(rs.getString("patient_gender"));
+                    record.setPatientPhone(rs.getString("patient_phone"));
+                    record.setPatientAddress(rs.getString("patient_address"));
+
+                    // Handle record date conversion
+                    java.sql.Date sqlDate = rs.getDate("record_date");
+                    if (sqlDate != null) {
+                        record.setDate(sqlDate.toLocalDate());
+                    } else {
+                        record.setDate(LocalDate.now());
+                    }
+
+                    record.setType(rs.getString("type"));
+                    record.setStatus(rs.getString("status"));
+
+                    return record;
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error getting detailed medical record by ID: " + e.getMessage());
             throw e;
         }
         return null;

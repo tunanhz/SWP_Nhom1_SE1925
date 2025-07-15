@@ -210,13 +210,90 @@ public class DiagnosisDAO {
     }
 
     /**
-     * Create a new diagnosis record
+     * Validate if a doctor has access to a medical record
+     * @param doctorId the doctor's ID
+     * @param medicineRecordId the medical record ID
+     * @return true if doctor has access, false otherwise
+     * @throws SQLException if database operation fails
+     */
+    public boolean validateDoctorMedicalRecordAccess(int doctorId, int medicineRecordId) throws SQLException {
+        String sql = """
+                SELECT COUNT(*) as access_count
+                FROM MedicineRecords mr
+                JOIN Patient p ON mr.patient_id = p.patient_id
+                WHERE mr.medicineRecord_id = ?
+                AND (
+                    EXISTS (SELECT 1 FROM Appointment a WHERE a.patient_id = p.patient_id AND a.doctor_id = ?)
+                    OR EXISTS (SELECT 1 FROM Diagnosis d WHERE d.medicineRecord_id = mr.medicineRecord_id AND d.doctor_id = ?)
+                    OR EXISTS (SELECT 1 FROM ExamResult er WHERE er.medicineRecord_id = mr.medicineRecord_id AND er.doctor_id = ?)
+                    OR EXISTS (SELECT 1 FROM Prescription pr WHERE pr.medicineRecord_id = mr.medicineRecord_id AND pr.doctor_id = ?)
+                )
+                """;
+
+        try (PreparedStatement ps = dbContext.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, medicineRecordId);
+            ps.setInt(2, doctorId);
+            ps.setInt(3, doctorId);
+            ps.setInt(4, doctorId);
+            ps.setInt(5, doctorId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("access_count") > 0;
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error validating doctor medical record access: " + e.getMessage());
+            throw e;
+        }
+        return false;
+    }
+
+    /**
+     * Get patient information for a medical record
+     * @param medicineRecordId the medical record ID
+     * @return patient information or null if not found
+     * @throws SQLException if database operation fails
+     */
+    public String getPatientInfoForMedicalRecord(int medicineRecordId) throws SQLException {
+        String sql = """
+                SELECT p.full_name, p.dob, p.gender, p.phone
+                FROM MedicineRecords mr
+                JOIN Patient p ON mr.patient_id = p.patient_id
+                WHERE mr.medicineRecord_id = ?
+                """;
+
+        try (PreparedStatement ps = dbContext.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, medicineRecordId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return String.format("Patient: %s, DOB: %s, Gender: %s, Phone: %s",
+                            rs.getString("full_name"),
+                            rs.getDate("dob"),
+                            rs.getString("gender"),
+                            rs.getString("phone"));
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error getting patient info for medical record: " + e.getMessage());
+            throw e;
+        }
+        return null;
+    }
+
+    /**
+     * Create a new diagnosis record with business validation
      * @param diagnosisRequest the diagnosis data to create
      * @return the created Diagnosis object with generated ID
      * @throws SQLException if database operation fails
      */
     public Diagnosis createDiagnosis(DiagnosisRequestDTO diagnosisRequest) throws SQLException {
-        String sql = "INSERT INTO Diagnosis (doctor_id, medicineRecord_id, conclusion, disease, treatmentPlan) VALUES (?, ?, ?, ?, ?)";
+        // Validate that the doctor has access to the medical record
+        if (!validateDoctorMedicalRecordAccess(diagnosisRequest.getDoctorId(), diagnosisRequest.getMedicineRecordId())) {
+            throw new SQLException("Doctor does not have access to the specified medical record");
+        }
+        String sql = "INSERT INTO Diagnosis (doctor_id, medicineRecord_id, conclusion, disease, treatment_plan) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = dbContext.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, diagnosisRequest.getDoctorId());
@@ -257,7 +334,7 @@ public class DiagnosisDAO {
      * @throws SQLException if database operation fails
      */
     public Diagnosis getDiagnosisById(int diagnosisId) throws SQLException {
-        String sql = "SELECT diagnosis_id, doctor_id, medicineRecord_id, conclusion, disease, treatmentPlan FROM Diagnosis WHERE diagnosis_id = ?";
+        String sql = "SELECT diagnosis_id, doctor_id, medicineRecord_id, conclusion, disease, treatment_plan FROM Diagnosis WHERE diagnosis_id = ?";
 
         try (PreparedStatement ps = dbContext.getConnection().prepareStatement(sql)) {
             ps.setInt(1, diagnosisId);
@@ -270,7 +347,7 @@ public class DiagnosisDAO {
                     diagnosis.setMedicineRecordId(rs.getInt("medicineRecord_id"));
                     diagnosis.setConclusion(rs.getString("conclusion"));
                     diagnosis.setDisease(rs.getString("disease"));
-                    diagnosis.setTreatmentPlan(rs.getString("treatmentPlan"));
+                    diagnosis.setTreatmentPlan(rs.getString("treatment_plan"));
                     return diagnosis;
                 }
             }
@@ -282,33 +359,48 @@ public class DiagnosisDAO {
     }
 
     /**
-     * Update an existing diagnosis record
+     * Update an existing diagnosis record with business validation
      * @param diagnosisId the ID of the diagnosis to update
      * @param diagnosisRequest the updated diagnosis data
      * @return the updated Diagnosis object
      * @throws SQLException if database operation fails
      */
     public Diagnosis updateDiagnosis(int diagnosisId, DiagnosisRequestDTO diagnosisRequest) throws SQLException {
-        String sql = "UPDATE Diagnosis SET doctor_id = ?, medicineRecord_id = ?, conclusion = ?, disease = ?, treatmentPlan = ? WHERE diagnosis_id = ?";
+        // Validate that the diagnosis exists and belongs to the doctor
+        Diagnosis existingDiagnosis = getDiagnosisById(diagnosisId);
+        if (existingDiagnosis == null) {
+            throw new SQLException("Diagnosis not found");
+        }
+
+        if (existingDiagnosis.getDoctorId() != diagnosisRequest.getDoctorId()) {
+            throw new SQLException("Doctor does not have permission to update this diagnosis");
+        }
+
+        // Business rule: Medical record cannot be changed during update
+        if (existingDiagnosis.getMedicineRecordId() != diagnosisRequest.getMedicineRecordId()) {
+            throw new SQLException("Medical record cannot be changed when updating a diagnosis");
+        }
+        // Only update allowed fields: conclusion, disease, treatmentPlan
+        // Medical record and doctor cannot be changed
+        String sql = "UPDATE Diagnosis SET conclusion = ?, disease = ?, treatment_plan = ? WHERE diagnosis_id = ? AND doctor_id = ?";
 
         try (PreparedStatement ps = dbContext.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, diagnosisRequest.getDoctorId());
-            ps.setInt(2, diagnosisRequest.getMedicineRecordId());
-            ps.setString(3, diagnosisRequest.getConclusion());
-            ps.setString(4, diagnosisRequest.getDisease());
-            ps.setString(5, diagnosisRequest.getTreatmentPlan());
-            ps.setInt(6, diagnosisId);
+            ps.setString(1, diagnosisRequest.getConclusion());
+            ps.setString(2, diagnosisRequest.getDisease());
+            ps.setString(3, diagnosisRequest.getTreatmentPlan());
+            ps.setInt(4, diagnosisId);
+            ps.setInt(5, diagnosisRequest.getDoctorId()); // Ensure only the original doctor can update
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Updating diagnosis failed, no rows affected.");
             }
 
-            // Return the updated diagnosis
+            // Return the updated diagnosis with original doctor_id and medicineRecord_id
             Diagnosis diagnosis = new Diagnosis();
             diagnosis.setDiagnosisId(diagnosisId);
-            diagnosis.setDoctorId(diagnosisRequest.getDoctorId());
-            diagnosis.setMedicineRecordId(diagnosisRequest.getMedicineRecordId());
+            diagnosis.setDoctorId(existingDiagnosis.getDoctorId()); // Keep original doctor
+            diagnosis.setMedicineRecordId(existingDiagnosis.getMedicineRecordId()); // Keep original medical record
             diagnosis.setConclusion(diagnosisRequest.getConclusion());
             diagnosis.setDisease(diagnosisRequest.getDisease());
             diagnosis.setTreatmentPlan(diagnosisRequest.getTreatmentPlan());

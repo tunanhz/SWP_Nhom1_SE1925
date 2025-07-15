@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="./assets/css/customizer.min.css?v=1.4.1" />
     <style>
         .filter-section { background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .medical-record-details .table td { padding: 0.25rem 0.5rem; }
+        .medical-record-details .card-header { font-size: 1.1em; }
+        .medical-record-details h6 { margin-bottom: 0.75rem; border-bottom: 1px solid #dee2e6; padding-bottom: 0.25rem; }
+        .medical-record-details .badge { font-size: 0.8em; }
     </style>
 </head>
 <body class="full-screen">
@@ -134,7 +138,7 @@
                     <h5 class="modal-title" id="viewRecordModalLabel">Medical Record Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body medical-record-details">
                     <div id="recordDetails">
                         <!-- Record details will be populated here -->
                     </div>
@@ -271,17 +275,97 @@
             });
         }
 
+        // Calculate age from date of birth
+        function calculateAge(dobString) {
+            if (!dobString) return 'N/A';
+            const dob = new Date(dobString);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
         function viewRecord(recordId) {
             fetch(`http://localhost:8080/SWP_back_war_exploded/api/doctor/medical-records/${recordId}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+                        });
+                    }
+                    return response.json();
+                })
                 .then(record => {
+                    const age = record.patientDob ? calculateAge(record.patientDob) : 'N/A';
                     const detailsHtml = `
-                        <div class="row">
-                            <div class="col-md-6">
-                                <strong>Record ID:</strong> ${record.medicineRecordId}
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0"><i class="fas fa-file-medical"></i> Medical Record #${record.recordId}</h6>
                             </div>
-                            <div class="col-md-6">
-                                <strong>Patient ID:</strong> ${record.patientId}
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="text-primary"><i class="fas fa-user"></i> Patient Information</h6>
+                                        <table class="table table-sm table-borderless">
+                                            <tr>
+                                                <td><strong>Name:</strong></td>
+                                                <td>${record.patientName || 'N/A'}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Age:</strong></td>
+                                                <td>${age} years</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Gender:</strong></td>
+                                                <td>${record.patientGender || 'N/A'}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Phone:</strong></td>
+                                                <td>${record.patientPhone || 'N/A'}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Date of Birth:</strong></td>
+                                                <td>${record.patientDob || 'N/A'}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-success"><i class="fas fa-clipboard-list"></i> Record Information</h6>
+                                        <table class="table table-sm table-borderless">
+                                            <tr>
+                                                <td><strong>Record ID:</strong></td>
+                                                <td>#${record.recordId}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Patient ID:</strong></td>
+                                                <td>#${record.patientId}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Record Date:</strong></td>
+                                                <td>${record.date || 'N/A'}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Type:</strong></td>
+                                                <td><span class="badge bg-info">${record.type || 'N/A'}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Status:</strong></td>
+                                                <td><span class="badge ${getStatusBadgeClass(record.status)}">${record.status || 'N/A'}</span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                ${record.patientAddress ? `
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <h6 class="text-secondary"><i class="fas fa-map-marker-alt"></i> Address</h6>
+                                        <p class="text-muted">${record.patientAddress}</p>
+                                    </div>
+                                </div>
+                                ` : ''}
                             </div>
                         </div>
                     `;
@@ -290,8 +374,30 @@
                 })
                 .catch(error => {
                     console.error('Error fetching record details:', error);
-                    alert('Error loading record details');
+
+                    // Provide specific error messages
+                    let errorMessage = 'Error loading record details';
+                    if (error.message.includes('not found')) {
+                        errorMessage = 'Medical record not found.';
+                    } else if (error.message.includes('doctorId parameter is required')) {
+                        errorMessage = 'Access denied: Doctor authentication required.';
+                    } else if (error.message) {
+                        errorMessage = error.message;
+                    }
+
+                    alert(errorMessage);
                 });
+        }
+
+        // Helper function to get appropriate badge class for status
+        function getStatusBadgeClass(status) {
+            switch(status?.toLowerCase()) {
+                case 'completed': return 'bg-success';
+                case 'active': return 'bg-primary';
+                case 'in progress': return 'bg-warning';
+                case 'pending': return 'bg-secondary';
+                default: return 'bg-secondary';
+            }
         }
 
         function deleteRecord(recordId) {

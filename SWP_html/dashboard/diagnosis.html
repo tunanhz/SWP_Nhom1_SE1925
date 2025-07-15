@@ -15,6 +15,41 @@
     <link rel="stylesheet" href="./assets/css/customizer.min.css?v=1.4.1" />
     <style>
         .filter-section { background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        #medicineRecordId { font-family: 'Courier New', monospace; font-size: 0.9em; }
+        #medicalRecordInfo { font-style: italic; color: #6c757d; }
+        #selectedPatientName { background-color: #f8f9fa; }
+        .patient-info-card {
+            border: 1px solid #dee2e6;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .patient-info-card strong {
+            color: #495057;
+        }
+        .medical-record-option {
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        /* Read-only field styling */
+        .form-control:disabled, .form-select:disabled {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+        .readonly-field-label {
+            color: #6c757d;
+            font-style: italic;
+        }
+        .edit-mode-notice {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body class="full-screen">
@@ -110,18 +145,42 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- Edit mode notice -->
+                    <div id="editModeNotice" class="edit-mode-notice" style="display: none;">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Edit Mode:</strong> Medical record and patient information cannot be changed when editing a diagnosis.
+                    </div>
+
                     <form id="diagnosisForm">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="medicineRecordId" class="form-label">Medical Record ID <span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="medicineRecordId" required>
+                                    <label for="medicineRecordId" class="form-label">Medical Record <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <select class="form-select" id="medicineRecordId" required>
+                                            <option value="">Select a medical record...</option>
+                                        </select>
+                                        <button class="btn btn-outline-secondary" type="button" onclick="refreshMedicalRecords()" title="Refresh medical records list">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                    </div>
+                                    <div class="form-text">
+                                        <small id="medicalRecordInfo" class="text-muted"></small>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="disease" class="form-label">Disease <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="disease" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="selectedPatientName" class="form-label">Patient Name</label>
+                                    <input type="text" class="form-control" id="selectedPatientName" readonly>
                                 </div>
                             </div>
                         </div>
@@ -192,6 +251,7 @@
         let pageSize = 10;
         let currentDiagnosisId = null;
         let isEditMode = false;
+        let medicalRecords = []; // Store loaded medical records
 
         // Get doctorId from localStorage or URL parameter
         function getDoctorId() {
@@ -220,13 +280,165 @@
             return 1;
         }
 
+        // Load medical records for dropdown
+        function loadMedicalRecords() {
+            const doctorId = getDoctorId();
+            return fetch(`http://localhost:8080/SWP_back_war_exploded/api/doctor/medical-records?doctorId=${doctorId}&page=1&pageSize=100`)
+                .then(response => response.json())
+                .then(data => {
+                    medicalRecords = data.records || [];
+                    populateMedicalRecordsDropdown();
+                    return medicalRecords;
+                })
+                .catch(error => {
+                    console.error('Error loading medical records:', error);
+                    medicalRecords = [];
+                    return [];
+                });
+        }
+
+        // Refresh medical records list
+        function refreshMedicalRecords() {
+            const refreshButton = document.querySelector('button[onclick="refreshMedicalRecords()"]');
+            const originalHtml = refreshButton.innerHTML;
+            refreshButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            refreshButton.disabled = true;
+
+            loadMedicalRecords().then(() => {
+                refreshButton.innerHTML = originalHtml;
+                refreshButton.disabled = false;
+
+                // Show success message briefly
+                const infoField = document.getElementById('medicalRecordInfo');
+                const originalInfo = infoField.innerHTML;
+                infoField.innerHTML = '<span class="text-success">Medical records refreshed successfully!</span>';
+                setTimeout(() => {
+                    infoField.innerHTML = originalInfo;
+                }, 2000);
+            }).catch(error => {
+                refreshButton.innerHTML = originalHtml;
+                refreshButton.disabled = false;
+                alert('Error refreshing medical records: ' + error.message);
+            });
+        }
+
+        // Populate medical records dropdown
+        function populateMedicalRecordsDropdown() {
+            const select = document.getElementById('medicineRecordId');
+            select.innerHTML = '<option value="">Select a medical record...</option>';
+
+            medicalRecords.forEach(record => {
+                const option = document.createElement('option');
+                option.value = record.recordId;
+
+                // Enhanced display with patient information
+                const patientAge = record.patientDob ? calculateAge(record.patientDob) : 'N/A';
+                const displayText = `#${record.recordId} - ${record.patientName} (${record.patientGender}, ${patientAge}y) - ${record.date}`;
+                option.textContent = displayText;
+
+                // Store all patient data as attributes
+                option.setAttribute('data-patient-id', record.patientId);
+                option.setAttribute('data-patient-name', record.patientName);
+                option.setAttribute('data-patient-dob', record.patientDob);
+                option.setAttribute('data-patient-gender', record.patientGender);
+                option.setAttribute('data-patient-phone', record.patientPhone);
+                option.setAttribute('data-patient-address', record.patientAddress);
+                option.setAttribute('data-date', record.date);
+                option.setAttribute('data-type', record.type);
+                option.setAttribute('data-status', record.status);
+                select.appendChild(option);
+            });
+        }
+
+        // Calculate age from date of birth
+        function calculateAge(dobString) {
+            if (!dobString) return 'N/A';
+            const dob = new Date(dobString);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        // Handle medical record selection
+        function handleMedicalRecordSelection() {
+            const select = document.getElementById('medicineRecordId');
+            const selectedOption = select.options[select.selectedIndex];
+            const patientNameField = document.getElementById('selectedPatientName');
+            const infoField = document.getElementById('medicalRecordInfo');
+
+            if (selectedOption.value) {
+                const patientName = selectedOption.getAttribute('data-patient-name');
+                const patientDob = selectedOption.getAttribute('data-patient-dob');
+                const patientGender = selectedOption.getAttribute('data-patient-gender');
+                const patientPhone = selectedOption.getAttribute('data-patient-phone');
+                const patientAddress = selectedOption.getAttribute('data-patient-address');
+                const date = selectedOption.getAttribute('data-date');
+                const type = selectedOption.getAttribute('data-type');
+                const status = selectedOption.getAttribute('data-status');
+
+                patientNameField.value = patientName;
+
+                // Enhanced patient information display
+                const age = patientDob ? calculateAge(patientDob) : 'N/A';
+                const infoText = `
+                    Patient: ${patientName} | Age: ${age} | Gender: ${patientGender || 'N/A'} |
+                    Phone: ${patientPhone || 'N/A'} | Record Date: ${date} | Type: ${type} | Status: ${status}
+                `.trim();
+
+                infoField.innerHTML = `
+                    <div class="patient-info-card p-2 bg-light rounded">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Patient:</strong> ${patientName}<br>
+                                <strong>Age:</strong> ${age} years<br>
+                                <strong>Gender:</strong> ${patientGender || 'N/A'}
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Phone:</strong> ${patientPhone || 'N/A'}<br>
+                                <strong>Record Date:</strong> ${date}<br>
+                                <strong>Type:</strong> ${type} | <strong>Status:</strong> ${status}
+                            </div>
+                        </div>
+                        ${patientAddress ? `<div class="mt-2"><strong>Address:</strong> ${patientAddress}</div>` : ''}
+                    </div>
+                `;
+            } else {
+                patientNameField.value = '';
+                infoField.innerHTML = '';
+            }
+        }
+
         // CRUD Operations
         function showCreateModal() {
             isEditMode = false;
             currentDiagnosisId = null;
             document.getElementById('diagnosisModalLabel').textContent = 'Create Diagnosis';
             document.getElementById('diagnosisForm').reset();
-            new bootstrap.Modal(document.getElementById('diagnosisModal')).show();
+            document.getElementById('selectedPatientName').value = '';
+            document.getElementById('medicalRecordInfo').innerHTML = '';
+
+            // Enable all fields for create mode
+            document.getElementById('medicineRecordId').disabled = false;
+            document.getElementById('selectedPatientName').disabled = false;
+
+            // Hide edit mode notice
+            document.getElementById('editModeNotice').style.display = 'none';
+
+            // Enable refresh button for create mode
+            const refreshButton = document.querySelector('button[onclick="refreshMedicalRecords()"]');
+            if (refreshButton) {
+                refreshButton.disabled = false;
+                refreshButton.title = "Refresh medical records list";
+            }
+
+            // Load medical records before showing modal
+            loadMedicalRecords().then(() => {
+                new bootstrap.Modal(document.getElementById('diagnosisModal')).show();
+            });
         }
 
         function editDiagnosis(diagnosisId) {
@@ -234,20 +446,44 @@
             currentDiagnosisId = diagnosisId;
             document.getElementById('diagnosisModalLabel').textContent = 'Edit Diagnosis';
 
-            // Fetch diagnosis details and populate form
-            fetch(`http://localhost:8080/SWP_back_war_exploded/api/doctor/diagnosis/${diagnosisId}`)
-                .then(response => response.json())
-                .then(diagnosis => {
-                    document.getElementById('medicineRecordId').value = diagnosis.medicineRecordId;
-                    document.getElementById('disease').value = diagnosis.disease || '';
-                    document.getElementById('conclusion').value = diagnosis.conclusion || '';
-                    document.getElementById('treatmentPlan').value = diagnosis.treatmentPlan || '';
-                    new bootstrap.Modal(document.getElementById('diagnosisModal')).show();
-                })
-                .catch(error => {
-                    console.error('Error fetching diagnosis details:', error);
-                    alert('Error loading diagnosis details');
-                });
+            // Load medical records first, then fetch diagnosis details
+            loadMedicalRecords().then(() => {
+                // Fetch diagnosis details and populate form
+                fetch(`http://localhost:8080/SWP_back_war_exploded/api/doctor/diagnosis/${diagnosisId}`)
+                    .then(response => response.json())
+                    .then(diagnosis => {
+                        // Set medical record (read-only in edit mode)
+                        document.getElementById('medicineRecordId').value = diagnosis.medicineRecordId;
+                        document.getElementById('medicineRecordId').disabled = true; // Make read-only
+
+                        // Set other fields (editable)
+                        document.getElementById('disease').value = diagnosis.disease || '';
+                        document.getElementById('conclusion').value = diagnosis.conclusion || '';
+                        document.getElementById('treatmentPlan').value = diagnosis.treatmentPlan || '';
+
+                        // Update patient name and info based on selected medical record
+                        handleMedicalRecordSelection();
+
+                        // Make patient name read-only in edit mode
+                        document.getElementById('selectedPatientName').disabled = true;
+
+                        // Show edit mode notice
+                        document.getElementById('editModeNotice').style.display = 'block';
+
+                        // Disable refresh button in edit mode
+                        const refreshButton = document.querySelector('button[onclick="refreshMedicalRecords()"]');
+                        if (refreshButton) {
+                            refreshButton.disabled = true;
+                            refreshButton.title = "Medical record cannot be changed when editing";
+                        }
+
+                        new bootstrap.Modal(document.getElementById('diagnosisModal')).show();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching diagnosis details:', error);
+                        alert('Error loading diagnosis details');
+                    });
+            });
         }
 
         function saveDiagnosis() {
@@ -257,7 +493,7 @@
             const treatmentPlan = document.getElementById('treatmentPlan').value;
 
             if (!medicineRecordId || medicineRecordId <= 0) {
-                alert('Please enter a valid Medical Record ID');
+                alert('Please select a medical record');
                 return;
             }
 
@@ -266,6 +502,8 @@
                 return;
             }
 
+            // In edit mode, we don't allow changing medical record
+            // But we still need to send it for validation purposes
             const diagnosisData = {
                 doctorId: getDoctorId(),
                 medicineRecordId: parseInt(medicineRecordId),
@@ -273,6 +511,11 @@
                 conclusion: conclusion.trim(),
                 treatmentPlan: treatmentPlan.trim()
             };
+
+            // Add validation message for edit mode
+            if (isEditMode) {
+                console.log('Edit mode: Medical record ID cannot be changed, maintaining:', medicineRecordId);
+            }
 
             const url = isEditMode
                 ? `http://localhost:8080/SWP_back_war_exploded/api/doctor/diagnosis/${currentDiagnosisId}`
@@ -287,7 +530,14 @@
                 },
                 body: JSON.stringify(diagnosisData)
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+                    });
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.error) {
                     alert('Error: ' + data.error);
@@ -299,7 +549,22 @@
             })
             .catch(error => {
                 console.error('Error saving diagnosis:', error);
-                alert('Error saving diagnosis');
+
+                // Provide specific error messages based on the error type
+                let errorMessage = 'Error saving diagnosis';
+                if (error.message.includes('does not have access')) {
+                    errorMessage = 'Access denied: You do not have permission to access this medical record.';
+                } else if (error.message.includes('not found')) {
+                    errorMessage = 'The specified medical record or diagnosis was not found.';
+                } else if (error.message.includes('does not have permission')) {
+                    errorMessage = 'Permission denied: You cannot modify this diagnosis.';
+                } else if (error.message.includes('Medical record cannot be changed')) {
+                    errorMessage = 'Business rule violation: Medical record cannot be changed when updating a diagnosis.';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+
+                alert(errorMessage);
             });
         }
 
@@ -411,7 +676,14 @@
         function applyFilters() { loadDiagnosis(); }
         document.getElementById('prevPage').onclick = function() { if (currentPage > 1) { currentPage--; loadDiagnosis(); } };
         document.getElementById('nextPage').onclick = function() { if (currentPage < totalPages) { currentPage++; loadDiagnosis(); } };
-        document.addEventListener('DOMContentLoaded', loadDiagnosis);
+
+        // Add event listener for medical record selection
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDiagnosis();
+
+            // Add change event listener to medical record dropdown
+            document.getElementById('medicineRecordId').addEventListener('change', handleMedicalRecordSelection);
+        });
     </script>
 </body>
 </html>
