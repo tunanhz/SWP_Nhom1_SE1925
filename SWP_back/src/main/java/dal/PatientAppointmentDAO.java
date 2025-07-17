@@ -345,15 +345,17 @@ public class PatientAppointmentDAO {
         }
     }
 
-    public boolean cancelAppointmentById(int appointmentId) {
+    public boolean cancelAppointmentById(int appointmentId, String note) {
         String sql = """
-                DELETE FROM [dbo].[Appointment]
+                UPDATE [dbo].[Appointment]
+                SET [status] = 'Cancelled'
+                   ,[note] = ?
                 WHERE [appointment_id] = ?
                 """;
-
         try {
             PreparedStatement stmt = ad.getConnection().prepareStatement(sql);
-            stmt.setInt(1, appointmentId);
+            stmt.setInt(2, appointmentId);
+            stmt.setString(1, note);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -672,6 +674,10 @@ public class PatientAppointmentDAO {
 
         ArrayList<PatientPaymentDTO> c = dao.getTop3Payment(2);
         System.out.println(c.size());
+
+
+        boolean result = dao.cancelAppointmentById(8, "Test note");
+        System.out.println("Result: " + result);
 
     }
 
