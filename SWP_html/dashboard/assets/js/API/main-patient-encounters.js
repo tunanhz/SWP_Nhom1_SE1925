@@ -90,7 +90,7 @@ function createAppointmentRow(appointment, index) {
                     </span>
                 </a>
             `;
-        } else if(isPending) {
+        } else if (isPending) {
             return `
                 <a class="d-inline-block pe-2 edit-btn2" data-bs-toggle="offcanvas"
                    href="#offcanvasEncounterEditPending" aria-controls="offcanvasEncounterEditPending" aria-label="Edit Appointment"
@@ -129,14 +129,14 @@ function createAppointmentRow(appointment, index) {
         }
     };
 
-    const renderStatus = () =>{
-        if(isCompleted){
+    const renderStatus = () => {
+        if (isCompleted) {
             return `<span class="badge bg-success-subtle p-2 text-success">Complete</span>`;
-        } else if (isConfirmed){
+        } else if (isConfirmed) {
             return `<span class="badge bg-primary-subtle p-2 text-primary">Confirmed</span>`;
-        }else if(isPending){
+        } else if (isPending) {
             return `<span class="badge bg-warning-subtle p-2 text-warning">Pending</span>`;
-        }else{
+        } else {
             return `<span class="badge bg-danger-subtle p-2 text-danger">Cancelled</span>`;
         }
     };
@@ -273,10 +273,10 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
         // Update container
         container.innerHTML = appointments.length ? appointmentTable + paginationHTML : document.getElementById('null-data').innerHTML = '<h3 class="text-center">No Appointments found.</h3>';
 
-        
+
         // Attach event listeners for edit buttons
         container.querySelectorAll(".edit-btn1").forEach(button => {
-            button.addEventListener("click", function(e) {
+            button.addEventListener("click", function (e) {
                 const appointment = JSON.parse(this.dataset.appointment);
                 populateEditFormConfirm(appointment);
             });
@@ -284,7 +284,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
 
         // Attach event listeners for edit buttons
         container.querySelectorAll(".edit-btn2").forEach(button => {
-            button.addEventListener("click", function(e) {
+            button.addEventListener("click", function (e) {
                 const appointment = JSON.parse(this.dataset.appointment);
                 populateEditForm(appointment);
             });
@@ -293,42 +293,95 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
 
         // Attach event listeners for edit buttons
         container.querySelectorAll(".view-btn").forEach(button => {
-            button.addEventListener("click", function(e) {
+            button.addEventListener("click", function (e) {
                 const appointment = JSON.parse(this.dataset.appointment);
                 populateView(appointment);
             });
         });
 
-        // Attach event listeners for delete buttons
+        // Inside displayAppointment, replace the existing .delete-btn event listener
         container.querySelectorAll(".delete-btn").forEach(button => {
-            button.addEventListener("click", async function(e) {
+            button.addEventListener("click", async function (e) {
                 e.preventDefault();
                 const appointmentId = this.dataset.id;
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You want to delete this appointment?",
-                    icon: "error",
+
+                if (!appointmentId || isNaN(appointmentId) || appointmentId <= 0) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Invalid appointment ID.",
+                        icon: "error",
+                        confirmButtonColor: "#c03221"
+                    });
+                    console.error("Invalid or missing dataset.id on cancel button:", appointmentId);
+                    return;
+                }
+
+                Swal.showLoading();
+
+                const { value: note } = await Swal.fire({
+                    title: "Confirm Cancellation?",
+                    text: `Are you sure you want to cancel appointment ? Please enter a cancellation reason (optional):`,
+                    icon: "warning",
+                    input: "text",
+                    inputPlaceholder: "Enter cancellation reason (optional)",
                     showCancelButton: true,
                     backdrop: `rgba(60,60,60,0.8)`,
-                    confirmButtonText: "Yes, delete it!",
-                    confirmButtonColor: "#c03221"
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        try {
-                            const response = await fetch(`${baseAPI.split('?')[0]}/${appointmentId}`, {
-                                method: "DELETE"
-                            });
-                            if (!response.ok) {
-                                throw new Error("Failed to delete appointment");
-                            }
-                            Swal.fire("Deleted!", "Your appointment has been deleted.", "success");
-                            await displayAppointment(state.currentPage, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
-                        } catch (error) {
-                            Swal.fire("Error!", "Could not delete appointment. Please try again.", "error");
-                            console.error("Delete error:", error);
+                    confirmButtonText: "Yes, cancel it!",
+                    cancelButtonText: "No",
+                    confirmButtonColor: "#c03221",
+                    cancelButtonColor: "#6c757d",
+                    inputValidator: (value) => {
+                        if (value && value.length > 200) {
+                            return "Cancellation reason must not exceed 200 characters.";
                         }
                     }
                 });
+
+                if (note !== undefined) {
+                    try {
+                        const url = `${API_BASE_URL}/patientCancel/${appointmentId}`;
+                        const response = await fetch(url, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ note: note || "No content" })
+                        });
+
+                        Swal.close();
+
+                        if (response.status === 204) {
+                            Swal.fire({
+                                title: "Cancelled!",
+                                text: `Appointment has been cancelled.`,
+                                icon: "success",
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+
+                            await displayAppointment(state.currentPage, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
+                        } else if (response.status === 404) {
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.error || "Appointment not found");
+                        } else if (response.status === 400) {
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.error || "Invalid request");
+                        } else {
+                            throw new Error(`Unexpected server response: ${response.status}`);
+                        }
+                    } catch (error) {
+                        Swal.close(); 
+                        Swal.fire({
+                            title: "Error!",
+                            text: `Could not cancel appointment: ${error.message}`,
+                            icon: "error",
+                            confirmButtonColor: "#c03221"
+                        });
+                        console.error(`Error cancelling appointment ID ${appointmentId}:`, error);
+                    }
+                } else {
+                    Swal.close();
+                }
             });
         });
 
@@ -808,7 +861,7 @@ function populateEditForm(appointment) {
         doctorSelect.disabled = false;
 
         fetchDoctorWorkingDates(appointment.doctor?.ID).then(() => {
-    
+
             if (appointment.appointmentDateTime) {
                 const date = new Date(appointment.appointmentDateTime);
                 if (isNaN(date)) {
@@ -819,10 +872,10 @@ function populateEditForm(appointment) {
                 yearSelect.value = date.getFullYear();
                 monthSelect.value = date.getMonth();
 
-                
+
                 generateCalendar(yearSelect.value, monthSelect.value);
 
-                
+
                 const day = String(date.getDate());
                 const selectedMonth = String(date.getMonth() + 1).padStart(2, '0');
                 selectedDate.value = `${date.getFullYear()}-${selectedMonth}-${day}`;
@@ -981,11 +1034,11 @@ editPendingAppointmentForm.addEventListener('submit', async (e) => {
     const formData = {
         appointmentId: appointmentIdInput.value,
         doctorId: doctorSelect.value,
-        patientId: patientIdInput?.value || null, 
-        date: selectedDate.value, 
-        time: selectedTime.value, 
-        shift: shiftSelect?.value || null, 
-        receptionistId: receptionistIdInput?.value || null, 
+        patientId: patientIdInput?.value || null,
+        date: selectedDate.value,
+        time: selectedTime.value,
+        shift: shiftSelect?.value || null,
+        receptionistId: receptionistIdInput?.value || null,
         note: noteInput.value || null
     };
 

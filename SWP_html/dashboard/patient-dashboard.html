@@ -65,12 +65,14 @@
          height: 40px;
          overflow: hidden;
       }
+
       #userImg {
-         width: 100%;
-         height: 100%;
+         width: 40px;
+         height: 40px;
          object-fit: cover;
          display: block;
       }
+
       #profileImg {
          width: 100px;
          height: 100px;
@@ -401,7 +403,7 @@
                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                        d="M9.1983 21.5001H9.1963C8.0753 21.4991 7.0143 21.0051 6.2093 20.1081C5.9323 19.8011 5.9573 19.3261 6.2653 19.0501C6.5733 18.7721 7.0473 18.7971 7.3243 19.1061C7.8423 19.6831 8.5073 20.0001 9.1973 20.0001H9.1983C9.8913 20.0001 10.5593 19.6831 11.0783 19.1051C11.3563 18.7981 11.8303 18.7731 12.1373 19.0501C12.4453 19.3271 12.4703 19.8021 12.1933 20.1091C11.3853 21.0061 10.3223 21.5001 9.1983 21.5001Z"
                                        fill="currentColor" />
-                                    </svg>
+                                 </svg>
                               </span>
                               <span class="badge-notification">4</span>
                            </div>
@@ -1568,7 +1570,7 @@
                               stroke="currentColor" stroke-width="1.42857" stroke-linecap="round"
                               stroke-linejoin="round"></path>
                         </svg>
-                        <span class="align-middle fw-500">Edit Profile</span>
+                        <span class="align-middle fw-500">Edit Avatars Profile</span>
                      </a>
                   </li>
                   <li class="nav-item">
@@ -1607,25 +1609,28 @@
                <!-- Tab panes -->
                <div class="tab-content mt-4">
                   <div class="tab-pane fade show active" id="setting-content-1">
-                     <form>
+                     <form id="updateProfileForm" enctype="multipart/form-data">
                         <div
                            class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
                            <div class="d-flex align-items-center gap-3">
                               <div class="flex-shrink-0 d-inline-block position-relative">
-                                 <img id="profileImg" src="./assets/images/user/amie-steward.png" alt="img-fluid">
+                                 <img id="profileImg" src="./assets/images/user/user-1.jpg" alt="img-fluid">
                                  <span
                                     class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white me-1 mb-1"></span>
                               </div>
                               <div class="content">
-                                 <h4 class="mb-2">Amine Steward</h4>
                                  <p class="m-0">Upload A New Image.</p>
+                                 <input type="file" id="profileImgInput" name="img" accept="image/*"
+                                    class="form-control mt-2">
+                                 <div id="img-error" class="error-message"></div>
                               </div>
                            </div>
-
-                           <button type="button" class="btn btn-primary">
+                           <button type="submit" class="btn btn-primary" id="saveChangesBtn" disabled>
                               <span class="btn-inner">
                                  <span class="text d-inline-block align-middle">Save Changes</span>
-                                 <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                 <span id="loadingSpinner" class="icon d-inline-block align-middle ms-1 ps-2"
+                                    style="display: none;">
+                                    <span class="icon d-inline-block align-middle ms-1 ps-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
                                        fill="none">
                                        <path
@@ -1633,9 +1638,21 @@
                                           fill="currentColor"></path>
                                     </svg>
                                  </span>
-                              </span></button>
+                                 </span>
+                                 <span id="saveIcon" class="icon d-inline-block align-middle ms-1 ps-2">
+                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
+                                       fill="none">
+                                       <path
+                                          d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                          fill="currentColor"></path>
+                                    </svg> -->
+                                 </span>
+                              </span>
+                           </button>
                         </div>
-                        <div class="row mt-5">
+                        <div id="form-error" class="error-message mt-2"></div>
+                        <div id="form-success" class="valid-message mt-2"></div>
+                        <!-- <div class="row mt-5">
                            <div class="col-md-6">
                               <input type="text" class="form-control" placeholder="Your First Name *">
                            </div>
@@ -1652,7 +1669,7 @@
                            <div class="col-md-12 mt-4">
                               <textarea class="form-control" placeholder="Your Bio"></textarea>
                            </div>
-                        </div>
+                        </div> -->
                      </form>
                   </div>
                   <div class="tab-pane fade" id="setting-content-2">

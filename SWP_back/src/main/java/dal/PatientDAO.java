@@ -1,7 +1,10 @@
 package dal;
 
+import dto.PatientDTO;
+import dto.ReceptionistDTO;
 import model.Patient;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -471,9 +474,64 @@ public class PatientDAO {
         }
     }
 
+    public PatientDTO getPatientInfoByAccountPatientId(int accountPatientId) {
+        String sql = """
+                   SELECT [account_patient_id]
+                          ,[img]
+                          ,[status]
+                   FROM [HealthCareSystem].[dbo].[AccountPatient] a
+                   WHERE a.account_patient_id = ? AND a.status = 'Enable'
+                """;
+
+        try (Connection conn = ad.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountPatientId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                PatientDTO patient = new PatientDTO();
+                patient.setAccountStaffId(rs.getInt("account_patient_id"));
+                patient.setImg(rs.getString("img"));
+                return patient;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean updatePatientIMG(int patientAccountId, String imgUrl) {
+        String sql = """
+                UPDATE [dbo].[AccountPatient]
+                SET [img] = ?
+                WHERE account_patient_id = ?
+                """;
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
+            stmt.setNString(1, imgUrl);
+            stmt.setInt(2, patientAccountId);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     public static void main(String[] args) {
         PatientDAO patientDAO = new PatientDAO();
         ArrayList<Patient> patients = patientDAO.getAllPatients(null, null, "", "", 1, 50);
         System.out.println(patients.size());
+
+        PatientDTO patientDTO = patientDAO.getPatientInfoByAccountPatientId(1);
+        System.out.println(patientDTO);
+
+        boolean p = patientDAO.updatePatientIMG(1, "a");
+        System.out.println(p);
+
+
     }
 }
