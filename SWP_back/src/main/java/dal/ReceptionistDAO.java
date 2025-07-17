@@ -1065,7 +1065,6 @@ public class ReceptionistDAO {
                 }
             }
 
-            // Cập nhật mật khẩu mới
             String updatePasswordSql = """
                 UPDATE [dbo].[AccountStaff]
                 SET password = ?

@@ -67,8 +67,20 @@
             object-fit: cover;
             border-radius: 50%;
         }
-        .spinner { animation: spin 1s linear infinite; }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -1633,20 +1645,24 @@
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary" id="saveChangesBtn" disabled>
-    <span class="btn-inner">
-        <span class="text d-inline-block align-middle">Save Changes</span>
-        <span id="loadingSpinner" class="icon d-inline-block align-middle ms-1 ps-2" style="display: none;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="spinner">
-                <circle cx="12" cy="12" r="10"></circle>
-            </svg>
-        </span>
-        <span id="saveIcon" class="icon d-inline-block align-middle ms-1 ps-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                        <span class="btn-inner">
+                                            <span class="text d-inline-block align-middle">Save Changes</span>
+                                            <span id="loadingSpinner" class="icon d-inline-block align-middle ms-1 ps-2"
+                                                style="display: none;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="spinner">
+                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                </svg>
+                                            </span>
+                                            <span id="saveIcon" class="icon d-inline-block align-middle ms-1 ps-2">
+                                                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
                 <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor"></path>
-            </svg>
-        </span>
-    </span>
-</button>
+            </svg> -->
+                                            </span>
+                                        </span>
+                                    </button>
                                 </div>
                                 <div class="row mt-5">
                                     <div class="col-md-12">
@@ -1666,40 +1682,55 @@
                                 </div>
                             </form>
                         </div>
-                      <div class="tab-pane fade" id="setting-content-2">
-        <form id="changePasswordForm">
-            <div class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
-                <div class="content">
-                    <h4 class="mb-2">Password</h4>
-                    <p class="m-0">Update Or Change Your Current Password.</p>
-                </div>
-                <button type="button" class="btn btn-primary" id="changePasswordBtn">
-                    <span class="btn-inner">
-                        <span class="text d-inline-block align-middle">Change Password</span>
-                        <span class="icon d-inline-block align-middle ms-1 ps-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-                                <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor"></path>
-                            </svg>
-                        </span>
-                    </span>
-                </button>
-            </div>
-            <div class="row mt-5">
-                <div class="col-md-12">
-                    <input type="password" class="form-control" id="currentPassword" placeholder="Your Current Password *">
-                </div>
-                <div class="col-md-12 mt-4">
-                    <input type="password" class="form-control" id="newPassword" placeholder="New Password *">
-                    <label class="mt-2">Password Must Be in 8 Character</label>
-                </div>
-                <div class="col-md-12 mt-4">
-                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm New Password *">
-                    <label class="mt-2">Must Be Same to New Password</label>
-                </div>
-                <div id="password-error" class="error-message mt-2" style="color: red; display: none;"></div>
-            </div>
-        </form>
-    </div>
+                        <div class="tab-pane fade" id="setting-content-2">
+                            <form id="changePasswordForm">
+                                <div
+                                    class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
+                                    <div class="content">
+                                        <h4 class="mb-2">Change Password</h4>
+                                        <p class="m-0">Update or change your current password.</p>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" id="changePasswordBtn" disabled>
+                                        <span class="btn-inner">
+                                            <span class="text d-inline-block align-middle">Change Password</span>
+                                            <span id="passwordLoadingSpinner"
+                                                class="icon d-inline-block align-middle ms-1 ps-2"
+                                                style="display: none;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="spinner">
+                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                </svg>
+                                            </span>
+                                            <span id="passwordSaveIcon"
+                                                class="icon d-inline-block align-middle ms-1 ps-2"></span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-md-12">
+                                        <input type="password" class="form-control" id="currentPassword"
+                                            name="currentPassword" placeholder="Your Current Password *" required>
+                                        <div id="currentPassword-error" class="error-message"></div>
+                                    </div>
+                                    <div class="col-md-12 mt-4">
+                                        <input type="password" class="form-control" id="newPassword" name="newPassword"
+                                            placeholder="New Password *" required minlength="8">
+                                        <label class="mt-2 text-muted">Password must be at least 8 characters</label>
+                                        <div id="newPassword-error" class="error-message"></div>
+                                    </div>
+                                    <div class="col-md-12 mt-4">
+                                        <input type="password" class="form-control" id="confirmPassword"
+                                            name="confirmPassword" placeholder="Confirm New Password *" required>
+                                        <label class="mt-2 text-muted">Must match the new password</label>
+                                        <div id="confirmPassword-error" class="error-message"></div>
+                                    </div>
+                                    <div id="password-form-error" class="error-message mt-2"></div>
+                                    <div id="password-form-success" class="valid-message mt-2"></div>
+                                </div>
+                            </form>
+                        </div>
                         <div class="tab-pane fade" id="setting-content-3">
                             <form>
                                 <div class="content">
