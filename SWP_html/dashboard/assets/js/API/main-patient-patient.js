@@ -176,13 +176,9 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
         `;
 
         // Update container
-        container.innerHTML = patients.length ? patientTable + paginationHTML : '';
-        if(patients.length === 0){
-            document.getElementById('null-data').innerHTML = '<h3 class="text-center" >No Patients found.</h3>'
-        }
+        container.innerHTML = patients.length ? patientTable + paginationHTML : '<h3 class="text-center" >No Patients found.</h3>';
         
-
-
+    
         // Attach event listeners for edit buttons
         container.querySelectorAll(".edit-btn1").forEach(button => {
             button.addEventListener("click", function(e) {

@@ -271,7 +271,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
         `;
 
         // Update container
-        container.innerHTML = appointments.length ? appointmentTable + paginationHTML : document.getElementById('null-data').innerHTML = '<h3 class="text-center">No Appointments found.</h3>';
+        container.innerHTML = appointments.length ? appointmentTable + paginationHTML : '<h3 class="text-center">No Appointments found.</h3>';
 
 
         // Attach event listeners for edit buttons

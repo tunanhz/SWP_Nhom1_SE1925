@@ -520,6 +520,97 @@ public class PatientDAO {
         }
     }
 
+    public boolean updatePassword(int accountPatientId, String currentPassword, String newPassword) throws SQLException {
+        // Input validation
+        if (currentPassword == null || newPassword == null || currentPassword.trim().isEmpty() || newPassword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Passwords cannot be null or empty");
+        }
+
+        if (newPassword.length() < 8) {
+            throw new IllegalArgumentException("New password must be at least 8 characters long");
+        }
+
+        Connection conn = null;
+        PreparedStatement checkStmt = null;
+        PreparedStatement updateStmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ad.getConnection();
+            conn.setAutoCommit(false); // Start transaction
+
+            // Verify current password
+            String checkPasswordSql = "SELECT password FROM [dbo].[AccountPatient] WHERE account_patient_id = ?";
+            checkStmt = conn.prepareStatement(checkPasswordSql);
+            checkStmt.setInt(1, accountPatientId);
+            rs = checkStmt.executeQuery();
+
+            if (!rs.next()) {
+                throw new SQLException("No account found for ID: " + accountPatientId);
+            }
+
+            String storedPassword = rs.getString("password");
+            // Note: Consider using proper password hashing comparison instead of plain text
+            if (!storedPassword.equals(currentPassword)) {
+                throw new SQLException("Current password is incorrect");
+            }
+
+            // Update password
+            String updatePasswordSql = "UPDATE [dbo].[AccountPatient] SET password = ? WHERE account_patient_id = ?";
+            updateStmt = conn.prepareStatement(updatePasswordSql);
+            updateStmt.setString(1, newPassword); // Use setString instead of setNString
+            updateStmt.setInt(2, accountPatientId);
+            int rowsAffected = updateStmt.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new SQLException("Failed to update password");
+            }
+
+            conn.commit(); // Commit transaction
+            return true;
+
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback(); // Rollback on error
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            throw e; // Re-throw the SQLException
+        } finally {
+            // Close resources in reverse order
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (checkStmt != null) {
+                try {
+                    checkStmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (updateStmt != null) {
+                try {
+                    updateStmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     public static void main(String[] args) {
         PatientDAO patientDAO = new PatientDAO();
@@ -528,10 +619,13 @@ public class PatientDAO {
 
         PatientDTO patientDTO = patientDAO.getPatientInfoByAccountPatientId(1);
         System.out.println(patientDTO);
-
-        boolean p = patientDAO.updatePatientIMG(1, "a");
-        System.out.println(p);
-
+        
+        try {
+            boolean p2 = patientDAO.updatePassword(1, "P@ss123", "11111111");
+            System.out.println(p2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 }
