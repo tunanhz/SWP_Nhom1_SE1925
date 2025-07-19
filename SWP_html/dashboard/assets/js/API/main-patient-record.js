@@ -95,7 +95,7 @@ async function renderPatientRecords(records, totalRecords, totalPages) {
     tbody.innerHTML = '<tr><td colspan="8" class="text-center">Loading...</td></tr>';
 
     if (!records || records.length === 0) {
-        document.getElementById('null-data').innerHTML = '<h3 class="text-center" >No patient records found.</h3>'
+        tbody.innerHTML = '<h3 class="text-center" >No patient records found.</h3>'
         return;
     }
 
