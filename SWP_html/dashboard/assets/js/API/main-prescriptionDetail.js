@@ -44,15 +44,17 @@ const API_URL = 'http://localhost:8080/SWP_back_war_exploded/api/prescriptionDet
             statusSpan.textContent = prescription.status;
             
             // Xóa các class cũ
-            statusSpan.classList.remove('bg-yellow-100', 'text-yellow-800', 'bg-red-100', 'text-red-800', 'bg-green-100', 'text-green-800');
+            statusSpan.classList.remove('status-pending', 'status-cancelled', 'status-confirmed', 'status-completed');
             
-            // Thêm các class tương ứng
+            // Thêm các class tương ứng với status badge mới
             if (prescription.status === 'Pending') {
-                statusSpan.classList.add('bg-yellow-100', 'text-yellow-800');
+                statusSpan.classList.add('status-pending');
             } else if (prescription.status === 'Cancelled') {
-                statusSpan.classList.add('bg-red-100', 'text-red-800');
+                statusSpan.classList.add('status-cancelled');
+            } else if (prescription.status === 'Dispensed') {
+                statusSpan.classList.add('status-confirmed');
             } else {
-                statusSpan.classList.add('bg-green-100', 'text-green-800');
+                statusSpan.classList.add('status-completed');
             }
 
             // Set current status in dropdown
@@ -66,10 +68,10 @@ const API_URL = 'http://localhost:8080/SWP_back_war_exploded/api/prescriptionDet
             prescriptions.forEach(p => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">${p.medicineName || 'N/A'}</td>
-                    <td class="px-4 py-2 whitespace-nowrap text-sm text-sm text-gray-900">${p.medicineQuantity || 'N/A'}</td>
-                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">${p.medicineDosage || 'N/A'}</td>
-                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">${p.medicinePrice ? p.medicinePrice.toLocaleString('vi-VN') + ' VND' : 'N/A'}</td>
+                    <td>${p.medicineName || 'N/A'}</td>
+                    <td>${p.medicineQuantity || 'N/A'}</td>
+                    <td>${p.medicineDosage || 'N/A'}</td>
+                    <td>${p.medicinePrice ? p.medicinePrice.toLocaleString('vi-VN') + ' VND' : 'N/A'}</td>
                 `;
                 medicationList.appendChild(row);
             });

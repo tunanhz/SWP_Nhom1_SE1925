@@ -66,201 +66,557 @@
             border-radius: 50%;
         }
 
-
         html, body {
-    height: 100%;
-    margin: 0;
-}
+            height: 100%;
+            margin: 0;
+        }
 
-body {
-    display: flex;
-    flex-direction: column;
-}
+        body {
+            display: flex;
+            flex-direction: column;
+        }
 
-.main-content {
-    flex: 1 0 auto; /* Đảm bảo main content chiếm không gian còn lại */
-}
+        .main-content {
+            flex: 1 0 auto;
+        }
 
-.footer {
-    flex-shrink: 0; /* Ngăn footer co lại */
-    width: 100%;
-    background-color: #f8f9fa; /* Màu nền footer (tùy chỉnh theo thiết kế) */
-    padding: 1rem 0; /* Khoảng cách trong footer */
-    text-align: center; /* Căn giữa nội dung footer */
-}
-     /* General Improvements */
-body {
-    background-color: #f4f6f9; /* Màu nền nhẹ nhàng */
-    font-family: 'Heebo', sans-serif; /* Đảm bảo font đồng nhất */
-    margin: 0; /* Loại bỏ margin mặc định của body */
-    padding: 0; /* Loại bỏ padding mặc định của body */
-    min-height: 100vh; /* Đảm bảo body chiếm toàn bộ chiều cao */
-    display: flex;
-    flex-direction: column;
-}
+        .footer {
+            flex-shrink: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 1rem 0;
+            text-align: center;
+        }
 
-/* Main Content Enhancements */
-.main-content {
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%); /* Gradient nền nhẹ nhàng */
-    flex: 1 0 auto; /* Chiếm toàn bộ không gian còn lại */
-    margin: 0; /* Loại bỏ margin */
-    padding: 1rem 0; /* Giảm padding để loại bỏ khoảng trắng thừa */
-}
+        /* Enhanced General Improvements */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Heebo', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-/* Container Adjustments */
-.container {
-    margin-top: 1rem; /* Khoảng cách nhỏ từ navbar */
-    margin-bottom: 1rem; /* Khoảng cách nhỏ từ footer */
-}
+        /* Enhanced Main Content */
+        .main-content {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            flex: 1 0 auto;
+            margin: 0;
+            padding: 2rem 0;
+            position: relative;
+        }
 
-/* Title Styling */
-.main-content h1 {
-    color: #1a3c6d; /* Màu xanh đậm cho tiêu đề */
-    font-weight: 700; /* Đậm chữ */
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Bóng chữ nhẹ */
-    transition: color 0.3s ease; /* Hiệu ứng chuyển đổi màu */
-    margin-bottom: 1rem; /* Giảm margin-bottom để giảm khoảng trắng */
-}
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
 
-.main-content h1:hover {
-    color: #007bff; /* Chuyển sang màu xanh sáng khi hover */
-}
+        /* Enhanced Container */
+        .container {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
 
-.main-content h2, .main-content h3 {
-    color: #1a3c6d; /* Màu xanh đậm cho tiêu đề phụ */
-    font-weight: 600;
-    margin-bottom: 0.5rem; /* Giảm khoảng cách */
-}
+        /* Enhanced Title Styling */
+        .main-content h1 {
+            color: #2c3e50;
+            font-weight: 800;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
 
-/* Prescription Details Card */
-#prescription-details {
-    background-color: #ffffff; /* Nền trắng sạch */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
-    border-radius: 8px; /* Bo góc */
-    padding: 1.5rem; /* Giảm padding */
-    margin-bottom: 1rem; /* Giảm khoảng cách dưới */
-}
+        .main-content h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
 
-/* Table Enhancements */
-table {
-    border-collapse: separate; /* Tách biệt viền */
-    border-spacing: 0; /* Loại bỏ khoảng cách giữa các ô */
-    border-radius: 8px; /* Bo góc bảng */
-    overflow: hidden; /* Đảm bảo bo góc hiển thị đúng */
-    background-color: #ffffff; /* Nền trắng sạch */
-}
+        .main-content h1:hover {
+            color: #667eea;
+            transform: translateY(-2px);
+        }
 
-/* Status Styling */
-#prescription-status.status-pending {
-    background-color: #fff3cd; /* Màu vàng nhạt cho trạng thái Pending */
-    color: #856404;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-}
+        .main-content h2, .main-content h3 {
+            color: #34495e;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+        }
 
-#prescription-status.status-dispensed {
-    background-color: #d4edda; /* Màu xanh nhạt cho trạng thái Dispensed */
-    color: #155724;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-}
+        /* Enhanced Prescription Details Card */
+        #prescription-details {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
 
-#prescription-status.status-cancelled {
-    background-color: #f8d7da; /* Màu đỏ nhạt cho trạng thái Cancelled */
-    color: #721c24;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-}
+        #prescription-details::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
 
-/* Update Status Section */
-#status-select {
-    border: 1px solid #ced4da; /* Viền nhẹ */
-    border-radius: 4px; /* Bo góc */
-    padding: 8px; /* Tăng padding */
-    background-color: #fff; /* Nền trắng */
-    color: #343a40; /* Màu chữ đậm */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng mượt mà */
-}
+        /* Enhanced Table Styling */
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 1.5rem;
+        }
 
-#status-select:focus {
-    border-color: #007bff; /* Viền xanh khi focus */
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* Bóng nhẹ khi focus */
-    outline: none;
-}
+        table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
 
-#update-status-btn, a[href="pharmacist-dashboard.html"] {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); /* Gradient xanh */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 16px;
-    transition: all 0.3s ease; /* Hiệu ứng mượt mà */
-    margin-top: 0.5rem; /* Giảm khoảng cách */
-}
+        table thead th {
+            color: white;
+            font-weight: 600;
+            padding: 1.2rem 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+        }
 
-#update-status-btn:hover, a[href="pharmacist-dashboard.html"]:hover {
-    background: linear-gradient(135deg, #0056b3 0%, #003d82 100%); /* Gradient xanh đậm khi hover */
-    transform: translateY(-1px); /* Nâng nhẹ */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Bóng nhẹ */
-}
+        table tbody tr {
+            transition: all 0.3s ease;
+        }
 
-/* Error and Success Messages */
-#error-message {
-    background: linear-gradient(135deg, #f8d7da 0%, #f1aeb5 100%); /* Gradient đỏ nhạt */
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-    border-radius: 4px;
-    padding: 12px;
-    margin-bottom: 1rem; /* Giảm khoảng cách */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        table tbody tr:hover {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
 
-#success-message {
-    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); /* Gradient xanh nhạt */
-    border: 1px solid #c3e6cb;
-    color: #155724;
-    border-radius: 4px;
-    padding: 12px;
-    margin-bottom: 1rem; /* Giảm khoảng cách */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        table tbody td {
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid #f1f3f4;
+            color: #2c3e50;
+            font-weight: 500;
+        }
 
-/* Navbar Enhancements */
-.navbar {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
-    background: linear-gradient(135deg, #ffffff, #f8f9fa); /* Gradient nền */
-    transition: all 0.3s ease; /* Hiệu ứng chuyển đổi mượt mà */
-}
+        /* Enhanced Status Styling */
+        #prescription-status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
 
-/* Footer Enhancements */
-.footer {
-    background: linear-gradient(135deg, #ffffff, #f8f9fa); /* Gradient nền footer */
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Bóng đổ phía trên */
-    padding: 1rem 0; /* Giảm padding */
-    border-top: 1px solid #dee2e6; /* Viền trên nhẹ */
-}
+        #prescription-status.status-pending {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #856404;
+        }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .main-content {
-        padding: 0.5rem 0; /* Giảm padding trên mobile */
-    }
+        #prescription-status.status-dispensed {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
 
-    .container {
-        margin-top: 0.5rem; /* Giảm khoảng cách trên mobile */
-        margin-bottom: 0.5rem;
-    }
+        #prescription-status.status-cancelled {
+            background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+            color: white;
+        }
 
-    #prescription-details {
-        padding: 1rem; /* Giảm padding trên mobile */
-    }
-}   
+        /* Enhanced Form Elements */
+        #status-select {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 12px 16px;
+            background: #ffffff;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            width: 200px;
+        }
+
+        #status-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            outline: none;
+            transform: translateY(-2px);
+        }
+
+        /* Enhanced Buttons */
+        #update-status-btn, a[href="pharmacist-dashboard.html"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        #update-status-btn:hover, a[href="pharmacist-dashboard.html"]:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Enhanced Messages */
+        #error-message, #success-message {
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border: none;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #error-message {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+        }
+
+        #success-message {
+            background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
+            color: white;
+        }
+
+        #error-message::before, #success-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Enhanced Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Enhanced Grid Layout */
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+
+        .md\:grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        /* Enhanced Text Styling */
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+        }
+
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        .mt-4 {
+            margin-top: 1rem;
+        }
+
+        .mt-6 {
+            margin-top: 1.5rem;
+        }
+
+        .mt-2 {
+            margin-top: 0.5rem;
+        }
+
+        .p-6 {
+            padding: 1.5rem;
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .rounded {
+            border-radius: 0.375rem;
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+
+        .text-gray-800 {
+            color: #1f2937;
+        }
+
+        .text-gray-700 {
+            color: #374151;
+        }
+
+        .text-gray-500 {
+            color: #6b7280;
+        }
+
+        .bg-white {
+            background-color: #ffffff;
+        }
+
+        .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .w-1\/4 {
+            width: 25%;
+        }
+
+        .min-w-full {
+            min-width: 100%;
+        }
+
+        .divide-y {
+            border-top-width: 1px;
+        }
+
+        .divide-gray-200 {
+            border-color: #e5e7eb;
+        }
+
+        .bg-gray-50 {
+            background-color: #f9fafb;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+        .tracking-wider {
+            letter-spacing: 0.05em;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .font-medium {
+            font-weight: 500;
+        }
+
+        .border-gray-300 {
+            border-color: #d1d5db;
+        }
+
+        .focus\:border-blue-500:focus {
+            border-color: #3b82f6;
+        }
+
+        .focus\:ring-blue-500:focus {
+            --tw-ring-color: #3b82f6;
+        }
+
+        .hover\:bg-blue-600:hover {
+            background-color: #2563eb;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem 0;
+            }
+
+            .container {
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+                padding: 0 1rem;
+            }
+
+            #prescription-details {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+
+            #status-select {
+                width: 100%;
+            }
+
+            .main-content h1 {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+
+            .main-content h1::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Animation Effects */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #prescription-details {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Enhanced Card Hover Effects */
+        #prescription-details:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Enhanced Button States */
+        #update-status-btn:active, a[href="pharmacist-dashboard.html"]:active {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Enhanced Table Row Animations */
+        table tbody tr {
+            animation: fadeInUp 0.4s ease-out;
+            animation-fill-mode: both;
+        }
+
+        table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+        table tbody tr:nth-child(2) { animation-delay: 0.2s; }
+        table tbody tr:nth-child(3) { animation-delay: 0.3s; }
+        table tbody tr:nth-child(4) { animation-delay: 0.4s; }
+        table tbody tr:nth-child(5) { animation-delay: 0.5s; }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff !important;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
+        }
+        .nav-link.active .icon,
+        .nav-link.active svg {
+            color: #fff !important;
+            fill: #fff !important;
+        }
     </style>
 
     
@@ -289,7 +645,7 @@ table {
                   <div class="offcanvas-body">
                      <ul class="iq-nav-menu list-unstyled gap-1">
                         <li class="nav-item">
-                           <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 active"
+                           <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0"
                               aria-current="page" href="./pharmacist-dashboard.html">
                               <i class="icon" data-bs-toggle="tooltip" title="Dashboard" data-bs-placement="right">
                                  <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 24 24" fill="none">
@@ -330,91 +686,10 @@ table {
                               <span class="item-name">Quản lý thuốc trong kho</span>
                            </a>
                         </li>
+                        
                         <li class="nav-item">
-                           <a class="nav-link menu-arrow justify-content-start" data-bs-toggle="collapse"
-                              href="#allPatitentPages" role="button" aria-expanded="false" aria-controls="allPatitentPages">
-                              <i class="icon" data-bs-toggle="tooltip" title="Pages" data-bs-placement="right">
-                                 <svg class="icon-20" height="20" width="20" viewBox="0 0 24 24" fill="none"
-                                      xmlns="http://www.w3.org/2000/svg">
-                                    <path opacity="0.4"
-                                          d="M16.191 2H7.81C4.77 2 3 3.78 3 6.83V17.16C3 20.26 4.77 22 7.81 22H16.191C19.28 22 21 20.26 21 17.16V6.83C21 3.78 19.28 2 16.191 2Z"
-                                          fill="currentColor"></path>
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                          d="M8.07996 6.6499V6.6599C7.64896 6.6599 7.29996 7.0099 7.29996 7.4399C7.29996 7.8699 7.64896 8.2199 8.07996 8.2199H11.069C11.5 8.2199 11.85 7.8699 11.85 7.4289C11.85 6.9999 11.5 6.6499 11.069 6.6499H8.07996ZM15.92 12.7399H8.07996C7.64896 12.7399 7.29996 12.3899 7.29996 11.9599C7.29996 11.5299 7.64896 11.1789 8.07996 11.1789H15.92C16.35 11.1789 16.7 11.5299 16.7 11.9599C16.7 12.3899 16.35 12.7399 15.92 12.7399ZM15.92 17.3099H8.07996C7.77996 17.3499 7.48996 17.1999 7.32996 16.9499C7.16996 16.6899 7.16996 16.3599 7.32996 16.1099C7.48996 15.8499 7.77996 15.7099 8.07996 15.7399H15.92C16.319 15.7799 16.62 16.1199 16.62 16.5299C16.62 16.9289 16.319 17.2699 15.92 17.3099Z"
-                                          fill="currentColor"></path>
-                                 </svg>
-                              </i>
-                              <span class="nav-text ms-2">Pages</span>
-                           </a>
-                           <ul class="iq-header-sub-menu list-unstyled collapse" id="allPatitentPages">
-                              <li class="nav-item">
-                                 <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 "
-                                    aria-current="page" href="./patient-patient.html">
-                                    <i class="icon" data-bs-toggle="tooltip" title="Patients" data-bs-placement="right">
-                                       <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <path d="M11.9488 14.54C8.49884 14.54 5.58789 15.1038 5.58789 17.2795C5.58789 19.4562 8.51765 20.0001 11.9488 20.0001C15.3988 20.0001 18.3098 19.4364 18.3098 17.2606C18.3098 15.084 15.38 14.54 11.9488 14.54Z" fill="currentColor"></path>
-                                          <path opacity="0.4" d="M11.949 12.467C14.2851 12.467 16.1583 10.5831 16.1583 8.23351C16.1583 5.88306 14.2851 4 11.949 4C9.61293 4 7.73975 5.88306 7.73975 8.23351C7.73975 10.5831 9.61293 12.467 11.949 12.467Z" fill="currentColor"></path>
-                                          <path opacity="0.4" d="M21.0881 9.21923C21.6925 6.84176 19.9205 4.70654 17.664 4.70654C17.4187 4.70654 17.1841 4.73356 16.9549 4.77949C16.9244 4.78669 16.8904 4.802 16.8725 4.82902C16.8519 4.86324 16.8671 4.90917 16.8895 4.93889C17.5673 5.89528 17.9568 7.0597 17.9568 8.30967C17.9568 9.50741 17.5996 10.6241 16.9728 11.5508C16.9083 11.6462 16.9656 11.775 17.0793 11.7948C17.2369 11.8227 17.3981 11.8371 17.5629 11.8416C19.2059 11.8849 20.6807 10.8213 21.0881 9.21923Z" fill="currentColor"></path>
-                                          <path d="M22.8094 14.817C22.5086 14.1722 21.7824 13.73 20.6783 13.513C20.1572 13.3851 18.747 13.205 17.4352 13.2293C17.4155 13.232 17.4048 13.2455 17.403 13.2545C17.4003 13.2671 17.4057 13.2887 17.4316 13.3022C18.0378 13.6039 20.3811 14.916 20.0865 17.6834C20.074 17.8032 20.1698 17.9068 20.2888 17.8888C20.8655 17.8059 22.3492 17.4853 22.8094 16.4866C23.0637 15.9589 23.0637 15.3456 22.8094 14.817Z" fill="currentColor"></path>
-                                          <path opacity="0.4" d="M7.04459 4.77973C6.81626 4.7329 6.58077 4.70679 6.33543 4.70679C4.07901 4.70679 2.30701 6.84201 2.9123 9.21947C3.31882 10.8216 4.79355 11.8851 6.43661 11.8419C6.60136 11.8374 6.76343 11.8221 6.92013 11.7951C7.03384 11.7753 7.09115 11.6465 7.02668 11.551C6.3999 10.6234 6.04263 9.50765 6.04263 8.30991C6.04263 7.05904 6.43303 5.89462 7.11085 4.93913C7.13234 4.90941 7.14845 4.86348 7.12696 4.82926C7.10906 4.80135 7.07593 4.78694 7.04459 4.77973Z" fill="currentColor"></path>
-                                          <path d="M3.32156 13.5127C2.21752 13.7297 1.49225 14.1719 1.19139 14.8167C0.936203 15.3453 0.936203 15.9586 1.19139 16.4872C1.65163 17.4851 3.13531 17.8066 3.71195 17.8885C3.83104 17.9065 3.92595 17.8038 3.91342 17.6832C3.61883 14.9167 5.9621 13.6046 6.56918 13.3029C6.59425 13.2885 6.59962 13.2677 6.59694 13.2542C6.59515 13.2452 6.5853 13.2317 6.5656 13.2299C5.25294 13.2047 3.84358 13.3848 3.32156 13.5127Z" fill="currentColor"></path>
-                                       </svg>
-                                    </i>
-                                    <span class="item-name">Patients</span>
-                                 </a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 "
-                                    aria-current="page" href="./patient-encounters.html">
-                                    <i class="icon" data-bs-toggle="tooltip" title="Encounters" data-bs-placement="right">
-                                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                          <path opacity="0.4"
-                                                d="M16.3125 6.60938C16.3125 11.25 9 15.1875 9 15.1875C9 15.1875 1.6875 11.25 1.6875 6.60938C1.6875 5.60238 2.08753 4.63663 2.79958 3.92458C3.51163 3.21253 4.47738 2.8125 5.48438 2.8125C7.07273 2.8125 8.43328 3.67805 9 5.0625C9.56672 3.67805 10.9273 2.8125 12.5156 2.8125C13.5226 2.8125 14.4884 3.21253 15.2004 3.92458C15.9125 4.63663 16.3125 5.60238 16.3125 6.60938Z"
-                                                fill="currentColor" />
-                                          <path
-                                                  d="M5.0625 9.5625H2.25C2.10082 9.5625 1.95774 9.50324 1.85225 9.39775C1.74676 9.29226 1.6875 9.14918 1.6875 9C1.6875 8.85082 1.74676 8.70774 1.85225 8.60225C1.95774 8.49676 2.10082 8.4375 2.25 8.4375H4.76156L5.71922 7.00031C5.77057 6.92316 5.84018 6.85988 5.92188 6.81612C6.00357 6.77235 6.09482 6.74945 6.1875 6.74945C6.28018 6.74945 6.37143 6.77235 6.45312 6.81612C6.53482 6.85988 6.60443 6.92316 6.65578 7.00031L8.4375 9.67219L9.09422 8.68781C9.14563 8.61076 9.21527 8.54759 9.29696 8.50392C9.37866 8.46026 9.46987 8.43744 9.5625 8.4375H11.25C11.3992 8.4375 11.5423 8.49676 11.6477 8.60225C11.7532 8.70774 11.8125 8.85082 11.8125 9C11.8125 9.14918 11.7532 9.29226 11.6477 9.39775C11.5423 9.50324 11.3992 9.5625 11.25 9.5625H9.86344L8.90578 10.9997C8.85443 11.0768 8.78482 11.1401 8.70312 11.1839C8.62143 11.2276 8.53018 11.2505 8.4375 11.2505C8.34482 11.2505 8.25357 11.2276 8.17188 11.1839C8.09018 11.1401 8.02057 11.0768 7.96922 10.9997L6.1875 8.32641L5.53078 9.31078C5.47953 9.3881 5.40996 9.45154 5.32826 9.49546C5.24655 9.53937 5.15526 9.56241 5.0625 9.5625ZM12.5156 2.25C11.0637 2.25 9.79242 2.87437 9 3.92977C8.20758 2.87437 6.93633 2.25 5.48438 2.25C4.3286 2.2513 3.22053 2.71101 2.40327 3.52827C1.58601 4.34553 1.1263 5.4536 1.125 6.60938C1.125 6.66211 1.125 6.71484 1.125 6.76758C1.12966 6.91676 1.1934 7.05798 1.30218 7.16018C1.41097 7.26237 1.55589 7.31716 1.70508 7.3125C1.85426 7.30784 1.99548 7.2441 2.09768 7.13532C2.19987 7.02653 2.25466 6.88161 2.25 6.73242C2.25 6.69164 2.25 6.65016 2.25 6.60938C2.25112 5.75191 2.59224 4.92988 3.19856 4.32356C3.80488 3.71724 4.62691 3.37612 5.48438 3.375C6.85195 3.375 8.00016 4.10344 8.47969 5.27344C8.52207 5.37661 8.59416 5.46485 8.6868 5.52695C8.77945 5.58905 8.88847 5.62221 9 5.62221C9.11153 5.62221 9.22055 5.58905 9.3132 5.52695C9.40584 5.46485 9.47793 5.37661 9.52031 5.27344C9.99984 4.10133 11.148 3.375 12.5156 3.375C13.3731 3.37612 14.1951 3.71724 14.8014 4.32356C15.4078 4.92988 15.7489 5.75191 15.75 6.60938C15.75 10.3788 10.2825 13.7918 9 14.5406C8.23852 14.097 6.00258 12.7125 4.31156 10.8696C4.21068 10.7596 4.07022 10.6941 3.92108 10.6877C3.77195 10.6812 3.62635 10.7343 3.51633 10.8352C3.4063 10.936 3.34086 11.0765 3.3344 11.2256C3.32794 11.3748 3.38099 11.5204 3.48187 11.6304C5.67352 14.021 8.60977 15.6157 8.73352 15.6825C8.81543 15.7266 8.90699 15.7496 9 15.7496C9.09301 15.7496 9.18457 15.7266 9.26648 15.6825C9.57726 15.5152 16.875 11.5312 16.875 6.60938C16.8737 5.4536 16.414 4.34553 15.5967 3.52827C14.7795 2.71101 13.6714 2.2513 12.5156 2.25Z"
-                                                  fill="currentColor" />
-                                       </svg>
-                                    </i>
-                                    <span class="item-name">Encounters</span>
-                                 </a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 "
-                                    aria-current="page" href="./patient-doctors.html">
-                                    <i class="icon" data-bs-toggle="tooltip" title="Doctors" data-bs-placement="right">
-                                       <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                          <path
-                                                  d="M11.997 15.1746C7.684 15.1746 4 15.8546 4 18.5746C4 21.2956 7.661 21.9996 11.997 21.9996C16.31 21.9996 19.994 21.3206 19.994 18.5996C19.994 15.8786 16.334 15.1746 11.997 15.1746Z"
-                                                  fill="currentColor"></path>
-                                          <path opacity="0.4"
-                                                d="M11.9971 12.5838C14.9351 12.5838 17.2891 10.2288 17.2891 7.29176C17.2891 4.35476 14.9351 1.99976 11.9971 1.99976C9.06008 1.99976 6.70508 4.35476 6.70508 7.29176C6.70508 10.2288 9.06008 12.5838 11.9971 12.5838Z"
-                                                fill="currentColor"></path>
-                                       </svg>
-                                    </i>
-                                    <span class="item-name">Doctors</span>
-                                 </a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 "
-                                    aria-current="page" href="./patient-record.html">
-                                    <i class="icon" data-bs-toggle="tooltip" title="Doctors" data-bs-placement="right">
-                                       <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <path opacity="0.4" d="M18.8088 9.021C18.3573 9.021 17.7592 9.011 17.0146 9.011C15.1987 9.011 13.7055 7.508 13.7055 5.675V2.459C13.7055 2.206 13.5036 2 13.253 2H7.96363C5.49517 2 3.5 4.026 3.5 6.509V17.284C3.5 19.889 5.59022 22 8.16958 22H16.0463C18.5058 22 20.5 19.987 20.5 17.502V9.471C20.5 9.217 20.299 9.012 20.0475 9.013C19.6247 9.016 19.1177 9.021 18.8088 9.021Z" fill="currentColor"></path>
-                                          <path opacity="0.4" d="M16.0842 2.56737C15.7852 2.25637 15.2632 2.47037 15.2632 2.90137V5.53837C15.2632 6.64437 16.1742 7.55437 17.2802 7.55437C17.9772 7.56237 18.9452 7.56437 19.7672 7.56237C20.1882 7.56137 20.4022 7.05837 20.1102 6.75437C19.0552 5.65737 17.1662 3.69137 16.0842 2.56737Z" fill="currentColor"></path>
-                                          <path fill-rule="evenodd" clip-rule="evenodd" d="M8.97398 11.3877H12.359C12.77 11.3877 13.104 11.0547 13.104 10.6437C13.104 10.2327 12.77 9.89868 12.359 9.89868H8.97398C8.56298 9.89868 8.22998 10.2327 8.22998 10.6437C8.22998 11.0547 8.56298 11.3877 8.97398 11.3877ZM8.97408 16.3819H14.4181C14.8291 16.3819 15.1631 16.0489 15.1631 15.6379C15.1631 15.2269 14.8291 14.8929 14.4181 14.8929H8.97408C8.56308 14.8929 8.23008 15.2269 8.23008 15.6379C8.23008 16.0489 8.56308 16.3819 8.97408 16.3819Z" fill="currentColor"></path>
-                                       </svg>
-                                    </i>
-                                    <span class="item-name">patient record</span>
-                                 </a>
-                              </li>
-                           </ul>
-                        </li>
-                        <li class="nav-item">
-                           <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 "
-                              aria-current="page" href="./patient-payments.html">
+                           <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 active"
+                              aria-current="page" href="./prescriptionList.html">
                               <i class="icon" data-bs-toggle="tooltip" title="Payments" data-bs-placement="right">
                                  <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
                                       xmlns="http://www.w3.org/2000/svg">
@@ -427,7 +702,7 @@ table {
                                     <circle cx="18" cy="11.8999" r="1" fill="currentColor"></circle>
                                  </svg>
                               </i>
-                              <span class="item-name">Payments</span>
+                              <span class="item-name">Prescription List</span>
                            </a>
                         </li>
                         <li class="nav-item">
@@ -642,7 +917,7 @@ table {
                                     <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                          src="./assets/images/shapes/01.png" loading="lazy" />
                                     <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Biker’s Jacket</h6>
+                                       <h6 class="mb-0 ">Biker's Jacket</h6>
                                        <p class="mb-0">$56.00</p>
                                     </div>
                                     <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -730,7 +1005,7 @@ table {
                                     <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                          src="./assets/images/shapes/01.png" loading="lazy" />
                                     <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Biker’s Jacket</h6>
+                                       <h6 class="mb-0 ">Biker's Jacket</h6>
                                        <p class="mb-0">$56.00</p>
                                     </div>
                                     <button type="button" class="btn btn-icon text-danger btn-sm">

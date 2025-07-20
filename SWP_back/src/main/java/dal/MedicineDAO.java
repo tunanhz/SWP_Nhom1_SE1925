@@ -284,4 +284,114 @@ public class MedicineDAO {
 
         return medicines;
     }
+
+    public ArrayList<MedicineDTO> getMedicinesNearExpiry(int daysThreshold) {
+        ArrayList<MedicineDTO> medicines = new ArrayList<>();
+        String sql = """
+            SELECT
+                m.medicine_id,
+                m.name,
+                m.ingredient,
+                m.usage,
+                m.preservation,
+                m.quantity,
+                m.manuDate,
+                m.expDate,
+                m.price,
+                w.name AS warehouse_name,
+                w.location AS warehouse_location,
+                c.categoryName
+            FROM Medicine m
+            JOIN Warehouse w ON m.warehouse_id = w.warehouse_id
+            LEFT JOIN Category c ON m.category_id = c.category_id
+            WHERE m.expDate IS NOT NULL
+            AND m.expDate BETWEEN ? AND ?
+            ORDER BY m.expDate ASC;
+            """;
+
+        java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
+        java.sql.Date thresholdDate = new java.sql.Date(currentDate.getTime() + (long) daysThreshold * 24 * 60 * 60 * 1000);
+
+        try {
+            PreparedStatement ps = ad.getConnection().prepareStatement(sql);
+            ps.setDate(1, currentDate);
+            ps.setDate(2, thresholdDate);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                medicines.add(new MedicineDTO(
+                        rs.getInt("medicine_id"),
+                        rs.getNString("name"),
+                        rs.getNString("ingredient"),
+                        rs.getNString("usage"),
+                        rs.getNString("preservation"),
+                        rs.getInt("quantity"),
+                        rs.getDate("manuDate"),
+                        rs.getDate("expDate"),
+                        rs.getDouble("price"),
+                        rs.getNString("warehouse_name"),
+                        rs.getNString("warehouse_location")
+                ));
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return medicines;
+    }
+    public ArrayList<MedicineDTO> getMedicinesLowStock(int quantityThreshold) {
+        ArrayList<MedicineDTO> medicines = new ArrayList<>();
+        String sql = """
+            SELECT
+                m.medicine_id,
+                m.name,
+                m.ingredient,
+                m.usage,
+                m.preservation,
+                m.quantity,
+                m.manuDate,
+                m.expDate,
+                m.price,
+                w.name AS warehouse_name,
+                w.location AS warehouse_location,
+                c.categoryName
+            FROM Medicine m
+            JOIN Warehouse w ON m.warehouse_id = w.warehouse_id
+            LEFT JOIN Category c ON m.category_id = c.category_id
+            WHERE m.quantity < ?
+            ORDER BY m.quantity ASC;
+            """;
+
+        try {
+            PreparedStatement ps = ad.getConnection().prepareStatement(sql);
+            ps.setInt(1, quantityThreshold);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                medicines.add(new MedicineDTO(
+                        rs.getInt("medicine_id"),
+                        rs.getNString("name"),
+                        rs.getNString("ingredient"),
+                        rs.getNString("usage"),
+                        rs.getNString("preservation"),
+                        rs.getInt("quantity"),
+                        rs.getDate("manuDate"),
+                        rs.getDate("expDate"),
+                        rs.getDouble("price"),
+                        rs.getNString("warehouse_name"),
+                        rs.getNString("warehouse_location")
+                ));
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return medicines;
+    }
 }

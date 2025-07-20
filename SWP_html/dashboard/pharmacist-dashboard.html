@@ -38,364 +38,687 @@
 
     
     <style>
+        /* User Image Styles */
         #userImg {
             width: 40px;
             height: 40px;
             object-fit: cover;
             border-radius: 50%;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
         }
+        
+        #userImg:hover {
+            border-color: #007bff;
+            transform: scale(1.05);
+        }
+        
         #profileImg {
             width: 100px;
             height: 100px;
             object-fit: cover;
             border-radius: 50%;
+            border: 3px solid #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
+
         /* Sticky Footer Styles */
         html, body {
             height: 100%;
             margin: 0;
         }
+        
         body {
             display: flex;
             flex-direction: column;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
+        
         .main-content {
             flex: 1 0 auto;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 2rem 0;
+            min-height: calc(100vh - 100px);
+            position: relative;
         }
+        
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+        
         .footer {
             flex-shrink: 0;
             width: 100%;
-            background-color: #f8f9fa;
-            padding: 1rem 0;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 1.5rem 0;
             text-align: center;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
         }
+        
         .footer-sticky {
             position: sticky;
             bottom: 0;
             z-index: 1000;
         }
+        
         .footer-glass {
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
             border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
 
+        /* Enhanced Typography */
+        body {
+            font-family: 'Heebo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
 
+        /* Main Content Enhancements */
+        .container {
+            position: relative;
+            z-index: 1;
+        }
 
-        /* General Improvements */
-body {
-    background-color: #f4f6f9; /* Màu nền nhẹ nhàng */
-    font-family: 'Heebo', sans-serif; /* Đảm bảo font đồng nhất */
-}
+        /* Title Styling with Animation */
+        .main-content h1 {
+            color: #2c3e50;
+            font-weight: 800;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            margin-bottom: 2rem;
+        }
 
-/* Main Content Enhancements */
-.main-content {
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%); /* Gradient nền nhẹ nhàng */
-    padding: 2rem 0; /* Tăng padding cho không gian thoáng hơn */
-    min-height: calc(100vh - 100px); /* Đảm bảo chiều cao đầy đủ */
-}
+        .main-content h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
 
-/* Title Styling */
-.main-content h1 {
-    color: #1a3c6d; /* Màu xanh đậm cho tiêu đề */
-    font-weight: 700; /* Đậm chữ */
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Bóng chữ nhẹ */
-    transition: color 0.3s ease; /* Hiệu ứng chuyển đổi màu */
-}
+        .main-content h1:hover::after {
+            width: 100px;
+        }
 
-.main-content h1:hover {
-    color: #007bff; /* Chuyển sang màu xanh sáng khi hover */
-}
+        .main-content h1:hover {
+            color: #667eea;
+            transform: translateY(-2px);
+        }
 
-/* Table Enhancements */
-table {
-    border-collapse: separate; /* Tách biệt viền */
-    border-spacing: 0; /* Loại bỏ khoảng cách giữa các ô */
-    border-radius: 8px; /* Bo góc bảng */
-    overflow: hidden; /* Đảm bảo bo góc hiển thị đúng */
-    background-color: #ffffff; /* Nền trắng sạch cho bảng */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
-}
+        /* Enhanced Table Design */
+        .bg-white {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
 
-th, td {
-    padding: 14px 18px; /* Tăng padding cho dễ nhìn */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Hiệu ứng mượt mà */
-}
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: transparent;
+            box-shadow: none;
+        }
 
-th {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); /* Gradient xanh cho tiêu đề */
-    color: white; /* Chữ trắng cho tương phản */
-    font-weight: 600; /* Đậm chữ */
-    text-transform: capitalize; /* Chữ hoa đầu */
-}
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 18px 20px;
+            font-size: 0.875rem;
+            position: relative;
+        }
 
-tbody tr {
-    transition: background-color 0.3s ease; /* Hiệu ứng hover mượt mà */
-}
+        th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
 
-tbody tr:hover {
-    background-color: rgba(0, 123, 255, 0.1); /* Nền xanh nhạt khi hover */
-}
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            color: #2c3e50;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
 
-td {
-    border-bottom: 1px solid #e9ecef; /* Viền dưới nhẹ */
-    color: #343a40; /* Màu chữ đậm cho nội dung */
-}
+        tbody tr {
+            transition: all 0.3s ease;
+            position: relative;
+        }
 
-/* Status Styling */
-td .status-pending {
-    background-color: #fff3cd; /* Màu vàng nhạt cho trạng thái Pending */
-    color: #856404;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-}
+        tbody tr:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
-td .status-dispensed {
-    background-color: #d4edda; /* Màu xanh nhạt cho trạng thái Dispensed */
-    color: #155724;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-}
+        tbody tr:hover td {
+            color: #667eea;
+        }
 
-td .status-cancelled {
-    background-color: #f8d7da; /* Màu đỏ nhạt cho trạng thái Cancelled */
-    color: #721c24;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-}
+        /* Enhanced Status Badges */
+        .status-expired {
+            background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
 
-td button {
-    padding: 6px 12px; /* Nút hành động nhỏ gọn */
-    border-radius: 4px; /* Bo góc nút */
-    background-color: #007bff; /* Màu xanh chính */
-    color: white;
-    border: none;
-    transition: all 0.3s ease; /* Hiệu ứng chuyển đổi */
-}
+        .status-expiring-soon {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #856404;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
 
-td button:hover {
-    background-color: #0056b3; /* Màu xanh đậm khi hover */
-    transform: translateY(-1px); /* Nâng nhẹ khi hover */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Bóng nhẹ khi hover */
-}
+        .status-valid {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
 
-/* Pagination and Filters */
-#prev-page, #next-page {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); /* Gradient xanh */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 16px;
-    transition: all 0.3s ease; /* Hiệu ứng mượt mà */
-}
+        /* Enhanced Action Buttons */
+        td button {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
 
-#prev-page:hover, #next-page:hover {
-    background: linear-gradient(135deg, #0056b3 0%, #003d82 100%); /* Gradient xanh đậm khi hover */
-    transform: translateY(-1px); /* Nâng nhẹ */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Bóng nhẹ */
-}
+        td button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
 
-#prev-page:disabled, #next-page:disabled {
-    background: #ced4da; /* Màu xám khi disabled */
-    cursor: not-allowed;
-}
+        td button:hover::before {
+            left: 100%;
+        }
 
-#status-filter, #page-size {
-    border: 1px solid #ced4da; /* Viền nhẹ */
-    border-radius: 4px; /* Bo góc */
-    padding: 8px; /* Tăng padding */
-    background-color: #fff; /* Nền trắng */
-    color: #343a40; /* Màu chữ đậm */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng mượt mà */
-}
+        td button:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a5acd 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        }
 
-#status-filter:focus, #page-size:focus {
-    border-color: #007bff; /* Viền xanh khi focus */
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* Bóng nhẹ khi focus */
-    outline: none;
-}
+        /* Enhanced Pagination and Filters */
+        .mt-4 {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
-#page-info {
-    background-color: #e9ecef; /* Nền xám nhạt cho thông tin trang */
-    color: #343a40;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: 500;
-}
+        #prev-page, #next-page {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
 
-/* Error Message Styling */
-#error-message {
-    background: linear-gradient(135deg, #f8d7da 0%, #f1aeb5 100%); /* Gradient đỏ nhạt */
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-    border-radius: 4px;
-    padding: 12px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        #prev-page::before, #next-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
 
-/* Navbar Enhancements (from previous) */
-.navbar {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(135deg, #ffffff, #f8f9fa);
-    transition: all 0.3s ease;
-}
+        #prev-page:hover::before, #next-page:hover::before {
+            left: 100%;
+        }
 
-.navbar-brand img {
-    transition: transform 0.3s ease;
-}
+        #prev-page:hover, #next-page:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a5acd 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        }
 
-.navbar-brand:hover img {
-    transform: scale(1.1);
-}
+        #prev-page:disabled, #next-page:disabled {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
 
-.nav-link {
-    transition: color 0.3s ease, background-color 0.3s ease;
-}
+        #status-filter, #page-size {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
 
-.nav-link:hover {
-    color: #007bff !important;
-    background-color: rgba(0, 123, 255, 0.1);
-}
+        #status-filter:focus, #page-size:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            outline: none;
+            background: white;
+        }
 
-.nav-list-icon .btn-inner {
-    position: relative;
-    transition: all 0.3s ease;
-}
+        #page-info {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #2c3e50;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
 
-.nav-list-icon .btn-inner:hover {
-    transform: translateY(-2px);
-}
+        /* Enhanced Error Message */
+        #error-message {
+            background: linear-gradient(135deg, #f8d7da 0%, #f1aeb5 100%);
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 16px rgba(220, 53, 69, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
 
-.badge-notification {
-    background-color: #dc3545;
-    border-radius: 50%;
-    padding: 4px 8px;
-    font-size: 12px;
-    color: white;
-}
+        #error-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #dc3545, #e74c3c, #dc3545);
+        }
 
-/* Footer Enhancements (from previous) */
-.footer {
-    background: linear-gradient(135deg, #ffffff, #f8f9fa);
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem 0;
-    border-top: 1px solid #dee2e6;
-}
+        /* Empty State Styling */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6c757d;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
 
-.footer-glass {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-}
+        .empty-state::before {
+            content: '📋';
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
 
-.footer .footer-link {
-    color: #007bff;
-    transition: color 0.3s ease;
-}
+        /* Enhanced Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
 
-.footer .footer-link:hover {
-    color: #0056b3;
-    text-decoration: underline;
-}
+        .navbar-brand img {
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
 
-/* Modal Enhancements (from previous) */
-.modal-content {
-    border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    border: none;
-}
+        .navbar-brand:hover img {
+            transform: scale(1.1) rotate(2deg);
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
 
-.modal-header {
-    border-bottom: 1px solid #e9ecef;
-    padding-bottom: 1rem;
-}
+        .nav-link {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 0 2px;
+            position: relative;
+        }
 
-.nav-tabs .nav-link {
-    color: #6c757d;
-    transition: all 0.3s ease;
-}
+        .nav-link:hover {
+            color: #667eea !important;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            transform: translateY(-1px);
+        }
 
-.nav-tabs .nav-link.active {
-    color: #007bff;
-    border-bottom: 2px solid #007bff;
-}
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white !important;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
 
-.nav-tabs .nav-link:hover {
-    color: #0056b3;
-}
+        .nav-list-icon .btn-inner {
+            position: relative;
+            transition: all 0.3s ease;
+        }
 
-.modal-body form .form-control {
-    border-radius: 4px;
-    border: 1px solid #ced4da;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
+        .nav-list-icon .btn-inner:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
 
-.modal-body form .form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
+        .badge-notification {
+            background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+            border-radius: 50%;
+            padding: 4px 8px;
+            font-size: 12px;
+            color: white;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+            animation: pulse 2s infinite;
+        }
 
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-    transition: all 0.3s ease;
-}
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
 
-.btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
-    transform: translateY(-1px);
-}
+        /* Enhanced Footer */
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+            padding: 2rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
 
-/* Customizer Enhancements (from previous) */
-.live-customizer {
-    border-left: 1px solid #dee2e6;
-    background: #ffffff;
-    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
-}
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
 
-.live-customizer .btn {
-    transition: all 0.3s ease;
-}
+        .footer .footer-link {
+            color: #667eea;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+        }
 
-.live-customizer .btn:hover {
-    background-color: #007bff;
-    color: white;
-    transform: translateY(-1px);
-}
+        .footer .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .main-content {
-        padding: 1rem; /* Giảm padding trên mobile */
-    }
+        .footer .footer-link:hover::after {
+            width: 100%;
+        }
 
-    .main-content h1 {
-        font-size: 1.75rem; /* Giảm kích thước tiêu đề */
-    }
+        .footer .footer-link:hover {
+            color: #764ba2;
+            text-decoration: none;
+        }
 
-    table th, table td {
-        font-size: 14px; /* Giảm kích thước chữ */
-        padding: 10px; /* Giảm padding */
-    }
+        /* Enhanced Modal */
+        .modal-content {
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+        }
 
-    #prev-page, #next-page {
-        padding: 6px 12px; /* Nút nhỏ hơn trên mobile */
-    }
+        .modal-header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 16px 16px 0 0;
+        }
 
-    #status-filter, #page-size {
-        font-size: 14px; /* Giảm kích thước chữ */
-        padding: 6px;
-    }
-}
-        
+        .nav-tabs .nav-link {
+            color: #6c757d;
+            transition: all 0.3s ease;
+            border-radius: 8px 8px 0 0;
+            margin-right: 4px;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-bottom: 3px solid #667eea;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: #764ba2;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .modal-body form .form-control {
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .modal-body form .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            background: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a5acd 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Enhanced Customizer */
+        .live-customizer {
+            border-left: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .live-customizer .btn {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .live-customizer .btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Loading Animation */
+        #loading {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .loader {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .main-content h1 {
+                font-size: 2rem;
+                text-align: center;
+            }
+
+            .main-content h1::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            table th, table td {
+                font-size: 0.875rem;
+                padding: 12px 16px;
+            }
+
+            #prev-page, #next-page {
+                padding: 8px 16px;
+                font-size: 0.875rem;
+            }
+
+            #status-filter, #page-size {
+                font-size: 0.875rem;
+                padding: 8px 12px;
+            }
+
+            .mt-4 {
+                padding: 1rem;
+            }
+
+            .bg-white {
+                border-radius: 12px;
+            }
+
+            /* Hide some columns on mobile for better readability */
+            table th:nth-child(3),
+            table td:nth-child(3) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-content h1 {
+                font-size: 1.75rem;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            th, td {
+                padding: 8px 12px;
+            }
+
+            .status-expired, .status-expiring-soon, .status-valid {
+                padding: 4px 12px;
+                font-size: 0.7rem;
+            }
+
+            /* Hide more columns on very small screens */
+            table th:nth-child(4),
+            table td:nth-child(4) {
+                display: none;
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a5acd 100%);
+        }
     </style>
 </head>
 
@@ -457,7 +780,7 @@ td button:hover {
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0" aria-current="page" href="./receptionist-Waitlists.html">
+                                        <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0" aria-current="page" href="./prescriptionList.html">
                                             <i class="icon" data-bs-toggle="tooltip" title="Waitlists" data-bs-placement="right">
                                                 <svg width="20" class="icon-20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M3 16.87V9.25699H21V16.931C21 20.07 19.0241 22 15.8628 22H8.12733C4.99561 22 3 20.03 3 16.87ZM7.95938 14.41C7.50494 14.431 7.12953 14.07 7.10977 13.611C7.10977 13.151 7.46542 12.771 7.91987 12.75C8.36443 12.75 8.72997 13.101 8.73985 13.55C8.7596 14.011 8.40395 14.391 7.95938 14.41ZM12.0198 14.41C11.5653 14.431 11.1899 14.07 11.1701 13.611C11.1701 13.151 11.5258 12.771 11.9802 12.75C12.4248 12.75 12.7903 13.101 12.8002 13.55C12.82 14.011 12.4643 14.391 12.0198 14.41ZM16.0505 18.09C15.596 18.08 15.2305 17.7 15.2305 17.24C15.2206 16.78 15.5862 16.401 16.0406 16.391H16.0505C16.5148 16.391 16.8902 16.771 16.8902 17.24C16.8902 17.71 16.5148 18.09 16.0505 18.09ZM11.1701 17.24C11.1899 17.7 11.5653 18.061 12.0198 18.04C12.4643 18.021 12.82 17.641 12.8002 17.181C12.7903 16.731 12.4248 16.38 11.9802 16.38C11.5258 16.401 11.1701 16.78 11.1701 17.24ZM7.09989 17.24C7.11965 17.7 7.49506 18.061 7.94951 18.04C8.39407 18.021 8.74973 17.641 8.72997 17.181C8.72009 16.731 8.35456 16.38 7.90999 16.38C7.45554 16.401 7.09989 16.78 7.09989 17.24ZM15.2404 13.601C15.2404 13.141 15.596 12.771 16.0505 12.761C16.4951 12.761 16.8507 13.12 16.8705 13.561C16.8804 14.021 16.5247 14.401 16.0801 14.41C15.6257 14.42 15.2503 14.07 15.2404 13.611V13.601Z" fill="currentColor" />
@@ -466,21 +789,10 @@ td button:hover {
                                                     <path d="M15.6949 6.59C16.1197 6.59 16.4556 6.261 16.4556 5.82V2.771C16.4556 2.33 16.1197 2 15.6949 2C15.2603 2 14.9342 2.33 14.9342 2.771V5.82C14.9342 6.261 15.2603 6.59 15.6949 6.59Z" fill="currentColor" />
                                                 </svg>
                                             </i>
-                                            <span class="item-name">Waitlists</span>
+                                            <span class="item-name">Prescription List</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0" aria-current="page" href="./patient-payments.html">
-                                            <i class="icon" data-bs-toggle="tooltip" title="Payments" data-bs-placement="right">
-                                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M21.9964 8.37513H17.7618C15.7911 8.37859 14.1947 9.93514 14.1911 11.8566C14.1884 13.7823 15.7867 15.3458 17.7618 15.3484H22V15.6543C22 19.0136 19.9636 21 16.5173 21H7.48356C4.03644 21 2 19.0136 2 15.6543V8.33786C2 4.97862 4.03644 3 7.48356 3H16.5138C19.96 3 21.9964 4.97862 21.9964 8.33786V8.37513ZM6.73956 8.36733H12.3796H12.3831H12.3902C12.8124 8.36559 13.1538 8.03019 13.152 7.61765C13.1502 7.20598 12.8053 6.87318 12.3831 6.87491H6.73956C6.32 6.87664 5.97956 7.20858 5.97778 7.61852C5.976 8.03019 6.31733 8.36559 6.73956 8.36733Z" fill="currentColor"></path>
-                                                    <path opacity="0.4" d="M16.0374 12.2966C16.2465 13.2478 17.0805 13.917 18.0326 13.8996H21.2825C21.6787 13.8996 22 13.5715 22 13.166V10.6344C21.9991 10.2297 21.6787 9.90077 21.2825 9.8999H17.9561C16.8731 9.90338 15.9983 10.8024 16 11.9102C16 12.0398 16.0128 12.1695 16.0374 12.2966Z" fill="currentColor"></path>
-                                                    <circle cx="18" cy="11.8999" r="1" fill="currentColor"></circle>
-                                                </svg>
-                                            </i>
-                                            <span class="item-name">Payments</span>
-                                        </a>
-                                    </li>
+                                    
                                     <li class="nav-item">
                                         <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#setting-modal">
                                             <i class="icon" data-bs-toggle="tooltip" title="Setting" data-bs-placement="right">
@@ -649,7 +961,7 @@ td button:hover {
                                                 <div class="d-flex align-items-center">
                                                     <img class="p-1 avatar-40 rounded-pill bg-primary-subtle" src="./assets/images/shapes/01.png" loading="lazy" />
                                                     <div class="ms-3 flex-grow-1 text-start">
-                                                        <h6 class="mb-0 ">Biker’s Jacket</h6>
+                                                        <h6 class="mb-0 ">Biker's Jacket</h6>
                                                         <p class="mb-0">$56.00</p>
                                                     </div>
                                                     <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -773,24 +1085,29 @@ td button:hover {
             <!-- Nav End -->
         </div>
         <div class="container mx-auto max-w-7xl">
-            <h1 class="text-3xl font-bold mb-6 text-gray-800">Prescription List</h1>
+            <h1 class="text-3xl font-bold mb-6 text-gray-800">Pharmacist-dashboard</h1>
             <!-- Error Message -->
             <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"></div>
+            <div id="low-stock-medicines" class="mb-6"></div>
             <!-- Table -->
             <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <h2 class="text-xl font-semibold mb-2 text-red-600"><span style="display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin-right:8px;"><circle cx="12" cy="12" r="10" stroke="black" stroke-width="2" fill="none"/><text x="12" y="17" text-anchor="middle" font-size="16" font-family="Arial" fill="black">!</text></svg>Danh sách thuốc sắp hết hạn</span></h2>
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Doctor</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên thuốc</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thành phần / Công dụng / Bảo quản</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số lượng</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày hết hạn</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giá</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên kho</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Địa chỉ kho</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody id="prescription-table" class="divide-y divide-gray-200">
+                    <tbody id="medicine-table" class="divide-y divide-gray-200">
                         <!-- Table rows will be populated by JavaScript -->
                     </tbody>
                 </table>
@@ -800,17 +1117,17 @@ td button:hover {
                 <div class="flex space-x-4">
                     <!-- Status Filter -->
                     <div>
-                        <label for="status-filter" class="mr-2">Filter by Status:</label>
+                        <label for="status-filter" class="mr-2">Lọc theo trạng thái:</label>
                         <select id="status-filter" class="border rounded p-1">
-                            <option value="">All</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Dispensed">Dispensed</option>
-                            <option value="Cancelled">Cancelled</option>
+                            <option value="">Tất cả</option>
+                            <option value="expired">Đã hết hạn</option>
+                            <option value="expiring-soon">Sắp hết hạn</option>
+                            <option value="valid">Còn hạn</option>
                         </select>
                     </div>
                     <!-- Items per page -->
                     <div>
-                        <label for="page-size" class="mr-2">Items per page:</label>
+                        <label for="page-size" class="mr-2">Số lượng mỗi trang:</label>
                         <select id="page-size" class="border rounded p-1">
                             <option value="5">5</option>
                             <option value="10" selected>10</option>
@@ -819,9 +1136,9 @@ td button:hover {
                     </div>
                 </div>
                 <div class="flex space-x-2">
-                    <button id="prev-page" class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300" disabled>Previous</button>
-                    <span id="page-info" class="px-4 py-2">Page 1</span>
-                    <button id="next-page" class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300">Next</button>
+                    <button id="prev-page" class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300" disabled>Trước</button>
+                    <span id="page-info" class="px-4 py-2">Trang 1</span>
+                    <button id="next-page" class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300">Tiếp</button>
                 </div>
             </div>
         </div>
@@ -1264,7 +1581,7 @@ td button:hover {
                                    fill="currentColor" />
                            <path
                                    d="M20.0941 18.5594C21.3117 16.848 21.9736 14.8163 21.9993 12.7329C22.0027 12.4569 21.7699 12.2413 21.4941 12.2512L19.5244 12.3213C19.2482 12.3311 19.0342 12.5633 19.0254 12.8395C18.9796 14.283 18.5078 15.6861 17.6628 16.8739C16.7203 18.1986 15.3651 19.183 13.8035 19.6772C12.2419 20.1714 10.5595 20.1483 9.01246 19.6114C7.4654 19.0746 6.13845 18.0534 5.23367 16.7033C4.66562 15.8557 4.28352 14.9076 4.10367 13.9196C4.00935 18.0934 6.49194 21.37 10.008 22.6416C10.697 22.8908 11.4336 22.9852 12.1652 22.9465C13.075 22.8983 13.8508 22.742 14.7105 22.4699C16.8889 21.7805 18.7794 20.4073 20.0941 18.5594Z"
-                                   fill="currentColor" />
+                                   fill="#0169CA" />
                         </svg>
                      </a>
                   </div>
@@ -1686,7 +2003,7 @@ td button:hover {
 
     
   
-    <script src='./assets/js/API/main-pharmacist-prescriptionList.js'></script>
+    <script src='./assets/js/API/main-phamarcist-dashboard.js'></script>
     <!-- Library Bundle Script -->
 <script src="./assets/js/core/libs.min.js"></script>
 <!-- Plugin Scripts -->
@@ -1738,5 +2055,13 @@ td button:hover {
 
 <!-- Icons -->
 <script src="./assets/js/solid-icon-search-filter.js?v=1.4.1" defer></script>
+
+<script>
+document.getElementById('status-filter').addEventListener('change', (e) => {
+    currentStatus = e.target.value;
+    currentPage = 1; // Reset về trang 1 khi thay đổi bộ lọc
+    fetchMedicines(currentPage, pageSize, currentStatus);
+});
+</script>
 </body>
 </html>

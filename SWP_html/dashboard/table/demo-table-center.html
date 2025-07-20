@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en" class="theme-fs-sm" data-bs-theme="light" data-bs-theme-color="default" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Table Center Fullscreen Demo</title>
+        <meta name="description" content="Demo cho Table Center Fullscreen với các tính năng nâng cao">
+        
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="../assets/images/favicon.ico" />
+        
+        <!-- Library / Plugin Css Build -->
+        <link rel="stylesheet" href="../assets/css/core/libs.min.css" />
+        
+        <!-- flaticon css -->
+        <link rel="stylesheet" href="../assets/vendor/flaticon/css/flaticon.css" />
+        
+        <!-- font-awesome css -->
+        <link rel="stylesheet" href="../assets/vendor/font-awesome/css/all.min.css" />
+        
+        <!-- Kivicare Design System Css -->
+        <link rel="stylesheet" href="../assets/css/kivicare.min.css?v=1.4.1" />
+        
+        <!-- Custom Css -->
+        <link rel="stylesheet" href="../assets/css/custom.min.css?v=1.4.1" />
+        
+        <!-- Table Full Width CSS -->
+        <link rel="stylesheet" href="../assets/css/table-full-width.css"/>
+        
+        <!-- Table Responsive Improvements -->
+        <link rel="stylesheet" href="../assets/css/table-responsive-improvements.css"/>
+        
+        <!-- Table Center Fullscreen CSS -->
+        <link rel="stylesheet" href="../assets/css/table-center-fullscreen.css"/>
+        
+        <!-- Google Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <!-- loader Start -->
+        <div id="loading">
+            <div class="loader simple-loader">
+                <div class="loader-body">
+                    <img src="../assets/images/loader.gif" alt="loader" class="light-loader img-fluid" width="200">
+                </div>
+            </div>
+        </div>
+        <!-- loader END -->
+
+        <!-- Wrapper Start-->
+        <div class="wrapper">
+            <!-- Sidebar  -->
+            <aside class="sidebar sidebar-base" id="first-tour" data-toggle="main-sidebar" data-sidebar="responsive">
+                <div class="sidebar-header d-flex align-items-center justify-content-start position-relative">
+                    <a href="../index.html" class="navbar-brand">
+                        <div class="logo-main">
+                            <img class="logo-normal img-fluid" src="../assets/images/logo.png" height="30" alt="logo">
+                        </div>
+                    </a>
+                </div>
+                <div class="sidebar-body pt-0 data-scrollbar">
+                    <div class="sidebar-list">
+                        <ul class="navbar-nav iq-main-menu" id="sidebar-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="../index.html">
+                                    <i class="icon">
+                                        <svg width="20" class="icon-20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.4" d="M16.0756 2H19.4616C20.8639 2 22.0001 3.14585 22.0001 4.55996V7.97452C22.0001 9.38864 20.8639 10.5345 19.4616 10.5345H16.0756C14.6734 10.5345 13.5371 9.38864 13.5371 7.97452V4.55996C13.5371 3.14585 14.6734 2 16.0756 2Z" fill="currentColor"></path>
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="currentColor"></path>
+                                        </svg>
+                                    </i>
+                                    <span class="item-name">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="demo-table-center.html">
+                                    <i class="icon">
+                                        <svg width="20" class="icon-20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3 13H11V3H3V13ZM3 21H11V15H3V21ZM13 21H21V11H13V21ZM13 3V9H21V3H13Z" fill="currentColor"/>
+                                        </svg>
+                                    </i>
+                                    <span class="item-name">Table Demo</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+            <!-- Sidebar  -->
+
+            <!-- TOP Nav Bar -->
+            <div class="iq-top-navbar">
+                <div class="iq-navbar-custom">
+                    <nav class="navbar navbar-expand-lg navbar-light p-0">
+                        <div class="iq-navbar-logo d-flex align-items-center justify-content-between">
+                            <a href="../index.html" class="header-logo">
+                                <h5 class="logo-title light-logo ml-3">Table Center Demo</h5>
+                            </a>
+                        </div>
+                        <div class="navbar-breadcrumb">
+                            <h5>Table Center Fullscreen Demo</h5>
+                        </div>
+                        <div class="iq-navbar-toolbar d-flex align-items-center">
+                            <button type="button" class="btn btn-primary" onclick="exportTable()">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                            <button type="button" class="btn btn-secondary ml-2" onclick="window.print()">
+                                <i class="fas fa-print"></i> Print
+                            </button>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <!-- TOP Nav Bar END -->
+
+            <!-- Page Content  -->
+            <div id="content-page" class="content-page">
+                <!-- Container-fluid -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="header-title">
+                                        <h4 class="card-title">Table Center Fullscreen Demo</h4>
+                                        <p class="mb-0">Demo cho các tính năng table center fullscreen với thiết kế hiện đại</p>
+                                    </div>
+                                    <div class="header-action">
+                                        <div class="form-group">
+                                            <input type="search" class="form-control search-input" placeholder="Tìm kiếm...">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive mt-4">
+                                        <table id="demo-table" class="table table-striped mb-0" role="grid">
+                                            <thead>
+                                                <tr>
+                                                    <th>Dự án</th>
+                                                    <th>Thành viên</th>
+                                                    <th>Ngân sách</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Tiến độ</th>
+                                                    <th>Hành động</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <img class="rounded img-fluid avatar-40 me-3 bg-primary-subtle"
+                                                                src="../assets/images/shapes/01.png" alt="profile" loading="lazy" />
+                                                            <h6>Soft UI XD Version</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="iq-media-group iq-media-group-1">
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">SP</div>
+                                                            </a>
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">PP</div>
+                                                            </a>
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">MM</div>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td>$14000</td>
+                                                    <td><div class="text-info">Đang chờ</div></td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <h6>60%</h6>
+                                                        </div>
+                                                        <div class="progress bg-info-subtle shadow-none w-100" style="height: 6px">
+                                                            <div class="progress-bar bg-info" data-toggle="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-primary">Xem</button>
+                                                        <button class="btn btn-sm btn-secondary">Sửa</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <img class="rounded img-fluid avatar-40 me-3 bg-primary-subtle"
+                                                                src="../assets/images/shapes/02.png" alt="profile" loading="lazy" />
+                                                            <h6>Add Progress Track</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="iq-media-group iq-media-group-1">
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">SP</div>
+                                                            </a>
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">PP</div>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td>$3000</td>
+                                                    <td><div class="text-danger">Đang chờ</div></td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <h6>10%</h6>
+                                                        </div>
+                                                        <div class="progress bg-danger-subtle shadow-none w-100" style="height: 6px">
+                                                            <div class="progress-bar bg-danger" data-toggle="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-primary">Xem</button>
+                                                        <button class="btn btn-sm btn-secondary">Sửa</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <img class="rounded img-fluid avatar-40 me-3 bg-primary-subtle"
+                                                                src="../assets/images/shapes/03.png" alt="profile" loading="lazy" />
+                                                            <h6>Fix Platform Errors</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="iq-media-group iq-media-group-1">
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">SP</div>
+                                                            </a>
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">PP</div>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td>Chưa thiết lập</td>
+                                                    <td><div class="text-success">Hoàn thành</div></td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <h6>100%</h6>
+                                                        </div>
+                                                        <div class="progress bg-success-subtle shadow-none w-100" style="height: 6px">
+                                                            <div class="progress-bar bg-success" data-toggle="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-primary">Xem</button>
+                                                        <button class="btn btn-sm btn-secondary">Sửa</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <img class="rounded img-fluid avatar-40 me-3 bg-primary-subtle"
+                                                                src="../assets/images/shapes/04.png" alt="profile" loading="lazy" />
+                                                            <h6>Launch Our Mobile App</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="iq-media-group iq-media-group-1">
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">SP</div>
+                                                            </a>
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">PP</div>
+                                                            </a>
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">AP</div>
+                                                            </a>
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">DP</div>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td>$20500</td>
+                                                    <td><div class="text-success">Hoàn thành</div></td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <h6>100%</h6>
+                                                        </div>
+                                                        <div class="progress bg-success-subtle shadow-none w-100" style="height: 6px">
+                                                            <div class="progress-bar bg-success" data-toggle="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-primary">Xem</button>
+                                                        <button class="btn btn-sm btn-secondary">Sửa</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <img class="rounded img-fluid avatar-40 me-3 bg-primary-subtle"
+                                                                src="../assets/images/shapes/06.png" alt="profile" loading="lazy" />
+                                                            <h6>Add the New Pricing Page</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="iq-media-group iq-media-group-1">
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">SP</div>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td>$500</td>
+                                                    <td><div class="text-primary">Đúng tiến độ</div></td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <h6>25%</h6>
+                                                        </div>
+                                                        <div class="progress bg-primary-subtle shadow-none w-100" style="height: 6px">
+                                                            <div class="progress-bar bg-primary" data-toggle="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-primary">Xem</button>
+                                                        <button class="btn btn-sm btn-secondary">Sửa</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <img class="rounded img-fluid avatar-40 me-3 bg-primary-subtle"
+                                                                src="../assets/images/shapes/01.png" alt="profile" loading="lazy" />
+                                                            <h6>Redesign New Online Shop</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="iq-media-group iq-media-group-1">
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">SP</div>
+                                                            </a>
+                                                            <a href="#" class="iq-media-1">
+                                                                <div class="icon iq-icon-box-3 rounded-pill">PP</div>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td>$2000</td>
+                                                    <td><div class="text-warning">Hoàn thành</div></td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <h6>40%</h6>
+                                                        </div>
+                                                        <div class="progress bg-warning-subtle shadow-none w-100" style="height: 6px">
+                                                            <div class="progress-bar bg-warning" data-toggle="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-primary">Xem</button>
+                                                        <button class="btn btn-sm btn-secondary">Sửa</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Wrapper End-->
+
+        <!-- Library Bundle Script -->
+        <script src="../assets/js/core/libs.min.js"></script>
+        
+        <!-- Utilities Functions -->
+        <script src="../assets/js/iqonic-script/utility.min.js"></script>
+        
+        <!-- Settings Script -->
+        <script src="../assets/js/iqonic-script/setting.min.js"></script>
+        
+        <!-- Settings Init Script -->
+        <script src="../assets/js/setting-init.js"></script>
+        
+        <!-- External Library Bundle Script -->
+        <script src="../assets/js/core/external.min.js"></script>
+        
+        <!-- Hopeui Script -->
+        <script src="../assets/js/kivicare.js?v=1.4.1" defer></script>
+        <script src="../assets/js/kivicare-advance.js?v=1.4.1" defer></script>
+        <script src="../assets/js/sidebar.js?v=1.4.1" defer></script>
+        
+        <!-- Table Enhancements JavaScript -->
+        <script src="../assets/js/table-enhancements.js"></script>
+        
+        <!-- Table Center Enhancements JavaScript -->
+        <script src="../assets/js/table-center-enhancements.js"></script>
+        
+        <!-- Demo specific functions -->
+        <script>
+            function exportTable() {
+                const table = document.getElementById('demo-table');
+                const rows = Array.from(table.querySelectorAll('tr'));
+                
+                let csv = [];
+                rows.forEach(row => {
+                    const cols = Array.from(row.querySelectorAll('th, td'));
+                    const rowData = cols.map(col => {
+                        // Remove HTML tags and get text content
+                        return '"' + col.textContent.replace(/"/g, '""') + '"';
+                    });
+                    csv.push(rowData.join(','));
+                });
+                
+                const csvContent = csv.join('\n');
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'table-demo-export.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+            
+            // Add click handlers for demo buttons
+            document.addEventListener('DOMContentLoaded', function() {
+                const buttons = document.querySelectorAll('.btn');
+                buttons.forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const action = this.textContent.trim();
+                        const row = this.closest('tr');
+                        const projectName = row.querySelector('h6').textContent;
+                        
+                        alert(`Bạn đã click vào nút "${action}" cho dự án "${projectName}"`);
+                    });
+                });
+            });
+        </script>
+    </body>
+</html> 

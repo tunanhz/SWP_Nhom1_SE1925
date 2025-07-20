@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout Demo - Improved Body Information Display</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Body Layout Improvements -->
+    <link rel="stylesheet" href="./assets/css/body-layout-improvements.css">
+    
+    <style>
+        /* Additional demo styles */
+        .demo-section {
+            margin-bottom: 3rem;
+        }
+        
+        .demo-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .demo-title {
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .demo-description {
+            color: #6c757d;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="container">
+                <h1 class="page-title">Layout Demo</h1>
+                <p class="page-subtitle">Improved Body Information Display</p>
+            </div>
+        </div>
+
+        <div class="content-inner container-fluid pb-0">
+            <div class="container">
+                
+                <!-- Information Grid Demo -->
+                <section class="demo-section">
+                    <div class="demo-card">
+                        <h2 class="demo-title">Information Grid Layout</h2>
+                        <p class="demo-description">Responsive grid layout for displaying patient information with hover effects and modern styling.</p>
+                        
+                        <div class="info-section fade-in-up">
+                            <h3>Patient Information</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">Full Name</span>
+                                    <span class="info-value">John Doe</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Date of Birth</span>
+                                    <span class="info-value">January 15, 1980</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Email</span>
+                                    <span class="info-value">john.doe@example.com</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Phone</span>
+                                    <span class="info-value">+1 (555) 123-4567</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Blood Type</span>
+                                    <span class="info-value">O+</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Address</span>
+                                    <span class="info-value">123 Health St, Wellness City</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Status Badges Demo -->
+                <section class="demo-section">
+                    <div class="demo-card">
+                        <h2 class="demo-title">Status Badges</h2>
+                        <p class="demo-description">Modern status indicators with gradient backgrounds and proper color coding.</p>
+                        
+                        <div class="d-flex gap-3 flex-wrap">
+                            <span class="status-badge status-pending">Pending</span>
+                            <span class="status-badge status-confirmed">Confirmed</span>
+                            <span class="status-badge status-cancelled">Cancelled</span>
+                            <span class="status-badge status-completed">Completed</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Table Demo -->
+                <section class="demo-section">
+                    <div class="demo-card">
+                        <h2 class="demo-title">Improved Tables</h2>
+                        <p class="demo-description">Enhanced table design with gradient headers and hover effects.</p>
+                        
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Medicine Name</th>
+                                        <th>Quantity</th>
+                                        <th>Dosage</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Paracetamol</td>
+                                        <td>20 tablets</td>
+                                        <td>500mg</td>
+                                        <td>50,000 VND</td>
+                                        <td><span class="status-badge status-confirmed">Available</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Amoxicillin</td>
+                                        <td>10 capsules</td>
+                                        <td>250mg</td>
+                                        <td>75,000 VND</td>
+                                        <td><span class="status-badge status-pending">Pending</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ibuprofen</td>
+                                        <td>15 tablets</td>
+                                        <td>400mg</td>
+                                        <td>60,000 VND</td>
+                                        <td><span class="status-badge status-completed">Dispensed</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Buttons Demo -->
+                <section class="demo-section">
+                    <div class="demo-card">
+                        <h2 class="demo-title">Enhanced Buttons</h2>
+                        <p class="demo-description">Modern button designs with gradient backgrounds and hover animations.</p>
+                        
+                        <div class="d-flex gap-3 flex-wrap">
+                            <button class="btn btn-primary">Primary Action</button>
+                            <button class="btn btn-secondary">Secondary Action</button>
+                            <button class="btn btn-success">Success Action</button>
+                            <button class="btn btn-danger">Danger Action</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Forms Demo -->
+                <section class="demo-section">
+                    <div class="demo-card">
+                        <h2 class="demo-title">Improved Forms</h2>
+                        <p class="demo-description">Enhanced form controls with better styling and focus states.</p>
+                        
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Enter full name">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Enter email">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea class="form-control" id="message" rows="3" placeholder="Enter your message"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit Form</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Alerts Demo -->
+                <section class="demo-section">
+                    <div class="demo-card">
+                        <h2 class="demo-title">Enhanced Alerts</h2>
+                        <p class="demo-description">Improved alert messages with gradient backgrounds and better typography.</p>
+                        
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Success! Your information has been saved successfully.
+                        </div>
+                        
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            Error! Please check your input and try again.
+                        </div>
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Warning! Please review your information before proceeding.
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Information! Here's some helpful information for you.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cards Demo -->
+                <section class="demo-section">
+                    <div class="demo-card">
+                        <h2 class="demo-title">Enhanced Cards</h2>
+                        <p class="demo-description">Modern card designs with hover effects and proper spacing.</p>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fas fa-user-md me-2"></i>
+                                        Doctor Profile
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Dr. Sarah Smith</h5>
+                                        <p class="card-text">Cardiologist with 10+ years of experience in treating heart conditions.</p>
+                                        <button class="btn btn-primary">View Profile</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fas fa-calendar-check me-2"></i>
+                                        Appointment
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Next Appointment</h5>
+                                        <p class="card-text">Your next appointment is scheduled for July 15, 2025 at 2:00 PM.</p>
+                                        <button class="btn btn-secondary">Reschedule</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fas fa-pills me-2"></i>
+                                        Prescription
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Active Prescriptions</h5>
+                                        <p class="card-text">You have 3 active prescriptions that need to be refilled soon.</p>
+                                        <button class="btn btn-success">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Add some interactive functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add fade-in animation to sections
+            const sections = document.querySelectorAll('.demo-section');
+            sections.forEach((section, index) => {
+                section.style.animationDelay = `${index * 0.2}s`;
+                section.classList.add('fade-in-up');
+            });
+            
+            // Add hover effects to info items
+            const infoItems = document.querySelectorAll('.info-item');
+            infoItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(10px)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
