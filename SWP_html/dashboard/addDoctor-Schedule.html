@@ -11,9 +11,11 @@
         <h2 class="text-2xl font-bold mb-6 text-center">Create Doctor Schedule</h2>
         <form id="doctorScheduleForm" class="space-y-4">
             <div>
-                <label for="doctorId" class="block text-sm font-medium text-gray-700">Doctor ID</label>
-                <input type="number" id="doctorId" name="doctorId" required
-                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <label for="doctorId" class="block text-sm font-medium text-gray-700">Doctor</label>
+                <select id="doctorId" name="doctorId" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="" disabled selected>Select a doctor</option>
+                </select>
             </div>
             <div>
                 <label for="workingDate" class="block text-sm font-medium text-gray-700">Working Date</label>
@@ -48,6 +50,34 @@
     </div>
 
     <script>
+        // Fetch doctors from API and populate the dropdown
+        async function loadDoctors() {
+            try {
+                const response = await fetch('http://localhost:8080/SWP_back_war_exploded/api/doctors/');
+                const data = await response.json();
+                const doctorSelect = document.getElementById('doctorId');
+
+                if (data.doctors && Array.isArray(data.doctors)) {
+                    data.doctors.forEach(doctor => {
+                        const option = document.createElement('option');
+                        option.value = doctor.ID;
+                        option.textContent = doctor.fullName;
+                        doctorSelect.appendChild(option);
+                    });
+                } else {
+                    throw new Error('Invalid doctor data format');
+                }
+            } catch (error) {
+                console.error('Error loading doctors:', error);
+                document.getElementById('message').classList.add('text-red-500');
+                document.getElementById('message').textContent = 'Error loading doctors: ' + error.message;
+            }
+        }
+
+        // Load doctors when the page loads
+        document.addEventListener('DOMContentLoaded', loadDoctors);
+
+        // Handle form submission
         document.getElementById('doctorScheduleForm').addEventListener('submit', async (event) => {
             event.preventDefault();
             const form = event.target;
@@ -75,6 +105,8 @@
                     messageElement.classList.add('text-green-500');
                     messageElement.textContent = 'Schedule created successfully!';
                     form.reset();
+                    // Reset the select to the default option
+                    document.getElementById('doctorId').value = '';
                 } else {
                     messageElement.classList.remove('text-green-500');
                     messageElement.classList.add('text-red-500');
