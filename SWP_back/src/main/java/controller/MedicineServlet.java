@@ -42,26 +42,32 @@ public class MedicineServlet extends HttpServlet {
         String searchName = req.getParameter("name");
         String usage = req.getParameter("usage");
         String warehouseName = req.getParameter("warehouseName");
+
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
-
                 if (req.getParameter("getWarehouses") != null) {
-                    // Lấy danh sách warehouseName
                     ArrayList<String> warehouseNames = dao.getWarehouseNames();
                     out.println(gson.toJson(warehouseNames));
                     resp.setStatus(HttpServletResponse.SC_OK);
                 } else if (req.getParameter("getUsages") != null) {
-                    // Lấy danh sách usage
                     ArrayList<String> usages = dao.getUniqueUsages();
                     out.println(gson.toJson(usages));
                     resp.setStatus(HttpServletResponse.SC_OK);
+                } else if (req.getParameter("nearExpiry") != null) {
+                    int daysThreshold = getIntParameter(req, "days", 30);
+                    ArrayList<MedicineDTO> medicines = dao.getMedicinesNearExpiry(daysThreshold);
+                    out.println(gson.toJson(medicines));
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                } else if (req.getParameter("lowStock") != null) {
+                    int quantityThreshold = getIntParameter(req, "quantityThreshold", 20);
+                    ArrayList<MedicineDTO> medicines = dao.getMedicinesLowStock(quantityThreshold);
+                    out.println(gson.toJson(medicines));
+                    resp.setStatus(HttpServletResponse.SC_OK);
                 } else if (searchName != null && !searchName.trim().isEmpty()) {
-                    // Tìm kiếm theo tên
                     ArrayList<MedicineDTO> medicines = dao.searchMedicinesByName(searchName);
                     out.println(gson.toJson(medicines));
                     resp.setStatus(HttpServletResponse.SC_OK);
                 } else {
-                    // Lấy danh sách thuốc với phân trang và lọc
                     int page = getIntParameter(req, "page", 1);
                     int size = getIntParameter(req, "size", 10);
                     if (page < 1 || size < 1) {
@@ -72,21 +78,7 @@ public class MedicineServlet extends HttpServlet {
                     out.println(gson.toJson(medicines));
                     resp.setStatus(HttpServletResponse.SC_OK);
                 }
-
-//                int page = getIntParameter(req, "page", 1);
-//                int size = getIntParameter(req, "size", 10);
-//                if (page < 1 || size < 1) {
-//                    sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid page or size parameters");
-//                    return;
-//                }
-//                // Giả định MedicineDAO có getMedicinesByPage
-//                // Cần phát triển phương thức này trong MedicineDAO
-//                // Ví dụ: ArrayList<MedicineDTO> getMedicinesByPage(int page, int size)
-//                ArrayList<MedicineDTO> medicines = dao.getMedicinesByPage(page, size); // Placeholder
-//                out.println(gson.toJson(medicines));
-//                resp.setStatus(HttpServletResponse.SC_OK);
-            }
-            else {
+            } else {
                 String idStr = pathInfo.substring(1);
                 int medicineId = Integer.parseInt(idStr);
                 if (medicineId < 1) {

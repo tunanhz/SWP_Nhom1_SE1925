@@ -1,0 +1,461 @@
+/* Table Center Fullscreen Styles */
+/* Căn chỉnh table ra giữa màn hình và làm đẹp hơn */
+
+/* ===== CONTAINER LAYOUT ===== */
+.content-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 20px !important;
+    margin: 0 !important;
+}
+
+/* ===== CARD STYLING ===== */
+.card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 15px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+    backdrop-filter: blur(10px) !important;
+    overflow: hidden !important;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border: none !important;
+    padding: 1.5rem 2rem !important;
+    font-weight: 600 !important;
+    font-size: 1.3rem !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.card-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.card-header:hover::before {
+    left: 100%;
+}
+
+.card-body {
+    padding: 0 !important;
+    width: 100% !important;
+    background: transparent !important;
+}
+
+/* ===== TABLE RESPONSIVE CONTAINER ===== */
+.table-responsive {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    border-radius: 0 0 15px 15px !important;
+    background: white !important;
+    box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ===== TABLE STYLING ===== */
+.table {
+    width: 100% !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    background: white !important;
+    font-family: 'Poppins', 'Heebo', sans-serif !important;
+}
+
+/* ===== TABLE HEADER ===== */
+.table thead {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border: none !important;
+    padding: 1.2rem 1.5rem !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+}
+
+.table thead th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.table thead th:hover::after {
+    transform: scaleX(1);
+}
+
+/* ===== TABLE BODY ===== */
+.table tbody tr {
+    transition: all 0.3s ease !important;
+    position: relative !important;
+}
+
+.table tbody tr:hover {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+    z-index: 5 !important;
+}
+
+.table tbody tr:nth-child(even) {
+    background: rgba(248, 249, 250, 0.5) !important;
+}
+
+.table tbody tr:nth-child(even):hover {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%) !important;
+}
+
+.table tbody td {
+    padding: 1.2rem 1.5rem !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+    vertical-align: middle !important;
+    font-size: 0.95rem !important;
+    color: #2c3e50 !important;
+    transition: all 0.3s ease !important;
+}
+
+/* ===== SPECIAL CELL STYLING ===== */
+/* Avatar and media styling */
+.avatar-40 {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 2px solid #667eea !important;
+    transition: all 0.3s ease !important;
+}
+
+.avatar-40:hover {
+    transform: scale(1.1) !important;
+    border-color: #764ba2 !important;
+}
+
+.iq-media-group {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+}
+
+.iq-icon-box-3 {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: white !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-radius: 50% !important;
+    transition: all 0.3s ease !important;
+}
+
+.iq-icon-box-3:hover {
+    transform: scale(1.2) !important;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4) !important;
+}
+
+/* Status styling */
+.text-info {
+    color: #17a2b8 !important;
+    font-weight: 600 !important;
+    padding: 0.3rem 0.8rem !important;
+    border-radius: 20px !important;
+    background: rgba(23, 162, 184, 0.1) !important;
+    display: inline-block !important;
+    transition: all 0.3s ease !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+    font-weight: 600 !important;
+    padding: 0.3rem 0.8rem !important;
+    border-radius: 20px !important;
+    background: rgba(220, 53, 69, 0.1) !important;
+    display: inline-block !important;
+    transition: all 0.3s ease !important;
+}
+
+.text-success {
+    color: #28a745 !important;
+    font-weight: 600 !important;
+    padding: 0.3rem 0.8rem !important;
+    border-radius: 20px !important;
+    background: rgba(40, 167, 69, 0.1) !important;
+    display: inline-block !important;
+    transition: all 0.3s ease !important;
+}
+
+.text-primary {
+    color: #007bff !important;
+    font-weight: 600 !important;
+    padding: 0.3rem 0.8rem !important;
+    border-radius: 20px !important;
+    background: rgba(0, 123, 255, 0.1) !important;
+    display: inline-block !important;
+    transition: all 0.3s ease !important;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+    font-weight: 600 !important;
+    padding: 0.3rem 0.8rem !important;
+    border-radius: 20px !important;
+    background: rgba(255, 193, 7, 0.1) !important;
+    display: inline-block !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Progress bar styling */
+.progress {
+    height: 8px !important;
+    border-radius: 10px !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+.progress-bar {
+    border-radius: 10px !important;
+    transition: width 1s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1200px) {
+    .table thead th,
+    .table tbody td {
+        padding: 1rem 1.2rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .card-header {
+        padding: 1.2rem 1.5rem !important;
+        font-size: 1.2rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 0 10px !important;
+    }
+    
+    .table thead th,
+    .table tbody td {
+        padding: 0.8rem 1rem !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .card-header {
+        padding: 1rem 1.2rem !important;
+        font-size: 1.1rem !important;
+    }
+    
+    .table-responsive {
+        font-size: 14px !important;
+    }
+    
+    .table-responsive table {
+        min-width: 800px !important;
+    }
+    
+    .avatar-40 {
+        width: 35px !important;
+        height: 35px !important;
+    }
+    
+    .iq-icon-box-3 {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 11px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .container-fluid {
+        padding: 0 5px !important;
+    }
+    
+    .card {
+        border-radius: 10px !important;
+    }
+    
+    .table thead th,
+    .table tbody td {
+        padding: 0.6rem 0.8rem !important;
+        font-size: 0.8rem !important;
+    }
+    
+    .card-header {
+        padding: 0.8rem 1rem !important;
+        font-size: 1rem !important;
+    }
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+.table-responsive::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 10px !important;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+    border-radius: 10px !important;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease !important;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.table tbody tr {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+.table tbody tr:nth-child(2) { animation-delay: 0.2s; }
+.table tbody tr:nth-child(3) { animation-delay: 0.3s; }
+.table tbody tr:nth-child(4) { animation-delay: 0.4s; }
+.table tbody tr:nth-child(5) { animation-delay: 0.5s; }
+.table tbody tr:nth-child(6) { animation-delay: 0.6s; }
+
+/* ===== LOADING STATE ===== */
+.table-loading {
+    position: relative;
+    min-height: 200px;
+}
+
+.table-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== KEYBOARD NAVIGATION HIGHLIGHT ===== */
+.keyboard-highlight {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    transform: scale(1.02) !important;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3) !important;
+    z-index: 15 !important;
+}
+
+.keyboard-highlight td {
+    color: white !important;
+}
+
+.keyboard-highlight .text-info,
+.keyboard-highlight .text-danger,
+.keyboard-highlight .text-success,
+.keyboard-highlight .text-primary,
+.keyboard-highlight .text-warning {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+    
+    .table thead th {
+        background: #f8f9fa !important;
+        color: #333 !important;
+    }
+    
+    .table tbody tr:hover {
+        background: #f8f9fa !important;
+        transform: none !important;
+    }
+    
+    .keyboard-highlight {
+        background: #f8f9fa !important;
+        color: #333 !important;
+        transform: none !important;
+    }
+} 
