@@ -1901,604 +1901,230 @@
             </nav> <!--Nav End-->
         </div>
         <div class="content-inner container-fluid pb-0" id="page_layout">
+    <!-- Breadcrumb -->
+    <div class="d-flex align-items-center mb-4 pb-3 pt-3">
+        <svg class="icon-18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9.15722 20.7714V17.7047C9.1572 16.9246 9.79312 16.2908 10.581 16.2856H13.4671C14.2587 16.2856 14.9005 16.9209 14.9005 17.7047V17.7047V20.7809C14.9003 21.4432 15.4343 21.9845 16.103 22H18.0271C19.9451 22 21.5 20.4607 21.5 18.5618V18.5618V9.83784C21.4898 9.09083 21.1355 8.38935 20.538 7.93303L13.9577 2.6853C12.8049 1.77157 11.1662 1.77157 10.0134 2.6853L3.46203 7.94256C2.86226 8.39702 2.50739 9.09967 2.5 9.84736V18.5618C2.5 20.4607 4.05488 22 5.97291 22H7.89696C8.58235 22 9.13797 21.4499 9.13797 20.7714V20.7714" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <svg class="mx-1 icon-18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.5 5L15.5 12L8.5 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="head-title fw-500 mt-1">Medical Services</span>
+    </div>
 
-            <div class="d-flex align-items-center mb-4 mb-4 pb-3 pt-3">
-                <svg class="icon-18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M9.15722 20.7714V17.7047C9.1572 16.9246 9.79312 16.2908 10.581 16.2856H13.4671C14.2587 16.2856 14.9005 16.9209 14.9005 17.7047V17.7047V20.7809C14.9003 21.4432 15.4343 21.9845 16.103 22H18.0271C19.9451 22 21.5 20.4607 21.5 18.5618V18.5618V9.83784C21.4898 9.09083 21.1355 8.38935 20.538 7.93303L13.9577 2.6853C12.8049 1.77157 11.1662 1.77157 10.0134 2.6853L3.46203 7.94256C2.86226 8.39702 2.50739 9.09967 2.5 9.84736V18.5618C2.5 20.4607 4.05488 22 5.97291 22H7.89696C8.58235 22 9.13797 21.4499 9.13797 20.7714V20.7714"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-                <svg class="mx-1 icon-18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8.5 5L15.5 12L8.5 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                        stroke-linejoin="round"></path>
-                </svg>
-                <span class="head-title fw-500 mt-1">Products</span>
-            </div>
-            <div class="card">
-                <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
-                    <div>
-                        <h4>All Product</h4>
-                        <span>More Than 400+ New Products</span>
-                    </div>
-                    <button class="btn btn-primary " type="button" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasProductAdd" aria-controls="offcanvasProductAdd">
-                        <span class="btn-inner">
-                            <span class="text d-inline-block align-middle">Add Product</span>
-                            <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                    fill="none">
-                                    <path
-                                        d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                        fill="currentColor" />
-                                </svg>
-                            </span>
-                        </span>
-                    </button>
-                </div>
-                <div class="card-body pt-0">
-                    <div class="table-responsive">
-                        <table class="table border-end border-start align-middle mb-0 rounded">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>No.</th>
-                                    <th>ID</th>
-                                    <th>Product Name</th>
-                                    <th>Category</th>
-                                    <th>Price</th>
-                                    <th>In Stock</th>
-                                    <th>Discount</th>
-                                    <th>Sale</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr data-item="list">
-                                    <th scope="row">1</th>
-                                    <td>#14356</td>
-                                    <td>
-                                        <h6 class="mb-0 text-body fw-normal">Asthma Inhaler</h6>
-                                    </td>
-                                    <td>Health Care</td>
-                                    <td>$67.90</td>
-                                    <td>23</td>
-                                    <td>15% Off</td>
-                                    <td>173 Sold</td>
-                                    <td>
-                                        <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                            href="#offcanvasProductEdit" aria-controls="offcanvasProductEdit">
-                                            <span class="text-success">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                        <a href="#" class="d-inline-block ps-2 delete-btn">
-                                            <span class="text-danger">
-                                                <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr data-item="list">
-                                    <th scope="row">2</th>
-                                    <td>#14678</td>
-                                    <td>
-                                        <h6 class="mb-0 text-body fw-normal">Contact Lenses</h6>
-                                    </td>
-                                    <td>Medical Equipment</td>
-                                    <td>$50.00</td>
-                                    <td>45</td>
-                                    <td>20% Off</td>
-                                    <td>189 Sold</td>
-                                    <td>
-                                        <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                            href="#offcanvasProductEdit" aria-controls="offcanvasProductEdit">
-                                            <span class="text-success">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                        <a href="#" class="d-inline-block ps-2 delete-btn">
-                                            <span class="text-danger">
-                                                <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr data-item="list">
-                                    <th scope="row">3</th>
-                                    <td>#12431</td>
-                                    <td>
-                                        <h6 class="mb-0 text-body fw-normal">Dental Equipment</h6>
-                                    </td>
-                                    <td>Medical Equipment</td>
-                                    <td>$280</td>
-                                    <td>12</td>
-                                    <td>12% Off</td>
-                                    <td>923 Sold</td>
-                                    <td>
-                                        <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                            href="#offcanvasProductEdit" aria-controls="offcanvasProductEdit">
-                                            <span class="text-success">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                        <a href="#" class="d-inline-block ps-2 delete-btn">
-                                            <span class="text-danger">
-                                                <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr data-item="list">
-                                    <th>4</th>
-                                    <td>#21356</td>
-                                    <td>
-                                        <h6 class="mb-0 text-body fw-normal">Electric Toothbrush</h6>
-                                    </td>
-                                    <td>Home Equipment</td>
-                                    <td>$370</td>
-                                    <td>09</td>
-                                    <td>09% Off</td>
-                                    <td>875 Sold</td>
-                                    <td>
-                                        <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                            href="#offcanvasProductEdit" aria-controls="offcanvasProductEdit">
-                                            <span class="text-success">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                        <a href="#" class="d-inline-block ps-2 delete-btn">
-                                            <span class="text-danger">
-                                                <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr data-item="list">
-                                    <th>5</th>
-                                    <td>#65783</td>
-                                    <td>
-                                        <h6 class="mb-0 text-body fw-normal">Hand Sanitizer</h6>
-                                    </td>
-                                    <td>Physical</td>
-                                    <td>$460</td>
-                                    <td>18</td>
-                                    <td>10% Off</td>
-                                    <td>456 Sold</td>
-                                    <td>
-                                        <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                            href="#offcanvasProductEdit" aria-controls="offcanvasProductEdit">
-                                            <span class="text-success">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                        <a href="#" class="d-inline-block ps-2 delete-btn">
-                                            <span class="text-danger">
-                                                <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr data-item="list">
-                                    <th>6</th>
-                                    <td>#12567</td>
-                                    <td>
-                                        <h6 class="mb-0 text-body fw-normal">Glucose Meter Set</h6>
-                                    </td>
-                                    <td>Medical Equipment</td>
-                                    <td>$220</td>
-                                    <td>18</td>
-                                    <td>05% Off</td>
-                                    <td>100 Sold</td>
-                                    <td>
-                                        <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                            href="#offcanvasProductEdit" aria-controls="offcanvasProductEdit">
-                                            <span class="text-success">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                        <a href="#" class="d-inline-block ps-2 delete-btn">
-                                            <span class="text-danger">
-                                                <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr data-item="list">
-                                    <th>7</th>
-                                    <td>#15342</td>
-                                    <td>
-                                        <h6 class="mb-0 text-body fw-normal">Handgloves</h6>
-                                    </td>
-                                    <td>Medical Equipment</td>
-                                    <td>$390</td>
-                                    <td>34</td>
-                                    <td>25% Off</td>
-                                    <td>23 sold</td>
-                                    <td>
-                                        <a class="d-inline-block pe-2" data-bs-toggle="offcanvas"
-                                            href="#offcanvasProductEdit" aria-controls="offcanvasProductEdit">
-                                            <span class="text-success">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M9.31055 14.3321H14.75" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M8.58501 1.84609C9.16674 1.15084 10.2125 1.04889 10.9222 1.6188C10.9614 1.64972 12.2221 2.62909 12.2221 2.62909C13.0017 3.10039 13.244 4.10233 12.762 4.86694C12.7365 4.90789 5.60896 13.8234 5.60896 13.8234C5.37183 14.1192 5.01187 14.2938 4.62718 14.298L1.89765 14.3323L1.28265 11.7292C1.1965 11.3632 1.28265 10.9788 1.51978 10.683L8.58501 1.84609Z"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M7.26562 3.50073L11.3548 6.64108" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                        <a href="#" class="d-inline-block ps-2 delete-btn">
-                                            <span class="text-danger">
-                                                <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M13.5312 3.67969H0.812744" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path
-                                                        d="M11.0804 3.67974C10.4917 3.67974 9.98468 3.26349 9.86918 2.68674L9.68693 1.77474C9.57443 1.35399 9.19343 1.06299 8.75918 1.06299H5.58443C5.15018 1.06299 4.76918 1.35399 4.65668 1.77474L4.47443 2.68674C4.35893 3.26349 3.85193 3.67974 3.26318 3.67974"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+    <!-- Search and Filter Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="searchQuery" placeholder="Search by name or description">
+                        <button class="btn btn-primary" type="button" id="searchButton">Search</button>
                     </div>
                 </div>
-                <div class="card-footer pt-0 row">
-                <div class="d-flex justify-content-start col-md-6">
-                    <button class="btn btn-secondary text-white me-3" type="button" id="prevPage">
-                        <span class="btn-inner">
-                            <span class="text d-inline-block align-middle">Previous</span>
-                            <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                        d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
-                                </svg>
-                            </span>
-                        </span>
-                    </button>
-                    <span class="align-self-center me-3" id="pageInfo">Page 1 of 8</span>
-                    <button class="btn btn-primary me-3" type="button" id="nextPage">
-                        <span class="btn-inner">
-                            <span class="text d-inline-block align-middle">Next</span>
-                            <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                                </svg>
-                            </span>
-                        </span>
-                    </button>
-                </div>
-                <div class="col-md-6 d-flex justify-content-center justify-content-md-end">
-                    <div class="input-group input-group-sm w-auto">
-                        <label class="input-group-text text-bg-info" for="itemsPerPage">Items per page</label>
-                        <select class="form-select" name="page" id="itemsPerPage">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="90">All</option>
-                        </select>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="minPrice" placeholder="Min Price">
+                        <input type="number" class="form-control" id="maxPrice" placeholder="Max Price">
+                        <button class="btn btn-primary" type="button" id="filterPriceButton">Filter</button>
                     </div>
                 </div>
             </div>
-
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProductEdit"
-                aria-labelledby="offcanvasProductEditLabel">
-                <div class="offcanvas-header border-bottom">
-                    <h3 class="offcanvas-title" id="offcanvasProductEditLabel">Edit Product</h3>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <div class="form-group">
-                        <label class="form-label" for="Id">Product Id <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="Id" value="#14356">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="Name">Product Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="Name" value="Asthma Inhaler">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Category <span class="text-danger">*</span></label>
-                        <select class="form-control select2-basic-single">
-                            <option>Medical Equipment</option>
-                            <option selected="selected">Health Care</option>
-                            <option>Home Equipment</option>
-                            <option>Disease</option>
-                            <option>Physical</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="Price">Price <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="Price" value="$67.90">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="stock">In Stock <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="stock" value="23">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="discount">Discount <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="discount" value="15% Off">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="sale">Sale <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="sale" value="173 Sold">
-                    </div>
-                </div>
-                <div class="offcanvas-footer border-top">
-                    <div class="d-grid d-md-flex gap-3 p-3">
-                        <button type="submit" class="btn btn-primary d-block">
-                            <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Update</span>
-                                <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <path
-                                            d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                            </span>
-                        </button>
-                        <button class="btn btn-secondary d-block" type="button" data-bs-dismiss="offcanvas">
-                            <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Close</span>
-                                <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <path
-                                            d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProductAdd"
-                aria-labelledby="offcanvasProductAddLabel">
-                <div class="offcanvas-header border-bottom">
-                    <h3 class="offcanvas-title" id="offcanvasProductAddLabel">Add Product</h3>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <div class="form-group">
-                        <label class="form-label" for="add_Id">Product Id <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="add_Id">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="add_Name">Product Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="add_Name">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="add_category">Category <span class="text-danger">*</span></label>
-                        <select class="form-control select2-basic-single" id="add_category">
-                            <option>Medical Equipment</option>
-                            <option>Health Care</option>
-                            <option>Home Equipment</option>
-                            <option>Disease</option>
-                            <option>Physical</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="add_Price">Price <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="add_Price">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="add_stock">In Stock <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="add_stock">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="add_discount">Discount <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="add_discount">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="form-label" for="add_sale">Sale <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="add_sale">
-                    </div>
-                </div>
-                <div class="offcanvas-footer border-top">
-                    <div class="d-grid d-md-flex gap-3 p-3">
-                        <button type="submit" class="btn btn-primary d-block">
-                            <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Save</span>
-                                <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <path
-                                            d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                            </span>
-                        </button>
-                        <button class="btn btn-secondary d-block" type="button" data-bs-dismiss="offcanvas">
-                            <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Close</span>
-                                <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                        fill="none">
-                                        <path
-                                            d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
         </div>
+    </div>
+
+    <!-- Main Table Card -->
+    <div class="card">
+        <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <h4>All Medical Services</h4>
+                <span>Manage your medical services</span>
+            </div>
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMedicalServiceAdd" aria-controls="offcanvasMedicalServiceAdd">
+                <span class="btn-inner">
+                    <span class="text d-inline-block align-middle">Add Service</span>
+                    <span class="icon d-inline-block align-middle ms-1 ps-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                            <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
+                        </svg>
+                    </span>
+                </span>
+            </button>
+        </div>
+        <div class="card-body pt-0">
+            <div class="table-responsive">
+                <table class="table border-end border-start align-middle mb-0 rounded">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>No.</th>
+                            <th>Service Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="medicalServiceTableBody">
+                        <!-- Data will be populated dynamically by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer pt-0 row">
+            <div class="d-flex justify-content-start col-md-6">
+                <button class="btn btn-secondary text-white me-3" type="button" id="prevPage">
+                    <span class="btn-inner">
+                        <span class="text d-inline-block align-middle">Previous</span>
+                        <span class="icon d-inline-block align-middle ms-1 ps-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                <span class="align-self-center me-3" id="pageInfo">Page 1 of 1</span>
+                <button class="btn btn-primary me-3" type="button" id="nextPage">
+                    <span class="btn-inner">
+                        <span class="text d-inline-block align-middle">Next</span>
+                        <span class="icon d-inline-block align-middle ms-1 ps-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+            </div>
+            <div class="col-md-6 d-flex justify-content-center justify-content-md-end">
+                <div class="input-group input-group-sm w-auto">
+                    <label class="input-group-text text-bg-info" for="itemsPerPage">Items per page</label>
+                    <select class="form-select" name="page" id="itemsPerPage">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="90">All</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offcanvas for Adding Service -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMedicalServiceAdd" aria-labelledby="offcanvasMedicalServiceAddLabel">
+        <div class="offcanvas-header border-bottom">
+            <h3 class="offcanvas-title" id="offcanvasMedicalServiceAddLabel">Add Medical Service</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form id="addMedicalServiceForm">
+                <div class="form-group col-md-12">
+                    <label class="form-label" for="addServiceName">Service Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="addServiceName" required>
+                    <small class="text-danger" id="nameExistsError" style="display: none;">Service name already exists</small>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="form-label" for="addDescription">Description <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="addDescription" required></textarea>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="form-label" for="addPrice">Price <span class="text-danger">*</span></label>
+                    <input type="number" step="0.01" class="form-control" id="addPrice" required>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="form-label" for="addStatus">Status <span class="text-danger">*</span></label>
+                    <select class="form-control" id="addStatus">
+                        <option value="Enable">Enable</option>
+                        <option value="Disable">Disable</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="offcanvas-footer border-top">
+            <div class="d-grid d-md-flex gap-3 p-3">
+                <button type="button" class="btn btn-primary d-block" id="saveMedicalServiceButton">
+                    <span class="btn-inner">
+                        <span class="text d-inline-block align-middle">Save</span>
+                        <span class="icon d-inline-block align-middle ms-1 ps-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                <button class="btn btn-secondary d-block" type="button" data-bs-dismiss="offcanvas">
+                    <span class="btn-inner">
+                        <span class="text d-inline-block align-middle">Close</span>
+                        <span class="icon d-inline-block align-middle ms-1 ps-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offcanvas for Editing Service -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMedicalServiceEdit" aria-labelledby="offcanvasMedicalServiceEditLabel">
+        <div class="offcanvas-header border-bottom">
+            <h3 class="offcanvas-title" id="offcanvasMedicalServiceEditLabel">Edit Medical Service</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form id="editMedicalServiceForm">
+                <div class="form-group col-md-12">
+                    <label class="form-label" for="editServiceId">Service ID <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="editServiceId" readonly>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="form-label" for="editServiceName">Service Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="editServiceName" required>
+                    <small class="text-danger" id="editNameExistsError" style="display: none;">Service name already exists</small>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="form-label" for="editDescription">Description <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="editDescription" required></textarea>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="form-label" for="editPrice">Price <span class="text-danger">*</span></label>
+                    <input type="number" step="0.01" class="form-control" id="editPrice" required>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="form-label" for="editStatus">Status <span class="text-danger">*</span></label>
+                    <select class="form-control" id="editStatus">
+                        <option value="Enable">Enable</option>
+                        <option value="Disable">Disable</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="offcanvas-footer border-top">
+            <div class="d-grid d-md-flex gap-3 p-3">
+                <button type="button" class="btn btn-primary d-block" id="updateMedicalServiceButton">
+                    <span class="btn-inner">
+                        <span class="text d-inline-block align-middle">Update</span>
+                        <span class="icon d-inline-block align-middle ms-1 ps-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                <button class="btn btn-secondary d-block" type="button" data-bs-dismiss="offcanvas">
+                    <span class="btn-inner">
+                        <span class="text d-inline-block align-middle">Close</span>
+                        <span class="icon d-inline-block align-middle ms-1 ps-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor" />
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
         <!-- Footer Section Start -->
         <footer class="footer">
             <div class="footer-body">
@@ -3389,6 +3015,7 @@
     <script src="./assets/js/kivicare.js?v=1.4.1" defer></script>
     <script src="./assets/js/kivicare-advance.js?v=1.4.1" defer></script>
     <script src="./assets/js/sidebar.js?v=1.4.1" defer></script>
+   <script src="./assets/js/API/main-adminbusiness-list-medical-service.js"></script>
 
     <!-- Icons -->
     <script src="./assets/js/solid-icon-search-filter.js?v=1.4.1" defer></script>
