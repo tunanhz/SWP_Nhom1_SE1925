@@ -120,7 +120,7 @@ public class PatientPaymentDAO {
                     JOIN Medicine m ON med.medicine_id = m.medicine_id
                     GROUP BY pi.invoice_id
                 ) med ON i.invoice_id = med.invoice_id
-                WHERE i.status IN ('Pending', 'Paid')
+                WHERE i.status IN ('Paid')
                     AND ap.account_patient_id = ?
                     AND ap.status = 'Enable'
                     AND p.status = 'Enable'
@@ -186,7 +186,7 @@ public class PatientPaymentDAO {
                 JOIN Patient p ON i.patient_id = p.patient_id
                 JOIN Patient_AccountPatient pa ON pa.patient_id = p.patient_id
                 JOIN AccountPatient ap ON ap.account_patient_id = pa.account_patient_id
-                WHERE i.status IN ('Pending', 'Paid')
+                WHERE i.status IN ('Paid')
                     AND ap.account_patient_id = ?
                     AND ap.status = 'Enable'
                     AND p.status = 'Enable'
