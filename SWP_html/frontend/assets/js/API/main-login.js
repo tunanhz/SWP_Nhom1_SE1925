@@ -56,6 +56,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         case 'pharmacist':
                             window.location.href = "/dashboard/pharmacist-dashboard.html";
                             break;
+                         case 'adminbusiness':
+                            window.location.href = "/dashboard/index.html";
+                            break;    
                         default:
                             redirectUrl = '/accessDenied';
                     }

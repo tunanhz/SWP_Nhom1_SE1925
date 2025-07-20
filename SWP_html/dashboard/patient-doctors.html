@@ -18,7 +18,25 @@
 
    <!-- Library / Plugin Css Build -->
    <link rel="stylesheet" href="./assets/css/core/libs.min.css" />
-
+   <style>
+      .icon-40 {
+         width: 40px;
+         height: 40px;
+         overflow: hidden;
+      }
+      #userImg {
+         width: 100%;
+         height: 31px;
+         object-fit: cover;
+         display: block;
+      }
+      #profileImg {
+         width: 100px;
+         height: 100px;
+         object-fit: cover;
+         border-radius: 50%;
+      }
+   </style>
    <!-- flaticon css -->
    <link rel="stylesheet" href="./assets/vendor/flaticon/css/flaticon.css" />
 
@@ -60,7 +78,7 @@
       <!--Nav Start-->
       <nav class="nav navbar navbar-expand-xl navbar-light iq-navbar patient-header">
          <div class="container-fluid navbar-inner">
-            <a href="./index.html" class="navbar-brand ms-0 me-5">
+             <a href="./patient-dashboard.html" class="navbar-brand ms-0 me-5">
 
                <!--Logo start-->
                <div class="logo-main">
@@ -311,305 +329,310 @@
                         </li>
                      </ul>
                   </li>
-                  <li class="nav-item dropdown">
-                     <a href="#" class="nav-link" id="notification-drop" data-bs-toggle="dropdown">
-                        <div class="nav-list-icon">
-                           <div class="btn-inner">
-                              <svg class="icon-20" width="19" height="22" viewBox="0 0 19 22" fill="none"
-                                   xmlns="http://www.w3.org/2000/svg">
-                                 <mask style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="19"
+                 <li class="nav-item dropdown">
+                        <a href="#" class="nav-link" id="notification-drop" data-bs-toggle="dropdown">
+                           <div class="btn-action position-relative nav-list-icon">
+                              <span class="btn-inner">
+                                 <svg class="icon-20" width="19" height="22" viewBox="0 0 19 22" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <mask style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="19"
                                        height="18">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                       <path fill-rule="evenodd" clip-rule="evenodd"
                                           d="M9.15527e-05 0H18.497V17.348H9.15527e-05V0Z" fill="white" />
-                                 </mask>
-                                 <g>
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                    </mask>
+                                    <g>
+                                       <path fill-rule="evenodd" clip-rule="evenodd"
                                           d="M9.2471 1.5C5.75211 1.5 3.3161 4.238 3.3161 6.695C3.3161 8.774 2.7391 9.735 2.2291 10.583C1.8201 11.264 1.4971 11.802 1.4971 12.971C1.6641 14.857 2.90911 15.848 9.2471 15.848C15.5501 15.848 16.8341 14.813 17.0001 12.906C16.9971 11.802 16.6741 11.264 16.2651 10.583C15.7551 9.735 15.1781 8.774 15.1781 6.695C15.1781 4.238 12.7421 1.5 9.2471 1.5ZM9.2471 17.348C4.5711 17.348 0.345105 17.018 0.000104907 13.035C-0.00289509 11.387 0.500105 10.549 0.944105 9.811C1.3931 9.063 1.8161 8.358 1.8161 6.695C1.8161 3.462 4.8021 0 9.2471 0C13.6921 0 16.6781 3.462 16.6781 6.695C16.6781 8.358 17.1011 9.063 17.5501 9.811C17.9941 10.549 18.4971 11.387 18.4971 12.971C18.1481 17.018 13.9231 17.348 9.2471 17.348Z"
                                           fill="currentColor" />
-                                 </g>
-                                 <path fill-rule="evenodd" clip-rule="evenodd"
+                                    </g>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
                                        d="M9.1983 21.5001H9.1963C8.0753 21.4991 7.0143 21.0051 6.2093 20.1081C5.9323 19.8011 5.9573 19.3261 6.2653 19.0501C6.5733 18.7721 7.0473 18.7971 7.3243 19.1061C7.8423 19.6831 8.5073 20.0001 9.1973 20.0001H9.1983C9.8913 20.0001 10.5593 19.6831 11.0783 19.1051C11.3563 18.7981 11.8303 18.7731 12.1373 19.0501C12.4453 19.3271 12.4703 19.8021 12.1933 20.1091C11.3853 21.0061 10.3223 21.5001 9.1983 21.5001Z"
                                        fill="currentColor" />
-                              </svg>
-                              <span class="bg-danger dots"></span>
+                                    </svg>
+                              </span>
+                              <span class="badge-notification">4</span>
                            </div>
-                        </div>
-                     </a>
-                     <div class="p-0 sub-drop dropdown-menu dropdown-menu-end" aria-labelledby="notification-drop">
-                        <div class="m-0 shadow-none card">
-                           <div class="py-3 card-header d-flex justify-content-between bg-primary mb-0">
-                              <div class="header-title">
-                                 <h5 class="mb-0 text-white">All Notifications</h5>
-                              </div>
-                           </div>
-                           <div class="p-0 card-body">
-                              <a href="#" class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/01.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Emma Watson Bni</h6>
-                                       <p class="mb-0">95 MB</p>
-                                    </div>
-                                    <small class="float-end font-size-12">Just Now</small>
-                                 </div>
-                              </a>
-                              <a href="#" class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/02.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">New customer is join</h6>
-                                       <p class="mb-0">Cyst Bni</p>
-                                    </div>
-                                    <small class="float-end font-size-12">5 days ago</small>
-                                 </div>
-                              </a>
-                              <a href="#" class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/03.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Two customer is left</h6>
-                                       <p class="mb-0">Cyst Bni</p>
-                                    </div>
-                                    <small class="float-end font-size-12">2 days ago</small>
-                                 </div>
-                              </a>
-                              <a href="#" class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/04.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">New Mail from Fenny</h6>
-                                       <p class="mb-0">Cyst Bni</p>
-                                    </div>
-                                    <small class="float-end font-size-12">3 days ago</small>
-                                 </div>
-                              </a>
-                           </div>
-                        </div>
-                     </div>
-                  </li>
-                  <li class="nav-item dropdown">
-                     <a href="#" class="nav-link" id="notification-cart" data-bs-toggle="dropdown">
-                        <div class="btn-action position-relative nav-list-icon">
-                                         <span class="btn-inner">
-                                            <svg class="cart-icons icon-20" xmlns="http://www.w3.org/2000/svg" width="18" height="17"
-                                                 viewBox="0 0 18 17" fill="none">
-                                               <path fill-rule="evenodd" clip-rule="evenodd"
-                                                     d="M4.27385 4.95616L4.77635 10.9328C4.81302 11.3928 5.18885 11.7378 5.64802 11.7378H5.65135H14.7439H14.7455C15.1797 11.7378 15.5505 11.4145 15.6122 10.9853L16.4039 5.51949C16.4222 5.38949 16.3897 5.25949 16.3105 5.15449C16.2322 5.04866 16.1172 4.98033 15.9872 4.96199C15.813 4.96866 8.58552 4.95866 4.27385 4.95616ZM5.64631 12.9878C4.54881 12.9878 3.61964 12.1311 3.53047 11.0353L2.76714 1.95695L1.51131 1.74028C1.17048 1.68028 0.942975 1.35778 1.00131 1.01695C1.06131 0.676117 1.39047 0.45445 1.72381 0.507784L3.45714 0.807784C3.73631 0.85695 3.94881 1.08862 3.97297 1.37195L4.16881 3.70612C16.0655 3.71112 16.1038 3.71695 16.1613 3.72362C16.6255 3.79112 17.0338 4.03362 17.3121 4.40695C17.5905 4.77945 17.7071 5.23862 17.6405 5.69862L16.8496 11.1636C16.7005 12.2036 15.7971 12.9878 14.7471 12.9878H14.743H5.65297H5.64631Z"
-                                                     fill="currentColor"></path>
-                                               <path fill-rule="evenodd" clip-rule="evenodd"
-                                                     d="M13.4077 8.03638H11.0977C10.7518 8.03638 10.4727 7.75638 10.4727 7.41138C10.4727 7.06638 10.7518 6.78638 11.0977 6.78638H13.4077C13.7527 6.78638 14.0327 7.06638 14.0327 7.41138C14.0327 7.75638 13.7527 8.03638 13.4077 8.03638Z"
-                                                     fill="currentColor"></path>
-                                               <path fill-rule="evenodd" clip-rule="evenodd"
-                                                     d="M5.28815 15.2516C5.53898 15.2516 5.74148 15.4541 5.74148 15.7049C5.74148 15.9558 5.53898 16.1591 5.28815 16.1591C5.03648 16.1591 4.83398 15.9558 4.83398 15.7049C4.83398 15.4541 5.03648 15.2516 5.28815 15.2516Z"
-                                                     fill="currentColor"></path>
-                                               <path fill-rule="evenodd" clip-rule="evenodd"
-                                                     d="M5.28732 16.784C4.69232 16.784 4.20898 16.2998 4.20898 15.7048C4.20898 15.1098 4.69232 14.6265 5.28732 14.6265C5.88232 14.6265 6.36648 15.1098 6.36648 15.7048C6.36648 16.2998 5.88232 16.784 5.28732 16.784"
-                                                     fill="currentColor"></path>
-                                               <path fill-rule="evenodd" clip-rule="evenodd"
-                                                     d="M14.6877 16.784C14.0927 16.784 13.6094 16.2998 13.6094 15.7048C13.6094 15.1098 14.0927 14.6265 14.6877 14.6265C15.2835 14.6265 15.7677 15.1098 15.7677 15.7048C15.7677 16.2998 15.2835 16.784 14.6877 16.784"
-                                                     fill="currentColor"></path>
-                                            </svg>
-                                         </span>
-                           <span class="badge-notification">4</span>
-                        </div>
-                     </a>
-                     <div class="p-0 sub-drop dropdown-menu dropdown-menu-end" aria-labelledby="notification-cart">
-                        <div class="m-0 shadow-none card">
-                           <div class="py-3 card-header d-flex justify-content-between bg-primary mb-0">
-                              <div class="header-title">
-                                 <h5 class="mb-0 text-white">All Carts</h5>
-                              </div>
-                           </div>
-                           <div class="p-0 card-body max-17 scroll-thin">
-                              <div class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/01.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Biker’s Jacket</h6>
-                                       <p class="mb-0">$56.00</p>
-                                    </div>
-                                    <button type="button" class="btn btn-icon text-danger btn-sm">
-                                                     <span class="btn-inner">
-                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                           <path opacity="0.4"
-                                                                 d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
-                                                                 fill="currentColor"></path>
-                                                           <path
-                                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
-                                                                   fill="currentColor"></path>
-                                                        </svg>
-                                                     </span>
-                                    </button>
+                        </a>
+                        <div class="p-0 sub-drop dropdown-menu dropdown-menu-end" aria-labelledby="notification-drop">
+                           <div class="m-0 shadow-none card">
+                              <div class="py-3 card-header d-flex justify-content-between bg-primary mb-0">
+                                 <div class="header-title">
+                                    <h5 class="mb-0 text-white">All Notifications</h5>
                                  </div>
                               </div>
-                              <div class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/02.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Casual Shoes</h6>
-                                       <p class="mb-0">$56.00</p>
+                              <div class="p-0 card-body max-17 scroll-thin">
+                                 <a href="#" class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/01.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">Emma Watson Bni</h6>
+                                          <p class="mb-0">95 MB</p>
+                                       </div>
+                                       <small class="float-end font-size-12">Just Now</small>
                                     </div>
-                                    <button type="button" class="btn btn-icon text-danger btn-sm">
-                                                     <span class="btn-inner">
-                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                           <path opacity="0.4"
-                                                                 d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
-                                                                 fill="currentColor"></path>
-                                                           <path
-                                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
-                                                                   fill="currentColor"></path>
-                                                        </svg>
-                                                     </span>
-                                    </button>
-                                 </div>
-                              </div>
-                              <div class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/03.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Knitted Shrug</h6>
-                                       <p class="mb-0">$56.00</p>
+                                 </a>
+                                 <a href="#" class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/02.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">New customer is join</h6>
+                                          <p class="mb-0">Cyst Bni</p>
+                                       </div>
+                                       <small class="float-end font-size-12">5 days ago</small>
                                     </div>
-                                    <button type="button" class="btn btn-icon text-danger btn-sm">
-                                                     <span class="btn-inner">
-                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                           <path opacity="0.4"
-                                                                 d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
-                                                                 fill="currentColor"></path>
-                                                           <path
-                                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
-                                                                   fill="currentColor"></path>
-                                                        </svg>
-                                                     </span>
-                                    </button>
-                                 </div>
-                              </div>
-                              <div class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/04.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Blue Handbag</h6>
-                                       <p class="mb-0">$56.00</p>
+                                 </a>
+                                 <a href="#" class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/03.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">Two customer is left</h6>
+                                          <p class="mb-0">Cyst Bni</p>
+                                       </div>
+                                       <small class="float-end font-size-12">2 days ago</small>
                                     </div>
-                                    <button type="button" class="btn btn-icon text-danger btn-sm">
-                                                     <span class="btn-inner">
-                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                           <path opacity="0.4"
-                                                                 d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
-                                                                 fill="currentColor"></path>
-                                                           <path
-                                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
-                                                                   fill="currentColor"></path>
-                                                        </svg>
-                                                     </span>
-                                    </button>
-                                 </div>
-                              </div>
-                              <div class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/01.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Biker’s Jacket</h6>
-                                       <p class="mb-0">$56.00</p>
+                                 </a>
+                                 <a href="#" class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/04.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">New Mail from Fenny</h6>
+                                          <p class="mb-0">Cyst Bni</p>
+                                       </div>
+                                       <small class="float-end font-size-12">3 days ago</small>
                                     </div>
-                                    <button type="button" class="btn btn-icon text-danger btn-sm">
-                                                     <span class="btn-inner">
-                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                           <path opacity="0.4"
-                                                                 d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
-                                                                 fill="currentColor"></path>
-                                                           <path
-                                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
-                                                                   fill="currentColor"></path>
-                                                        </svg>
-                                                     </span>
-                                    </button>
-                                 </div>
+                                 </a>
                               </div>
-                              <div class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/02.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Casual Shoes</h6>
-                                       <p class="mb-0">$56.00</p>
-                                    </div>
-                                    <button type="button" class="btn btn-icon text-danger btn-sm">
-                                                     <span class="btn-inner">
-                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                           <path opacity="0.4"
-                                                                 d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
-                                                                 fill="currentColor"></path>
-                                                           <path
-                                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
-                                                                   fill="currentColor"></path>
-                                                        </svg>
-                                                     </span>
-                                    </button>
+                              <div class="card-footer p-0 text-center">
+                                 <div class="d-grid">
+                                    <a href="#" class="btn btn-primary">View All</a>
                                  </div>
-                              </div>
-                              <div class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/03.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Knitted Shrug</h6>
-                                       <p class="mb-0">$56.00</p>
-                                    </div>
-                                    <button type="button" class="btn btn-icon text-danger btn-sm">
-                                                     <span class="btn-inner">
-                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                           <path opacity="0.4"
-                                                                 d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
-                                                                 fill="currentColor"></path>
-                                                           <path
-                                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
-                                                                   fill="currentColor"></path>
-                                                        </svg>
-                                                     </span>
-                                    </button>
-                                 </div>
-                              </div>
-                              <div class="iq-sub-card">
-                                 <div class="d-flex align-items-center">
-                                    <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
-                                         src="./assets/images/shapes/04.png" loading="lazy" />
-                                    <div class="ms-3 flex-grow-1 text-start">
-                                       <h6 class="mb-0 ">Blue Handbag</h6>
-                                       <p class="mb-0">$56.00</p>
-                                    </div>
-                                    <button type="button" class="btn btn-icon text-danger btn-sm">
-                                                     <span class="btn-inner">
-                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                           <path opacity="0.4"
-                                                                 d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
-                                                                 fill="currentColor"></path>
-                                                           <path
-                                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
-                                                                   fill="currentColor"></path>
-                                                        </svg>
-                                                     </span>
-                                    </button>
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="card-footer p-0 text-center">
-                              <div class="d-grid">
-                                 <a href="#" class="btn btn-primary">View All</a>
                               </div>
                            </div>
                         </div>
-                     </div>
-                  </li>
+                     </li>
+                     <!-- <li class="nav-item dropdown">
+                        <a href="#" class="nav-link" id="notification-cart" data-bs-toggle="dropdown">
+                           <div class="btn-action position-relative nav-list-icon">
+                              <span class="btn-inner">
+                                 <svg class="cart-icons icon-20" xmlns="http://www.w3.org/2000/svg" width="18"
+                                    height="17" viewBox="0 0 18 17" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                       d="M4.27385 4.95616L4.77635 10.9328C4.81302 11.3928 5.18885 11.7378 5.64802 11.7378H5.65135H14.7439H14.7455C15.1797 11.7378 15.5505 11.4145 15.6122 10.9853L16.4039 5.51949C16.4222 5.38949 16.3897 5.25949 16.3105 5.15449C16.2322 5.04866 16.1172 4.98033 15.9872 4.96199C15.813 4.96866 8.58552 4.95866 4.27385 4.95616ZM5.64631 12.9878C4.54881 12.9878 3.61964 12.1311 3.53047 11.0353L2.76714 1.95695L1.51131 1.74028C1.17048 1.68028 0.942975 1.35778 1.00131 1.01695C1.06131 0.676117 1.39047 0.45445 1.72381 0.507784L3.45714 0.807784C3.73631 0.85695 3.94881 1.08862 3.97297 1.37195L4.16881 3.70612C16.0655 3.71112 16.1038 3.71695 16.1613 3.72362C16.6255 3.79112 17.0338 4.03362 17.3121 4.40695C17.5905 4.77945 17.7071 5.23862 17.6405 5.69862L16.8496 11.1636C16.7005 12.2036 15.7971 12.9878 14.7471 12.9878H14.743H5.65297H5.64631Z"
+                                       fill="currentColor"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                       d="M13.4077 8.03638H11.0977C10.7518 8.03638 10.4727 7.75638 10.4727 7.41138C10.4727 7.06638 10.7518 6.78638 11.0977 6.78638H13.4077C13.7527 6.78638 14.0327 7.06638 14.0327 7.41138C14.0327 7.75638 13.7527 8.03638 13.4077 8.03638Z"
+                                       fill="currentColor"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                       d="M5.28815 15.2516C5.53898 15.2516 5.74148 15.4541 5.74148 15.7049C5.74148 15.9558 5.53898 16.1591 5.28815 16.1591C5.03648 16.1591 4.83398 15.9558 4.83398 15.7049C4.83398 15.4541 5.03648 15.2516 5.28815 15.2516Z"
+                                       fill="currentColor"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                       d="M5.28732 16.784C4.69232 16.784 4.20898 16.2998 4.20898 15.7048C4.20898 15.1098 4.69232 14.6265 5.28732 14.6265C5.88232 14.6265 6.36648 15.1098 6.36648 15.7048C6.36648 16.2998 5.88232 16.784 5.28732 16.784"
+                                       fill="currentColor"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                       d="M14.6877 16.784C14.0927 16.784 13.6094 16.2998 13.6094 15.7048C13.6094 15.1098 14.0927 14.6265 14.6877 14.6265C15.2835 14.6265 15.7677 15.1098 15.7677 15.7048C15.7677 16.2998 15.2835 16.784 14.6877 16.784"
+                                       fill="currentColor"></path>
+                                 </svg>
+                              </span>
+                              <span class="badge-notification">4</span>
+                           </div>
+                        </a>
+                        <div class="p-0 sub-drop dropdown-menu dropdown-menu-end" aria-labelledby="notification-cart">
+                           <div class="m-0 shadow-none card">
+                              <div class="py-3 card-header d-flex justify-content-between bg-primary mb-0">
+                                 <div class="header-title">
+                                    <h5 class="mb-0 text-white">All Carts</h5>
+                                 </div>
+                              </div>
+                              <div class="p-0 card-body max-17 scroll-thin">
+                                 <div class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/01.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">Biker’s Jacket</h6>
+                                          <p class="mb-0">$56.00</p>
+                                       </div>
+                                       <button type="button" class="btn btn-icon text-danger btn-sm">
+                                          <span class="btn-inner">
+                                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                   d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
+                                                   fill="currentColor"></path>
+                                                <path
+                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
+                                                   fill="currentColor"></path>
+                                             </svg>
+                                          </span>
+                                       </button>
+                                    </div>
+                                 </div>
+                                 <div class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/02.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">Casual Shoes</h6>
+                                          <p class="mb-0">$56.00</p>
+                                       </div>
+                                       <button type="button" class="btn btn-icon text-danger btn-sm">
+                                          <span class="btn-inner">
+                                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                   d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
+                                                   fill="currentColor"></path>
+                                                <path
+                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
+                                                   fill="currentColor"></path>
+                                             </svg>
+                                          </span>
+                                       </button>
+                                    </div>
+                                 </div>
+                                 <div class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/03.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">Knitted Shrug</h6>
+                                          <p class="mb-0">$56.00</p>
+                                       </div>
+                                       <button type="button" class="btn btn-icon text-danger btn-sm">
+                                          <span class="btn-inner">
+                                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                   d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
+                                                   fill="currentColor"></path>
+                                                <path
+                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
+                                                   fill="currentColor"></path>
+                                             </svg>
+                                          </span>
+                                       </button>
+                                    </div>
+                                 </div>
+                                 <div class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/04.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">Blue Handbag</h6>
+                                          <p class="mb-0">$56.00</p>
+                                       </div>
+                                       <button type="button" class="btn btn-icon text-danger btn-sm">
+                                          <span class="btn-inner">
+                                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                   d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
+                                                   fill="currentColor"></path>
+                                                <path
+                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
+                                                   fill="currentColor"></path>
+                                             </svg>
+                                          </span>
+                                       </button>
+                                    </div>
+                                 </div>
+                                 <div class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/01.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">Biker’s Jacket</h6>
+                                          <p class="mb-0">$56.00</p>
+                                       </div>
+                                       <button type="button" class="btn btn-icon text-danger btn-sm">
+                                          <span class="btn-inner">
+                                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                   d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
+                                                   fill="currentColor"></path>
+                                                <path
+                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
+                                                   fill="currentColor"></path>
+                                             </svg>
+                                          </span>
+                                       </button>
+                                    </div>
+                                 </div>
+                                 <div class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/02.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">Casual Shoes</h6>
+                                          <p class="mb-0">$56.00</p>
+                                       </div>
+                                       <button type="button" class="btn btn-icon text-danger btn-sm">
+                                          <span class="btn-inner">
+                                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                   d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
+                                                   fill="currentColor"></path>
+                                                <path
+                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
+                                                   fill="currentColor"></path>
+                                             </svg>
+                                          </span>
+                                       </button>
+                                    </div>
+                                 </div>
+                                 <div class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/03.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">Knitted Shrug</h6>
+                                          <p class="mb-0">$56.00</p>
+                                       </div>
+                                       <button type="button" class="btn btn-icon text-danger btn-sm">
+                                          <span class="btn-inner">
+                                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                   d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
+                                                   fill="currentColor"></path>
+                                                <path
+                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
+                                                   fill="currentColor"></path>
+                                             </svg>
+                                          </span>
+                                       </button>
+                                    </div>
+                                 </div>
+                                 <div class="iq-sub-card">
+                                    <div class="d-flex align-items-center">
+                                       <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
+                                          src="./assets/images/shapes/04.png" loading="lazy" />
+                                       <div class="ms-3 flex-grow-1 text-start">
+                                          <h6 class="mb-0 ">Blue Handbag</h6>
+                                          <p class="mb-0">$56.00</p>
+                                       </div>
+                                       <button type="button" class="btn btn-icon text-danger btn-sm">
+                                          <span class="btn-inner">
+                                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                   d="M19.643 9.48851C19.643 9.5565 19.11 16.2973 18.8056 19.1342C18.615 20.8751 17.4927 21.9311 15.8092 21.9611C14.5157 21.9901 13.2494 22.0001 12.0036 22.0001C10.6809 22.0001 9.38741 21.9901 8.13185 21.9611C6.50477 21.9221 5.38147 20.8451 5.20057 19.1342C4.88741 16.2873 4.36418 9.5565 4.35445 9.48851C4.34473 9.28351 4.41086 9.08852 4.54507 8.93053C4.67734 8.78453 4.86796 8.69653 5.06831 8.69653H18.9388C19.1382 8.69653 19.3191 8.78453 19.4621 8.93053C19.5953 9.08852 19.6624 9.28351 19.643 9.48851Z"
+                                                   fill="currentColor"></path>
+                                                <path
+                                                   d="M21 5.97686C21 5.56588 20.6761 5.24389 20.2871 5.24389H17.3714C16.7781 5.24389 16.2627 4.8219 16.1304 4.22692L15.967 3.49795C15.7385 2.61698 14.9498 2 14.0647 2H9.93624C9.0415 2 8.26054 2.61698 8.02323 3.54595L7.87054 4.22792C7.7373 4.8219 7.22185 5.24389 6.62957 5.24389H3.71385C3.32386 5.24389 3 5.56588 3 5.97686V6.35685C3 6.75783 3.32386 7.08982 3.71385 7.08982H20.2871C20.6761 7.08982 21 6.75783 21 6.35685V5.97686Z"
+                                                   fill="currentColor"></path>
+                                             </svg>
+                                          </span>
+                                       </button>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="card-footer p-0 text-center">
+                                 <div class="d-grid">
+                                    <a href="#" class="btn btn-primary">View All</a>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </li> -->
                   <li class="nav-item iq-full-screen d-none d-xl-block" id="fullscreen-item">
                      <a href="#" class="nav-link" id="btnFullscreen" data-bs-toggle="dropdown">
                         <div class="icon nav-list-icon">
@@ -645,7 +668,7 @@
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="icon-40">
                                          <span class="btn-inner d-inline-block position-relative">
-                                            <img src="./assets/images/avatars/12.png"
+                                            <img id="userImg" src="./assets/images/avatars/12.png"
                                                  class="img-fluid rounded-circle object-fit-cover" alt="icon">
                                             <span
                                                     class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white"></span>
@@ -677,7 +700,7 @@
          <h1 class="mb-3">Hello! Amine Steward</h1>
          <span class="mx-0 text-capitalize">Have a nice day. don’t forget to take care of your self.</span>
       </div>
-      <div class="card-header">
+      <div class="card-header mt-3">
          <div class="row flex-wrap d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div class="col-lg-4 col-md-4">
                <select id="department-search" class="form-select border text-body p-3 mb-3 mb-md-0 rounded" aria-label="Select department">
@@ -1361,246 +1384,255 @@
 
 <!-- The Modal -->
 <div class="modal fade setting-modal" id="setting-modal">
-   <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content rounded-0 p-sm-5 p-4">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+         <div class="modal-content rounded-0 p-sm-5 p-4">
 
-         <!-- Modal Header -->
-         <div class="modal-header p-0 pb-3 mb-3 border-bottom">
-            <h3 class="modal-title">Settings</h3>
-            <a href="" class="text-secondary" id="logoutModalLink">
-               <svg height="20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                          d="M15.016 7.38948V6.45648C15.016 4.42148 13.366 2.77148 11.331 2.77148H6.45597C4.42197 2.77148 2.77197 4.42148 2.77197 6.45648V17.5865C2.77197 19.6215 4.42197 21.2715 6.45597 21.2715H11.341C13.37 21.2715 15.016 19.6265 15.016 17.5975V16.6545"
-                          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  </path>
-                  <path d="M21.8096 12.0215H9.76855" stroke="currentColor" stroke-width="1.5"
+            <!-- Modal Header -->
+            <div class="modal-header p-0 pb-3 mb-3 border-bottom">
+               <h3 class="modal-title">Settings</h3>
+               <a href="" class="text-secondary" id="logoutModalLink">
+                  <svg height="20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path
+                        d="M15.016 7.38948V6.45648C15.016 4.42148 13.366 2.77148 11.331 2.77148H6.45597C4.42197 2.77148 2.77197 4.42148 2.77197 6.45648V17.5865C2.77197 19.6215 4.42197 21.2715 6.45597 21.2715H11.341C13.37 21.2715 15.016 19.6265 15.016 17.5975V16.6545"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                     </path>
+                     <path d="M21.8096 12.0215H9.76855" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                     <path d="M18.8813 9.1062L21.8093 12.0212L18.8813 14.9372" stroke="currentColor" stroke-width="1.5"
                         stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path d="M18.8813 9.1062L21.8093 12.0212L18.8813 14.9372" stroke="currentColor"
-                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-               </svg>
-               <h6 class="d-inline-block mb-0 text-secondary align-middle ms-1">Logout</h6>
-            </a>
-            <a href="#" class="d-inline-block position-absolute text-secondary" data-bs-dismiss="modal">
-               <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd"
+                  </svg>
+                  <h6 class="d-inline-block mb-0 text-secondary align-middle ms-1">Logout</h6>
+               </a>
+               <a href="#" class="d-inline-block position-absolute text-secondary" data-bs-dismiss="modal">
+                  <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path fill-rule="evenodd" clip-rule="evenodd"
                         d="M7.67 1.99927H16.34C19.73 1.99927 22 4.37927 22 7.91927V16.0903C22 19.6203 19.73 21.9993 16.34 21.9993H7.67C4.28 21.9993 2 19.6203 2 16.0903V7.91927C2 4.37927 4.28 1.99927 7.67 1.99927ZM15.01 14.9993C15.35 14.6603 15.35 14.1103 15.01 13.7703L13.23 11.9903L15.01 10.2093C15.35 9.87027 15.35 9.31027 15.01 8.97027C14.67 8.62927 14.12 8.62927 13.77 8.97027L12 10.7493L10.22 8.97027C9.87 8.62927 9.32 8.62927 8.98 8.97027C8.64 9.31027 8.64 9.87027 8.98 10.2093L10.76 11.9903L8.98 13.7603C8.64 14.1103 8.64 14.6603 8.98 14.9993C9.15 15.1693 9.38 15.2603 9.6 15.2603C9.83 15.2603 10.05 15.1693 10.22 14.9993L12 13.2303L13.78 14.9993C13.95 15.1803 14.17 15.2603 14.39 15.2603C14.62 15.2603 14.84 15.1693 15.01 14.9993Z"
                         fill="currentColor"></path>
-               </svg>
-            </a>
-         </div>
+                  </svg>
+               </a>
+            </div>
 
-         <!-- Modal body -->
-         <div class="modal-body p-0">
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs gap-sm-5 gap-3 border-bottom p-0">
-               <li class="nav-item">
-                  <a class="nav-link active border-0" data-bs-toggle="tab" href="#setting-content-1">
-                     <svg height="18" width="18" viewBox="0 0 24 24" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
+            <!-- Modal body -->
+            <div class="modal-body p-0">
+               <!-- Nav tabs -->
+               <ul class="nav nav-tabs gap-sm-5 gap-3 border-bottom p-0">
+                  <li class="nav-item">
+                     <a class="nav-link active border-0" data-bs-toggle="tab" href="#setting-content-1">
+                        <svg height="18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <path fill-rule="evenodd" clip-rule="evenodd"
                               d="M11.9849 15.3462C8.11731 15.3462 4.81445 15.931 4.81445 18.2729C4.81445 20.6148 8.09636 21.2205 11.9849 21.2205C15.8525 21.2205 19.1545 20.6348 19.1545 18.2938C19.1545 15.9529 15.8735 15.3462 11.9849 15.3462Z"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                              stroke-linejoin="round"></path>
-                        <path fill-rule="evenodd" clip-rule="evenodd"
+                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                           </path>
+                           <path fill-rule="evenodd" clip-rule="evenodd"
                               d="M11.9849 12.0059C14.523 12.0059 16.5801 9.94779 16.5801 7.40969C16.5801 4.8716 14.523 2.81445 11.9849 2.81445C9.44679 2.81445 7.3887 4.8716 7.3887 7.40969C7.38013 9.93922 9.42394 11.9973 11.9525 12.0059H11.9849Z"
                               stroke="currentColor" stroke-width="1.42857" stroke-linecap="round"
                               stroke-linejoin="round"></path>
-                     </svg>
-                     <span class="align-middle fw-500">Edit Profile</span>
-                  </a>
-               </li>
-               <li class="nav-item">
-                  <a class="nav-link border-0" data-bs-toggle="tab" href="#setting-content-2">
-                     <svg height="18" width="18" viewBox="0 0 24 24" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                        <path
-                                d="M16.4232 9.4478V7.3008C16.4232 4.7878 14.3852 2.7498 11.8722 2.7498C9.35925 2.7388 7.31325 4.7668 7.30225 7.2808V7.3008V9.4478"
-                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round"></path>
-                        <path fill-rule="evenodd" clip-rule="evenodd"
+                        </svg>
+                        <span class="align-middle fw-500">Edit Avatars Profile</span>
+                     </a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link border-0" data-bs-toggle="tab" href="#setting-content-2">
+                        <svg height="18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <path
+                              d="M16.4232 9.4478V7.3008C16.4232 4.7878 14.3852 2.7498 11.8722 2.7498C9.35925 2.7388 7.31325 4.7668 7.30225 7.2808V7.3008V9.4478"
+                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                           </path>
+                           <path fill-rule="evenodd" clip-rule="evenodd"
                               d="M15.683 21.2497H8.042C5.948 21.2497 4.25 19.5527 4.25 17.4577V13.1687C4.25 11.0737 5.948 9.37671 8.042 9.37671H15.683C17.777 9.37671 19.475 11.0737 19.475 13.1687V17.4577C19.475 19.5527 17.777 21.2497 15.683 21.2497Z"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                              stroke-linejoin="round"></path>
-                        <path d="M11.8628 14.2026V16.4236" stroke="currentColor" stroke-width="1.5"
+                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                           </path>
+                           <path d="M11.8628 14.2026V16.4236" stroke="currentColor" stroke-width="1.5"
                               stroke-linecap="round" stroke-linejoin="round"></path>
-                     </svg>
-                     <span class="align-middle fw-500">Setting</span>
-                  </a>
-               </li>
-               <li class="nav-item">
-                  <a class="nav-link border-0" data-bs-toggle="tab" href="#setting-content-3">
-                     <svg height="18" width="18" viewBox="0 0 24 24" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
+                        </svg>
+                        <span class="align-middle fw-500">Change Password</span>
+                     </a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link border-0" data-bs-toggle="tab" href="#setting-content-3">
+                        <svg height="18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <path fill-rule="evenodd" clip-rule="evenodd"
                               d="M12 17.8476C17.6392 17.8476 20.2481 17.1242 20.5 14.2205C20.5 11.3188 18.6812 11.5054 18.6812 7.94511C18.6812 5.16414 16.0452 2 12 2C7.95477 2 5.31885 5.16414 5.31885 7.94511C5.31885 11.5054 3.5 11.3188 3.5 14.2205C3.75295 17.1352 6.36177 17.8476 12 17.8476Z"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                              stroke-linejoin="round"></path>
-                        <path d="M14.3889 20.8572C13.0247 22.3719 10.8967 22.3899 9.51953 20.8572"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                              stroke-linejoin="round"></path>
-                     </svg>
-                     <span class="align-middle fw-500">Notification</span>
-                  </a>
-               </li>
-            </ul>
+                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                           </path>
+                           <path d="M14.3889 20.8572C13.0247 22.3719 10.8967 22.3899 9.51953 20.8572"
+                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                           </path>
+                        </svg>
+                        <span class="align-middle fw-500">Notification</span>
+                     </a>
+                  </li>
+               </ul>
 
-            <!-- Tab panes -->
-            <div class="tab-content mt-4">
-               <div class="tab-pane fade show active" id="setting-content-1">
-                  <form>
-                     <div
-                             class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
-                        <div class="d-flex align-items-center gap-3">
-                           <div class="flex-shrink-0 d-inline-block position-relative">
-                              <img src="./assets/images/user/amie-steward.png" alt="img-fluid">
-                              <span
-                                      class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white me-1 mb-1"></span>
+               <!-- Tab panes -->
+               <div class="tab-content mt-4">
+                  <div class="tab-pane fade show active" id="setting-content-1">
+                     <form id="updateProfileForm" enctype="multipart/form-data">
+                        <div
+                           class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
+                           <div class="d-flex align-items-center gap-3">
+                              <div class="flex-shrink-0 d-inline-block position-relative">
+                                 <img id="profileImg" src="./assets/images/user/user-1.jpg" alt="img-fluid">
+                                 <span
+                                    class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white me-1 mb-1"></span>
+                              </div>
+                              <div class="content">
+                                 <p class="m-0">Upload A New Image.</p>
+                                 <input type="file" id="profileImgInput" name="img" accept="image/*"
+                                    class="form-control mt-2">
+                                 <div id="img-error" class="error-message"></div>
+                              </div>
                            </div>
+                           <button type="submit" class="btn btn-primary" id="saveChangesBtn" disabled>
+                              <span class="btn-inner">
+                                 <span class="text d-inline-block align-middle">Save Changes</span>
+                                 <span id="loadingSpinner" class="icon d-inline-block align-middle ms-1 ps-2"
+                                    style="display: none;">
+                                    <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                       <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
+                                          fill="none">
+                                          <path
+                                             d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                             fill="currentColor"></path>
+                                       </svg>
+                                    </span>
+                                 </span>
+                                 <span id="saveIcon" class="icon d-inline-block align-middle ms-1 ps-2">
+                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
+                                       fill="none">
+                                       <path
+                                          d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                          fill="currentColor"></path>
+                                    </svg> -->
+                                 </span>
+                              </span>
+                           </button>
+                        </div>
+                        <div id="form-error" class="error-message mt-2"></div>
+                        <div id="form-success" class="valid-message mt-2"></div>
+                        <!-- <div class="row mt-5">
+                           <div class="col-md-6">
+                              <input type="text" class="form-control" placeholder="Your First Name *">
+                           </div>
+                           <div class="col-md-6 mt-md-0 mt-4">
+                              <input type="text" class="form-control" placeholder="Your Last Name *">
+                           </div>
+                           <div class="col-md-6 mt-4">
+                              <input type="email" class="form-control" placeholder="E-mail Address *">
+                           </div>
+                           <div class="col-md-6 mt-4">
+                              <input type="text" class="form-control date_flatpicker flatpickr-input active"
+                                 placeholder="Your DOB*" readonly="readonly">
+                           </div>
+                           <div class="col-md-12 mt-4">
+                              <textarea class="form-control" placeholder="Your Bio"></textarea>
+                           </div>
+                        </div> -->
+                     </form>
+                  </div>
+                  <div class="tab-pane fade" id="setting-content-2">
+                     <form id="changePasswordForm">
+                        <div
+                           class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
                            <div class="content">
-                              <h4 class="mb-2">Amine Steward</h4>
-                              <p class="m-0">Upload A New Image.</p>
+                              <h4 class="mb-2">Password</h4>
+                              <p class="m-0">Update Or Change Your Current Password.</p>
                            </div>
+                           <button type="submit" class="btn btn-primary" id="changePasswordBtn">
+                              <span class="btn-inner">
+                                 <span class="text d-inline-block align-middle">Change Password</span>
+                                 <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
+                                       fill="none">
+                                       <path
+                                          d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
+                                          fill="currentColor"></path>
+                                    </svg>
+                                 </span>
+                              </span>
+                           </button>
                         </div>
-
-                        <button type="button" class="btn btn-primary">
-                                                <span class="btn-inner">
-                                                    <span class="text d-inline-block align-middle">Save Changes</span>
-                                                    <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
-                                                             viewBox="0 0 8 8" fill="none">
-                                                            <path
-                                                                    d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                                                    fill="currentColor"></path>
-                                                        </svg>
-                                                    </span>
-                                                </span></button>
-                     </div>
-                     <div class="row mt-5">
-                        <div class="col-md-6">
-                           <input type="text" class="form-control"
-                                  placeholder="Your First Name *">
+                        <div class="row mt-5">
+                           <div class="col-md-12">
+                              <label class="mt-2 fw-bold">Your Old Password <span class="text-danger">*</span></label>
+                              <input type="password" class="form-control" id="currentPassword"
+                                 placeholder="Your Current Password *">
+                           </div>
+                           <div class="col-md-12 mt-4">
+                              <label class="mt-2 fw-bold">Your New Pass Password <span class="text-danger">*</span></label>
+                              <input type="password" class="form-control" id="newPassword" placeholder="New Password *">
+                           </div>
+                           <div class="col-md-12 mt-4">
+                              <input type="password" class="form-control" id="confirmPassword"
+                                 placeholder="Confirm New Password *">
+                           </div>
+                           <div id="password-error" class="error-message mt-2"></div>
+                           <div id="password-success" class="success-message mt2"></div>
                         </div>
-                        <div class="col-md-6 mt-md-0 mt-4">
-                           <input type="text" class="form-control"
-                                  placeholder="Your Last Name *">
-                        </div>
-                        <div class="col-md-6 mt-4">
-                           <input type="email" class="form-control"
-                                  placeholder="E-mail Address *">
-                        </div>
-                        <div class="col-md-6 mt-4">
-                           <input type="text"
-                                  class="form-control date_flatpicker flatpickr-input active"
-                                  placeholder="Your DOB*" readonly="readonly">
-                        </div>
-                        <div class="col-md-12 mt-4">
-                           <textarea class="form-control" placeholder="Your Bio"></textarea>
-                        </div>
-                     </div>
-                  </form>
-               </div>
-               <div class="tab-pane fade" id="setting-content-2">
-                  <form>
-                     <div
-                             class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
+                     </form>
+                  </div>
+                  <div class="tab-pane fade" id="setting-content-3">
+                     <form>
                         <div class="content">
-                           <h4 class="mb-2">Password</h4>
-                           <p class="m-0">Update Or Change Your Current Password. </p>
+                           <h4 class="mb-2">Notification</h4>
+                           <p class="m-0">Update Or Change Your Notification Settings.</p>
                         </div>
-
-                        <button type="button" class="btn btn-primary">
-                                                <span class="btn-inner">
-                                                    <span class="text d-inline-block align-middle">Change Password</span>
-                                                    <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
-                                                             viewBox="0 0 8 8" fill="none">
-                                                            <path
-                                                                    d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                                                    fill="currentColor"></path>
-                                                        </svg>
-                                                    </span>
-                                                </span>
-                        </button>
-                     </div>
-                     <div class="row mt-5">
-                        <div class="col-md-12">
-                           <input type="password" class="form-control"
-                                  placeholder="Your Current Password *">
+                        <div
+                           class="d-flex aling-items-center justify-content-between gap-3 mt-5 me-0 mb-0 p-0 form-check form-switch form-check-inline">
+                           <h5 class="mb-0">Email Notification</h5>
+                           <input class="form-check-input" type="checkbox" id="switch1" checked />
                         </div>
-                        <div class="col-md-12 mt-4">
-                           <input type="password" class="form-control"
-                                  placeholder="New Password *">
-                           <label class="mt-2">Password Must Be in 8 Character</label>
+                        <div
+                           class="d-flex aling-items-center justify-content-between gap-3 mt-3 me-0 mb-0 p-0 form-check form-switch form-check-inline">
+                           <h5 class="mb-0">App Notification</h5>
+                           <input class="form-check-input" type="checkbox" id="switch2" checked />
                         </div>
-                        <div class="col-md-12 mt-4">
-                           <input type="password" class="form-control"
-                                  placeholder="Confirm New Password *">
-                           <label class="mt-2">Must Be Same to New Password</label>
+                        <div class="mt-4 pt-4 border-top">
+                           <ul class="list-inline m-0 p-0">
+                              <li class="mb-3">
+                                 <div
+                                    class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
+                                    <label class="form-check-label h5 text-body mb-0" for="customCheck1">Appointment
+                                       Reminder</label>
+                                    <input type="checkbox" class="form-check-input" id="customCheck1">
+                                 </div>
+                              </li>
+                              <li class="mb-3">
+                                 <div
+                                    class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
+                                    <label class="form-check-label h5 text-body mb-0" for="customCheck2">Subscription
+                                       Offer</label>
+                                    <input type="checkbox" class="form-check-input" id="customCheck2">
+                                 </div>
+                              </li>
+                              <li class="mb-3">
+                                 <div
+                                    class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
+                                    <label class="form-check-label h5 text-body mb-0" for="customCheck3">New
+                                       Update Notification</label>
+                                    <input type="checkbox" class="form-check-input" id="customCheck3">
+                                 </div>
+                              </li>
+                              <li>
+                                 <div
+                                    class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
+                                    <label class="form-check-label h5 text-body mb-0" for="customCheck4">All
+                                       Notification</label>
+                                    <input type="checkbox" class="form-check-input" id="customCheck4">
+                                 </div>
+                              </li>
+                           </ul>
                         </div>
-                     </div>
-                  </form>
-               </div>
-               <div class="tab-pane fade" id="setting-content-3">
-                  <form>
-                     <div class="content">
-                        <h4 class="mb-2">Notification</h4>
-                        <p class="m-0">Update Or Change Your Notification Settings.</p>
-                     </div>
-                     <div
-                             class="d-flex aling-items-center justify-content-between gap-3 mt-5 me-0 mb-0 p-0 form-check form-switch form-check-inline">
-                        <h5 class="mb-0">Email Notification</h5>
-                        <input class="form-check-input" type="checkbox" id="switch1" checked />
-                     </div>
-                     <div
-                             class="d-flex aling-items-center justify-content-between gap-3 mt-3 me-0 mb-0 p-0 form-check form-switch form-check-inline">
-                        <h5 class="mb-0">App Notification</h5>
-                        <input class="form-check-input" type="checkbox" id="switch2" checked />
-                     </div>
-                     <div class="mt-4 pt-4 border-top">
-                        <ul class="list-inline m-0 p-0">
-                           <li class="mb-3">
-                              <div
-                                      class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                 <label class="form-check-label h5 text-body mb-0"
-                                        for="customCheck1">Appointment Reminder</label>
-                                 <input type="checkbox" class="form-check-input" id="customCheck1">
-                              </div>
-                           </li>
-                           <li class="mb-3">
-                              <div
-                                      class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                 <label class="form-check-label h5 text-body mb-0"
-                                        for="customCheck2">Subscription Offer</label>
-                                 <input type="checkbox" class="form-check-input" id="customCheck2">
-                              </div>
-                           </li>
-                           <li class="mb-3">
-                              <div
-                                      class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                 <label class="form-check-label h5 text-body mb-0" for="customCheck3">New
-                                    Update Notification</label>
-                                 <input type="checkbox" class="form-check-input" id="customCheck3">
-                              </div>
-                           </li>
-                           <li>
-                              <div
-                                      class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                 <label class="form-check-label h5 text-body mb-0" for="customCheck4">All
-                                    Notification</label>
-                                 <input type="checkbox" class="form-check-input" id="customCheck4">
-                              </div>
-                           </li>
-                        </ul>
-                     </div>
-                  </form>
+                     </form>
+                  </div>
                </div>
             </div>
          </div>
       </div>
    </div>
-</div>
 <!--Lấy API-->
 <script src="./assets/js/API/main-patient-doctors.js"></script>
+<script src="./assets/js/API/main-logout-img-edit.js"></script>
 
 <!-- Library Bundle Script -->
 <script src="./assets/js/core/libs.min.js"></script>

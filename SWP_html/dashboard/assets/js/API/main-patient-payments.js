@@ -174,8 +174,8 @@ async function displayPayment(page = 1, issueDateSearch = state.currentIssueDate
             </div>
         </div>`;
 
-        container.innerHTML = payments.length ? paymentTable + paginationHTML : '<p>No Payment found.</p>';
-
+        container.innerHTML = payments.length ? paymentTable + paginationHTML :'<h3 class="text-center" >No Payment found.</h3>';
+        
         container.querySelectorAll(".edit-btn1").forEach(button => {
             button.addEventListener("click", function (e) {
                 const payment = JSON.parse(this.dataset.payment);

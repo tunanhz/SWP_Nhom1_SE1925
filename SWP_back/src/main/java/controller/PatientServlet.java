@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Doctor;
 import model.Patient;
 
 import java.io.BufferedReader;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -44,59 +46,139 @@ public class PatientServlet extends HttpServlet {
 
         if (pathInfo == null || pathInfo.equals("/")) {
             try {
-                String accountPatientIdParam = request.getParameter("accountPatientId");
+                // Check if this is a request for all patients (admin/staff view)
+                String viewType = request.getParameter("viewType");
 
-                if (accountPatientIdParam == null || accountPatientIdParam.trim().isEmpty()) {
-                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                    out.print("{\"error\": \"accountPatientId is required\"}");
-                    return;
+                if ("all".equals(viewType)) {
+                    // Admin/Staff view - get all patients
+                    handleGetAllPatients(request, response, out);
+                } else {
+                    // Patient view - get patients by account
+                    handleGetPatientsByAccount(request, response, out);
                 }
-                int accountPatientId = Integer.parseInt(accountPatientIdParam.trim());
-                String fullName = request.getParameter("name");
-                String dob = request.getParameter("dob");
-                String gender = request.getParameter("gender");
-                int page = Integer.parseInt(request.getParameter("page") != null ? request.getParameter("page") : "1");
-                int pageSize = Integer.parseInt(request.getParameter("pageSize") != null ? request.getParameter("pageSize") : "8");
-
-                // Validate pagination parameters
-                if (page < 0 || pageSize <= 0 || pageSize > 100) {
-                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                    out.print("{\"error\": \"Invalid page or pageSize\"}");
-                    return;
-                }
-
-                String dobValid = parseDateTime(dob);
-
-                // Log request for debugging
-                LOGGER.info("Fetching appointments for accountPatientId=" + accountPatientId +
-                        ", fullName=" + fullName + ", dob=" + dobValid +
-                        ", gender=" + gender + ", page=" + page + ", pageSize=" + pageSize);
-
-                // Get appointments and total count
-                ArrayList<Patient> patients = patientDAO.getAllPatientsByAccountPatientId(
-                        accountPatientId, fullName, dobValid, gender, page, pageSize);
-
-                int totalPatient = patientDAO.countPatientByAccountPatientId(
-                        accountPatientId, fullName, dobValid, gender);
-                int totalPages = (int) Math.ceil((double) totalPatient / pageSize);
-
-                // Build response JSON
-                JsonObject responseJson = new JsonObject();
-                responseJson.add("patients", gson.toJsonTree(patients));
-                responseJson.addProperty("totalPages", totalPages);
-                responseJson.addProperty("currentPage", page);
-                responseJson.addProperty("pageSize", pageSize);
-                responseJson.addProperty("totalPatient", totalPatient);
-                out.print(gson.toJson(responseJson));
-            } catch (NumberFormatException e) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.print("{\"error\": \"Invalid number format in parameters\"}");
-                LOGGER.severe("Invalid number format: " + e.getMessage());
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                out.print("{\"error\": \"Failed to fetch appointments\"}");
+                out.print("{\"error\": \"Failed to fetch patients\"}");
                 LOGGER.severe("Error processing request: " + e.getMessage());
             }
+        } else {
+            // Lấy patient theo ID
+            String[] splits = pathInfo.split("/");
+
+            if (splits.length == 2) {
+                try {
+                    int id = Integer.parseInt(splits[1]);
+                    Patient patient = patientDAO.getPatientByPatientId(id);
+                    if (patient != null) {
+                        JsonObject responseJson = new JsonObject();
+                        responseJson.add("patient", gson.toJsonTree(patient));
+                        out.print(gson.toJson(responseJson));
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        out.print("{\"error\":\"Doctor not found\"}");
+                    }
+                } catch (NumberFormatException e) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.print("{\"error\":\"Invalid path\"}");
+                }
+            }
+        }
+    }
+
+    private void handleGetAllPatients(HttpServletRequest request, HttpServletResponse response, PrintWriter out) {
+        try {
+            int page = Integer.parseInt(request.getParameter("page") != null ? request.getParameter("page") : "1");
+            int pageSize = Integer.parseInt(request.getParameter("pageSize") != null ? request.getParameter("pageSize") : "8");
+            String fullName = request.getParameter("name");
+            String dob = request.getParameter("dob");
+            String gender = request.getParameter("gender");
+            String status = request.getParameter("status");
+
+            // Validate pagination parameters
+            if (page < 1 || pageSize <= 0 || pageSize > 100) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.print("{\"error\": \"Invalid page or pageSize\"}");
+                return;
+            }
+
+            String dobValid = parseDateTime(dob);
+
+            // Log request for debugging
+            LOGGER.info("Fetching all patients: fullName=" + fullName + ", dob=" + dobValid +
+                    ", gender=" + gender + ", status=" + status + ", page=" + page + ", pageSize=" + pageSize);
+
+            // Get all patients and total count
+            ArrayList<Patient> patients = patientDAO.getAllPatients(fullName, dobValid, gender, status, page, pageSize);
+            int totalPatient = patientDAO.countAllPatients(fullName, dobValid, gender, status);
+            int totalPages = (int) Math.ceil((double) totalPatient / pageSize);
+
+            // Build response JSON
+            JsonObject responseJson = new JsonObject();
+            responseJson.add("patients", gson.toJsonTree(patients));
+            responseJson.addProperty("totalPages", totalPages);
+            responseJson.addProperty("currentPage", page);
+            responseJson.addProperty("pageSize", pageSize);
+            responseJson.addProperty("totalPatient", totalPatient);
+            out.print(gson.toJson(responseJson));
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\": \"Invalid number format in parameters\"}");
+            LOGGER.severe("Invalid number format: " + e.getMessage());
+        }
+    }
+
+    private void handleGetPatientsByAccount(HttpServletRequest request, HttpServletResponse response, PrintWriter out) {
+        try {
+            // Get parameters
+            String accountPatientIdParam = request.getParameter("accountPatientId");
+
+            if (accountPatientIdParam == null || accountPatientIdParam.trim().isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.print("{\"error\": \"accountPatientId is required\"}");
+                return;
+            }
+
+            int accountPatientId = Integer.parseInt(accountPatientIdParam.trim());
+            String fullName = request.getParameter("name");
+            String dob = request.getParameter("dob");
+            String gender = request.getParameter("gender");
+            int page = Integer.parseInt(request.getParameter("page") != null ? request.getParameter("page") : "1");
+            int pageSize = Integer.parseInt(request.getParameter("pageSize") != null ? request.getParameter("pageSize") : "8");
+
+            // Validate pagination parameters
+            if (page < 1 || pageSize <= 0 || pageSize > 100) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.print("{\"error\": \"Invalid page or pageSize\"}");
+                return;
+            }
+
+            String dobValid = parseDateTime(dob);
+
+            // Log request for debugging
+            LOGGER.info("Fetching patients for accountPatientId=" + accountPatientId +
+                    ", fullName=" + fullName + ", dob=" + dobValid +
+                    ", gender=" + gender + ", page=" + page + ", pageSize=" + pageSize);
+
+            // Get patients by account and total count
+            ArrayList<Patient> patients = patientDAO.getAllPatientsByAccountPatientId(
+                    accountPatientId, fullName, dobValid, gender, page, pageSize);
+
+            int totalPatient = patientDAO.countPatientByAccountPatientId(
+                    accountPatientId, fullName, dobValid, gender);
+            int totalPages = (int) Math.ceil((double) totalPatient / pageSize);
+
+            // Build response JSON
+            JsonObject responseJson = new JsonObject();
+            responseJson.add("patients", gson.toJsonTree(patients));
+            responseJson.addProperty("totalPages", totalPages);
+            responseJson.addProperty("currentPage", page);
+            responseJson.addProperty("pageSize", pageSize);
+            responseJson.addProperty("totalPatient", totalPatient);
+            out.print(gson.toJson(responseJson));
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\": \"Invalid number format in parameters\"}");
+            LOGGER.severe("Invalid number format: " + e.getMessage());
         }
     }
 
@@ -149,6 +231,20 @@ public class PatientServlet extends HttpServlet {
                 if (addPatient.getDob() == null || addPatient.getDob().isEmpty()) {
                     response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
                     out.print("{\"error\":\"Date of birth is required\"}");
+                    return;
+                }
+
+                try {
+                    LocalDate dob = LocalDate.parse(addPatient.getDob(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    LocalDate today = LocalDate.now();
+                    if (dob.isAfter(today)) {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                        out.print("{\"error\":\"Date of birth cannot be in the future\"}");
+                        return;
+                    }
+                } catch (DateTimeParseException e) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                    out.print("{\"error\":\"Invalid date of birth format\"}");
                     return;
                 }
 
@@ -278,6 +374,20 @@ public class PatientServlet extends HttpServlet {
                     return;
                 }
 
+                try {
+                    LocalDate dob = LocalDate.parse(updatedPatient.getDob(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    LocalDate today = LocalDate.now();
+                    if (dob.isAfter(today)) {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                        out.print("{\"error\":\"Date of birth cannot be in the future\"}");
+                        return;
+                    }
+                } catch (DateTimeParseException e) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+                    out.print("{\"error\":\"Invalid date of birth format\"}");
+                    return;
+                }
+
                 if (updatedPatient.getGender() == null || updatedPatient.getGender().isEmpty()) {
                     response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
                     out.print("{\"error\":\"Gender is required\"}");
@@ -401,13 +511,8 @@ public class PatientServlet extends HttpServlet {
 
     public static String parseDateTime(String input) {
         // Return null if input is null
-        if (input == null) {
+        if (input == null || input.trim().isEmpty()) {
             return null;
-        }
-
-        // Check for empty input
-        if (input.trim().isEmpty()) {
-            return "Error: Năm là bắt buộc. Vui lòng nhập năm.";
         }
 
         // Normalize input: replace / with - and trim spaces

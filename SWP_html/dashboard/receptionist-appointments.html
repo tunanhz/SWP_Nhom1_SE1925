@@ -65,6 +65,36 @@
    <link
       href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,300;1,400;1,500&display=swap"
       rel="stylesheet">
+
+   <style>
+      #userImg {
+         width: 40px;
+         height: 40px;
+         object-fit: cover;
+         border-radius: 50%;
+      }
+
+      #profileImg {
+         width: 100px;
+         height: 100px;
+         object-fit: cover;
+         border-radius: 50%;
+      }
+
+      .spinner {
+         animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+         0% {
+            transform: rotate(0deg);
+         }
+
+         100% {
+            transform: rotate(360deg);
+         }
+      }
+   </style>
 </head>
 
 <body class=" full-screen ">
@@ -124,8 +154,30 @@
                               </a>
                            </li>
                            <li class="nav-item">
-                              <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 active"
-                                 aria-current="page" href="./receptionist-appointments.html">
+                              <a class="nav-link menu-arrow justify-content-start" data-bs-toggle="collapse"
+                                 href="#reception" role="button" aria-expanded="false"
+                                 aria-controls="appoiment_recetion">
+                                 <i class="icon" data-bs-toggle="tooltip" title="Pages" data-bs-placement="right">
+                                    <svg width="20" class="icon-20" viewBox="0 0 24 24" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg">
+                                       <path fill-rule="evenodd" clip-rule="evenodd"
+                                          d="M3 16.87V9.25699H21V16.931C21 20.07 19.0241 22 15.8628 22H8.12733C4.99561 22 3 20.03 3 16.87ZM7.95938 14.41C7.50494 14.431 7.12953 14.07 7.10977 13.611C7.10977 13.151 7.46542 12.771 7.91987 12.75C8.36443 12.75 8.72997 13.101 8.73985 13.55C8.7596 14.011 8.40395 14.391 7.95938 14.41ZM12.0198 14.41C11.5653 14.431 11.1899 14.07 11.1701 13.611C11.1701 13.151 11.5258 12.771 11.9802 12.75C12.4248 12.75 12.7903 13.101 12.8002 13.55C12.82 14.011 12.4643 14.391 12.0198 14.41ZM16.0505 18.09C15.596 18.08 15.2305 17.7 15.2305 17.24C15.2206 16.78 15.5862 16.401 16.0406 16.391H16.0505C16.5148 16.391 16.8902 16.771 16.8902 17.24C16.8902 17.71 16.5148 18.09 16.0505 18.09ZM11.1701 17.24C11.1899 17.7 11.5653 18.061 12.0198 18.04C12.4643 18.021 12.82 17.641 12.8002 17.181C12.7903 16.731 12.4248 16.38 11.9802 16.38C11.5258 16.401 11.1701 16.78 11.1701 17.24ZM7.09989 17.24C7.11965 17.7 7.49506 18.061 7.94951 18.04C8.39407 18.021 8.74973 17.641 8.72997 17.181C8.72009 16.731 8.35456 16.38 7.90999 16.38C7.45554 16.401 7.09989 16.78 7.09989 17.24ZM15.2404 13.601C15.2404 13.141 15.596 12.771 16.0505 12.761C16.4951 12.761 16.8507 13.12 16.8705 13.561C16.8804 14.021 16.5247 14.401 16.0801 14.41C15.6257 14.42 15.2503 14.07 15.2404 13.611V13.601Z"
+                                          fill="currentColor" />
+                                       <path opacity="0.4"
+                                          d="M3.00336 9.2569C3.0162 8.6699 3.0656 7.5049 3.15846 7.1299C3.63267 5.0209 5.24298 3.6809 7.54485 3.4899H16.4559C18.738 3.6909 20.3681 5.0399 20.8423 7.1299C20.9342 7.4949 20.9836 8.6689 20.9964 9.2569H3.00336Z"
+                                          fill="currentColor" />
+                                       <path
+                                          d="M8.30486 6.59C8.73955 6.59 9.06556 6.261 9.06556 5.82V2.771C9.06556 2.33 8.73955 2 8.30486 2C7.87017 2 7.54416 2.33 7.54416 2.771V5.82C7.54416 6.261 7.87017 6.59 8.30486 6.59Z"
+                                          fill="currentColor" />
+                                       <path
+                                          d="M15.6949 6.59C16.1197 6.59 16.4556 6.261 16.4556 5.82V2.771C16.4556 2.33 16.1197 2 15.6949 2C15.2603 2 14.9342 2.33 14.9342 2.771V5.82C14.9342 6.261 15.2603 6.59 15.6949 6.59Z"
+                                          fill="currentColor" />
+                                    </svg>
+                                 </i>
+                                 <span class="nav-text ms-2">Appoiment</span>
+                              </a>
+                              <!-- <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 active"
+                                 aria-current="page" href="#receptionist">
                                  <i class="icon" data-bs-toggle="tooltip" title="Appointments"
                                     data-bs-placement="right">
                                     <svg width="20" class="icon-20" viewBox="0 0 24 24" fill="none"
@@ -145,33 +197,81 @@
                                     </svg>
                                  </i>
                                  <span class="item-name">Appointments</span>
-                              </a>
+                              </a> -->
+
+                              <ul class="iq-header-sub-menu list-unstyled collapse" id="allPatitentPages">
+                                 <li class="nav-item">
+                                    <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 active"
+                                       aria-current="page" href="./receptionist-appointments.html">
+                                       <i class="icon" data-bs-toggle="tooltip" title="Appointments"
+                                          data-bs-placement="right">
+                                          <svg width="20" class="icon-20" viewBox="0 0 24 24" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                             <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M3 16.87V9.25699H21V16.931C21 20.07 19.0241 22 15.8628 22H8.12733C4.99561 22 3 20.03 3 16.87ZM7.95938 14.41C7.50494 14.431 7.12953 14.07 7.10977 13.611C7.10977 13.151 7.46542 12.771 7.91987 12.75C8.36443 12.75 8.72997 13.101 8.73985 13.55C8.7596 14.011 8.40395 14.391 7.95938 14.41ZM12.0198 14.41C11.5653 14.431 11.1899 14.07 11.1701 13.611C11.1701 13.151 11.5258 12.771 11.9802 12.75C12.4248 12.75 12.7903 13.101 12.8002 13.55C12.82 14.011 12.4643 14.391 12.0198 14.41ZM16.0505 18.09C15.596 18.08 15.2305 17.7 15.2305 17.24C15.2206 16.78 15.5862 16.401 16.0406 16.391H16.0505C16.5148 16.391 16.8902 16.771 16.8902 17.24C16.8902 17.71 16.5148 18.09 16.0505 18.09ZM11.1701 17.24C11.1899 17.7 11.5653 18.061 12.0198 18.04C12.4643 18.021 12.82 17.641 12.8002 17.181C12.7903 16.731 12.4248 16.38 11.9802 16.38C11.5258 16.401 11.1701 16.78 11.1701 17.24ZM7.09989 17.24C7.11965 17.7 7.49506 18.061 7.94951 18.04C8.39407 18.021 8.74973 17.641 8.72997 17.181C8.72009 16.731 8.35456 16.38 7.90999 16.38C7.45554 16.401 7.09989 16.78 7.09989 17.24ZM15.2404 13.601C15.2404 13.141 15.596 12.771 16.0505 12.761C16.4951 12.761 16.8507 13.12 16.8705 13.561C16.8804 14.021 16.5247 14.401 16.0801 14.41C15.6257 14.42 15.2503 14.07 15.2404 13.611V13.601Z"
+                                                fill="currentColor" />
+                                             <path opacity="0.4"
+                                                d="M3.00336 9.2569C3.0162 8.6699 3.0656 7.5049 3.15846 7.1299C3.63267 5.0209 5.24298 3.6809 7.54485 3.4899H16.4559C18.738 3.6909 20.3681 5.0399 20.8423 7.1299C20.9342 7.4949 20.9836 8.6689 20.9964 9.2569H3.00336Z"
+                                                fill="currentColor" />
+                                             <path
+                                                d="M8.30486 6.59C8.73955 6.59 9.06556 6.261 9.06556 5.82V2.771C9.06556 2.33 8.73955 2 8.30486 2C7.87017 2 7.54416 2.33 7.54416 2.771V5.82C7.54416 6.261 7.87017 6.59 8.30486 6.59Z"
+                                                fill="currentColor" />
+                                             <path
+                                                d="M15.6949 6.59C16.1197 6.59 16.4556 6.261 16.4556 5.82V2.771C16.4556 2.33 16.1197 2 15.6949 2C15.2603 2 14.9342 2.33 14.9342 2.771V5.82C14.9342 6.261 15.2603 6.59 15.6949 6.59Z"
+                                                fill="currentColor" />
+                                          </svg>
+                                       </i>
+                                       <span class="item-name">Appointments Checkin</span>
+                                    </a>
+                                 </li>
+                                 <li class="nav-item">
+                                    <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 "
+                                       aria-current="page" href="./receptionist-book-on-behalf.html">
+                                       <i class="icon" data-bs-toggle="tooltip" title="Appointments"
+                                          data-bs-placement="right">
+                                          <svg width="20" class="icon-20" viewBox="0 0 24 24" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                             <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M3 16.87V9.25699H21V16.931C21 20.07 19.0241 22 15.8628 22H8.12733C4.99561 22 3 20.03 3 16.87ZM7.95938 14.41C7.50494 14.431 7.12953 14.07 7.10977 13.611C7.10977 13.151 7.46542 12.771 7.91987 12.75C8.36443 12.75 8.72997 13.101 8.73985 13.55C8.7596 14.011 8.40395 14.391 7.95938 14.41ZM12.0198 14.41C11.5653 14.431 11.1899 14.07 11.1701 13.611C11.1701 13.151 11.5258 12.771 11.9802 12.75C12.4248 12.75 12.7903 13.101 12.8002 13.55C12.82 14.011 12.4643 14.391 12.0198 14.41ZM16.0505 18.09C15.596 18.08 15.2305 17.7 15.2305 17.24C15.2206 16.78 15.5862 16.401 16.0406 16.391H16.0505C16.5148 16.391 16.8902 16.771 16.8902 17.24C16.8902 17.71 16.5148 18.09 16.0505 18.09ZM11.1701 17.24C11.1899 17.7 11.5653 18.061 12.0198 18.04C12.4643 18.021 12.82 17.641 12.8002 17.181C12.7903 16.731 12.4248 16.38 11.9802 16.38C11.5258 16.401 11.1701 16.78 11.1701 17.24ZM7.09989 17.24C7.11965 17.7 7.49506 18.061 7.94951 18.04C8.39407 18.021 8.74973 17.641 8.72997 17.181C8.72009 16.731 8.35456 16.38 7.90999 16.38C7.45554 16.401 7.09989 16.78 7.09989 17.24ZM15.2404 13.601C15.2404 13.141 15.596 12.771 16.0505 12.761C16.4951 12.761 16.8507 13.12 16.8705 13.561C16.8804 14.021 16.5247 14.401 16.0801 14.41C15.6257 14.42 15.2503 14.07 15.2404 13.611V13.601Z"
+                                                fill="currentColor" />
+                                             <path opacity="0.4"
+                                                d="M3.00336 9.2569C3.0162 8.6699 3.0656 7.5049 3.15846 7.1299C3.63267 5.0209 5.24298 3.6809 7.54485 3.4899H16.4559C18.738 3.6909 20.3681 5.0399 20.8423 7.1299C20.9342 7.4949 20.9836 8.6689 20.9964 9.2569H3.00336Z"
+                                                fill="currentColor" />
+                                             <path
+                                                d="M8.30486 6.59C8.73955 6.59 9.06556 6.261 9.06556 5.82V2.771C9.06556 2.33 8.73955 2 8.30486 2C7.87017 2 7.54416 2.33 7.54416 2.771V5.82C7.54416 6.261 7.87017 6.59 8.30486 6.59Z"
+                                                fill="currentColor" />
+                                             <path
+                                                d="M15.6949 6.59C16.1197 6.59 16.4556 6.261 16.4556 5.82V2.771C16.4556 2.33 16.1197 2 15.6949 2C15.2603 2 14.9342 2.33 14.9342 2.771V5.82C14.9342 6.261 15.2603 6.59 15.6949 6.59Z"
+                                                fill="currentColor" />
+                                          </svg>
+                                       </i>
+                                       <span class="item-name">Book on Behalf</span>
+                                    </a>
+                                 </li>
+                              </ul>
+
                            </li>
                            <li class="nav-item">
-                                        <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0"
-                                            aria-current="page" href="./receptionist-Waitlists.html">
-                                            <i class="icon" data-bs-toggle="tooltip" title="Waitlists"
-                                                data-bs-placement="right">
-                                                <svg width="20" class="icon-20" viewBox="0 0 24 24" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M3 16.87V9.25699H21V16.931C21 20.07 19.0241 22 15.8628 22H8.12733C4.99561 22 3 20.03 3 16.87ZM7.95938 14.41C7.50494 14.431 7.12953 14.07 7.10977 13.611C7.10977 13.151 7.46542 12.771 7.91987 12.75C8.36443 12.75 8.72997 13.101 8.73985 13.55C8.7596 14.011 8.40395 14.391 7.95938 14.41ZM12.0198 14.41C11.5653 14.431 11.1899 14.07 11.1701 13.611C11.1701 13.151 11.5258 12.771 11.9802 12.75C12.4248 12.75 12.7903 13.101 12.8002 13.55C12.82 14.011 12.4643 14.391 12.0198 14.41ZM16.0505 18.09C15.596 18.08 15.2305 17.7 15.2305 17.24C15.2206 16.78 15.5862 16.401 16.0406 16.391H16.0505C16.5148 16.391 16.8902 16.771 16.8902 17.24C16.8902 17.71 16.5148 18.09 16.0505 18.09ZM11.1701 17.24C11.1899 17.7 11.5653 18.061 12.0198 18.04C12.4643 18.021 12.82 17.641 12.8002 17.181C12.7903 16.731 12.4248 16.38 11.9802 16.38C11.5258 16.401 11.1701 16.78 11.1701 17.24ZM7.09989 17.24C7.11965 17.7 7.49506 18.061 7.94951 18.04C8.39407 18.021 8.74973 17.641 8.72997 17.181C8.72009 16.731 8.35456 16.38 7.90999 16.38C7.45554 16.401 7.09989 16.78 7.09989 17.24ZM15.2404 13.601C15.2404 13.141 15.596 12.771 16.0505 12.761C16.4951 12.761 16.8507 13.12 16.8705 13.561C16.8804 14.021 16.5247 14.401 16.0801 14.41C15.6257 14.42 15.2503 14.07 15.2404 13.611V13.601Z"
-                                                        fill="currentColor" />
-                                                    <path opacity="0.4"
-                                                        d="M3.00336 9.2569C3.0162 8.6699 3.0656 7.5049 3.15846 7.1299C3.63267 5.0209 5.24298 3.6809 7.54485 3.4899H16.4559C18.738 3.6909 20.3681 5.0399 20.8423 7.1299C20.9342 7.4949 20.9836 8.6689 20.9964 9.2569H3.00336Z"
-                                                        fill="currentColor" />
-                                                    <path
-                                                        d="M8.30486 6.59C8.73955 6.59 9.06556 6.261 9.06556 5.82V2.771C9.06556 2.33 8.73955 2 8.30486 2C7.87017 2 7.54416 2.33 7.54416 2.771V5.82C7.54416 6.261 7.87017 6.59 8.30486 6.59Z"
-                                                        fill="currentColor" />
-                                                    <path
-                                                        d="M15.6949 6.59C16.1197 6.59 16.4556 6.261 16.4556 5.82V2.771C16.4556 2.33 16.1197 2 15.6949 2C15.2603 2 14.9342 2.33 14.9342 2.771V5.82C14.9342 6.261 15.2603 6.59 15.6949 6.59Z"
-                                                        fill="currentColor" />
-                                                </svg>
-                                            </i>
-                                            <span class="item-name">Waitlists</span>
-                                        </a>
-                                    </li>
-                            <!-- <li class="nav-item">
+                              <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0" aria-current="page"
+                                 href="./receptionist-Waitlists.html">
+                                 <i class="icon" data-bs-toggle="tooltip" title="Waitlists" data-bs-placement="right">
+                                    <svg class="icon-22" width="22" viewBox="0 0 24 24" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg">
+                                       <path opacity="0.4"
+                                          d="M18.8088 9.021C18.3573 9.021 17.7592 9.011 17.0146 9.011C15.1987 9.011 13.7055 7.508 13.7055 5.675V2.459C13.7055 2.206 13.5036 2 13.253 2H7.96363C5.49517 2 3.5 4.026 3.5 6.509V17.284C3.5 19.889 5.59022 22 8.16958 22H16.0463C18.5058 22 20.5 19.987 20.5 17.502V9.471C20.5 9.217 20.299 9.012 20.0475 9.013C19.6247 9.016 19.1177 9.021 18.8088 9.021Z"
+                                          fill="currentColor"></path>
+                                       <path opacity="0.4"
+                                          d="M16.0842 2.56737C15.7852 2.25637 15.2632 2.47037 15.2632 2.90137V5.53837C15.2632 6.64437 16.1742 7.55437 17.2802 7.55437C17.9772 7.56237 18.9452 7.56437 19.7672 7.56237C20.1882 7.56137 20.4022 7.05837 20.1102 6.75437C19.0552 5.65737 17.1662 3.69137 16.0842 2.56737Z"
+                                          fill="currentColor"></path>
+                                       <path fill-rule="evenodd" clip-rule="evenodd"
+                                          d="M8.97398 11.3877H12.359C12.77 11.3877 13.104 11.0547 13.104 10.6437C13.104 10.2327 12.77 9.89868 12.359 9.89868H8.97398C8.56298 9.89868 8.22998 10.2327 8.22998 10.6437C8.22998 11.0547 8.56298 11.3877 8.97398 11.3877ZM8.97408 16.3819H14.4181C14.8291 16.3819 15.1631 16.0489 15.1631 15.6379C15.1631 15.2269 14.8291 14.8929 14.4181 14.8929H8.97408C8.56308 14.8929 8.23008 15.2269 8.23008 15.6379C8.23008 16.0489 8.56308 16.3819 8.97408 16.3819Z"
+                                          fill="currentColor"></path>
+                                    </svg>
+                                 </i>
+                                 <span class="item-name">Waitlists</span>
+                              </a>
+                           </li>
+                           <!-- <li class="nav-item">
                               <a class="nav-link menu-arrow justify-content-start" data-bs-toggle="collapse"
                                  href="#allPatitentPages" role="button" aria-expanded="false"
                                  aria-controls="allPatitentPages">
@@ -727,7 +827,7 @@
                            data-bs-toggle="dropdown" aria-expanded="false">
                            <div class="icon-40">
                               <span class="btn-inner d-inline-block position-relative">
-                                 <img src="./assets/images/avatars/12.png"
+                                 <img id="userImg" src="./assets/images/avatars/12.png"
                                     class="img-fluid rounded-circle object-fit-cover" alt="icon">
                                  <span
                                     class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white"></span>
@@ -929,12 +1029,14 @@
                         </div>
                         <div class="col-md-3">
                            <div class="form-group">
-                              <input type="date" class="form-control " id="startDate" placeholder="Start Date (mm/dd/yyyy)...">
+                              <input type="date" class="form-control " id="startDate"
+                                 placeholder="Start Date (yyyy-mm-dd)...">
                            </div>
                         </div>
                         <div class="col-md-3">
                            <div class="form-group">
-                              <input type="date" class="form-control " id="endDate" placeholder="End Date (mm/dd/yyyy)...">
+                              <input type="date" class="form-control " id="endDate"
+                                 placeholder="End Date (yyyy-mm-dd)...">
                            </div>
                         </div>
                         <div class="col-md-3">
@@ -954,6 +1056,7 @@
                         <table class="table checkin-table">
                            <thead>
                               <tr>
+                                 <th>No.</th>
                                  <th>Patient Name</th>
                                  <th>Doctor Name</th>
                                  <th>Appointment Time</th>
@@ -1604,7 +1707,6 @@
    <div class="modal fade setting-modal" id="setting-modal">
       <div class="modal-dialog modal-dialog-centered modal-lg">
          <div class="modal-content rounded-0 p-sm-5 p-4">
-
             <!-- Modal Header -->
             <div class="modal-header p-0 pb-3 mb-3 border-bottom">
                <h3 class="modal-title">Settings</h3>
@@ -1629,7 +1731,6 @@
                   </svg>
                </a>
             </div>
-
             <!-- Modal body -->
             <div class="modal-body p-0">
                <!-- Nav tabs -->
@@ -1681,93 +1782,105 @@
                      </a>
                   </li>
                </ul>
-
                <!-- Tab panes -->
                <div class="tab-content mt-4">
                   <div class="tab-pane fade show active" id="setting-content-1">
-                     <form>
+                     <form id="updateProfileForm" enctype="multipart/form-data">
                         <div
                            class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
                            <div class="d-flex align-items-center gap-3">
                               <div class="flex-shrink-0 d-inline-block position-relative">
-                                 <img src="./assets/images/user/amie-steward.png" alt="img-fluid">
+                                 <img id="profileImg" src="./assets/images/user/user-1.jpg" alt="img-fluid">
                                  <span
                                     class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white me-1 mb-1"></span>
                               </div>
                               <div class="content">
-                                 <h4 class="mb-2">Amine Steward</h4>
+                                 <h4 class="mb-2" id="fullNameDisplay">Loading...</h4>
                                  <p class="m-0">Upload A New Image.</p>
+                                 <input type="file" id="profileImgInput" name="img" accept="image/*"
+                                    class="form-control mt-2">
+                                 <div id="img-error" class="error-message"></div>
                               </div>
                            </div>
-
-                           <button type="button" class="btn btn-primary">
+                           <button type="submit" class="btn btn-primary" id="saveChangesBtn" disabled>
                               <span class="btn-inner">
                                  <span class="text d-inline-block align-middle">Save Changes</span>
-                                 <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                       fill="none">
-                                       <path
-                                          d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                          fill="currentColor"></path>
+                                 <span id="loadingSpinner" class="icon d-inline-block align-middle ms-1 ps-2"
+                                    style="display: none;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                       stroke-linejoin="round" class="spinner">
+                                       <circle cx="12" cy="12" r="10"></circle>
                                     </svg>
                                  </span>
-                              </span></button>
-                        </div>
-                        <div class="row mt-5">
-                           <div class="col-md-6">
-                              <input type="text" class="form-control" placeholder="Your First Name *">
-                           </div>
-                           <div class="col-md-6 mt-md-0 mt-4">
-                              <input type="text" class="form-control" placeholder="Your Last Name *">
-                           </div>
-                           <div class="col-md-6 mt-4">
-                              <input type="email" class="form-control" placeholder="E-mail Address *">
-                           </div>
-                           <div class="col-md-6 mt-4">
-                              <input type="text" class="form-control date_flatpicker flatpickr-input active"
-                                 placeholder="Your DOB*" readonly="readonly">
-                           </div>
-                           <div class="col-md-12 mt-4">
-                              <textarea class="form-control" placeholder="Your Bio"></textarea>
-                           </div>
-                        </div>
-                     </form>
-                  </div>
-                  <div class="tab-pane fade" id="setting-content-2">
-                     <form>
-                        <div
-                           class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
-                           <div class="content">
-                              <h4 class="mb-2">Password</h4>
-                              <p class="m-0">Update Or Change Your Current Password. </p>
-                           </div>
-
-                           <button type="button" class="btn btn-primary">
-                              <span class="btn-inner">
-                                 <span class="text d-inline-block align-middle">Change Password</span>
-                                 <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                       fill="none">
-                                       <path
-                                          d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                          fill="currentColor"></path>
-                                    </svg>
+                                 <span id="saveIcon" class="icon d-inline-block align-middle ms-1 ps-2">
+                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor"></path>
+            </svg> -->
                                  </span>
                               </span>
                            </button>
                         </div>
                         <div class="row mt-5">
                            <div class="col-md-12">
-                              <input type="password" class="form-control" placeholder="Your Current Password *">
+                              <input type="text" class="form-control" id="fullName" name="fullName"
+                                 placeholder="Your Full Name *" required>
+                              <div id="fullName-error" class="error-message"></div>
                            </div>
                            <div class="col-md-12 mt-4">
-                              <input type="password" class="form-control" placeholder="New Password *">
-                              <label class="mt-2">Password Must Be in 8 Character</label>
+                              <input type="text" class="form-control" id="phone" name="phone"
+                                 placeholder="Your Phone Number (e.g., 0123456789) *" required pattern="^0[0-9]{9}$"
+                                 title="Phone number must be 10 digits starting with 0">
+                              <div id="phone-error" class="error-message"></div>
+                           </div>
+                           <div id="form-error" class="error-message mt-2"></div>
+                           <div id="form-success" class="valid-message mt-2"></div>
+                        </div>
+                     </form>
+                  </div>
+                  <div class="tab-pane fade" id="setting-content-2">
+                     <form id="changePasswordForm">
+                        <div
+                           class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
+                           <div class="content">
+                              <h4 class="mb-2">Change Password</h4>
+                              <p class="m-0">Update or change your current password.</p>
+                           </div>
+                           <button type="submit" class="btn btn-primary" id="changePasswordBtn" disabled>
+                              <span class="btn-inner">
+                                 <span class="text d-inline-block align-middle">Change Password</span>
+                                 <span id="passwordLoadingSpinner" class="icon d-inline-block align-middle ms-1 ps-2"
+                                    style="display: none;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                       stroke-linejoin="round" class="spinner">
+                                       <circle cx="12" cy="12" r="10"></circle>
+                                    </svg>
+                                 </span>
+                                 <span id="passwordSaveIcon" class="icon d-inline-block align-middle ms-1 ps-2"></span>
+                              </span>
+                           </button>
+                        </div>
+                        <div class="row mt-5">
+                           <div class="col-md-12">
+                              <input type="password" class="form-control" id="currentPassword" name="currentPassword"
+                                 placeholder="Your Current Password *" required>
+                              <div id="currentPassword-error" class="error-message"></div>
                            </div>
                            <div class="col-md-12 mt-4">
-                              <input type="password" class="form-control" placeholder="Confirm New Password *">
-                              <label class="mt-2">Must Be Same to New Password</label>
+                              <input type="password" class="form-control" id="newPassword" name="newPassword"
+                                 placeholder="New Password *" required minlength="8">
+                              <label class="mt-2 text-muted">Password must be at least 8 characters</label>
+                              <div id="newPassword-error" class="error-message"></div>
                            </div>
+                           <div class="col-md-12 mt-4">
+                              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                 placeholder="Confirm New Password *" required>
+                              <label class="mt-2 text-muted">Must match the new password</label>
+                              <div id="confirmPassword-error" class="error-message"></div>
+                           </div>
+                           <div id="password-form-error" class="error-message mt-2"></div>
+                           <div id="password-form-success" class="valid-message mt-2"></div>
                         </div>
                      </form>
                   </div>
@@ -1842,6 +1955,7 @@
    <script src="./assets/js/plugins/flatpickr.js" defer></script>
 
    <script src="./assets/js/API/main-receptionist-appointments.js"></script>
+   <script src="./assets/js/API/main-receptionist-update-infor.js"></script>
 
    <!-- Slider-tab Script -->
    <script src="./assets/js/plugins/slider-tabs.js"></script>

@@ -176,8 +176,9 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
         `;
 
         // Update container
-        container.innerHTML = patients.length ? patientTable + paginationHTML : '<p>No Patients found.</p>';
-
+        container.innerHTML = patients.length ? patientTable + paginationHTML : '<h3 class="text-center" >No Patients found.</h3>';
+        
+    
         // Attach event listeners for edit buttons
         container.querySelectorAll(".edit-btn1").forEach(button => {
             button.addEventListener("click", function(e) {
@@ -299,6 +300,11 @@ async function handleFormSubmission(event) {
         return;
     }
 
+   const dobValidation = isPastOrPresentDate(dob);
+    if (!dobValidation.isValid) {
+        return;
+    }
+
     if (!phonePatient || !/^[0][1-9]{9}$/.test(phonePatient)) {
         Swal.fire("Error!", "Phone number must be exactly 10 digits and start with 0", "error");
         return;
@@ -362,8 +368,8 @@ async function handleAddPatientSubmission(event) {
         return;
     }
 
-    if (!dob) {
-        Swal.fire("Error!", "Date of birth is required", "error");
+    const dobValidation = isPastOrPresentDate(dob);
+    if (!dobValidation.isValid) {
         return;
     }
 
@@ -431,6 +437,34 @@ function triggerSearch() {
     displayPatient(1, nameValue, dobValue, genderValue);
 }
 
+function isPastOrPresentDate(dateString) {
+    if (!dateString || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+        Swal.fire("Error", "Invalid date format. Please use YYYY-MM-DD.", "error");
+        return { isValid: false, message: "Invalid date format. Please use YYYY-MM-DD." };
+    }
+
+    try {
+        const inputDate = new Date(dateString);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (isNaN(inputDate.getTime())) {
+            Swal.fire("Error", "Invalid date.", "error");
+            return { isValid: false, message: "Invalid date." };
+        }
+
+        if (inputDate > today) {
+            Swal.fire("Error", "Only current or past dates can be selected.", "error");
+            return { isValid: false, message: "Only current or past dates can be selected." };
+        }
+
+        return { isValid: true, message: "Valid date.", date: dateString };
+    } catch (error) {
+        Swal.fire("Error", `Error processing date: ${error.message}`, "error");
+        return { isValid: false, message: `Error processing date: ${error.message}` };
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     displayPatient(1);
 
@@ -477,16 +511,4 @@ document.addEventListener("DOMContentLoaded", () => {
             displayPatient(1, state1.currentNameSearch, state1.currentDob, state1.currentGender);
         });
     }
-
-    document.getElementById('logoutLink').addEventListener('click', function (event) {
-        event.preventDefault();
-        localStorage.removeItem('account'); 
-        window.location.href = '/frontend/login.html'; 
-    });
-
-    document.getElementById('logoutModalLink').addEventListener('click', function (event) {
-        event.preventDefault();
-        localStorage.removeItem('account'); 
-        window.location.href = '/frontend/login.html'; 
-    });
 });

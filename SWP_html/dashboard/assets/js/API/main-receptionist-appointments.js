@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     flatpickr('#startDate', { dateFormat: 'Y-m-d' });
     flatpickr('#endDate', { dateFormat: 'Y-m-d' });
+
     // Event delegation for check-in buttons
     document.getElementById('checkin-table-body').addEventListener('click', function (event) {
         if (event.target.classList.contains('btn-checkin')) {
@@ -43,6 +44,19 @@ document.addEventListener('DOMContentLoaded', function () {
         currentPage++;
         fetchAppointments(currentPage, pageSize);
     });
+
+    // Logout
+    document.getElementById('logoutLink').addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('account');
+        window.location.href = '/frontend/login.html';
+    });
+
+    document.getElementById('logoutModalLink').addEventListener('click', function (event) {
+        event.preventDefault();
+        localStorage.removeItem('account');
+        window.location.href = '/frontend/login.html';
+    });
 });
 
 function fetchAppointments(page, pageSize) {
@@ -56,7 +70,7 @@ function fetchAppointments(page, pageSize) {
 
     const url = `${baseAPI}?page=${page}&pageSize=${pageSize}&searchQuery=${encodeURIComponent(searchQuery || '')}&startDate=${encodeURIComponent(startDate || '')}&endDate=${encodeURIComponent(endDate || '')}&status=${encodeURIComponent(status || '')}&sortBy=appointment_id&sortOrder=ASC`;
 
-    console.log('Fetching URL:', url); // Debug request
+    console.log('Fetching URL:', url);
 
     fetch(url, {
         method: 'GET',
@@ -64,13 +78,15 @@ function fetchAppointments(page, pageSize) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json().then(err => {
+                    throw new Error(err.message || `HTTP error! Status: ${response.status}`);
+                });
             }
             return response.json();
         })
         .then(data => {
             if (data.success) {
-                console.log('Received data:', data); // Debug response
+                console.log('Received data:', data);
                 renderAppointments(data.appointments);
                 updatePagination(data.totalPages, data.currentPage, data.pageSize, data.totalAppointments);
             } else {
@@ -88,19 +104,20 @@ function renderAppointments(appointments) {
     tbody.innerHTML = '';
 
     if (appointments.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No appointments found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No appointments found</td></tr>';
         return;
     }
 
-    console.log('Rendering appointments:', appointments.length); // Debug rendered count
-    appointments.forEach(appt => {
+    console.log('Rendering appointments:', appointments.length);
+    appointments.forEach((appt, index) => {
         if (!appt || !appt.appointmentId) {
-            console.warn('Skipping invalid appointment:', appt); // Debug invalid rows
+            console.warn('Skipping invalid appointment:', appt);
             return;
         }
-        const row = document.createElement('tr');
         const statusClass = getStatusClass(appt.status);
+        const row = document.createElement('tr');
         row.innerHTML = `
+            <td>${index + 1}</td>
             <td>${appt.patientName || '-'}</td>
             <td>${appt.doctorName || '-'}</td>
             <td>${formatDateTime(appt.appointmentDatetime) || '-'}</td>
@@ -123,23 +140,25 @@ function handleCheckIn(appointmentId, button) {
     errorMessage.style.display = 'none';
 
     const account = JSON.parse(localStorage.getItem('account'));
-    const receptionistId = account?.accountStaffId || 1; // Fallback to 1 if not found
+    const accountStaffId = account?.accountStaffId || 1;
 
     fetch(`${baseAPI}/checkin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ appointmentId: Number(appointmentId), receptionistId })
+        body: JSON.stringify({ appointmentId: Number(appointmentId), accountStaffId })
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json().then(err => {
+                    throw new Error(err.message || `HTTP error! Status: ${response.status}`);
+                });
             }
             return response.json();
         })
         .then(data => {
             if (data.success) {
                 alert('Check-in successful!');
-                fetchAppointments(1, 6); // Refresh the table
+                fetchAppointments(1, document.getElementById('itemsPerPage').value); // Refresh the table
             } else {
                 showError(data.message || 'Check-in failed!');
                 button.disabled = false;
@@ -170,6 +189,7 @@ function getStatusClass(status) {
 function formatDateTime(dateTime) {
     if (!dateTime) return '-';
     const date = new Date(dateTime);
+    if (isNaN(date.getTime())) return '-';
     return date.toLocaleString('en-GB', {
         day: '2-digit',
         month: '2-digit',
@@ -203,15 +223,3 @@ function updatePagination(totalPages, currentPage, pageSize, totalAppointments) 
     if (nextPage) nextPage.classList.toggle('disabled', currentPage >= (totalPages || 1));
     document.getElementById('itemsPerPage').value = pageSize;
 }
-
-document.getElementById('logoutLink').addEventListener('click', function (event) {
-    event.preventDefault();
-    localStorage.removeItem('account');
-    window.location.href = '/frontend/login.html';
-});
-
-document.getElementById('logoutModalLink').addEventListener('click', function (event) {
-    event.preventDefault();
-    localStorage.removeItem('account');
-    window.location.href = '/frontend/login.html';
-});

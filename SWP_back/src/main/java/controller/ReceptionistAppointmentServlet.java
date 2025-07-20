@@ -138,15 +138,15 @@ public class ReceptionistAppointmentServlet extends HttpServlet {
             }
 
             JsonObject jsonObject = gson.fromJson(jsonBody.toString(), JsonObject.class);
-            if (!jsonObject.has("appointmentId") || !jsonObject.has("receptionistId")) {
+            if (!jsonObject.has("appointmentId") || !jsonObject.has("accountStaffId")) {
                 sendError(response, HttpServletResponse.SC_BAD_REQUEST,
-                        "MISSING_FIELDS", "appointmentId and receptionistId are required");
+                        "MISSING_FIELDS", "appointmentId and accountStaffId are required");
                 return;
             }
 
             int appointmentId = jsonObject.get("appointmentId").getAsInt();
-            int receptionistId = jsonObject.get("receptionistId").getAsInt();
-
+            int accountStaffId = jsonObject.get("accountStaffId").getAsInt();
+            int receptionistId = receptionistDAO.getReceptionistByAccountStaffId(accountStaffId);
             if (appointmentId <= 0 || receptionistId <= 0) {
                 sendError(response, HttpServletResponse.SC_BAD_REQUEST,
                         "INVALID_IDS", "appointmentId and receptionistId must be positive integers");
@@ -160,7 +160,7 @@ public class ReceptionistAppointmentServlet extends HttpServlet {
             JsonObject responseJson = new JsonObject();
             responseJson.addProperty("success", success);
             responseJson.addProperty("message", success ? "Check-in successful" :
-                    "Check-in failed: appointment may not exist or is not in Pending status");
+                    "Check-in failed: appointment may not exist, not in Pending status, no room assigned, or invalid timestamp format");
             out.print(gson.toJson(responseJson));
         } catch (com.google.gson.JsonSyntaxException e) {
             sendError(response, HttpServletResponse.SC_BAD_REQUEST,
@@ -168,11 +168,12 @@ public class ReceptionistAppointmentServlet extends HttpServlet {
         } catch (Exception e) {
             LOGGER.severe("Error processing POST request: " + e.getMessage());
             sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    "CHECKIN_ERROR", "Failed to process check-in: " + e.getMessage());
+                    "CHECKIN_ERROR", "Failed to process check-in: " + (e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
         } finally {
             out.flush();
         }
     }
+
 
     private void setCORSHeaders(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");

@@ -63,7 +63,7 @@ function createAppointmentRow(appointment, index) {
                    href="#offcanvasEncounterView" aria-controls="offcanvasEncounterView" aria-label="View Appointment"
                    data-appointment='${JSON.stringify(appointment)}'>
                     <span class="text-success">
-                        <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd" 
                                   d="M15.1614 12.0531C15.1614 13.7991 13.7454 15.2141 11.9994 15.2141C10.2534 15.2141 8.83838 13.7991 8.83838 12.0531C8.83838 10.3061 10.2534 8.89111 11.9994 8.89111C13.7454 8.89111 15.1614 10.3061 15.1614 12.0531Z" 
                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -90,7 +90,7 @@ function createAppointmentRow(appointment, index) {
                     </span>
                 </a>
             `;
-        } else if(isPending) {
+        } else if (isPending) {
             return `
                 <a class="d-inline-block pe-2 edit-btn2" data-bs-toggle="offcanvas"
                    href="#offcanvasEncounterEditPending" aria-controls="offcanvasEncounterEditPending" aria-label="Edit Appointment"
@@ -107,7 +107,7 @@ function createAppointmentRow(appointment, index) {
                 </a>
                 <a href="#" class="d-inline-block ps-2 delete-btn" data-id="${appointment.appointmentId}" aria-label="Delete Appointment">
                     <span class="text-danger">
-                        <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="16" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12.4938 6.10107C12.4938 6.10107 12.0866 11.1523 11.8503 13.2801C11.7378 14.2963 11.1101 14.8918 10.0818 14.9106C8.12509 14.9458 6.16609 14.9481 4.21009 14.9068C3.22084 14.8866 2.60359 14.2836 2.49334 13.2853C2.25559 11.1388 1.85059 6.10107 1.85059 6.10107"
                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M13.5312 3.67969H0.812744" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -120,7 +120,7 @@ function createAppointmentRow(appointment, index) {
         } else {
             return `<a class="d-inline-block pe-2" data-bs-toggle="offcanvas">
                     <span class="text-warning">
-                    <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="icon-32" width="15" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path opacity="0.4" d="M4.72251 21.1672C4.70951 21.1672 4.69751 21.1672 4.68351 21.1662C4.36851 21.1502 4.05951 21.0822 3.76551 20.9632C2.31851 20.3752 1.62051 18.7222 2.20751 17.2762L9.52851 4.45025C9.78051 3.99425 10.1625 3.61225 10.6285 3.35425C11.9935 2.59825 13.7195 3.09525 14.4745 4.45925L21.7475 17.1872C21.9095 17.5682 21.9785 17.8782 21.9955 18.1942C22.0345 18.9502 21.7765 19.6752 21.2705 20.2362C20.7645 20.7972 20.0695 21.1282 19.3145 21.1662L4.79451 21.1672H4.72251Z" fill="currentColor"></path>
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1245 10.0208C11.1245 9.53875 11.5175 9.14575 11.9995 9.14575C12.4815 9.14575 12.8745 9.53875 12.8745 10.0208V12.8488C12.8745 13.3318 12.4815 13.7238 11.9995 13.7238C11.5175 13.7238 11.1245 13.3318 11.1245 12.8488V10.0208ZM11.1245 16.2699C11.1245 15.7849 11.5175 15.3899 11.9995 15.3899C12.4815 15.3899 12.8745 15.7799 12.8745 16.2589C12.8745 16.7519 12.4815 17.1449 11.9995 17.1449C11.5175 17.1449 11.1245 16.7519 11.1245 16.2699Z" fill="currentColor"></path>
                     </svg>
@@ -129,14 +129,14 @@ function createAppointmentRow(appointment, index) {
         }
     };
 
-    const renderStatus = () =>{
-        if(isCompleted){
+    const renderStatus = () => {
+        if (isCompleted) {
             return `<span class="badge bg-success-subtle p-2 text-success">Complete</span>`;
-        } else if (isConfirmed){
+        } else if (isConfirmed) {
             return `<span class="badge bg-primary-subtle p-2 text-primary">Confirmed</span>`;
-        }else if(isPending){
+        } else if (isPending) {
             return `<span class="badge bg-warning-subtle p-2 text-warning">Pending</span>`;
-        }else{
+        } else {
             return `<span class="badge bg-danger-subtle p-2 text-danger">Cancelled</span>`;
         }
     };
@@ -271,11 +271,12 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
         `;
 
         // Update container
-        container.innerHTML = appointments.length ? appointmentTable + paginationHTML : '<p>No Appointments found.</p>';
+        container.innerHTML = appointments.length ? appointmentTable + paginationHTML : '<h3 class="text-center">No Appointments found.</h3>';
+
 
         // Attach event listeners for edit buttons
         container.querySelectorAll(".edit-btn1").forEach(button => {
-            button.addEventListener("click", function(e) {
+            button.addEventListener("click", function (e) {
                 const appointment = JSON.parse(this.dataset.appointment);
                 populateEditFormConfirm(appointment);
             });
@@ -283,7 +284,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
 
         // Attach event listeners for edit buttons
         container.querySelectorAll(".edit-btn2").forEach(button => {
-            button.addEventListener("click", function(e) {
+            button.addEventListener("click", function (e) {
                 const appointment = JSON.parse(this.dataset.appointment);
                 populateEditForm(appointment);
             });
@@ -292,42 +293,95 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
 
         // Attach event listeners for edit buttons
         container.querySelectorAll(".view-btn").forEach(button => {
-            button.addEventListener("click", function(e) {
+            button.addEventListener("click", function (e) {
                 const appointment = JSON.parse(this.dataset.appointment);
                 populateView(appointment);
             });
         });
 
-        // Attach event listeners for delete buttons
+        // Inside displayAppointment, replace the existing .delete-btn event listener
         container.querySelectorAll(".delete-btn").forEach(button => {
-            button.addEventListener("click", async function(e) {
+            button.addEventListener("click", async function (e) {
                 e.preventDefault();
                 const appointmentId = this.dataset.id;
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You want to delete this appointment?",
-                    icon: "error",
+
+                if (!appointmentId || isNaN(appointmentId) || appointmentId <= 0) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Invalid appointment ID.",
+                        icon: "error",
+                        confirmButtonColor: "#c03221"
+                    });
+                    console.error("Invalid or missing dataset.id on cancel button:", appointmentId);
+                    return;
+                }
+
+                Swal.showLoading();
+
+                const { value: note } = await Swal.fire({
+                    title: "Confirm Cancellation?",
+                    text: `Are you sure you want to cancel appointment ? Please enter a cancellation reason (optional):`,
+                    icon: "warning",
+                    input: "text",
+                    inputPlaceholder: "Enter cancellation reason (optional)",
                     showCancelButton: true,
                     backdrop: `rgba(60,60,60,0.8)`,
-                    confirmButtonText: "Yes, delete it!",
-                    confirmButtonColor: "#c03221"
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        try {
-                            const response = await fetch(`${baseAPI.split('?')[0]}/${appointmentId}`, {
-                                method: "DELETE"
-                            });
-                            if (!response.ok) {
-                                throw new Error("Failed to delete appointment");
-                            }
-                            Swal.fire("Deleted!", "Your appointment has been deleted.", "success");
-                            await displayAppointment(state.currentPage, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
-                        } catch (error) {
-                            Swal.fire("Error!", "Could not delete appointment. Please try again.", "error");
-                            console.error("Delete error:", error);
+                    confirmButtonText: "Yes, cancel it!",
+                    cancelButtonText: "No",
+                    confirmButtonColor: "#c03221",
+                    cancelButtonColor: "#6c757d",
+                    inputValidator: (value) => {
+                        if (value && value.length > 200) {
+                            return "Cancellation reason must not exceed 200 characters.";
                         }
                     }
                 });
+
+                if (note !== undefined) {
+                    try {
+                        const url = `${API_BASE_URL}/patientCancel/${appointmentId}`;
+                        const response = await fetch(url, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ note: note || "No content" })
+                        });
+
+                        Swal.close();
+
+                        if (response.status === 204) {
+                            Swal.fire({
+                                title: "Cancelled!",
+                                text: `Appointment has been cancelled.`,
+                                icon: "success",
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+
+                            await displayAppointment(state.currentPage, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
+                        } else if (response.status === 404) {
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.error || "Appointment not found");
+                        } else if (response.status === 400) {
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.error || "Invalid request");
+                        } else {
+                            throw new Error(`Unexpected server response: ${response.status}`);
+                        }
+                    } catch (error) {
+                        Swal.close(); 
+                        Swal.fire({
+                            title: "Error!",
+                            text: `Could not cancel appointment: ${error.message}`,
+                            icon: "error",
+                            confirmButtonColor: "#c03221"
+                        });
+                        console.error(`Error cancelling appointment ID ${appointmentId}:`, error);
+                    }
+                } else {
+                    Swal.close();
+                }
             });
         });
 
@@ -807,7 +861,7 @@ function populateEditForm(appointment) {
         doctorSelect.disabled = false;
 
         fetchDoctorWorkingDates(appointment.doctor?.ID).then(() => {
-    
+
             if (appointment.appointmentDateTime) {
                 const date = new Date(appointment.appointmentDateTime);
                 if (isNaN(date)) {
@@ -818,10 +872,10 @@ function populateEditForm(appointment) {
                 yearSelect.value = date.getFullYear();
                 monthSelect.value = date.getMonth();
 
-                
+
                 generateCalendar(yearSelect.value, monthSelect.value);
 
-                
+
                 const day = String(date.getDate());
                 const selectedMonth = String(date.getMonth() + 1).padStart(2, '0');
                 selectedDate.value = `${date.getFullYear()}-${selectedMonth}-${day}`;
@@ -980,11 +1034,11 @@ editPendingAppointmentForm.addEventListener('submit', async (e) => {
     const formData = {
         appointmentId: appointmentIdInput.value,
         doctorId: doctorSelect.value,
-        patientId: patientIdInput?.value || null, 
-        date: selectedDate.value, 
-        time: selectedTime.value, 
-        shift: shiftSelect?.value || null, 
-        receptionistId: receptionistIdInput?.value || null, 
+        patientId: patientIdInput?.value || null,
+        date: selectedDate.value,
+        time: selectedTime.value,
+        shift: shiftSelect?.value || null,
+        receptionistId: receptionistIdInput?.value || null,
         note: noteInput.value || null
     };
 

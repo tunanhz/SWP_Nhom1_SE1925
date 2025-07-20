@@ -80,7 +80,7 @@ public class QRCodeServlet extends HttpServlet {
         bankIdByCode.put("Eximbank", "970431");
         bankIdByCode.put("msb", "970426");
         bankIdByCode.put("cake", "546034");
-        
+
         String bankId = bankIdByCode.get(bankCode);
         if (bankId == null) {
             throw new IllegalArgumentException("Mã ngân hàng không hợp lệ: " + bankCode);
@@ -156,6 +156,13 @@ public class QRCodeServlet extends HttpServlet {
         BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeContent, BarcodeFormat.QR_CODE, width, height, hints);
 
         MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        setCORSHeaders(response);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     private void setCORSHeaders(HttpServletResponse response) {

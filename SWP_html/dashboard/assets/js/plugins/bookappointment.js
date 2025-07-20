@@ -1,5 +1,3 @@
-"use strict";
-
 const accountString = localStorage.getItem("account");
 const account = JSON.parse(accountString);
 const baseAPI = `http://localhost:8080/SWP_back_war_exploded/api/patientAppointment/?accountPatientId=${account.accountPatientId}`;
