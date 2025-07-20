@@ -45,8 +45,9 @@ public class AdminBusinessServlet extends HttpServlet {
                 String maxPriceStr = request.getParameter("maxPrice");
                 int page = parseIntParam(request, "page", 1);
                 int pageSize = parseIntParam(request, "pageSize", 10);
-                String sortBy = request.getParameter("sortBy") != null ? request.getParameter("sortBy") : "service_id";
-                String sortOrder = request.getParameter("sortOrder") != null ? request.getParameter("sortOrder") : "ASC";
+                String sortBy = request.getParameter("sortBy");
+                String sortOrder = request.getParameter("sortOrder");
+                String statusFilter = request.getParameter("statusFilter");
 
                 if (page < 1 || pageSize <= 0 || pageSize > 100) {
                     sendError(response, HttpServletResponse.SC_BAD_REQUEST, "INVALID_PAGE",
@@ -63,8 +64,10 @@ public class AdminBusinessServlet extends HttpServlet {
                     return;
                 }
 
-                ArrayList<ListOfMedicalService> services = adminBusinessDAO.getServices(searchQuery, minPrice, maxPrice, page, pageSize, sortBy, sortOrder);
-                int totalServices = adminBusinessDAO.countServices(searchQuery, minPrice, maxPrice);
+                long startTime = System.currentTimeMillis();
+                ArrayList<ListOfMedicalService> services = adminBusinessDAO.getServices(searchQuery, minPrice, maxPrice, page, pageSize, sortBy, sortOrder, statusFilter);
+                int totalServices = adminBusinessDAO.countServices(searchQuery, minPrice, maxPrice, statusFilter);
+                LOGGER.info("Servlet processing time: " + (System.currentTimeMillis() - startTime) + "ms");
 
                 JsonObject responseJson = new JsonObject();
                 responseJson.add("services", gson.toJsonTree(services));
@@ -75,13 +78,27 @@ public class AdminBusinessServlet extends HttpServlet {
                 responseJson.addProperty("success", true);
                 responseJson.addProperty("message", services.isEmpty() ? "No services found" : "Services fetched successfully");
                 out.print(gson.toJson(responseJson));
+            } else if (pathInfo != null && pathInfo.matches("/services/\\d+")) {
+                int serviceId = Integer.parseInt(pathInfo.substring(1).split("/")[1]);
+                long startTime = System.currentTimeMillis();
+                ListOfMedicalService service = adminBusinessDAO.getServiceById(serviceId);
+                LOGGER.info("Get service by ID time: " + (System.currentTimeMillis() - startTime) + "ms");
+
+                if (service != null) {
+                    JsonObject responseJson = new JsonObject();
+                    responseJson.add("service", gson.toJsonTree(service));
+                    responseJson.addProperty("success", true);
+                    out.print(gson.toJson(responseJson));
+                } else {
+                    sendError(response, HttpServletResponse.SC_NOT_FOUND, "NOT_FOUND", "Service not found");
+                }
             } else {
                 sendError(response, HttpServletResponse.SC_NOT_FOUND, "INVALID_ENDPOINT", "Endpoint not found");
             }
         } catch (NumberFormatException e) {
             LOGGER.severe("Number format error: " + e.getMessage());
             sendError(response, HttpServletResponse.SC_BAD_REQUEST, "INVALID_INPUT",
-                    "Invalid number format for price parameters");
+                    "Invalid number format for price or service ID parameters");
         } catch (Exception e) {
             LOGGER.severe("Error processing GET request: " + e.getMessage());
             sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SERVER_ERROR",
@@ -117,7 +134,9 @@ public class AdminBusinessServlet extends HttpServlet {
                 service.setDescription(jsonObject.get("description").getAsString());
                 service.setPrice(jsonObject.get("price").getAsDouble());
                 service.setStatus("Enable");
+                long startTime = System.currentTimeMillis();
                 boolean success = adminBusinessDAO.createService(service);
+                LOGGER.info("Create service time: " + (System.currentTimeMillis() - startTime) + "ms");
 
                 JsonObject responseJson = new JsonObject();
                 responseJson.addProperty("success", success);
@@ -130,7 +149,9 @@ public class AdminBusinessServlet extends HttpServlet {
                 service.setDescription(jsonObject.get("description").getAsString());
                 service.setPrice(jsonObject.get("price").getAsDouble());
                 service.setStatus(jsonObject.has("status") ? jsonObject.get("status").getAsString() : "Enable");
+                long startTime = System.currentTimeMillis();
                 boolean success = adminBusinessDAO.updateService(service);
+                LOGGER.info("Update service time: " + (System.currentTimeMillis() - startTime) + "ms");
 
                 JsonObject responseJson = new JsonObject();
                 responseJson.addProperty("success", success);
@@ -138,7 +159,9 @@ public class AdminBusinessServlet extends HttpServlet {
                 out.print(gson.toJson(responseJson));
             } else if ("/services/delete".equals(pathInfo)) {
                 int serviceId = jsonObject.get("serviceId").getAsInt();
+                long startTime = System.currentTimeMillis();
                 boolean success = adminBusinessDAO.deleteService(serviceId);
+                LOGGER.info("Delete service time: " + (System.currentTimeMillis() - startTime) + "ms");
 
                 JsonObject responseJson = new JsonObject();
                 responseJson.addProperty("success", success);
