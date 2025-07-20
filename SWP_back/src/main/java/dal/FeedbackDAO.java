@@ -13,7 +13,7 @@ public class FeedbackDAO {
 
     // Kiểm tra tính hợp lệ của bệnh nhân
     public boolean checkEligibility(int patientId) {
-        String sql = "SELECT COUNT(*) AS completed_appointments FROM Appointment a JOIN Feedback f ON f.patient_id = a.appointment_id WHERE f.patient_id = ? AND status = 'Completed'";
+        String sql = "SELECT COUNT(*) AS completed_appointments FROM Appointment a JOIN Feedback f ON f.patient_id = a.patient_id WHERE f.patient_id = ? AND status = 'Completed'";
         try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
             stmt.setInt(1, patientId);
             ResultSet rs = stmt.executeQuery();
