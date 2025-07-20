@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             window.location.href = '/dashboard/patient-dashboard.html';
                             break;
                         case 'pharmacist':
-                            window.location.href = "./front-end/index.html";
+                            window.location.href = "/dashboard/pharmacist-dashboard.html";
                             break;
                         default:
                             redirectUrl = '/accessDenied';

@@ -1,76 +1,4 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Kho Thuốc</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen p-6">
-    <div class="container mx-auto max-w-6xl">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-gray-800">Quản lý Kho Thuốc</h1>
-            <div>
-                <a href="dashboard.html" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2">Quay lại</a>
-                <a href="#" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Đăng xuất</a>
-            </div>
-        </div>
-
-        <!-- Filter and Search -->
-        <div class="bg-white shadow-md rounded-lg p-4 mb-6 flex space-x-4 items-center">
-            <input type="text" id="search" placeholder="Tìm kiếm theo tên thuốc..." class="border rounded p-2 w-1/3">
-            <select id="usageFilter" class="border rounded p-2 w-1/4">
-                <option value="">Tất cả công dụng</option>
-            </select>
-            <select id="warehouseFilter" class="border rounded p-2 w-1/4">
-                <option value="">Tất cả kho</option>
-            </select>
-            <button id="refreshBtn" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Làm mới</button>
-        </div>
-
-        <!-- Medicine List Table -->
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <h2 class="text-xl font-semibold mb-4">Danh sách Thuốc</h2>
-            <div id="message" class="mb-4 hidden"></div>
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tên</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Số lượng</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Giá</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Công dụng</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Ngày sản xuất</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Ngày hết hạn</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Kho</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody id="medicineTable" class="divide-y divide-gray-200"></tbody>
-            </table>
-            <!-- Pagination Controls -->
-            <div class="flex justify-between items-center mt-4">
-                <button id="prevPageBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50" disabled>Trang trước</button>
-                <span id="pageInfo" class="text-gray-600">Trang 1</span>
-                <button id="nextPageBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">Trang sau</button>
-            </div>
-        </div>
-
-        <!-- Update Quantity Form -->
-        <div class="bg-white shadow-md rounded-lg p-6 mt-8">
-            <h2 class="text-xl font-semibold mb-4">Cập nhật số lượng</h2>
-            <div class="flex space-x-4">
-                <input type="number" id="updateId" placeholder="ID thuốc" class="border rounded p-2">
-                <input type="number" id="newQuantity" placeholder="Số lượng mới" class="border rounded p-2">
-                <button id="updateBtn" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Cập nhật</button>
-            </div>
-            <p id="updateMsg" class="mt-4 text-sm"></p>
-        </div>
-    </div>
-
-    <script>
-        const API_URL = 'http://localhost:8080/SWP_back_war_exploded/api/medicines';
+const API_URL = 'http://localhost:8080/SWP_back_war_exploded/api/medicines';
         let currentPage = 1;
         const pageSize = 10;
         let totalPages = 1;
@@ -252,6 +180,3 @@
             loadUsageFilter();
             loadMedicines("", "", "", currentPage);
         };
-    </script>
-</body>
-</html>

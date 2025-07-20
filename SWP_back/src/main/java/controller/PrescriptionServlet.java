@@ -36,6 +36,7 @@ public class PrescriptionServlet extends HttpServlet {
     }
 
 
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setCORSHeaders(resp);
         resp.setContentType("application/json");
@@ -47,13 +48,19 @@ public class PrescriptionServlet extends HttpServlet {
                 // Get paginated prescriptions
                 int page = getIntParameter(req, "page", 1);
                 int size = getIntParameter(req, "size", 10);
+                String status = req.getParameter("status"); // Lấy tham số status
 
                 if (page < 1 || size < 1) {
                     sendError(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid page or size parameters");
                     return;
                 }
 
-                ArrayList<PrescriptionDTO> prescriptions = dao.getAllPrescriptions(page, size);
+                ArrayList<PrescriptionDTO> prescriptions;
+                if (status != null && !status.isEmpty()) {
+                    prescriptions = dao.getAllPrescriptions(page, size, status); // Gọi DAO với status
+                } else {
+                    prescriptions = dao.getAllPrescriptions(page, size); // Gọi DAO không có status
+                }
 
                 out.println(gson.toJson(prescriptions));
                 resp.setStatus(HttpServletResponse.SC_OK);
