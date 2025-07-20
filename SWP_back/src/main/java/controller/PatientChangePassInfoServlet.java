@@ -141,7 +141,7 @@ public class PatientChangePassInfoServlet extends HttpServlet {
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Database error during password change: {0}", e.getMessage());
             sendError(response, HttpServletResponse.SC_BAD_REQUEST, "DATABASE_ERROR",
-                    "Database error: " + e.getMessage());
+                    "Error: " + e.getMessage());
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error during password change: {0}", e.getMessage());
             sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SERVER_ERROR",

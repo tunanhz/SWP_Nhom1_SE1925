@@ -1,5 +1,6 @@
 package dal;
 
+import dto.PatientPaymentDTO;
 import dto.ReceptionistCheckInDTO;
 import dto.ReceptionistDTO;
 import dto.WaitlistDTO;
@@ -34,24 +35,24 @@ public class ReceptionistDAO {
         ArrayList<ReceptionistCheckInDTO> appointments = new ArrayList<>();
 
         String sql = """
-            SELECT 
-                a.appointment_id,
-                COALESCE(p.full_name, 'Unknown Patient') AS patient_name,
-                COALESCE(d.full_name, 'Unknown Doctor') AS doctor_name,
-                a.appointment_datetime,
-                a.shift,
-                a.status,
-                a.note
-            FROM 
-                Appointment a
-                LEFT JOIN Patient p ON a.patient_id = p.patient_id
-                LEFT JOIN Doctor d ON a.doctor_id = d.doctor_id
-            WHERE 
-                a.status IN ('Pending', 'Confirmed', 'Completed', 'Cancelled')
-                AND (? IS NULL OR COALESCE(p.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? OR COALESCE(d.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-                AND ( (? IS NULL AND ? IS NULL) OR a.appointment_datetime BETWEEN ? AND ? )
-                AND (? IS NULL OR UPPER(a.status) = UPPER(?))
-            """;
+                SELECT 
+                    a.appointment_id,
+                    COALESCE(p.full_name, 'Unknown Patient') AS patient_name,
+                    COALESCE(d.full_name, 'Unknown Doctor') AS doctor_name,
+                    a.appointment_datetime,
+                    a.shift,
+                    a.status,
+                    a.note
+                FROM 
+                    Appointment a
+                    LEFT JOIN Patient p ON a.patient_id = p.patient_id
+                    LEFT JOIN Doctor d ON a.doctor_id = d.doctor_id
+                WHERE 
+                    a.status IN ('Pending', 'Confirmed', 'Completed', 'Cancelled')
+                    AND (? IS NULL OR COALESCE(p.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? OR COALESCE(d.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                    AND ( (? IS NULL AND ? IS NULL) OR a.appointment_datetime BETWEEN ? AND ? )
+                    AND (? IS NULL OR UPPER(a.status) = UPPER(?))
+                """;
 
         String sortColumn;
         switch (sortBy != null ? sortBy.toLowerCase() : "appointment_id") {
@@ -151,17 +152,17 @@ public class ReceptionistDAO {
 
     public int countAppointmentsByStatus(String searchQuery, String startDate, String endDate, String status) {
         String sql = """
-            SELECT COUNT(*) AS total
-            FROM 
-                Appointment a
-                LEFT JOIN Patient p ON a.patient_id = p.patient_id
-                LEFT JOIN Doctor d ON a.doctor_id = d.doctor_id
-            WHERE 
-                a.status IN ('Pending', 'Confirmed', 'Completed', 'Cancelled')
-                AND ( ? IS NULL OR COALESCE(p.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? OR COALESCE(d.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-                AND ( (? IS NULL AND ? IS NULL) OR a.appointment_datetime BETWEEN ? AND ? )
-                AND (? IS NULL OR UPPER(a.status) = UPPER(?))
-        """;
+                    SELECT COUNT(*) AS total
+                    FROM 
+                        Appointment a
+                        LEFT JOIN Patient p ON a.patient_id = p.patient_id
+                        LEFT JOIN Doctor d ON a.doctor_id = d.doctor_id
+                    WHERE 
+                        a.status IN ('Pending', 'Confirmed', 'Completed', 'Cancelled')
+                        AND ( ? IS NULL OR COALESCE(p.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? OR COALESCE(d.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                        AND ( (? IS NULL AND ? IS NULL) OR a.appointment_datetime BETWEEN ? AND ? )
+                        AND (? IS NULL OR UPPER(a.status) = UPPER(?))
+                """;
 
         try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -222,19 +223,19 @@ public class ReceptionistDAO {
 
     private Appointment getAppointmentById(int appointmentId, Connection conn) throws SQLException {
         String sql = """
-            SELECT 
-                a.appointment_id,
-                a.patient_id,
-                a.doctor_id,
-                a.appointment_datetime,
-                a.shift,
-                a.status,
-                a.note
-            FROM 
-                Appointment a
-            WHERE 
-                a.appointment_id = ?
-        """;
+                    SELECT 
+                        a.appointment_id,
+                        a.patient_id,
+                        a.doctor_id,
+                        a.appointment_datetime,
+                        a.shift,
+                        a.status,
+                        a.note
+                    FROM 
+                        Appointment a
+                    WHERE 
+                        a.appointment_id = ?
+                """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, appointmentId);
@@ -263,19 +264,19 @@ public class ReceptionistDAO {
     // Get room_id from DoctorSchedule based on doctor_id, appointment_datetime, and shift
     private Integer getRoomIdForAppointment(int doctorId, Date appointmentDatetime, String shift, Connection conn) throws SQLException {
         String sql = """
-            SELECT 
-                ds.room_id
-            FROM 
-                Appointment a
-                INNER JOIN Doctor d ON a.doctor_id = d.doctor_id
-                INNER JOIN DoctorSchedule ds ON a.doctor_id = ds.doctor_id
-                    AND CAST(a.appointment_datetime AS DATE) = ds.working_date
-                    AND a.shift = ds.shift
-            WHERE 
-                a.doctor_id = ?
-                AND a.appointment_datetime = ?
-                AND a.shift = ?
-        """;
+                    SELECT 
+                        ds.room_id
+                    FROM 
+                        Appointment a
+                        INNER JOIN Doctor d ON a.doctor_id = d.doctor_id
+                        INNER JOIN DoctorSchedule ds ON a.doctor_id = ds.doctor_id
+                            AND CAST(a.appointment_datetime AS DATE) = ds.working_date
+                            AND a.shift = ds.shift
+                    WHERE 
+                        a.doctor_id = ?
+                        AND a.appointment_datetime = ?
+                        AND a.shift = ?
+                """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, doctorId);
@@ -300,10 +301,10 @@ public class ReceptionistDAO {
     // Add record to Waitlist
     private boolean addToWaitlist(Waitlist waitlist, Connection conn) throws SQLException {
         String sql = """
-            INSERT INTO [dbo].[Waitlist]
-                ([patient_id], [doctor_id], [room_id], [registered_at], [estimated_time], [visittype], [status])
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """;
+                    INSERT INTO [dbo].[Waitlist]
+                        ([patient_id], [doctor_id], [room_id], [registered_at], [estimated_time], [visittype], [status])
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, waitlist.getPatientId());
@@ -336,10 +337,10 @@ public class ReceptionistDAO {
 
             // Step 1: Update Appointment status to Confirmed
             String updateSql = """
-                UPDATE Appointment
-                SET status = 'Confirmed', receptionist_id = ?
-                WHERE appointment_id = ? AND status = 'Pending'
-            """;
+                        UPDATE Appointment
+                        SET status = 'Confirmed', receptionist_id = ?
+                        WHERE appointment_id = ? AND status = 'Pending'
+                    """;
             try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
                 updateStmt.setInt(1, receptionistId);
                 updateStmt.setInt(2, appointmentId);
@@ -453,29 +454,29 @@ public class ReceptionistDAO {
         ArrayList<WaitlistDTO> waitlistEntries = new ArrayList<>();
 
         String sql = """
-            SELECT 
-                w.waitlist_id,
-                COALESCE(p.full_name, 'Unknown Patient') AS patient_name,
-                COALESCE(d.full_name, 'Unknown Doctor') AS doctor_name,
-                r.room_name,
-                w.registered_at,
-                w.estimated_time,
-                w.visittype,
-                w.status
-            FROM 
-                Waitlist w
-                INNER JOIN Patient p ON w.patient_id = p.patient_id
-                INNER JOIN Doctor d ON w.doctor_id = d.doctor_id
-                LEFT JOIN Room r ON w.room_id = r.room_id
-            WHERE 
-                w.status IN ('Waiting', 'InProgress', 'Skipped', 'Completed')
-                AND (? IS NULL OR COALESCE(p.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? 
-                    OR COALESCE(d.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?
-                    OR COALESCE(r.room_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-                AND ( (? IS NULL AND ? IS NULL) OR w.registered_at BETWEEN ? AND ? )
-                AND (? IS NULL OR UPPER(w.status) = UPPER(?))
-                AND (? IS NULL OR UPPER(w.visittype) = UPPER(?))
-            """;
+                SELECT 
+                    w.waitlist_id,
+                    COALESCE(p.full_name, 'Unknown Patient') AS patient_name,
+                    COALESCE(d.full_name, 'Unknown Doctor') AS doctor_name,
+                    r.room_name,
+                    w.registered_at,
+                    w.estimated_time,
+                    w.visittype,
+                    w.status
+                FROM 
+                    Waitlist w
+                    INNER JOIN Patient p ON w.patient_id = p.patient_id
+                    INNER JOIN Doctor d ON w.doctor_id = d.doctor_id
+                    LEFT JOIN Room r ON w.room_id = r.room_id
+                WHERE 
+                    w.status IN ('Waiting', 'InProgress', 'Skipped', 'Completed')
+                    AND (? IS NULL OR COALESCE(p.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? 
+                        OR COALESCE(d.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?
+                        OR COALESCE(r.room_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                    AND ( (? IS NULL AND ? IS NULL) OR w.registered_at BETWEEN ? AND ? )
+                    AND (? IS NULL OR UPPER(w.status) = UPPER(?))
+                    AND (? IS NULL OR UPPER(w.visittype) = UPPER(?))
+                """;
 
         String sortColumn;
         switch (sortBy != null ? sortBy.toLowerCase() : "waitlist_id") {
@@ -560,21 +561,21 @@ public class ReceptionistDAO {
 
     public int countWaitlistEntries(String searchQuery, String startDate, String endDate, String status, String visitType) {
         String sql = """
-            SELECT COUNT(*) AS total
-            FROM 
-                Waitlist w
-                INNER JOIN Patient p ON w.patient_id = p.patient_id
-                INNER JOIN Doctor d ON w.doctor_id = d.doctor_id
-                LEFT JOIN Room r ON w.room_id = r.room_id
-            WHERE 
-                w.status IN ('Waiting', 'InProgress', 'Skipped', 'Completed')
-                AND ( ? IS NULL OR COALESCE(p.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? 
-                    OR COALESCE(d.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?
-                    OR COALESCE(r.room_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-                AND ( (? IS NULL AND ? IS NULL) OR w.registered_at BETWEEN ? AND ? )
-                AND (? IS NULL OR UPPER(w.status) = UPPER(?))
-                AND (? IS NULL OR UPPER(w.visittype) = UPPER(?))
-        """;
+                    SELECT COUNT(*) AS total
+                    FROM 
+                        Waitlist w
+                        INNER JOIN Patient p ON w.patient_id = p.patient_id
+                        INNER JOIN Doctor d ON w.doctor_id = d.doctor_id
+                        LEFT JOIN Room r ON w.room_id = r.room_id
+                    WHERE 
+                        w.status IN ('Waiting', 'InProgress', 'Skipped', 'Completed')
+                        AND ( ? IS NULL OR COALESCE(p.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? 
+                            OR COALESCE(d.full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?
+                            OR COALESCE(r.room_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                        AND ( (? IS NULL AND ? IS NULL) OR w.registered_at BETWEEN ? AND ? )
+                        AND (? IS NULL OR UPPER(w.status) = UPPER(?))
+                        AND (? IS NULL OR UPPER(w.visittype) = UPPER(?))
+                """;
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -615,10 +616,10 @@ public class ReceptionistDAO {
 
     public boolean updateEstimatedTime(int waitlistId, String estimatedTimeStr) {
         String sql = """
-            UPDATE Waitlist
-            SET estimated_time = ?
-            WHERE waitlist_id = ? AND visittype = 'Initial' AND status = 'Waiting';
-        """;
+                    UPDATE Waitlist
+                    SET estimated_time = ?
+                    WHERE waitlist_id = ? AND visittype = 'Initial' AND status = 'Waiting';
+                """;
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -644,22 +645,22 @@ public class ReceptionistDAO {
         ArrayList<Patient> patients = new ArrayList<>();
 
         String sql = """
-            SELECT 
-                patient_id,
-                full_name,
-                dob,
-                gender,
-                phone,
-                address
-            FROM 
-                Patient
-            WHERE 
-                status = 'Enable'
-                AND (? IS NULL OR COALESCE(full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? 
-                    OR COALESCE(phone, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-                AND (? IS NULL OR CONVERT(VARCHAR, dob, 23) LIKE ? + '%')
-                AND (? IS NULL OR gender = ?)
-            """;
+                SELECT 
+                    patient_id,
+                    full_name,
+                    dob,
+                    gender,
+                    phone,
+                    address
+                FROM 
+                    Patient
+                WHERE 
+                    status = 'Enable'
+                    AND (? IS NULL OR COALESCE(full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? 
+                        OR COALESCE(phone, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                    AND (? IS NULL OR CONVERT(VARCHAR, dob, 23) LIKE ? + '%')
+                    AND (? IS NULL OR gender = ?)
+                """;
 
         String sortColumn;
         switch (sortBy != null ? sortBy.toLowerCase() : "patient_id") {
@@ -736,16 +737,16 @@ public class ReceptionistDAO {
 
     public int countPatients(String searchQuery, String dob, String gender) {
         String sql = """
-            SELECT COUNT(*) AS total
-            FROM 
-                Patient
-            WHERE 
-                status = 'Enable'
-                AND (? IS NULL OR COALESCE(full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? 
-                    OR COALESCE(phone, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
-                AND (? IS NULL OR CONVERT(VARCHAR, dob, 23) LIKE ? + '%')
-                AND (? IS NULL OR gender = ?)
-        """;
+                    SELECT COUNT(*) AS total
+                    FROM 
+                        Patient
+                    WHERE 
+                        status = 'Enable'
+                        AND (? IS NULL OR COALESCE(full_name, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ? 
+                            OR COALESCE(phone, '') COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                        AND (? IS NULL OR CONVERT(VARCHAR, dob, 23) LIKE ? + '%')
+                        AND (? IS NULL OR gender = ?)
+                """;
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -781,9 +782,9 @@ public class ReceptionistDAO {
 
     public boolean addPatient(Patient patient) throws SQLException {
         String sql = """
-            INSERT INTO [dbo].[Patient] ([full_name], [dob], [gender], [phone], [address], [status])
-            VALUES (?, ?, ?, ?, ?, ?)
-        """;
+                    INSERT INTO [dbo].[Patient] ([full_name], [dob], [gender], [phone], [address], [status])
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """;
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -838,8 +839,16 @@ public class ReceptionistDAO {
                     ", Error Code: " + e.getErrorCode());
             throw e;
         } finally {
-            if (stmt != null) try { stmt.close(); } catch (SQLException e) { LOGGER.severe("Error closing statement: " + e.getMessage()); }
-            if (conn != null) try { conn.close(); } catch (SQLException e) { LOGGER.severe("Error closing connection: " + e.getMessage()); }
+            if (stmt != null) try {
+                stmt.close();
+            } catch (SQLException e) {
+                LOGGER.severe("Error closing statement: " + e.getMessage());
+            }
+            if (conn != null) try {
+                conn.close();
+            } catch (SQLException e) {
+                LOGGER.severe("Error closing connection: " + e.getMessage());
+            }
         }
         return createdAppointment;
     }
@@ -887,29 +896,29 @@ public class ReceptionistDAO {
     public List<WaitlistDTO> getTop3WaitlistEntriesPerDay(String startDate, String endDate) {
         List<WaitlistDTO> waitlistEntries = new ArrayList<>();
         String sql = """
-            SELECT DISTINCT waitlist_date, waitlist_id, patient_name, doctor_name, room_name, estimated_time, visittype, status
-            FROM (
-                SELECT 
-                    CONVERT(date, w.estimated_time) AS waitlist_date,
-                    w.waitlist_id AS waitlist_id,
-                    COALESCE(p.full_name, 'Unknown Patient') AS patient_name,
-                    COALESCE(d.full_name, 'Unknown Doctor') AS doctor_name,
-                    COALESCE(r.room_name, 'Unknown Room') AS room_name,
-                    w.estimated_time,
-                    w.visittype,
-                    w.status,
-                    ROW_NUMBER() OVER (PARTITION BY CONVERT(date, w.estimated_time) ORDER BY w.estimated_time) AS row_num
-                FROM Waitlist w
-                INNER JOIN Patient p ON w.patient_id = p.patient_id
-                INNER JOIN Doctor d ON w.doctor_id = d.doctor_id
-                LEFT JOIN Room r ON w.room_id = r.room_id
-                WHERE w.estimated_time BETWEEN ? AND ?
-                AND w.visittype = 'Initial'
-                AND w.status = 'Waiting'
-            ) AS ranked_waitlist
-            WHERE row_num <= 3
-            ORDER BY waitlist_date, estimated_time
-        """;
+                    SELECT DISTINCT waitlist_date, waitlist_id, patient_name, doctor_name, room_name, estimated_time, visittype, status
+                    FROM (
+                        SELECT 
+                            CONVERT(date, w.estimated_time) AS waitlist_date,
+                            w.waitlist_id AS waitlist_id,
+                            COALESCE(p.full_name, 'Unknown Patient') AS patient_name,
+                            COALESCE(d.full_name, 'Unknown Doctor') AS doctor_name,
+                            COALESCE(r.room_name, 'Unknown Room') AS room_name,
+                            w.estimated_time,
+                            w.visittype,
+                            w.status,
+                            ROW_NUMBER() OVER (PARTITION BY CONVERT(date, w.estimated_time) ORDER BY w.estimated_time) AS row_num
+                        FROM Waitlist w
+                        INNER JOIN Patient p ON w.patient_id = p.patient_id
+                        INNER JOIN Doctor d ON w.doctor_id = d.doctor_id
+                        LEFT JOIN Room r ON w.room_id = r.room_id
+                        WHERE w.estimated_time BETWEEN ? AND ?
+                        AND w.visittype = 'Initial'
+                        AND w.status = 'Waiting'
+                    ) AS ranked_waitlist
+                    WHERE row_num <= 3
+                    ORDER BY waitlist_date, estimated_time
+                """;
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -940,11 +949,11 @@ public class ReceptionistDAO {
 
     public ReceptionistDTO getReceptionistInfoByAccountStaffId(int accountStaffId) throws SQLException {
         String sql = """
-            SELECT r.receptionist_id, r.full_name, r.phone, r.account_staff_id, a.img
-            FROM [dbo].[Receptionist] r
-            JOIN [dbo].[AccountStaff] a ON r.account_staff_id = a.account_staff_id
-            WHERE r.account_staff_id = ? AND a.status = 'Enable'
-        """;
+                    SELECT r.receptionist_id, r.full_name, r.phone, r.account_staff_id, a.img
+                    FROM [dbo].[Receptionist] r
+                    JOIN [dbo].[AccountStaff] a ON r.account_staff_id = a.account_staff_id
+                    WHERE r.account_staff_id = ? AND a.status = 'Enable'
+                """;
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -980,10 +989,10 @@ public class ReceptionistDAO {
 
             if (fullName != null || phone != null) {
                 String updateReceptionistSql = """
-                UPDATE [dbo].[Receptionist]
-                SET full_name = COALESCE(?, full_name), phone = COALESCE(?, phone)
-                WHERE receptionist_id = ?
-            """;
+                            UPDATE [dbo].[Receptionist]
+                            SET full_name = COALESCE(?, full_name), phone = COALESCE(?, phone)
+                            WHERE receptionist_id = ?
+                        """;
                 try (PreparedStatement stmt = conn.prepareStatement(updateReceptionistSql)) {
                     stmt.setString(1, fullName);
                     stmt.setString(2, phone);
@@ -999,10 +1008,10 @@ public class ReceptionistDAO {
 
             if (imgUrl != null) {
                 String updateAccountStaffSql = """
-                UPDATE [dbo].[AccountStaff]
-                SET img = ?
-                WHERE account_staff_id = (SELECT account_staff_id FROM [dbo].[Receptionist] WHERE receptionist_id = ?)
-            """;
+                            UPDATE [dbo].[AccountStaff]
+                            SET img = ?
+                            WHERE account_staff_id = (SELECT account_staff_id FROM [dbo].[Receptionist] WHERE receptionist_id = ?)
+                        """;
                 try (PreparedStatement stmt = conn.prepareStatement(updateAccountStaffSql)) {
                     stmt.setString(1, imgUrl);
                     stmt.setInt(2, receptionistId);
@@ -1048,8 +1057,8 @@ public class ReceptionistDAO {
 
             // Kiểm tra mật khẩu hiện tại
             String checkPasswordSql = """
-                SELECT password FROM [dbo].[AccountStaff] WHERE account_staff_id = ?
-            """;
+                        SELECT password FROM [dbo].[AccountStaff] WHERE account_staff_id = ?
+                    """;
             try (PreparedStatement checkStmt = conn.prepareStatement(checkPasswordSql)) {
                 checkStmt.setInt(1, accountStaffId);
                 try (ResultSet rs = checkStmt.executeQuery()) {
@@ -1066,10 +1075,10 @@ public class ReceptionistDAO {
             }
 
             String updatePasswordSql = """
-                UPDATE [dbo].[AccountStaff]
-                SET password = ?
-                WHERE account_staff_id = ?
-            """;
+                        UPDATE [dbo].[AccountStaff]
+                        SET password = ?
+                        WHERE account_staff_id = ?
+                    """;
             try (PreparedStatement stmt = conn.prepareStatement(updatePasswordSql)) {
                 stmt.setString(1, newPassword);
                 stmt.setInt(2, accountStaffId);
@@ -1107,6 +1116,151 @@ public class ReceptionistDAO {
     }
 
 
+    //Payment - Patient
+    public ArrayList<PatientPaymentDTO> getPatientInvoices(String fromDate, String toDate, String status, int page, int pageSize) {
+        String sql = """
+                SELECT 
+                    i.invoice_id,
+                    p.patient_id,
+                    CONVERT(DATE, i.issue_date) as issue_date,
+                    i.status AS invoice_status,
+                    COALESCE(sv.service_details, 'Không có dịch vụ') AS service_details,
+                    COALESCE(sv.total_service_cost, 0) AS total_service_cost,
+                    COALESCE(med.medicine_details, 'Không có thuốc') AS medicine_details,
+                    COALESCE(med.total_medicine_cost, 0) AS total_medicine_cost,
+                    (COALESCE(sv.total_service_cost, 0) + COALESCE(med.total_medicine_cost, 0)) AS total_cost
+                FROM Invoice i
+                JOIN Patient p ON i.patient_id = p.patient_id
+                LEFT JOIN (
+                    SELECT 
+                        si.invoice_id,
+                        STRING_AGG(
+                            CONCAT(lms.name, ': ', si.quantity, ' x ', si.unit_price, ' = ', si.total_price), 
+                            '; '
+                        ) AS service_details,
+                        SUM(si.total_price) AS total_service_cost
+                    FROM ServiceInvoice si
+                    JOIN ServiceOrderItem soi ON si.service_order_item_id = soi.service_order_item_id
+                    JOIN ListOfMedicalService lms ON soi.service_id = lms.service_id
+                    GROUP BY si.invoice_id
+                ) sv ON i.invoice_id = sv.invoice_id
+                LEFT JOIN (
+                    SELECT 
+                        pi.invoice_id,
+                        STRING_AGG(
+                            CONCAT(m.name, ': ', med.quantity, ' x ', m.price, ' = ', (med.quantity * m.price)), 
+                            '; '
+                        ) AS medicine_details,
+                        SUM(med.quantity * m.price) AS total_medicine_cost
+                    FROM PrescriptionInvoice pi    
+                    JOIN Medicines med ON pi.prescription_invoice_id = med.prescription_invoice_id
+                    JOIN Medicine m ON med.medicine_id = m.medicine_id
+                    GROUP BY pi.invoice_id
+                ) med ON i.invoice_id = med.invoice_id
+                WHERE
+                    p.status = 'Enable'
+                    AND (? IS NULL OR i.issue_date >= ?)
+                    AND (? IS NULL OR i.issue_date <= ?)
+                    AND (? IS NULL OR i.status COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                ORDER BY i.issue_date desc
+                OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
+                """;
+
+        ArrayList<PatientPaymentDTO> invoices = new ArrayList<>();
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set date range parameters
+            stmt.setString(1, fromDate);
+            stmt.setString(2, fromDate);
+            stmt.setString(3, toDate);
+            stmt.setString(4, toDate);
+
+            // Set status parameters
+            stmt.setString(5, status);
+            stmt.setString(6, status != null ? "%" + status + "%" : null);
+
+            // Set pagination parameters
+            int offset = (page - 1) * pageSize;
+            stmt.setInt(7, offset);
+            stmt.setInt(8, pageSize);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    PatientPaymentDTO invoice = new PatientPaymentDTO();
+                    invoice.setInvoiceId(rs.getInt("invoice_id"));
+                    invoice.setPatientId(rs.getInt("patient_id"));
+                    invoice.setIssueDate(rs.getString("issue_date"));
+                    invoice.setInvoiceStatus(rs.getString("invoice_status"));
+                    invoice.setServiceDetail(rs.getString("service_details"));
+                    invoice.setTotalServiceCost(rs.getString("total_service_cost"));
+                    invoice.setMedicineDetail(rs.getString("medicine_details"));
+                    invoice.setTotalMedicineCost(rs.getString("total_medicine_cost"));
+                    invoice.setInvoiceTotalAmount(rs.getString("total_cost"));
+                    invoice.includePatient();
+                    invoices.add(invoice);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return invoices;
+    }
+
+    public int getTotalInvoices(String fromDate, String toDate, String status) {
+        String sql = """
+                SELECT COUNT(*)
+                FROM Invoice i
+                JOIN Patient p ON i.patient_id = p.patient_id
+                WHERE
+                    p.status = 'Enable'
+                    AND (? IS NULL OR i.issue_date >= ?)
+                    AND (? IS NULL OR i.issue_date <= ?)
+                    AND (? IS NULL OR i.status COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set date range parameters
+            stmt.setString(1, fromDate);
+            stmt.setString(2, fromDate);
+            stmt.setString(3, toDate);
+            stmt.setString(4, toDate);
+
+            // Set status parameters
+            stmt.setString(5, status);
+            stmt.setString(6, status != null ? "%" + status + "%" : null);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Consider logging the error properly or throwing a custom exception
+        }
+        return 0;
+    }
+
+    public boolean updateInvoice(int invoiceId) {
+        String sql = """
+                UPDATE [dbo].[Invoice]
+                SET [status] = 'Paid'
+                WHERE invoice_id = ?
+                """;
+        try {
+            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            stmt.setInt(1, invoiceId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static void main(String[] args) {
         ReceptionistDAO dao = new ReceptionistDAO();
         String startDate = "2025-06-01T00:00:00"; // Start of the range
@@ -1127,6 +1281,9 @@ public class ReceptionistDAO {
         }
         int totalWaitlistCount = dao.countWaitlistEntries(null, startDate, endDate, null, null);
         System.out.println("Total waitlist count: " + totalWaitlistCount);
+        ArrayList<PatientPaymentDTO> a = dao.getPatientInvoices(null, null, null, 1, 50);
+        System.out.println(a.size());
+
     }
 
 }
