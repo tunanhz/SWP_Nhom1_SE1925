@@ -4,15 +4,17 @@ public class ListOfMedicalService {
     private String name;
     private String description;
     private double price;
+    private String status;
 
     public ListOfMedicalService() {
     }
 
-    public ListOfMedicalService(int serviceId, String name, String description, double price) {
+    public ListOfMedicalService(int serviceId, String name, String description, double price, String status) {
         this.serviceId = serviceId;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.status = status;
     }
 
     public int getServiceId() {
@@ -45,5 +47,24 @@ public class ListOfMedicalService {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "ListOfMedicalService{" +
+                "serviceId=" + serviceId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", status='" + status + '\'' +
+                '}';
     }
 }
