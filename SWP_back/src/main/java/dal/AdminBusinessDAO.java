@@ -14,57 +14,71 @@ public class AdminBusinessDAO {
     }
 
     public ArrayList<ListOfMedicalService> getServices(String searchQuery, Double minPrice, Double maxPrice,
-                                                       int page, int pageSize, String sortBy, String sortOrder) {
+                                                       int page, int pageSize, String sortBy, String sortOrder, String statusFilter) {
         ArrayList<ListOfMedicalService> services = new ArrayList<>();
-        String baseSql = """
-            SELECT service_id, name, description, price, status
-            FROM ListOfMedicalService
-            WHERE status = 'Enable'
-            AND (? IS NULL OR name LIKE ? OR description LIKE ?)
-            AND (? IS NULL OR price >= ?)
-            AND (? IS NULL OR price <= ?)
-            ORDER BY 
-                CASE 
-                    WHEN ? = 'service_id' THEN CAST(service_id AS VARCHAR(10))
-                    WHEN ? = 'name' THEN name
-                    WHEN ? = 'price' THEN CAST(price AS VARCHAR(10))
-                    ELSE CAST(service_id AS VARCHAR(10))
-                END
-            OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
-            """;
+        StringBuilder baseSql = new StringBuilder();
+        baseSql.append("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ");
+        if (sortBy != null && !sortBy.trim().isEmpty()) {
+            baseSql.append("CASE WHEN ? = 'price' THEN price ELSE service_id END ");
+            if (sortOrder != null && sortOrder.equalsIgnoreCase("DESC")) {
+                baseSql.append("DESC");
+            } else {
+                baseSql.append("ASC");
+            }
+        } else {
+            baseSql.append("service_id"); // Mặc định ORDER BY service_id
+        }
+        baseSql.append(") AS RowNum, service_id, name, description, price, status FROM ListOfMedicalService WHERE 1=1 ");
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            baseSql.append("AND (? IS NULL OR name LIKE ? OR description LIKE ?) ");
+        }
+        baseSql.append("AND (? IS NULL OR price >= ?) AND (? IS NULL OR price <= ?) ");
+        if (statusFilter != null && !statusFilter.trim().isEmpty()) {
+            baseSql.append("AND status = ? ");
+        }
+        baseSql.append(") AS Result WHERE RowNum BETWEEN ? AND ?");
 
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = getConnection()) {
             if (conn == null) {
                 throw new SQLException("Database connection is null");
             }
             LOGGER.info("Connection established: " + conn.getMetaData().getURL());
 
-            String sortColumn = sortBy != null && !sortBy.trim().isEmpty() ? sortBy.toLowerCase() : "service_id";
-            LOGGER.info("Using sortColumn: " + sortColumn);
+            String searchParam = searchQuery != null && !searchQuery.trim().isEmpty() ? searchQuery.trim().replaceAll("\\s+", " ") : null;
+            LOGGER.info("Search param: " + searchParam);
 
-            try (PreparedStatement stmt = conn.prepareStatement(baseSql)) {
-                String searchParam = searchQuery != null && !searchQuery.trim().isEmpty() ? searchQuery.trim().replaceAll("\\s+", " ") : null;
-                LOGGER.info("Search param: " + searchParam);
-                stmt.setString(1, searchParam);
-                stmt.setString(2, searchParam != null ? "%" + searchParam + "%" : null);
-                stmt.setString(3, searchParam != null ? "%" + searchParam + "%" : null);
+            try (PreparedStatement stmt = conn.prepareStatement(baseSql.toString())) {
+                int paramIndex = 1;
+                if (sortBy != null && !sortBy.trim().isEmpty()) {
+                    stmt.setString(paramIndex++, sortBy);
+                }
+
+                if (searchParam != null && !searchParam.trim().isEmpty()) {
+                    stmt.setString(paramIndex++, searchParam);
+                    stmt.setString(paramIndex++, "%" + searchParam + "%");
+                    stmt.setString(paramIndex++, "%" + searchParam + "%");
+                }
 
                 LOGGER.info("minPrice: " + minPrice + ", maxPrice: " + maxPrice);
-                stmt.setObject(4, minPrice);
-                stmt.setObject(5, minPrice);
-                stmt.setObject(6, maxPrice);
-                stmt.setObject(7, maxPrice);
+                stmt.setObject(paramIndex++, minPrice);
+                stmt.setObject(paramIndex++, minPrice);
+                stmt.setObject(paramIndex++, maxPrice);
+                stmt.setObject(paramIndex++, maxPrice);
 
-                stmt.setString(8, sortColumn);
-                stmt.setString(9, sortColumn);
-                stmt.setString(10, sortColumn);
+                if (statusFilter != null && !statusFilter.trim().isEmpty()) {
+                    stmt.setString(paramIndex++, statusFilter);
+                }
 
-                int offset = (page - 1) * pageSize;
-                LOGGER.info("Offset: " + offset + ", pageSize: " + pageSize);
-                stmt.setInt(11, offset);
-                stmt.setInt(12, pageSize);
+                int offset = (page - 1) * pageSize + 1;
+                int limit = page * pageSize;
+                stmt.setInt(paramIndex++, offset);
+                stmt.setInt(paramIndex, limit);
 
-                LOGGER.info("Executing query with parameters set");
+                long startTime = System.currentTimeMillis();
+                LOGGER.info("Executing SQL: " + baseSql.toString().replace("?", "{}").formatted(
+                        sortBy, searchParam, searchParam != null ? "%" + searchParam + "%" : null,
+                        searchParam != null ? "%" + searchParam + "%" : null, minPrice, minPrice,
+                        maxPrice, maxPrice, statusFilter, offset, limit));
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         ListOfMedicalService service = new ListOfMedicalService();
@@ -76,39 +90,51 @@ public class AdminBusinessDAO {
                         services.add(service);
                     }
                 }
+                LOGGER.info("Query execution time: " + (System.currentTimeMillis() - startTime) + "ms");
+                LOGGER.info("Fetched " + services.size() + " services");
             }
-            LOGGER.info("Fetched " + services.size() + " services");
         } catch (SQLException e) {
             LOGGER.severe("SQL Error: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode() +
                     ", Cause: " + (e.getCause() != null ? e.getCause().getMessage() : "N/A"));
+            e.printStackTrace();
             throw new RuntimeException("Failed to fetch services", e);
         }
         return services;
     }
 
-    public int countServices(String searchQuery, Double minPrice, Double maxPrice) {
-        String sql = """
-            SELECT COUNT(*) AS total
-            FROM ListOfMedicalService
-            WHERE status = 'Enable'
-            AND (? IS NULL OR name LIKE ? OR description LIKE ?)
-            AND (? IS NULL OR price >= ?)
-            AND (? IS NULL OR price <= ?)
-            """;
+    public int countServices(String searchQuery, Double minPrice, Double maxPrice, String statusFilter) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT COUNT(*) AS total FROM ListOfMedicalService WHERE 1=1 ");
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            sql.append("AND (? IS NULL OR name LIKE ? OR description LIKE ?) ");
+        }
+        sql.append("AND (? IS NULL OR price >= ?) AND (? IS NULL OR price <= ?) ");
+        if (statusFilter != null && !statusFilter.trim().isEmpty()) {
+            sql.append("AND status = ? ");
+        }
 
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
             String searchParam = searchQuery != null && !searchQuery.trim().isEmpty() ? searchQuery.trim().replaceAll("\\s+", " ") : null;
-            stmt.setString(1, searchParam);
-            stmt.setString(2, searchParam != null ? "%" + searchParam + "%" : null);
-            stmt.setString(3, searchParam != null ? "%" + searchParam + "%" : null);
+            if (searchParam != null && !searchParam.trim().isEmpty()) {
+                stmt.setString(paramIndex++, searchParam);
+                stmt.setString(paramIndex++, "%" + searchParam + "%");
+                stmt.setString(paramIndex++, "%" + searchParam + "%");
+            }
 
-            stmt.setObject(4, minPrice);
-            stmt.setObject(5, minPrice);
-            stmt.setObject(6, maxPrice);
-            stmt.setObject(7, maxPrice);
+            stmt.setObject(paramIndex++, minPrice);
+            stmt.setObject(paramIndex++, minPrice);
+            stmt.setObject(paramIndex++, maxPrice);
+            stmt.setObject(paramIndex++, maxPrice);
 
+            if (statusFilter != null && !statusFilter.trim().isEmpty()) {
+                stmt.setString(paramIndex, statusFilter);
+            }
+
+            long startTime = System.currentTimeMillis();
             ResultSet rs = stmt.executeQuery();
+            LOGGER.info("Count query execution time: " + (System.currentTimeMillis() - startTime) + "ms");
             if (rs.next()) {
                 return rs.getInt("total");
             }
@@ -119,7 +145,6 @@ public class AdminBusinessDAO {
         }
     }
 
-    // Check if name already exists (excluding the current service during update)
     private boolean isNameExists(String name, Integer excludeServiceId) {
         String sql = "SELECT COUNT(*) FROM ListOfMedicalService WHERE name = ? AND (? IS NULL OR service_id != ?)";
         try (Connection conn = getConnection();
@@ -141,7 +166,7 @@ public class AdminBusinessDAO {
     public boolean createService(ListOfMedicalService service) {
         if (isNameExists(service.getName(), null)) {
             LOGGER.warning("Duplicate name detected: " + service.getName());
-            return false; // Return false to indicate failure due to duplicate
+            return false;
         }
 
         String sql = "INSERT INTO ListOfMedicalService (name, description, price, status) VALUES (?, ?, ?, ?)";
@@ -160,10 +185,9 @@ public class AdminBusinessDAO {
     }
 
     public boolean updateService(ListOfMedicalService service) {
-        // Check if the new name is already in use by another service
         if (isNameExists(service.getName(), service.getServiceId())) {
             LOGGER.warning("Duplicate name detected: " + service.getName());
-            return false; // Return false to indicate failure due to duplicate
+            return false;
         }
 
         String sql = "UPDATE ListOfMedicalService SET name = ?, description = ?, price = ?, status = ? WHERE service_id = ?";
@@ -193,5 +217,28 @@ public class AdminBusinessDAO {
             LOGGER.severe("Error deleting service: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
             throw new RuntimeException("Failed to delete service", e);
         }
+    }
+
+    public ListOfMedicalService getServiceById(int serviceId) {
+        String sql = "SELECT service_id, name, description, price, status FROM ListOfMedicalService WHERE service_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, serviceId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    ListOfMedicalService service = new ListOfMedicalService();
+                    service.setServiceId(rs.getInt("service_id"));
+                    service.setName(rs.getString("name"));
+                    service.setDescription(rs.getString("description"));
+                    service.setPrice(rs.getDouble("price"));
+                    service.setStatus(rs.getString("status"));
+                    return service;
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error fetching service by ID: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+            throw new RuntimeException("Failed to fetch service by ID", e);
+        }
+        return null;
     }
 }
