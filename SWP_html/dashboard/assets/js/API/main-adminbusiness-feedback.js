@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentPage = 1;
     let pageSize = 10;
 
+    flatpickr('#startDate', { dateFormat: 'Y-m-d' });
+    flatpickr('#endDate', { dateFormat: 'Y-m-d' });
+
     // Initialize feedback list
     fetchFeedback(currentPage, pageSize);
 

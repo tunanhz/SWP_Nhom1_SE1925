@@ -1855,18 +1855,22 @@
             </div>
             <div class="row card container">
                 <div class="content col-md-12">
-                    <h2 class="mb-4 mt-1">Patient Feedback Report</h2>
+                    <h2 class="mb-4 mt-1">Patient Appointment Report</h2>
                     <!--Filler-->
                     <div class="filter-section mb-4 row g-3" id="filterForm">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <label for="searchTerm" class="form-label">From Date</label>
+                                <input type="text" id="searchTerm" class="form-control" placeholder="Search here...">
+                            </div>
+                            <div class="col-md-3">
                                 <label for="startDate" class="form-label">From Date</label>
-                                <input type="date" id="startDate" class="form-control">
+                                <input type="date" id="startDate" class="form-control" placeholder="Start Date">
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="endDate" class="form-label">To Date</label>
-                                <input type="date" id="endDate" class="form-control">
+                                <input type="date" id="endDate" class="form-control" placeholder="End Date">
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="" id="export">
                                 <button class="btn btn-primary" onclick="exportReport('excel')">Export Excel</button>
                                 </div>
@@ -1906,7 +1910,7 @@
                     
                     <!-- Details Section -->
                     <section id="details" class="mt-5">
-                        <h3>Feedback Details All</h3>
+                        <h3>Appointment Details All</h3>
                         <div class="table-responsive">
                             <table class="table border-end border-start align-middle mb-0 rounded">
                                 <thead class="table-dark">
