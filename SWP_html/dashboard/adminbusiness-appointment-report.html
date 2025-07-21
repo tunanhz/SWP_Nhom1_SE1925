@@ -1853,7 +1853,126 @@
                 </svg>
                 <span class="head-title fw-500 mt-1">Report</span>
             </div>
-            
+            <div class="row card container">
+                <div class="content col-md-12">
+                    <h2 class="mb-4 mt-1">Patient Feedback Report</h2>
+                    <!--Filler-->
+                    <div class="filter-section mb-4 row g-3" id="filterForm">
+                            <div class="col-md-4">
+                                <label for="startDate" class="form-label">From Date</label>
+                                <input type="date" id="startDate" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="endDate" class="form-label">To Date</label>
+                                <input type="date" id="endDate" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <div class="" id="export">
+                                <button class="btn btn-primary" onclick="exportReport('excel')">Export Excel</button>
+                                </div>
+                            </div>
+                    </div>
+                    
+                    <!-- Overview Section -->
+                    <section id="overview">
+                        <h3>Overview</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card p-3 mb-3">
+                                    <h5>Total Appointments</h5>
+                                    <p class="display-6" id="totalAppointments">0</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card p-3 mb-3">
+                                    <h5>Completed Appointments</h5>
+                                    <p class="display-6" id="completedAppointments">0</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card p-3 mb-3">
+                                    <h5>Canceled Appointments</h5>
+                                    <p class="display-6" id="canceledAppointments">0</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card p-3 mb-3">
+                                    <h5>No Show Appointments</h5>
+                                    <p class="display-6" id="noShowAppointments">0</p>
+                                </div>
+                            </div>                           
+                        </div>
+                    </section>
+                    
+                    <!-- Details Section -->
+                    <section id="details" class="mt-5">
+                        <h3>Feedback Details All</h3>
+                        <div class="table-responsive">
+                            <table class="table border-end border-start align-middle mb-0 rounded">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Appointment Id</th>
+                                        <th>Patient Id</th>
+                                        <th>Patient Name</th>
+                                        <th>Appointment DateTime</th>
+                                        <th>Shift</th>
+                                        <th>Cancellation Reason</th>
+                                        <th>Appointment Status</th>
+                                        <th>Doctor Id</th>
+                                        <th>Doctor Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="feedbackTableBody">
+                                    <!-- Dữ liệu sẽ được thêm bằng JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="card-footer pt-0 row">
+                            <div class="d-flex justify-content-start col-md-6 mt-4">
+                                <button class="btn btn-secondary text-white me-3" type="button" id="prevPage">
+                                    <span class="btn-inner">
+                                        <span class="text d-inline-block align-middle">Previous</span>
+                                        <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </button>
+                                <span class="align-self-center me-3" id="pageInfo">Page 1 of 8</span>
+                                <button class="btn btn-primary me-3" type="button" id="nextPage">
+                                    <span class="btn-inner">
+                                        <span class="text d-inline-block align-middle">Next</span>
+                                        <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-center justify-content-md-end mt-4">
+                                <div class="input-group input-group-sm w-auto">
+                                    <label class="input-group-text text-bg-info" for="itemsPerPage">Items per
+                                        page</label>
+                                    <select class="form-select" name="page" id="itemsPerPage">
+                                        <option value="5">5</option>
+                                        <option value="10" selected>10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                        <option id="all_appointment">All</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
         </div>
         <!-- Footer Section Start -->
         <footer class="footer">
