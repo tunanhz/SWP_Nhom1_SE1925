@@ -148,10 +148,10 @@
                                        xmlns="http://www.w3.org/2000/svg">
                                        <path fill-rule="evenodd" clip-rule="evenodd"
                                           d="M3 16.87V9.25699H21V16.931C21 20.07 19.0241 22 15.8628 22H8.12733C4.99561 22 3 20.03 3 16.87ZM7.95938 14.41C7.50494 14.431 7.12953 14.07 7.10977 13.611C7.10977 13.151 7.46542 12.771 7.91987 12.75C8.36443 12.75 8.72997 13.101 8.73985 13.55C8.7596 14.011 8.40395 14.391 7.95938 14.41ZM12.0198 14.41C11.5653 14.431 11.1899 14.07 11.1701 13.611C11.1701 13.151 11.5258 12.771 11.9802 12.75C12.4248 12.75 12.7903 13.101 12.8002 13.55C12.82 14.011 12.4643 14.391 12.0198 14.41ZM16.0505 18.09C15.596 18.08 15.2305 17.7 15.2305 17.24C15.2206 16.78 15.5862 16.401 16.0406 16.391H16.0505C16.5148 16.391 16.8902 16.771 16.8902 17.24C16.8902 17.71 16.5148 18.09 16.0505 18.09ZM11.1701 17.24C11.1899 17.7 11.5653 18.061 12.0198 18.04C12.4643 18.021 12.82 17.641 12.8002 17.181C12.7903 16.731 12.4248 16.38 11.9802 16.38C11.5258 16.401 11.1701 16.78 11.1701 17.24ZM7.09989 17.24C7.11965 17.7 7.49506 18.061 7.94951 18.04C8.39407 18.021 8.74973 17.641 8.72997 17.181C8.72009 16.731 8.35456 16.38 7.90999 16.38C7.45554 16.401 7.09989 16.78 7.09989 17.24ZM15.2404 13.601C15.2404 13.141 15.596 12.771 16.0505 12.761C16.4951 12.761 16.8507 13.12 16.8705 13.561C16.8804 14.021 16.5247 14.401 16.0801 14.41C15.6257 14.42 15.2503 14.07 15.2404 13.611V13.601Z"
-                                          fill="currentColor" />
+                                          fill="currentColor"></path>
                                        <path opacity="0.4"
                                           d="M3.00336 9.2569C3.0162 8.6699 3.0656 7.5049 3.15846 7.1299C3.63267 5.0209 5.24298 3.6809 7.54485 3.4899H16.4559C18.738 3.6909 20.3681 5.0399 20.8423 7.1299C20.9342 7.4949 20.9836 8.6689 20.9964 9.2569H3.00336Z"
-                                          fill="currentColor" />
+                                          fill="currentColor"></path>
                                        <path
                                           d="M8.30486 6.59C8.73955 6.59 9.06556 6.261 9.06556 5.82V2.771C9.06556 2.33 8.73955 2 8.30486 2C7.87017 2 7.54416 2.33 7.54416 2.771V5.82C7.54416 6.261 7.87017 6.59 8.30486 6.59Z"
                                           fill="currentColor" />
@@ -510,7 +510,7 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/01.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0 ">Biker’s Jacket</h6>
+                                          <h6 class="mb-0 ">Biker's Jacket</h6>
                                           <p class="mb-0">$56.00</p>
                                        </div>
                                        <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -598,7 +598,7 @@
                                        <img class="p-1 avatar-40 rounded-pill bg-primary-subtle"
                                           src="./assets/images/shapes/01.png" loading="lazy" />
                                        <div class="ms-3 flex-grow-1 text-start">
-                                          <h6 class="mb-0 ">Biker’s Jacket</h6>
+                                          <h6 class="mb-0 ">Biker's Jacket</h6>
                                           <p class="mb-0">$56.00</p>
                                        </div>
                                        <button type="button" class="btn btn-icon text-danger btn-sm">
@@ -759,8 +759,7 @@
                <h1 class="mt-5">Appointments</h1>
                <span>All your upcoming appointments are here.Check now!</span>
             </div>
-            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-               data-bs-target="#offcanvasAddAppointment" aria-controls="offcanvasAddAppointment">
+            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#addAppointmentModal">
                <span class="btn-inner">
                   <span class="text d-inline-block align-middle">Add
                      Appointment</span>
@@ -775,190 +774,15 @@
             </button>
          </div>
          <div class="row">
-            <div class="modal fade" id="add-appointment" data-bs-keyboard="true" tabindex="-1" aria-hidden="true">
-               <div class="modal-dialog">
+            <div class="modal fade" id="addAppointmentModal" tabindex="-1" aria-hidden="true">
+               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                      <div class="modal-header">
                         <h5 class="modal-title">Add Appointment</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                      </div>
-                     <div class="modal-body">
-                        <form id="add-form" action="javascript:void(0)" method="post">
-                           <div class="d-flex flex-column align-items-start">
-                              <input type="hidden" name="id" />
-                              <input type="hidden" name="appointment_type" />
-                              <div class="w-100" id="v-pills-tabContent">
-                                 <div class="fade active show" id="-3">
-                                    <div class="row g-3 align-items-center form-group">
-                                       <div class="col-2">
-                                          <label for="addtitle" class="col-form-label">Title</label>
-                                       </div>
-                                       <div class="col-10">
-                                          <input type="text" id="addtitle" class="form-control"
-                                             aria-describedby="addtitle" />
-                                       </div>
-                                    </div>
-                                    <div class="row g-3 align-items-center form-group">
-                                       <div class="col-2">
-                                          <label for="addname" class="col-form-label">Doctor
-                                             Name</label>
-                                       </div>
-                                       <div class="col-10">
-                                          <input type="text" id="addname" class="form-control"
-                                             aria-describedby="addname" />
-                                       </div>
-                                    </div>
-                                    <div class="row g-3 align-items-center form-group">
-                                       <div class="col-2">
-                                          <label for="nametitle" class="col-form-label">
-                                             <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M3.09265 9.40427H20.9166" stroke="currentColor"
-                                                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M16.4421 13.3097H16.4514" stroke="currentColor"
-                                                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M12.0046 13.3097H12.0139" stroke="currentColor"
-                                                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M7.5579 13.3097H7.56717" stroke="currentColor"
-                                                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M16.4421 17.1962H16.4514" stroke="currentColor"
-                                                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M12.0046 17.1962H12.0139" stroke="currentColor"
-                                                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M7.5579 17.1962H7.56717" stroke="currentColor"
-                                                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M16.0437 2V5.29078" stroke="currentColor" stroke-width="1.5"
-                                                   stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M7.96552 2V5.29078" stroke="currentColor" stroke-width="1.5"
-                                                   stroke-linecap="round" stroke-linejoin="round" />
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                   d="M16.2383 3.57922H7.77096C4.83427 3.57922 3 5.21516 3 8.22225V17.2719C3 20.3263 4.83427 22 7.77096 22H16.229C19.175 22 21 20.3546 21 17.3475V8.22225C21.0092 5.21516 19.1842 3.57922 16.2383 3.57922Z"
-                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                   stroke-linejoin="round" />
-                                             </svg>
-                                          </label>
-                                       </div>
-                                       <div class="col-5">
-                                          <input type="text" name="start_date" id="nametitle"
-                                             class="form-control date_flatpicker" placeholder="Select Start Date " />
-                                       </div>
-                                       <div class="col-5">
-                                          <input type="text" name="end_date" class="form-control date_flatpicker"
-                                             placeholder="Select End Date " />
-                                       </div>
-                                    </div>
-                                    <div class="row g-3 align-items-center form-group">
-                                       <div class="col-2">
-                                          <label class="col-form-label">
-                                             <svg class="icon-24" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                   d="M21.2498 12.0005C21.2498 17.1095 17.1088 21.2505 11.9998 21.2505C6.8908 21.2505 2.7498 17.1095 2.7498 12.0005C2.7498 6.89149 6.8908 2.75049 11.9998 2.75049C17.1088 2.75049 21.2498 6.89149 21.2498 12.0005Z"
-                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                   stroke-linejoin="round" />
-                                                <path d="M15.4314 14.9429L11.6614 12.6939V7.84689" stroke="currentColor"
-                                                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                             </svg>
-                                          </label>
-                                       </div>
-                                       <div class="col-10 d-flex align-items-center justify-content-center">
-                                          <input type="text" name="start_time" class="form-control time_flatpicker" />
-                                          <span class="mx-2">To</span>
-                                          <input type="text" name="end_time" class="form-control time_flatpicker" />
-                                       </div>
-                                    </div>
-                                    <div class="row g-3 align-items-center form-group">
-                                       <div class="col-2">
-                                          <label class="col-form-label">
-                                             <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M13.7474 20.4429H21" stroke="currentColor" stroke-width="1.5"
-                                                   stroke-linecap="round" stroke-linejoin="round" />
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                   d="M12.78 3.79479C13.5557 2.86779 14.95 2.73186 15.8962 3.49173C15.9485 3.53296 17.6295 4.83879 17.6295 4.83879C18.669 5.46719 18.992 6.80311 18.3494 7.82259C18.3153 7.87718 8.81195 19.7645 8.81195 19.7645C8.49578 20.1589 8.01583 20.3918 7.50291 20.3973L3.86353 20.443L3.04353 16.9723C2.92866 16.4843 3.04353 15.9718 3.3597 15.5773L12.78 3.79479Z"
-                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                   stroke-linejoin="round" />
-                                                <path d="M11.0208 6.00092L16.4731 10.188" stroke="currentColor"
-                                                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                             </svg>
-                                          </label>
-                                       </div>
-                                       <div class="col-10">
-                                          <select name="service" class="form-select choices-multiple-remove-button"
-                                             multiple>
-                                             <option disabled>Select
-                                                Services</option>
-                                             <option value="Anesthetics">Anesthetics</option>
-                                             <option value="Cardiology">Cardiology</option>
-                                             <option value="ENT">ENT</option>
-                                             <option value="Gastroenterology">
-                                                Gastroenterology
-                                             </option>
-                                          </select>
-                                       </div>
-                                    </div>
-                                    <div class="row g-3 align-items-center form-group">
-                                       <div class="col-2">
-                                          <label class="col-form-label">
-                                             <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                   d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341"
-                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                   stroke-linejoin="round"></path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                   d="M8.82812 10.921L16.3011 3.44799C17.2321 2.51799 18.7411 2.51799 19.6721 3.44799L20.8891 4.66499C21.8201 5.59599 21.8201 7.10599 20.8891 8.03599L13.3801 15.545C12.9731 15.952 12.4211 16.181 11.8451 16.181H8.09912L8.19312 12.401C8.20712 11.845 8.43412 11.315 8.82812 10.921Z"
-                                                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                   stroke-linejoin="round"></path>
-                                                <path d="M15.1655 4.60254L19.7315 9.16854" stroke="currentColor"
-                                                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                </path>
-                                             </svg>
-                                          </label>
-                                       </div>
-                                       <div class="col-10">
-                                          <textarea name="description" class="form-control" rows="3"
-                                             placeholder="Description"></textarea>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </form>
-                        <div class="d-flex align-items-center justify-content-center form-check">
-                           <input type="checkbox" class="form-check-input m-0" id="addconfirm2" name="confirm"
-                              value="Bike" />
-                           <label class="form-check-label ms-2" for="addconfirm2">Confirm Information</label>
-                        </div>
-                     </div>
-                     <div class="modal-footer border-0">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                           <span class="btn-inner">
-                              <span class="text d-inline-block align-middle">Discard
-                                 Changes</span>
-                              <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                    fill="none">
-                                    <path
-                                       d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                       fill="currentColor" />
-                                 </svg>
-                              </span>
-                           </span>
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" name="save">
-                           <span class="btn-inner">
-                              <span class="text d-inline-block align-middle">Save</span>
-                              <span class="icon d-inline-block align-middle ms-1 ps-2">
-                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
-                                    fill="none">
-                                    <path
-                                       d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.66734 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z"
-                                       fill="currentColor" />
-                                 </svg>
-                              </span>
-                           </span>
-                        </button>
+                     <div class="modal-body p-0" style="height:80vh;">
+                        <iframe src="addAppointment.html" style="width:100%;height:100%;border:none;"></iframe>
                      </div>
                   </div>
                </div>
