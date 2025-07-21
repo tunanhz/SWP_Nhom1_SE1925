@@ -58,6 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
                          case 'adminbusiness':
                             window.location.href = "/dashboard/index.html";
+                            break;
+                         case 'adminsys':
+                            window.location.href = "/dashboard/adminSystem_dashborad.html";
                             break;    
                         default:
                             redirectUrl = '/accessDenied';
