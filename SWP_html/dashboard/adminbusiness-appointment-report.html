@@ -367,7 +367,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " aria-current="page" href="./receptionis.html">
+                        <a class="nav-link " aria-current="page" href="./receptionist.html">
                             <i class="icon" data-bs-toggle="tooltip" title="Receptionist" data-bs-placement="right">
                                 <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -1858,23 +1858,18 @@
                     <h2 class="mb-4 mt-1">Patient Feedback Report</h2>
                     <!--Filler-->
                     <div class="filter-section mb-4 row g-3" id="filterForm">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label for="startDate" class="form-label">From Date</label>
                                 <input type="date" id="startDate" class="form-control">
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label for="endDate" class="form-label">To Date</label>
                                 <input type="date" id="endDate" class="form-control">
                             </div>
-                            <div class="col-md-3">
-                                <label for="minAvgFeedback" class="form-label">Min Avg Feedback</label>
-                                <input type="number" id="minAvgFeedback" class="form-control" step="0.1" min="1"
-                                    max="5">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="maxAvgFeedback" class="form-label">Max Avg Feedback</label>
-                                <input type="number" id="maxAvgFeedback" class="form-control" step="0.1" min="1"
-                                    max="5">
+                            <div class="col-md-4">
+                                <div class="" id="export">
+                                <button class="btn btn-primary" onclick="exportReport('excel')">Export Excel</button>
+                                </div>
                             </div>
                     </div>
                     
@@ -1884,31 +1879,28 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="card p-3 mb-3">
-                                    <h5>Total Feedback</h5>
-                                    <p class="display-6" id="totalFeedback">0</p>
+                                    <h5>Total Appointments</h5>
+                                    <p class="display-6" id="totalAppointments">0</p>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="card p-3 mb-3">
-                                    <h5>Doctor Average Star</h5>
-                                    <p class="display-6" id="avgDoctorRating">0</p>
+                                    <h5>Completed Appointments</h5>
+                                    <p class="display-6" id="completedAppointments">0</p>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="card p-3 mb-3">
-                                    <h5>Negative Feedback</h5>
-                                    <p class="display-6" id="negativeFeedback">0%</p>
+                                    <h5>Canceled Appointments</h5>
+                                    <p class="display-6" id="canceledAppointments">0</p>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <section id="export">
-                                    <div class="card p-3 mb-3">
-                                        <h5>Export Report</h5>
-                                        <button class="btn btn-primary" onclick="exportReport('excel')">Export
-                                            Excel</button>
-                                    </div>
-                                </section>
-                            </div>
+                                <div class="card p-3 mb-3">
+                                    <h5>No Show Appointments</h5>
+                                    <p class="display-6" id="noShowAppointments">0</p>
+                                </div>
+                            </div>                           
                         </div>
                     </section>
                     
@@ -1973,7 +1965,7 @@
                                         <option value="10" selected>10</option>
                                         <option value="15">15</option>
                                         <option value="20">20</option>
-                                        <option id="all_feedback">All</option>
+                                        <option id="all_appointment">All</option>
                                     </select>
                                 </div>
                             </div>
