@@ -53,7 +53,7 @@
         // Fetch doctors from API and populate the dropdown
         async function loadDoctors() {
             try {
-                const response = await fetch('http://localhost:8080/SWP_back_war_exploded/api/doctors/');
+                const response = await fetch('http://localhost:8080/SWP_back_war_exploded/api/all-doctors');
                 const data = await response.json();
                 const doctorSelect = document.getElementById('doctorId');
 
