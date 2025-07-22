@@ -61,9 +61,38 @@ public class AccountPharmacistDAO {
         }
     }
 
+    public AccountPharmacist getAccountByUsername(String username) {
+        AccountPharmacist account = null;
+        String sql = """
+                SELECT * FROM [dbo].[AccountPharmacist] 
+                WHERE username = ? AND status = 'Enable'
+                """;
+
+        try {
+            PreparedStatement stmt = dbContext.getConnection().prepareStatement(sql);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                account = new AccountPharmacist(
+                        rs.getInt("account_pharmacist_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getBoolean("status"),
+                        rs.getString("img")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching pharmacist account by username: " + e.getMessage(), e);
+        }
+
+        return account;
+    }
     public static void main(String[] args) {
         AccountPharmacistDAO dao = new AccountPharmacistDAO();
-        AccountPharmacist pharmacist = dao.getAccountByUsernameAndPassword("phamthuphuong", "P@ss2024");
+        //AccountPharmacist pharmacist = dao.getAccountByUsernameAndPassword("phamthuphuong", "P@ss2024");
+        AccountPharmacist pharmacist = dao.getAccountByUsername("phamthuphuong");
         System.out.println(pharmacist);
     }
 }

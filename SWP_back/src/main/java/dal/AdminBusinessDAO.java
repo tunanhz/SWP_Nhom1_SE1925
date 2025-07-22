@@ -380,114 +380,314 @@ public class AdminBusinessDAO {
         }
     }
 
-    public boolean createReceptionist(AccountStaff account, Receptionist receptionist) throws SQLException {
-        // Validate email format
-        if (!EMAIL_PATTERN.matcher(account.getEmail()).matches()) {
-            LOGGER.warning("Invalid email format: " + account.getEmail());
-            throw new SQLException("Invalid email format");
+//    public boolean createReceptionist(AccountStaff account, Receptionist receptionist) throws SQLException {
+//        // Validate email format
+//        if (!EMAIL_PATTERN.matcher(account.getEmail()).matches()) {
+//            LOGGER.warning("Invalid email format: " + account.getEmail());
+//            throw new SQLException("Invalid email format");
+//        }
+//        // Validate phone format
+//        if (!PHONE_PATTERN.matcher(receptionist.getPhone()).matches()) {
+//            LOGGER.warning("Invalid phone format: " + receptionist.getPhone());
+//            throw new SQLException("Phone must be 10 digits starting with 0");
+//        }
+//        // Validate username
+//        if (account.getUserName() == null || account.getUserName().length() < 3 || account.getUserName().length() > 50 || !account.getUserName().matches("^[a-zA-Z0-9_]+$")) {
+//            LOGGER.warning("Invalid username format: " + account.getUserName());
+//            throw new SQLException("Username must be 3-50 characters, alphanumeric or underscore only");
+//        }
+//        // Validate password
+//        if (account.getPassWord() == null || account.getPassWord().length() < 6 || account.getPassWord().length() > 50) {
+//            LOGGER.warning("Invalid password format: " + account.getPassWord());
+//            throw new SQLException("Password must be 6-50 characters");
+//        }
+//        // Validate fullName
+//        if (receptionist.getFullName() == null || receptionist.getFullName().length() > 100 || receptionist.getFullName().matches(".*\\s{2,}.*")) {
+//            LOGGER.warning("Invalid full name format: " + receptionist.getFullName());
+//            throw new SQLException("Full name must be 1-100 characters with single spaces");
+//        }
+//        // Check uniqueness of username, email, and phone
+//        if (!isUniqueField("username", account.getUserName(), null)) {
+//            LOGGER.warning("Duplicate username detected: " + account.getUserName());
+//            throw new SQLException("Username already exists");
+//        }
+//        if (!isUniqueField("email", account.getEmail(), null)) {
+//            LOGGER.warning("Duplicate email detected: " + account.getEmail());
+//            throw new SQLException("Email already exists");
+//        }
+//        if (!isUniqueField("phone", receptionist.getPhone(), null)) {
+//            LOGGER.warning("Duplicate phone detected: " + receptionist.getPhone());
+//            throw new SQLException("Phone already exists");
+//        }
+//
+//        Connection conn = null;
+//        PreparedStatement stmtAccount = null;
+//        PreparedStatement stmtReceptionist = null;
+//        ResultSet generatedKeys = null;
+//
+//        try {
+//            conn = getConnection();
+//            if (conn == null) {
+//                throw new SQLException("Database connection is null");
+//            }
+//            conn.setAutoCommit(false);
+//
+//            // Insert into AccountStaff with default image URL
+//            String sqlAccount = "INSERT INTO AccountStaff (username, password, role, email, img, status) " +
+//                    "VALUES (?, ?, 'Receptionist', ?, ?, ?)";
+//            stmtAccount = conn.prepareStatement(sqlAccount, Statement.RETURN_GENERATED_KEYS);
+//            stmtAccount.setString(1, account.getUserName());
+//            stmtAccount.setString(2, account.getPassWord());
+//            stmtAccount.setString(3, account.getEmail());
+//            stmtAccount.setString(4, account.getImg() != null ? account.getImg() : DEFAULT_IMAGE_URL);
+//            stmtAccount.setString(5, account.isStatus() ? "Enable" : "Disable");
+//            int rowsAffected = stmtAccount.executeUpdate();
+//
+//            if (rowsAffected == 0) {
+//                throw new SQLException("Failed to create AccountStaff");
+//            }
+//
+//            // Get generated account_staff_id
+//            generatedKeys = stmtAccount.getGeneratedKeys();
+//            if (generatedKeys.next()) {
+//                int accountStaffId = generatedKeys.getInt(1);
+//                receptionist.setAccountStaffId(accountStaffId);
+//
+//                // Insert into Receptionist
+//                String sqlReceptionist = "INSERT INTO Receptionist (full_name, phone, account_staff_id) " +
+//                        "VALUES (?, ?, ?)";
+//                stmtReceptionist = conn.prepareStatement(sqlReceptionist);
+//                stmtReceptionist.setString(1, receptionist.getFullName());
+//                stmtReceptionist.setString(2, receptionist.getPhone());
+//                stmtReceptionist.setInt(3, accountStaffId);
+//                rowsAffected = stmtReceptionist.executeUpdate();
+//
+//                if (rowsAffected == 0) {
+//                    throw new SQLException("Failed to create Receptionist");
+//                }
+//
+//                conn.commit();
+//                return true;
+//            } else {
+//                throw new SQLException("Failed to retrieve generated account_staff_id");
+//            }
+//        } catch (SQLException e) {
+//            if (conn != null) {
+//                try {
+//                    conn.rollback();
+//                } catch (SQLException rollbackEx) {
+//                    LOGGER.severe("Rollback failed: " + rollbackEx.getMessage());
+//                }
+//            }
+//            LOGGER.severe("Error creating receptionist: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+//            throw e;
+//        } finally {
+//            if (generatedKeys != null) try { generatedKeys.close(); } catch (SQLException e) { /* ignored */ }
+//            if (stmtReceptionist != null) try { stmtReceptionist.close(); } catch (SQLException e) { /* ignored */ }
+//            if (stmtAccount != null) try { stmtAccount.close(); } catch (SQLException e) { /* ignored */ }
+//            if (conn != null) try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) { /* ignored */ }
+//        }
+//    }
+public boolean createReceptionist(AccountStaff account, Receptionist receptionist) throws SQLException {
+    // Validate email format
+    if (!EMAIL_PATTERN.matcher(account.getEmail()).matches()) {
+        LOGGER.warning("Invalid email format: " + account.getEmail());
+        throw new SQLException("Invalid email format");
+    }
+    // Validate phone format
+    if (!PHONE_PATTERN.matcher(receptionist.getPhone()).matches()) {
+        LOGGER.warning("Invalid phone format: " + receptionist.getPhone());
+        throw new SQLException("Phone must be 10 digits starting with 0");
+    }
+    // Validate username
+    if (account.getUserName() == null || account.getUserName().length() < 3 || account.getUserName().length() > 50 || !account.getUserName().matches("^[a-zA-Z0-9_]+$")) {
+        LOGGER.warning("Invalid username format: " + account.getUserName());
+        throw new SQLException("Username must be 3-50 characters, alphanumeric or underscore only");
+    }
+    // Validate fullName
+    if (receptionist.getFullName() == null || receptionist.getFullName().length() > 100 || receptionist.getFullName().matches(".*\\s{2,}.*")) {
+        LOGGER.warning("Invalid full name format: " + receptionist.getFullName());
+        throw new SQLException("Full name must be 1-100 characters with single spaces");
+    }
+    // Check uniqueness of username, email, and phone
+    if (!isUniqueField("username", account.getUserName(), null)) {
+        LOGGER.warning("Duplicate username detected: " + account.getUserName());
+        throw new SQLException("Username already exists");
+    }
+    if (!isUniqueField("email", account.getEmail(), null)) {
+        LOGGER.warning("Duplicate email detected: " + account.getEmail());
+        throw new SQLException("Email already exists");
+    }
+    if (!isUniqueField("phone", receptionist.getPhone(), null)) {
+        LOGGER.warning("Duplicate phone detected: " + receptionist.getPhone());
+        throw new SQLException("Phone already exists");
+    }
+
+    Connection conn = null;
+    PreparedStatement stmtAccount = null;
+    PreparedStatement stmtReceptionist = null;
+    ResultSet generatedKeys = null;
+
+    try {
+        conn = getConnection();
+        if (conn == null) {
+            throw new SQLException("Database connection is null");
         }
-        // Validate phone format
-        if (!PHONE_PATTERN.matcher(receptionist.getPhone()).matches()) {
-            LOGGER.warning("Invalid phone format: " + receptionist.getPhone());
-            throw new SQLException("Phone must be 10 digits starting with 0");
-        }
-        // Validate username
-        if (account.getUserName() == null || account.getUserName().length() < 3 || account.getUserName().length() > 50 || !account.getUserName().matches("^[a-zA-Z0-9_]+$")) {
-            LOGGER.warning("Invalid username format: " + account.getUserName());
-            throw new SQLException("Username must be 3-50 characters, alphanumeric or underscore only");
-        }
-        // Validate password
-        if (account.getPassWord() == null || account.getPassWord().length() < 6 || account.getPassWord().length() > 50) {
-            LOGGER.warning("Invalid password format: " + account.getPassWord());
-            throw new SQLException("Password must be 6-50 characters");
-        }
-        // Validate fullName
-        if (receptionist.getFullName() == null || receptionist.getFullName().length() > 100 || receptionist.getFullName().matches(".*\\s{2,}.*")) {
-            LOGGER.warning("Invalid full name format: " + receptionist.getFullName());
-            throw new SQLException("Full name must be 1-100 characters with single spaces");
-        }
-        // Check uniqueness of username, email, and phone
-        if (!isUniqueField("username", account.getUserName(), null)) {
-            LOGGER.warning("Duplicate username detected: " + account.getUserName());
-            throw new SQLException("Username already exists");
-        }
-        if (!isUniqueField("email", account.getEmail(), null)) {
-            LOGGER.warning("Duplicate email detected: " + account.getEmail());
-            throw new SQLException("Email already exists");
-        }
-        if (!isUniqueField("phone", receptionist.getPhone(), null)) {
-            LOGGER.warning("Duplicate phone detected: " + receptionist.getPhone());
-            throw new SQLException("Phone already exists");
+        conn.setAutoCommit(false);
+
+        // Insert into AccountStaff with default image URL
+        String sqlAccount = "INSERT INTO AccountStaff (username, password, role, email, img, status) " +
+                "VALUES (?, ?, 'Receptionist', ?, ?, ?)";
+        stmtAccount = conn.prepareStatement(sqlAccount, Statement.RETURN_GENERATED_KEYS);
+        stmtAccount.setString(1, account.getUserName());
+        stmtAccount.setString(2, account.getPassWord()); // Expects bcrypt hashed password
+        stmtAccount.setString(3, account.getEmail());
+        stmtAccount.setString(4, account.getImg() != null ? account.getImg() : DEFAULT_IMAGE_URL);
+        stmtAccount.setString(5, account.isStatus() ? "Enable" : "Disable");
+        int rowsAffected = stmtAccount.executeUpdate();
+
+        if (rowsAffected == 0) {
+            throw new SQLException("Failed to create AccountStaff");
         }
 
-        Connection conn = null;
-        PreparedStatement stmtAccount = null;
-        PreparedStatement stmtReceptionist = null;
-        ResultSet generatedKeys = null;
+        // Get generated account_staff_id
+        generatedKeys = stmtAccount.getGeneratedKeys();
+        if (generatedKeys.next()) {
+            int accountStaffId = generatedKeys.getInt(1);
+            receptionist.setAccountStaffId(accountStaffId);
 
-        try {
-            conn = getConnection();
-            if (conn == null) {
-                throw new SQLException("Database connection is null");
-            }
-            conn.setAutoCommit(false);
-
-            // Insert into AccountStaff with default image URL
-            String sqlAccount = "INSERT INTO AccountStaff (username, password, role, email, img, status) " +
-                    "VALUES (?, ?, 'Receptionist', ?, ?, ?)";
-            stmtAccount = conn.prepareStatement(sqlAccount, Statement.RETURN_GENERATED_KEYS);
-            stmtAccount.setString(1, account.getUserName());
-            stmtAccount.setString(2, account.getPassWord());
-            stmtAccount.setString(3, account.getEmail());
-            stmtAccount.setString(4, account.getImg() != null ? account.getImg() : DEFAULT_IMAGE_URL);
-            stmtAccount.setString(5, account.isStatus() ? "Enable" : "Disable");
-            int rowsAffected = stmtAccount.executeUpdate();
+            // Insert into Receptionist
+            String sqlReceptionist = "INSERT INTO Receptionist (full_name, phone, account_staff_id) " +
+                    "VALUES (?, ?, ?)";
+            stmtReceptionist = conn.prepareStatement(sqlReceptionist);
+            stmtReceptionist.setString(1, receptionist.getFullName());
+            stmtReceptionist.setString(2, receptionist.getPhone());
+            stmtReceptionist.setInt(3, accountStaffId);
+            rowsAffected = stmtReceptionist.executeUpdate();
 
             if (rowsAffected == 0) {
-                throw new SQLException("Failed to create AccountStaff");
+                throw new SQLException("Failed to create Receptionist");
             }
 
-            // Get generated account_staff_id
-            generatedKeys = stmtAccount.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                int accountStaffId = generatedKeys.getInt(1);
-                receptionist.setAccountStaffId(accountStaffId);
-
-                // Insert into Receptionist
-                String sqlReceptionist = "INSERT INTO Receptionist (full_name, phone, account_staff_id) " +
-                        "VALUES (?, ?, ?)";
-                stmtReceptionist = conn.prepareStatement(sqlReceptionist);
-                stmtReceptionist.setString(1, receptionist.getFullName());
-                stmtReceptionist.setString(2, receptionist.getPhone());
-                stmtReceptionist.setInt(3, accountStaffId);
-                rowsAffected = stmtReceptionist.executeUpdate();
-
-                if (rowsAffected == 0) {
-                    throw new SQLException("Failed to create Receptionist");
-                }
-
-                conn.commit();
-                return true;
-            } else {
-                throw new SQLException("Failed to retrieve generated account_staff_id");
-            }
-        } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException rollbackEx) {
-                    LOGGER.severe("Rollback failed: " + rollbackEx.getMessage());
-                }
-            }
-            LOGGER.severe("Error creating receptionist: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
-            throw e;
-        } finally {
-            if (generatedKeys != null) try { generatedKeys.close(); } catch (SQLException e) { /* ignored */ }
-            if (stmtReceptionist != null) try { stmtReceptionist.close(); } catch (SQLException e) { /* ignored */ }
-            if (stmtAccount != null) try { stmtAccount.close(); } catch (SQLException e) { /* ignored */ }
-            if (conn != null) try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) { /* ignored */ }
+            conn.commit();
+            return true;
+        } else {
+            throw new SQLException("Failed to retrieve generated account_staff_id");
         }
+    } catch (SQLException e) {
+        if (conn != null) {
+            try {
+                conn.rollback();
+            } catch (SQLException rollbackEx) {
+                LOGGER.severe("Rollback failed: " + rollbackEx.getMessage());
+            }
+        }
+        LOGGER.severe("Error creating receptionist: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+        throw e;
+    } finally {
+        if (generatedKeys != null) try { generatedKeys.close(); } catch (SQLException e) { /* ignored */ }
+        if (stmtReceptionist != null) try { stmtReceptionist.close(); } catch (SQLException e) { /* ignored */ }
+        if (stmtAccount != null) try { stmtAccount.close(); } catch (SQLException e) { /* ignored */ }
+        if (conn != null) try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) { /* ignored */ }
     }
+}
+
+//    public boolean updateReceptionist(AccountStaff account, Receptionist receptionist) throws SQLException {
+//        // Validate email format
+//        if (!EMAIL_PATTERN.matcher(account.getEmail()).matches()) {
+//            LOGGER.warning("Invalid email format: " + account.getEmail());
+//            throw new SQLException("Invalid email format");
+//        }
+//        // Validate phone format
+//        if (!PHONE_PATTERN.matcher(receptionist.getPhone()).matches()) {
+//            LOGGER.warning("Invalid phone format: " + receptionist.getPhone());
+//            throw new SQLException("Phone must be 10 digits starting with 0");
+//        }
+//        // Validate username
+//        if (account.getUserName() == null || account.getUserName().length() < 3 || account.getUserName().length() > 50 || !account.getUserName().matches("^[a-zA-Z0-9_]+$")) {
+//            LOGGER.warning("Invalid username format: " + account.getUserName());
+//            throw new SQLException("Username must be 3-50 characters, alphanumeric or underscore only");
+//        }
+//        // Validate password
+//        if (account.getPassWord() == null || account.getPassWord().length() < 6 || account.getPassWord().length() > 50) {
+//            LOGGER.warning("Invalid password format: " + account.getPassWord());
+//            throw new SQLException("Password must be 6-50 characters");
+//        }
+//        // Validate fullName
+//        if (receptionist.getFullName() == null || receptionist.getFullName().length() > 100 || receptionist.getFullName().matches(".*\\s{2,}.*")) {
+//            LOGGER.warning("Invalid full name format: " + receptionist.getFullName());
+//            throw new SQLException("Full name must be 1-100 characters with single spaces");
+//        }
+//        // Check uniqueness of username, email, and phone
+//        if (!isUniqueField("username", account.getUserName(), account.getAccountStaffId())) {
+//            LOGGER.warning("Duplicate username detected: " + account.getUserName());
+//            throw new SQLException("Username already exists");
+//        }
+//        if (!isUniqueField("email", account.getEmail(), account.getAccountStaffId())) {
+//            LOGGER.warning("Duplicate email detected: " + account.getEmail());
+//            throw new SQLException("Email already exists");
+//        }
+//        if (!isUniqueField("phone", receptionist.getPhone(), account.getAccountStaffId())) {
+//            LOGGER.warning("Duplicate phone detected: " + receptionist.getPhone());
+//            throw new SQLException("Phone already exists");
+//        }
+//
+//        Connection conn = null;
+//        PreparedStatement stmtAccount = null;
+//        PreparedStatement stmtReceptionist = null;
+//
+//        try {
+//            conn = getConnection();
+//            if (conn == null) {
+//                throw new SQLException("Database connection is null");
+//            }
+//            conn.setAutoCommit(false);
+//
+//            // Update AccountStaff (excluding img)
+//            String sqlAccount = "UPDATE AccountStaff SET username = ?, password = ?, email = ?, status = ? " +
+//                    "WHERE account_staff_id = ?";
+//            stmtAccount = conn.prepareStatement(sqlAccount);
+//            stmtAccount.setString(1, account.getUserName());
+//            stmtAccount.setString(2, account.getPassWord());
+//            stmtAccount.setString(3, account.getEmail());
+//            stmtAccount.setString(4, account.isStatus() ? "Enable" : "Disable");
+//            stmtAccount.setInt(5, account.getAccountStaffId());
+//            int rowsAffected = stmtAccount.executeUpdate();
+//
+//            if (rowsAffected == 0) {
+//                throw new SQLException("Failed to update AccountStaff");
+//            }
+//
+//            // Update Receptionist
+//            String sqlReceptionist = "UPDATE Receptionist SET full_name = ?, phone = ? WHERE account_staff_id = ?";
+//            stmtReceptionist = conn.prepareStatement(sqlReceptionist);
+//            stmtReceptionist.setString(1, receptionist.getFullName());
+//            stmtReceptionist.setString(2, receptionist.getPhone());
+//            stmtReceptionist.setInt(3, receptionist.getAccountStaffId());
+//            rowsAffected = stmtReceptionist.executeUpdate();
+//
+//            if (rowsAffected == 0) {
+//                throw new SQLException("Failed to update Receptionist");
+//            }
+//
+//            conn.commit();
+//            return true;
+//        } catch (SQLException e) {
+//            if (conn != null) {
+//                try {
+//                    conn.rollback();
+//                } catch (SQLException rollbackEx) {
+//                    LOGGER.severe("Rollback failed: " + rollbackEx.getMessage());
+//                }
+//            }
+//            LOGGER.severe("Error updating receptionist: " + e.getMessage() + ", SQLState: " + e.getSQLState() + ", ErrorCode: " + e.getErrorCode());
+//            throw e;
+//        } finally {
+//            if (stmtReceptionist != null) try { stmtReceptionist.close(); } catch (SQLException e) { /* ignored */ }
+//            if (stmtAccount != null) try { stmtAccount.close(); } catch (SQLException e) { /* ignored */ }
+//            if (conn != null) try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) { /* ignored */ }
+//        }
+//    }
 
     public boolean updateReceptionist(AccountStaff account, Receptionist receptionist) throws SQLException {
         // Validate email format
@@ -504,11 +704,6 @@ public class AdminBusinessDAO {
         if (account.getUserName() == null || account.getUserName().length() < 3 || account.getUserName().length() > 50 || !account.getUserName().matches("^[a-zA-Z0-9_]+$")) {
             LOGGER.warning("Invalid username format: " + account.getUserName());
             throw new SQLException("Username must be 3-50 characters, alphanumeric or underscore only");
-        }
-        // Validate password
-        if (account.getPassWord() == null || account.getPassWord().length() < 6 || account.getPassWord().length() > 50) {
-            LOGGER.warning("Invalid password format: " + account.getPassWord());
-            throw new SQLException("Password must be 6-50 characters");
         }
         // Validate fullName
         if (receptionist.getFullName() == null || receptionist.getFullName().length() > 100 || receptionist.getFullName().matches(".*\\s{2,}.*")) {
@@ -541,14 +736,19 @@ public class AdminBusinessDAO {
             conn.setAutoCommit(false);
 
             // Update AccountStaff (excluding img)
-            String sqlAccount = "UPDATE AccountStaff SET username = ?, password = ?, email = ?, status = ? " +
-                    "WHERE account_staff_id = ?";
+            String sqlAccount = "UPDATE AccountStaff SET username = ?, email = ?, status = ?" +
+                    (account.getPassWord() != null ? ", password = ?" : "") +
+                    " WHERE account_staff_id = ?";
             stmtAccount = conn.prepareStatement(sqlAccount);
             stmtAccount.setString(1, account.getUserName());
-            stmtAccount.setString(2, account.getPassWord());
-            stmtAccount.setString(3, account.getEmail());
-            stmtAccount.setString(4, account.isStatus() ? "Enable" : "Disable");
-            stmtAccount.setInt(5, account.getAccountStaffId());
+            stmtAccount.setString(2, account.getEmail());
+            stmtAccount.setString(3, account.isStatus() ? "Enable" : "Disable");
+            if (account.getPassWord() != null) {
+                stmtAccount.setString(4, account.getPassWord()); // Expects bcrypt hashed password
+                stmtAccount.setInt(5, account.getAccountStaffId());
+            } else {
+                stmtAccount.setInt(4, account.getAccountStaffId());
+            }
             int rowsAffected = stmtAccount.executeUpdate();
 
             if (rowsAffected == 0) {
@@ -585,6 +785,7 @@ public class AdminBusinessDAO {
             if (conn != null) try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) { /* ignored */ }
         }
     }
+
 
     public boolean deleteReceptionist(int accountStaffId) {
         String sql = "UPDATE AccountStaff SET status = 'Disable' WHERE account_staff_id = ? AND role = 'Receptionist'";

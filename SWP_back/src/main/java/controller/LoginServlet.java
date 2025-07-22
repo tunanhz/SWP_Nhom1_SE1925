@@ -15,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -98,21 +99,24 @@ public class LoginServlet extends HttpServlet {
         Account account = null;
 
         try {
-            AccountStaff staff = staffDAO.getAccountByUsernameAndPassword(identifier, password);
-            if (staff != null) {
+//            AccountStaff staff = staffDAO.getAccountByUsernameAndPassword(identifier, password);
+            AccountStaff staff = staffDAO.getAccountByUsernameOrEmail(identifier);
+            if (staff != null && BCrypt.checkpw(password, staff.getPassword())) {
                 account = staff;
             }
 
             if (account == null) {
-                AccountPatient patient = patientDAO.getAccountByUsernameOrEmailAndPassword(identifier, password);
-                if (patient != null) {
+//              AccountPatient patient = patientDAO.getAccountByUsernameOrEmailAndPassword(identifier, password);
+                AccountPatient patient = patientDAO.getAccountByUsernameOrEmail(identifier);
+                if (patient != null && BCrypt.checkpw(password, patient.getPassword())) {
                     account = patient;
                 }
             }
 
             if (account == null) {
-                AccountPharmacist pharmacist = pharmacistDAO.getAccountByUsernameAndPassword(identifier, password);
-                if (pharmacist != null) {
+ //               AccountPharmacist pharmacist = pharmacistDAO.getAccountByUsernameAndPassword(identifier, password);
+                AccountPharmacist pharmacist = pharmacistDAO.getAccountByUsername(identifier);
+                if (pharmacist != null && BCrypt.checkpw(password, pharmacist.getPassword())) {
                     account = pharmacist;
                 }
             }

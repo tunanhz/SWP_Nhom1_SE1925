@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -70,11 +71,11 @@ public class SignupPatientServlet extends HttpServlet {
                 return;
             }
 
-
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
 
             AccountPatient patient = new AccountPatient();
             patient.setUsername(username);
-            patient.setPassword(password);
+            patient.setPassword(hashedPassword);
             patient.setEmail(email);
             patient.setImg(imgUrl);
 
