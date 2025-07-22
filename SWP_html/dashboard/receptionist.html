@@ -2095,7 +2095,10 @@
                 </div>
                 <div class="form-group col-md-12">
                     <label class="form-label" for="password1">Password <span class="text-danger">*</span></label>
-                    <input type="password" class="form-control" id="password1" required>
+                    <input type="password" class="form-control" id="password1" required
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                    oninvalid="this.setCustomValidity('Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt')"
+                    oninput="this.setCustomValidity('')">
                 </div>
                 <div class="form-group col-md-12">
                     <label class="form-label" for="fullName1">Full Name <span class="text-danger">*</span></label>
@@ -2103,7 +2106,11 @@
                 </div>
                 <div class="form-group col-md-12">
                     <label class="form-label" for="email1">Email <span class="text-danger">*</span></label>
-                    <input type="email" class="form-control" id="email1" required>
+                    <input type="email" class="form-control" id="email1" required 
+                    pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                    title="Vui lòng nhập địa chỉ email hợp lệ(ví dụ: chuhung@gmail.com)"
+                    oninvalid="this.setCustomValidity('Vui lòng nhập địa chỉ email hợp lệ (ví dụ: chuhung@gmail.com)')"
+                    oninput="this.setCustomValidity('')">
                 </div>
                 <div class="form-group col-md-12">
                     <label class="form-label" for="phone1">Phone <span class="text-danger">*</span></label>

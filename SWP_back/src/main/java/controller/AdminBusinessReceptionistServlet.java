@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -121,7 +122,8 @@ public class AdminBusinessReceptionistServlet extends HttpServlet {
             if ("/create".equals(pathInfo)) {
                 AccountStaff account = new AccountStaff();
                 account.setUserName(jsonObject.get("username").getAsString());
-                account.setPassWord(jsonObject.get("password").getAsString());
+                String plainPassword = jsonObject.get("password").getAsString();
+                account.setPassWord(BCrypt.hashpw(plainPassword, BCrypt.gensalt(12))); // Hash password
                 account.setEmail(jsonObject.get("email").getAsString());
                 account.setStatus(jsonObject.has("status") ? jsonObject.get("status").getAsString().equals("Enable") : true);
                 account.setRole("Receptionist");
@@ -142,7 +144,9 @@ public class AdminBusinessReceptionistServlet extends HttpServlet {
                 AccountStaff account = new AccountStaff();
                 account.setAccountStaffId(jsonObject.get("accountStaffId").getAsInt());
                 account.setUserName(jsonObject.get("username").getAsString());
-                account.setPassWord(jsonObject.get("password").getAsString());
+                String plainPassword = jsonObject.has("password") ? jsonObject.get("password").getAsString() : null;
+                account.setPassWord(plainPassword != null && !plainPassword.isEmpty() ?
+                        BCrypt.hashpw(plainPassword, BCrypt.gensalt(12)) : null); // Hash password if provided
                 account.setEmail(jsonObject.get("email").getAsString());
                 account.setStatus(jsonObject.has("status") ? jsonObject.get("status").getAsString().equals("Enable") : true);
                 account.setRole("Receptionist");

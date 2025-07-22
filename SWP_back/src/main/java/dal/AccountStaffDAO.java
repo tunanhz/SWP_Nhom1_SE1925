@@ -61,9 +61,41 @@ public class AccountStaffDAO {
         }
     }
 
+    public AccountStaff getAccountByUsernameOrEmail(String identifier) {
+        AccountStaff account = null;
+        String sql = """
+                SELECT * FROM [dbo].[AccountStaff] 
+                WHERE (userName = ? OR email = ?) AND status = 'Enable'
+                """;
+
+        try {
+            PreparedStatement stmt = dbContext.getConnection().prepareStatement(sql);
+            stmt.setString(1, identifier);
+            stmt.setString(2, identifier);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                account = new AccountStaff(
+                        rs.getInt("account_staff_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getString("email"),
+                        rs.getString("img"),
+                        rs.getBoolean("status")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching staff account by username or email: " + e.getMessage(), e);
+        }
+
+        return account;
+    }
+
     public static void main(String[] args) {
         AccountStaffDAO dao = new AccountStaffDAO();
-        AccountStaff staff = dao.getAccountByUsernameAndPassword("doquocdat", "P@ss123");
+//        AccountStaff staff = dao.getAccountByUsernameAndPassword("doquocdat", "P@ss123");
+        AccountStaff staff = dao.getAccountByUsernameOrEmail("chuhung2k4@gmail.com");
         System.out.println(staff);
     }
 }

@@ -1,6 +1,7 @@
 package dal;
 
 import model.AccountPatient;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,6 +35,8 @@ public class AccountPatientDAO {
 
         return account;
     }
+
+
 
     public AccountPatient getAccountByUsernameOrEmailAndPassword(String identifier, String password) {
         AccountPatient account = null;
@@ -142,6 +145,37 @@ public class AccountPatientDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Error updating password: " + e.getMessage());
         }
+    }
+
+
+    public AccountPatient getAccountByUsernameOrEmail(String identifier) {
+        AccountPatient account = null;
+        String sql = """
+                SELECT * FROM [dbo].[AccountPatient] 
+                WHERE (username = ? OR email = ?) AND status = 'Enable'
+                """;
+
+        try {
+            PreparedStatement stmt = dbContext.getConnection().prepareStatement(sql);
+            stmt.setString(1, identifier);
+            stmt.setString(2, identifier);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                account = new AccountPatient(
+                        rs.getInt("account_patient_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getBoolean("status"),
+                        rs.getString("img")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching account by username or email: " + e.getMessage(), e);
+        }
+
+        return account;
     }
 
     public static void main(String[] args) {
