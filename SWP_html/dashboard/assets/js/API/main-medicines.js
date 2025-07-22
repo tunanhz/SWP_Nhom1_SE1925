@@ -57,7 +57,7 @@ const API_URL = 'http://localhost:8080/SWP_back_war_exploded/api/medicines';
                 table.innerHTML = "";
 
                 if (!data || data.length === 0) {
-                    table.innerHTML = `<tr><td colspan="9" class="text-center py-4">Không có dữ liệu</td></tr>`;
+                    table.innerHTML = `<tr><td colspan="8" class="text-center py-4">Không có dữ liệu</td></tr>`;
                     updatePagination(0, page);
                     return;
                 }
@@ -72,9 +72,9 @@ const API_URL = 'http://localhost:8080/SWP_back_war_exploded/api/medicines';
                             <td class="px-4 py-2">${med.usage || 'N/A'}</td>
                             <td class="px-4 py-2">${new Date(med.manuDate).toLocaleDateString("vi-VN")}</td>
                             <td class="px-4 py-2">${new Date(med.expDate).toLocaleDateString("vi-VN")}</td>
-                            <td class="px-4 py-2">${med.warehouseName}</td>
                             <td class="px-4 py-2">
-                                <button onclick="prefill(${med.medicineId}, ${med.quantity})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Chọn</button>
+                                <button onclick="prefill(${med.medicineId}, ${med.quantity})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-1">Chọn</button>
+                                <button onclick='showMedicineDetail(${JSON.stringify(med)})' class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Xem chi tiết</button>
                             </td>
                         </tr>
                     `;
@@ -180,3 +180,50 @@ const API_URL = 'http://localhost:8080/SWP_back_war_exploded/api/medicines';
             loadUsageFilter();
             loadMedicines("", "", "", currentPage);
         };
+
+        // Thêm hàm hiển thị chi tiết thuốc
+        function showMedicineDetail(med) {
+            // Nếu đã có modal thì xóa trước
+            let oldModal = document.getElementById('medicineDetailModal');
+            if (oldModal) oldModal.remove();
+            // Tạo modal
+            const modal = document.createElement('div');
+            modal.id = 'medicineDetailModal';
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100vw';
+            modal.style.height = '100vh';
+            modal.style.background = 'rgba(0,0,0,0.4)';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.style.zIndex = '9999';
+            modal.innerHTML = `
+                <div style="background: #fff; border-radius: 16px; max-width: 500px; width: 100%; padding: 2rem; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.2); animation: fadeIn 0.3s;">
+                    <button id="closeMedicineDetailModal" style="position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+                    <h2 style="margin-bottom: 1rem; color: #667eea;">Chi tiết thuốc</h2>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr><td style="font-weight: bold; padding: 6px 0;">ID:</td><td>${med.medicineId}</td></tr>
+                        <tr><td style="font-weight: bold; padding: 6px 0;">Tên:</td><td>${med.name}</td></tr>
+                        <tr><td style="font-weight: bold; padding: 6px 0;">Số lượng:</td><td>${med.quantity}</td></tr>
+                        <tr><td style="font-weight: bold; padding: 6px 0;">Giá:</td><td>${med.price ? med.price.toLocaleString('vi-VN') + ' VND' : ''}</td></tr>
+                        <tr><td style="font-weight: bold; padding: 6px 0;">Công dụng:</td><td>${med.usage || 'N/A'}</td></tr>
+                        <tr><td style="font-weight: bold; padding: 6px 0;">Thành phần:</td><td>${med.ingredient || 'N/A'}</td></tr>
+                        <tr><td style="font-weight: bold; padding: 6px 0;">Bảo quản:</td><td>${med.preservation || 'N/A'}</td></tr>
+                        <tr><td style="font-weight: bold; padding: 6px 0;">Ngày sản xuất:</td><td>${med.manuDate ? new Date(med.manuDate).toLocaleDateString('vi-VN') : ''}</td></tr>
+                        <tr><td style="font-weight: bold; padding: 6px 0;">Ngày hết hạn:</td><td>${med.expDate ? new Date(med.expDate).toLocaleDateString('vi-VN') : ''}</td></tr>
+                        <tr><td style="font-weight: bold; padding: 6px 0;">Kho:</td><td>${med.warehouseName || ''}</td></tr>
+                        <tr><td style="font-weight: bold; padding: 6px 0;">Vị trí kho:</td><td>${med.warehouseLocation || ''}</td></tr>
+                    </table>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.getElementById('closeMedicineDetailModal').onclick = function() {
+                modal.remove();
+            };
+            // Đóng modal khi click ra ngoài
+            modal.onclick = function(e) {
+                if (e.target === modal) modal.remove();
+            };
+        }

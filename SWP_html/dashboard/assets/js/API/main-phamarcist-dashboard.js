@@ -9,10 +9,7 @@ async function fetchMedicines(page, size, status = '') {
         // Gọi song song 2 API: thuốc sắp hết hạn và thuốc đã hết hạn
         let nearExpiryUrl = `${API_URL}?nearExpiry=true&days=30&page=${page}&size=${size}`;
         let expiredUrl = `${API_URL}?expired=true`;
-        if (status) {
-            nearExpiryUrl += `&status=${encodeURIComponent(status)}`;
-            expiredUrl += `&status=${encodeURIComponent(status)}`;
-        }
+        // KHÔNG truyền status vào API nữa
 
         // Gọi song song
         const [nearExpiryRes, expiredRes] = await Promise.all([
@@ -28,7 +25,21 @@ async function fetchMedicines(page, size, status = '') {
         const expiredData = await expiredRes.json();
 
         // Gộp 2 mảng, ưu tiên thuốc hết hạn lên đầu danh sách
-        const allMedicines = [...expiredData, ...nearExpiryData];
+        let allMedicines = [...expiredData, ...nearExpiryData];
+
+        // Lọc trên client theo trạng thái
+        if (status) {
+            allMedicines = allMedicines.filter(medicine => {
+                const expiryDate = new Date(medicine.expDate);
+                const today = new Date();
+                const daysUntilExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+                if (status === 'expired') return daysUntilExpiry < 0;
+                if (status === 'expiring-soon') return daysUntilExpiry >= 0 && daysUntilExpiry <= 30;
+                if (status === 'valid') return daysUntilExpiry > 30;
+                return true;
+            });
+        }
+
         displayMedicines(allMedicines);
         updatePagination(allMedicines.length);
         hideError();

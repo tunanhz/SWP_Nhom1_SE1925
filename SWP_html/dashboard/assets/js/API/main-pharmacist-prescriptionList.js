@@ -3,6 +3,7 @@ let currentPage = 1;
 let pageSize = 10;
 let totalItems = 0;
 let currentStatus = ''; // Biến lưu trạng thái hiện tại
+let allPrescriptions = [];
 
 async function fetchPrescriptions(page, size, status = '') {
     try {
@@ -23,6 +24,7 @@ async function fetchPrescriptions(page, size, status = '') {
         }
 
         const data = await response.json();
+        allPrescriptions = data; // Lưu tất cả đơn thuốc của trang hiện tại
         displayPrescriptions(data);
         updatePagination(data.length);
         hideError();
@@ -91,6 +93,14 @@ function hideError() {
     errorDiv.classList.add('hidden');
 }
 
+// Hàm loại bỏ dấu tiếng Việt
+function removeVietnameseTones(str) {
+    return str
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+}
+
 // Event Listeners
 document.getElementById('page-size').addEventListener('change', (e) => {
     pageSize = parseInt(e.target.value);
@@ -116,6 +126,29 @@ document.getElementById('status-filter').addEventListener('change', (e) => {
     currentPage = 1; // Reset về trang 1 khi thay đổi bộ lọc
     fetchPrescriptions(currentPage, pageSize, currentStatus);
 });
+
+// Thêm event listener cho bộ lọc theo tên hoặc số điện thoại bệnh nhân
+const patientFilterInput = document.getElementById('patient-filter');
+if (patientFilterInput) {
+    patientFilterInput.addEventListener('input', function(e) {
+        const keyword = e.target.value.trim().toLowerCase();
+        if (!keyword) {
+            displayPrescriptions(allPrescriptions);
+            return;
+        }
+        const filtered = allPrescriptions.filter(p => {
+            const name = p.patientName ? p.patientName.toLowerCase() : '';
+            const phone = p.patientPhone ? p.patientPhone.toLowerCase() : '';
+            // So sánh có dấu hoặc không dấu
+            return (
+                name.includes(keyword) ||
+                phone.includes(keyword) ||
+                removeVietnameseTones(name).includes(removeVietnameseTones(keyword))
+            );
+        });
+        displayPrescriptions(filtered);
+    });
+}
 
 // Initial fetch
 fetchPrescriptions(currentPage, pageSize, currentStatus);
