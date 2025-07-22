@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        showError(errorElement, 'Checking...');
+        showError(errorElement, 'Đang kiểm tra...');
         hideValid(validElement);
 
         fetch(`${baseAPI}/check${type}`, {
@@ -82,13 +82,13 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 console.log(`${type} check result:`, data);
                 if (data.exists) {
-                    showError(errorElement, `${type} already exists`);
+                   showError(errorElement, type === 'Username' ? 'Tên người dùng đã tồn tại' : 'Email đã tồn tại');
                     hideValid(validElement);
                     if (type === 'Username') isUsernameValid = false;
                     else if (type === 'Email') isEmailValid = false;
                 } else {
                     hideError(errorElement);
-                    showValid(validElement, `${type} is available`);
+                    showValid(validElement, type === 'Username' ? 'Tên người dùng có thể sử dụng' : 'Email có thể sử dụng');
                     if (type === 'Username') isUsernameValid = true;
                     else if (type === 'Email') isEmailValid = true;
                 }
@@ -111,12 +111,12 @@ document.addEventListener('DOMContentLoaded', function () {
             hideValid(confirmPasswordValid);
             isPasswordConfirmed = false;
         } else if (password !== confirmPassword) {
-            showError(confirmPasswordError, 'Passwords do not match');
+            showError(confirmPasswordError, 'Mật khẩu không khớp');
             hideValid(confirmPasswordValid);
             isPasswordConfirmed = false;
         } else {
             hideError(confirmPasswordError);
-            showValid(confirmPasswordValid, 'Passwords match');
+            showValid(confirmPasswordValid, 'Mật khẩu khớp nhau');
             isPasswordConfirmed = true;
         }
         updateSubmitButton();
@@ -219,17 +219,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (!username || !password || !confirmPassword || !email || !imgFile) {
-            showError(usernameError, 'Please fill in all required fields');
+            showError(usernameError, 'Vui lòng điền đầy đủ các trường bắt buộc');
             return;
         }
 
         if (!isUsernameValid || !isEmailValid || !isPasswordConfirmed) {
-            showError(usernameError, 'Please resolve username, email, or password errors');
+            showError(usernameError, 'Vui lòng khắc phục lỗi tên người dùng, email hoặc mật khẩu');
             return;
         }
 
         submitButton.disabled = true;
-        submitButton.innerHTML = 'Registering...';
+        submitButton.innerHTML = 'Đang đăng ký...';
 
         uploadToCloudinary(imgFile)
             .then(imageUrl => {
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 console.error('Upload error:', error);
-                showError(usernameError, 'Failed to upload image: ' + error.message);
+                showError(usernameError, 'Tải ảnh lên thất bại: ' + error.message);
                 submitButton.disabled = false;
                 submitButton.innerHTML = '<span class="iq-btn-text-holder">register</span><span class="iq-btn-icon-holder">...</span>';
             });
@@ -274,10 +274,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 submitButton.disabled = false;
                 submitButton.innerHTML = '<span class="iq-btn-text-holder">register</span><span class="iq-btn-icon-holder">...</span>';
                 if (data.success) {
-                    alert('Registration successful! Redirecting to login...');
+                    alert('Đăng ký thành công! Đang chuyển hướng đến trang đăng nhập...');
                     window.location.href = '/frontend/login.html';
                 } else {
-                    showError(usernameError, data.error || 'Registration failed!');
+                    showError(usernameError, data.error || 'Đăng ký thất bại!');
                 }
             })
             .catch(error => {

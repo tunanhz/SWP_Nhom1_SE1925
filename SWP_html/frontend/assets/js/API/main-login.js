@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = form.querySelector('input[name="pwd"]').value;
 
         if (!identifier || !password) {
-            alert("Please fill in both username/email and password!");
+            alert("Vui lòng điền đầy đủ tên người dùng/email và mật khẩu!");
             return;
         }
 
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.status + ' ' + response.statusText);
+                    throw new Error('Phản hồi của mạng không ổn ' + response.status + ' ' + response.statusText);
                 }
                 return response.json();
             })
@@ -84,12 +84,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     // // Chuyển hướng đến URL tương ứng
                     // window.location.href = baseAPI.substring(0, baseAPI.indexOf('/api')) + redirectUrl;
                 } else {
-                    alert(data.error || 'Login failed!');
+                    alert(data.error || 'Đăng nhập thất bại!');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred during login. Please try again! Status: ' + error.message);
+                alert('Đã xảy ra lỗi trong quá trình đăng nhập. Vui lòng thử lại! Trạng thái:' + error.message);
             });
     });
 });

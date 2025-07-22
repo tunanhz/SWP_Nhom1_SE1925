@@ -36,7 +36,7 @@ public class AccountService {
         otpStore.put(email, otpData);
 
         sendEmail(email, "Your OTP Code", "Your OTP code is: " + otp);
-        return new ResponseDTO(true, "An OTP has been sent to your email.", null);
+        return new ResponseDTO(true, "Một mã OTP đã được gửi tới email của bạn.", null);
     }
 
     public ResponseDTO verifyOTPAndSetPassword(VerifyOTPRequestDTO request) {
@@ -51,19 +51,19 @@ public class AccountService {
         }
 
         if (!password.equals(confirmPassword)) {
-            return new ResponseDTO(false, null, "Passwords do not match");
+            return new ResponseDTO(false, null, "Mật khẩu không khớp");
         }
 
         Map<String, Object> otpData = otpStore.get(email);
         if (otpData == null || !otpData.get("otp").equals(otp) || (Long) otpData.get("expiry") < System.currentTimeMillis()) {
-            return new ResponseDTO(false, null, "Invalid or expired OTP");
+            return new ResponseDTO(false, null, "OTP không hợp lệ hoặc hết hạn");
         }
 
         String accountType = (String) otpData.get("accountType");
         accountDAO.updatePassword(email, password, accountType);
 
         otpStore.remove(email);
-        return new ResponseDTO(true, "Your password has been updated.", null);
+        return new ResponseDTO(true, "Mật khẩu của bạn đã được cập nhật.", null);
     }
 
     private String generateOTP() {
