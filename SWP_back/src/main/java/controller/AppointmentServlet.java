@@ -61,6 +61,7 @@ public class AppointmentServlet extends HttpServlet {
             }
 
             int doctorId = Integer.parseInt(appointmentRequest.getDoctorId());
+            int patientId =  appointmentRequest.getPatientId();
             String date = appointmentRequest.getDate();
             String time = appointmentRequest.getTime();
             String note = appointmentRequest.getNote();
@@ -84,7 +85,7 @@ public class AppointmentServlet extends HttpServlet {
 
             Appointment appointment = new Appointment();
             appointment.setDoctorId(doctorId);
-            appointment.setPatientId(1); // TODO: replace with actual patientId from session
+            appointment.setPatientId(patientId);
             appointment.setAppointmentDatetime(appointmentDatetime);
             appointment.setNote(note != null && !note.trim().isEmpty() ? note.trim() : null);
 
@@ -100,10 +101,12 @@ public class AppointmentServlet extends HttpServlet {
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.println("{\"error\": \"Database error: " + e.getMessage().replace("\"", "\\\"") + "\"}");
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.println("{\"error\": \"Unexpected error: " + e.getMessage().replace("\"", "\\\"") + "\"}");
-        } finally {
+        }
+//        catch (Exception e) {
+//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            out.println("{\"error\": \"Unexpected error: " + e.getMessage().replace("\"", "\\\"") + "\"}");
+//        }
+        finally {
             out.flush();
         }
     }

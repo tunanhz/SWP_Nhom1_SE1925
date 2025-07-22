@@ -612,6 +612,38 @@ public class PatientDAO {
         }
     }
 
+    public ArrayList<Patient> getPatientsByAccountId(int accountPatientId) {
+        Logger LOGGER = Logger.getLogger(this.getClass().getName());
+        String sql = """
+                SELECT p.patient_id, p.full_name
+                FROM [HealthCareSystem].[dbo].[Patient] p
+                INNER JOIN [HealthCareSystem].[dbo].[Patient_AccountPatient] pap 
+                    ON p.patient_id = pap.patient_id
+                INNER JOIN [HealthCareSystem].[dbo].[AccountPatient] ap
+                    ON pap.account_patient_id = ap.account_patient_id
+                WHERE pap.account_patient_id = ? 
+                    AND p.status = 'Enable'
+                    AND ap.status = 'Enable'
+                ORDER BY p.patient_id DESC
+                """;
+
+        ArrayList<Patient> patients = new ArrayList<>();
+        try (PreparedStatement stmt = ad.getConnection().prepareStatement(sql)) {
+            stmt.setInt(1, accountPatientId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Patient patient = new Patient();
+                patient.setId(rs.getInt("patient_id"));
+                patient.setFullName(rs.getString("full_name"));
+                patients.add(patient);
+            }
+            LOGGER.info("Fetched " + patients.size() + " patients for accountPatientId=" + accountPatientId);
+        } catch (SQLException e) {
+            LOGGER.severe("Error fetching patients for accountPatientId=" + accountPatientId + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+        return patients;
+    }
     public static void main(String[] args) {
         PatientDAO patientDAO = new PatientDAO();
         ArrayList<Patient> patients = patientDAO.getAllPatients(null, null, "", "", 1, 50);

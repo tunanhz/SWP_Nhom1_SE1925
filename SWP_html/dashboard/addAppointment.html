@@ -207,6 +207,23 @@
     <h2>Thêm cuộc hẹn</h2>
 
     <form id="appointmentForm" action="http://localhost:8080/SWP_back_war_exploded/api/Add_appointments" method="POST">
+
+        <!-- Thêm vào form, trước phần chọn chuyên khoa -->
+<div class="form-group">
+    <label for="patientSelect">
+        <span class="label-icon">
+            <svg class="label-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <circle cx="12" cy="12" r="10" stroke="#1976d2" stroke-width="2" fill="#e3f2fd"/>
+                <path d="M12 8v4M12 16h.01" stroke="#1976d2" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </span>
+        Chọn bệnh nhân:
+    </label>
+    <select id="patientSelect" name="patientId" required>
+        <option value="">-- Chọn bệnh nhân --</option>
+    </select>
+</div>
+
         <div class="form-group">
             <label for="departmentSelect"><span class="label-icon"> 
                 <svg class="label-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke="#1976d2" stroke-width="2" fill="#e3f2fd"/><path d="M12 6v6l4 2" stroke="#1976d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -317,6 +334,62 @@
 
     <script src='./assets/js/API/main-addAppointment.js'></script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch(`http://localhost:8080/SWP_back_war_exploded/api/patients-of-account?accountPatientId=${account.accountPatientId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const select = document.getElementById('patientSelect');
+                    // Xóa các option cũ (trừ option đầu tiên)
+                    select.length = 1;
+                    // Giả sử data là mảng các object bệnh nhân, ví dụ: [{id: 1, name: "Nguyễn Văn A"}, ...]
+                    data.forEach(patient => {
+                        const option = document.createElement('option');
+                        option.value = patient.id || patient.patientId || patient.ID; // tuỳ thuộc vào key trả về
+                        option.textContent = patient.name || patient.fullName || patient.patientName; // tuỳ thuộc vào key trả về
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Lỗi khi lấy danh sách bệnh nhân:', error);
+                });
+        });
+        </script>
+
+
+
+    <script>
+        const accountString = localStorage.getItem('account');
+        const account = JSON.parse(accountString);
+
+          document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+          patientId: form.patientId.value,
+          doctorId: form.doctorId.value,
+          date: form.date.value,
+          time: form.time.value,
+          note: form.note.value
+      };
+      fetch('http://localhost:8080/SWP_back_war_exploded/api/Add_appointments', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(data => {
+          alert('Đặt lịch thành công!');
+      })
+      .catch(err => {
+          alert('Có lỗi xảy ra khi đặt lịch!');
+          console.error(err);
+      });
+  });
+    </script>
     
 </body>
+
 </html>
