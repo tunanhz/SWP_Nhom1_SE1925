@@ -1,5 +1,6 @@
 package dal;
 
+import dto.ReceptionistResponseDTO;
 import model.AccountStaff;
 import model.ListOfMedicalService;
 import model.Receptionist;
@@ -7,11 +8,14 @@ import model.Receptionist;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class AdminBusinessDAO {
     private static final Logger LOGGER = Logger.getLogger(AdminBusinessDAO.class.getName());
     private final DBContext db = new DBContext();
     private static final String DEFAULT_IMAGE_URL = "https://res.cloudinary.com/dnoyqme5b/image/upload/v1752978933/avatars/1_xaytga.jpg";
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^[0][0-9]{9}$");
 
     public Connection getConnection() throws SQLException {
         return db.getConnection();
@@ -247,12 +251,12 @@ public class AdminBusinessDAO {
     }
 
     // Receptionist management methods
-    public ArrayList<Receptionist> getReceptionists(String searchQuery, String statusFilter, int page, int pageSize) {
-        ArrayList<Receptionist> receptionists = new ArrayList<>();
+    public ArrayList<ReceptionistResponseDTO> getReceptionists(String searchQuery, String statusFilter, int page, int pageSize) {
+        ArrayList<ReceptionistResponseDTO> receptionists = new ArrayList<>();
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY r.receptionist_id) AS RowNum, ");
         sql.append("r.receptionist_id, r.full_name, r.phone, r.account_staff_id, ");
-        sql.append("a.username, a.email, a.status ");
+        sql.append("a.username, a.email, a.img, a.status ");
         sql.append("FROM Receptionist r ");
         sql.append("JOIN AccountStaff a ON r.account_staff_id = a.account_staff_id ");
         sql.append("WHERE a.role = 'Receptionist' ");
@@ -293,18 +297,16 @@ public class AdminBusinessDAO {
                 LOGGER.info("Executing SQL: " + sql.toString());
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
-                        Receptionist receptionist = new Receptionist();
-                        receptionist.setReceptionistId(rs.getInt("receptionist_id"));
-                        receptionist.setFullName(rs.getString("full_name"));
-                        receptionist.setPhone(rs.getString("phone"));
-                        receptionist.setAccountStaffId(rs.getInt("account_staff_id"));
-
-                        AccountStaff account = new AccountStaff();
-                        account.setAccountStaffId(rs.getInt("account_staff_id"));
-                        account.setUserName(rs.getString("username"));
-                        account.setEmail(rs.getString("email"));
-                        account.setStatus(rs.getString("status").equals("Enable"));
-                        receptionist.setAccountStaffId(rs.getInt("account_staff_id"));
+                        ReceptionistResponseDTO receptionist = new ReceptionistResponseDTO(
+                                rs.getInt("receptionist_id"),
+                                rs.getString("full_name"),
+                                rs.getString("phone"),
+                                rs.getInt("account_staff_id"),
+                                rs.getString("username"),
+                                rs.getString("email"),
+                                rs.getString("img") != null ? rs.getString("img") : DEFAULT_IMAGE_URL,
+                                rs.getString("status")
+                        );
                         receptionists.add(receptionist);
                     }
                 }
@@ -379,7 +381,32 @@ public class AdminBusinessDAO {
     }
 
     public boolean createReceptionist(AccountStaff account, Receptionist receptionist) throws SQLException {
-        // Check uniqueness of username, email, and phone individually
+        // Validate email format
+        if (!EMAIL_PATTERN.matcher(account.getEmail()).matches()) {
+            LOGGER.warning("Invalid email format: " + account.getEmail());
+            throw new SQLException("Invalid email format");
+        }
+        // Validate phone format
+        if (!PHONE_PATTERN.matcher(receptionist.getPhone()).matches()) {
+            LOGGER.warning("Invalid phone format: " + receptionist.getPhone());
+            throw new SQLException("Phone must be 10 digits starting with 0");
+        }
+        // Validate username
+        if (account.getUserName() == null || account.getUserName().length() < 3 || account.getUserName().length() > 50 || !account.getUserName().matches("^[a-zA-Z0-9_]+$")) {
+            LOGGER.warning("Invalid username format: " + account.getUserName());
+            throw new SQLException("Username must be 3-50 characters, alphanumeric or underscore only");
+        }
+        // Validate password
+        if (account.getPassWord() == null || account.getPassWord().length() < 6 || account.getPassWord().length() > 50) {
+            LOGGER.warning("Invalid password format: " + account.getPassWord());
+            throw new SQLException("Password must be 6-50 characters");
+        }
+        // Validate fullName
+        if (receptionist.getFullName() == null || receptionist.getFullName().length() > 100 || receptionist.getFullName().matches(".*\\s{2,}.*")) {
+            LOGGER.warning("Invalid full name format: " + receptionist.getFullName());
+            throw new SQLException("Full name must be 1-100 characters with single spaces");
+        }
+        // Check uniqueness of username, email, and phone
         if (!isUniqueField("username", account.getUserName(), null)) {
             LOGGER.warning("Duplicate username detected: " + account.getUserName());
             throw new SQLException("Username already exists");
@@ -412,7 +439,7 @@ public class AdminBusinessDAO {
             stmtAccount.setString(1, account.getUserName());
             stmtAccount.setString(2, account.getPassWord());
             stmtAccount.setString(3, account.getEmail());
-            stmtAccount.setString(4, DEFAULT_IMAGE_URL);
+            stmtAccount.setString(4, account.getImg() != null ? account.getImg() : DEFAULT_IMAGE_URL);
             stmtAccount.setString(5, account.isStatus() ? "Enable" : "Disable");
             int rowsAffected = stmtAccount.executeUpdate();
 
@@ -463,7 +490,32 @@ public class AdminBusinessDAO {
     }
 
     public boolean updateReceptionist(AccountStaff account, Receptionist receptionist) throws SQLException {
-        // Check uniqueness of username, email, and phone individually
+        // Validate email format
+        if (!EMAIL_PATTERN.matcher(account.getEmail()).matches()) {
+            LOGGER.warning("Invalid email format: " + account.getEmail());
+            throw new SQLException("Invalid email format");
+        }
+        // Validate phone format
+        if (!PHONE_PATTERN.matcher(receptionist.getPhone()).matches()) {
+            LOGGER.warning("Invalid phone format: " + receptionist.getPhone());
+            throw new SQLException("Phone must be 10 digits starting with 0");
+        }
+        // Validate username
+        if (account.getUserName() == null || account.getUserName().length() < 3 || account.getUserName().length() > 50 || !account.getUserName().matches("^[a-zA-Z0-9_]+$")) {
+            LOGGER.warning("Invalid username format: " + account.getUserName());
+            throw new SQLException("Username must be 3-50 characters, alphanumeric or underscore only");
+        }
+        // Validate password
+        if (account.getPassWord() == null || account.getPassWord().length() < 6 || account.getPassWord().length() > 50) {
+            LOGGER.warning("Invalid password format: " + account.getPassWord());
+            throw new SQLException("Password must be 6-50 characters");
+        }
+        // Validate fullName
+        if (receptionist.getFullName() == null || receptionist.getFullName().length() > 100 || receptionist.getFullName().matches(".*\\s{2,}.*")) {
+            LOGGER.warning("Invalid full name format: " + receptionist.getFullName());
+            throw new SQLException("Full name must be 1-100 characters with single spaces");
+        }
+        // Check uniqueness of username, email, and phone
         if (!isUniqueField("username", account.getUserName(), account.getAccountStaffId())) {
             LOGGER.warning("Duplicate username detected: " + account.getUserName());
             throw new SQLException("Username already exists");
@@ -547,7 +599,7 @@ public class AdminBusinessDAO {
         }
     }
 
-    public Receptionist getReceptionistById(int accountStaffId) {
+    public ReceptionistResponseDTO getReceptionistById(int accountStaffId) {
         String sql = "SELECT r.receptionist_id, r.full_name, r.phone, r.account_staff_id, " +
                 "a.username, a.password, a.email, a.img, a.status " +
                 "FROM Receptionist r " +
@@ -558,22 +610,16 @@ public class AdminBusinessDAO {
             stmt.setInt(1, accountStaffId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Receptionist receptionist = new Receptionist();
-                    receptionist.setReceptionistId(rs.getInt("receptionist_id"));
-                    receptionist.setFullName(rs.getString("full_name"));
-                    receptionist.setPhone(rs.getString("phone"));
-                    receptionist.setAccountStaffId(rs.getInt("account_staff_id"));
-
-                    AccountStaff account = new AccountStaff();
-                    account.setAccountStaffId(rs.getInt("account_staff_id"));
-                    account.setUserName(rs.getString("username"));
-                    account.setPassWord(rs.getString("password"));
-                    account.setEmail(rs.getString("email"));
-                    account.setImg(rs.getString("img"));
-                    account.setStatus(rs.getString("status").equals("Enable"));
-                    account.setRole("Receptionist");
-
-                    return receptionist;
+                    return new ReceptionistResponseDTO(
+                            rs.getInt("receptionist_id"),
+                            rs.getString("full_name"),
+                            rs.getString("phone"),
+                            rs.getInt("account_staff_id"),
+                            rs.getString("username"),
+                            rs.getString("email"),
+                            rs.getString("img") != null ? rs.getString("img") : DEFAULT_IMAGE_URL,
+                            rs.getString("status")
+                    );
                 }
             }
         } catch (SQLException e) {
