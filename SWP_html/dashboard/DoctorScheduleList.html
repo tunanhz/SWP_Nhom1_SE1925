@@ -25,30 +25,27 @@
             margin-bottom: 20px;
             font-size: 24px;
         }
-        .form-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 15px;
-        }
-        label {
-            font-weight: bold;
-            color: #34495e;
-            flex: 0 0 120px;
-            text-align: right;
-        }
-        input, select {
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
+        .add-schedule-btn {
+            display: block;
             width: 200px;
-            transition: border-color 0.3s ease;
+            padding: 10px;
+            margin: 0 auto 20px auto;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-        input:focus, select:focus {
-            border-color: #3498db;
+        .add-schedule-btn:hover {
+            background-color: #45a049;
+        }
+        .add-schedule-btn:focus {
             outline: none;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.4);
         }
         #result {
             margin-top: 30px;
@@ -84,28 +81,6 @@
         .text-red-500 {
             color: #e74c3c;
         }
-        .add-schedule-btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .add-schedule-btn:hover {
-            background-color: #45a049;
-        }
-        .add-schedule-btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.4);
-        }
         @media (max-width: 600px) {
             .form-group {
                 flex-direction: column;
@@ -125,32 +100,8 @@
 <body onload="fetchAllSchedules()">
     <div class="form-container">
         <h2>Doctor Schedule List : </h2>
-        <div class="form-group">
-            <label for="doctorId">Doctor Name:</label>
-            <select id="doctorId" name="doctorId" onchange="searchAll()">
-                <option value="">All Doctors</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" name="startDate" onchange="searchAll()">
-            <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" name="endDate" onchange="searchAll()">
-        </div>
-        <div class="form-group">
-            <label for="shift">Shift:</label>
-            <select id="shift" name="shift" onchange="searchAll()">
-                <option value="">All</option>
-                <option value="Morning">Morning</option>
-                <option value="Afternoon">Afternoon</option>
-                <option value="Evening">Evening</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="department">Department:</label>
-            <input type="text" id="department" name="department" placeholder="Enter Department" onchange="searchAll()">
-        </div>
         <button id="addScheduleBtn" class="add-schedule-btn">Add Schedule</button>
+        <iframe id="scheduleFormContainer" src="addDoctor-Schedule.html" style="display:none;width:100%;max-width:900px;height:700px;border:none;margin-top:20px;border-radius:15px;box-shadow:0 8px 16px rgba(0,0,0,0.1);"></iframe>
     </div>
     <div id="result">
         <p class="loading">Loading schedules...</p>
@@ -162,64 +113,8 @@
 
         async function fetchAllSchedules() {
             try {
-                // Load doctors list first
-                await loadDoctors();
                 // Fetch all schedules
                 const response = await fetch(baseUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                });
-                const data = await response.json();
-                displaySchedules(data);
-            } catch (error) {
-                document.getElementById('result').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
-            }
-        }
-
-        async function loadDoctors() {
-            try {
-                const response = await fetch('http://localhost:8080/SWP_back_war_exploded/api/doctors/');
-                const data = await response.json();
-                const doctorSelect = document.getElementById('doctorId');
-
-                if (data.doctors && Array.isArray(data.doctors)) {
-                    data.doctors.forEach(doctor => {
-                        const option = document.createElement('option');
-                        option.value = doctor.ID;
-                        option.textContent = doctor.fullName;
-                        doctorSelect.appendChild(option);
-                    });
-                } else {
-                    throw new Error('Invalid doctor data format');
-                }
-            } catch (error) {
-                console.error('Error loading doctors:', error);
-                document.getElementById('message').classList.add('text-red-500');
-                document.getElementById('message').textContent = 'Error loading doctors: ' + error.message;
-            }
-        }
-
-        async function searchAll() {
-            const doctorId = document.getElementById('doctorId').value;
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-            const shift = document.getElementById('shift').value;
-            const department = document.getElementById('department').value;
-
-            let url = baseUrl;
-            const params = [];
-            if (doctorId) params.push(`doctorId=${doctorId}`);
-            if (startDate) params.push(`startDate=${startDate}`);
-            if (endDate) params.push(`endDate=${endDate}`);
-            if (shift) params.push(`shift=${shift}`);
-            if (department) params.push(`department=${department}`);
-            if (params.length > 0) url += '?' + params.join('&');
-
-            try {
-                const response = await fetch(url, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -258,8 +153,11 @@
         }
 
         // Add event listener for the Add Schedule button
-        document.getElementById('addScheduleBtn').addEventListener('click', () => {
-            window.location.href = 'addDoctor-Schedule.html';
+        const addBtn = document.getElementById('addScheduleBtn');
+        const formContainer = document.getElementById('scheduleFormContainer');
+        addBtn.addEventListener('click', () => {
+            formContainer.style.display = 'block';
+            addBtn.style.display = 'none';
         });
     </script>
 </body>

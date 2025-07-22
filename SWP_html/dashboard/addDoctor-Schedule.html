@@ -5,46 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Doctor Schedule</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        }
+        .custom-form-container {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(52, 152, 219, 0.10), 0 1.5px 4px rgba(44, 62, 80, 0.08);
+            padding: 2.5rem 2rem;
+            max-width: 420px;
+            width: 100%;
+            margin: 40px auto;
+        }
+        .custom-form-title {
+            color: #2c3e50;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .custom-form-label {
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+        .custom-form-input, .custom-form-select, .custom-form-textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e0eafc;
+            border-radius: 7px;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #f8fafc;
+        }
+        .custom-form-input:focus, .custom-form-select:focus, .custom-form-textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px #a5d8ff;
+            background: #fff;
+        }
+        .custom-form-checkbox {
+            accent-color: #6366f1;
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+        }
+        .custom-form-btn {
+            width: 100%;
+            padding: 12px 0;
+            background: linear-gradient(90deg, #6366f1 0%, #3498db 100%);
+            color: #fff;
+            font-weight: 700;
+            border: none;
+            border-radius: 7px;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.10);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .custom-form-btn:hover {
+            background: linear-gradient(90deg, #4f46e5 0%, #2980b9 100%);
+        }
+        @media (max-width: 500px) {
+            .custom-form-container {
+                padding: 1.2rem 0.5rem;
+            }
+        }
+    </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-6 text-center">Create Doctor Schedule</h2>
-        <form id="doctorScheduleForm" class="space-y-4">
+    <div class="custom-form-container">
+        <h2 class="custom-form-title">Create Doctor Schedule</h2>
+        <form id="doctorScheduleForm">
             <div>
-                <label for="doctorId" class="block text-sm font-medium text-gray-700">Doctor</label>
-                <select id="doctorId" name="doctorId" required
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <label for="doctorId" class="custom-form-label">Doctor</label>
+                <select id="doctorId" name="doctorId" required class="custom-form-select">
                     <option value="" disabled selected>Select a doctor</option>
                 </select>
             </div>
             <div>
-                <label for="workingDate" class="block text-sm font-medium text-gray-700">Working Date</label>
-                <input type="date" id="workingDate" name="workingDate" required
-                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <label for="workingDate" class="custom-form-label">Working Date</label>
+                <input type="date" id="workingDate" name="workingDate" required class="custom-form-input">
             </div>
             <div>
-                <label for="shift" class="block text-sm font-medium text-gray-700">Shift</label>
-                <select id="shift" name="shift" required
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <label for="shift" class="custom-form-label">Shift</label>
+                <select id="shift" name="shift" required class="custom-form-select">
                     <option value="Morning">Morning</option>
                     <option value="Afternoon">Afternoon</option>
                     <option value="Evening">Evening</option>
                 </select>
             </div>
-            <div>
-                <label for="isAvailable" class="block text-sm font-medium text-gray-700">Available</label>
-                <input type="checkbox" id="isAvailable" name="isAvailable"
-                       class="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+                <input type="checkbox" id="isAvailable" name="isAvailable" class="custom-form-checkbox">
+                <label for="isAvailable" class="custom-form-label" style="margin-bottom:0; font-weight:500;">Available</label>
             </div>
             <div>
-                <label for="note" class="block text-sm font-medium text-gray-700">Note</label>
-                <textarea id="note" name="note"
-                          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                <label for="note" class="custom-form-label">Note</label>
+                <textarea id="note" name="note" class="custom-form-textarea"></textarea>
             </div>
-            <button type="submit"
-                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Create Schedule
-            </button>
+            <button type="submit" class="custom-form-btn">Create Schedule</button>
         </form>
         <p id="message" class="mt-4 text-center text-sm text-gray-600"></p>
     </div>
