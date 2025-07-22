@@ -200,8 +200,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page"
-                                    href="./adminbusiness-feedback-report.html">
+                                <a class="nav-link" aria-current="page" href="./adminbusiness-feedback-report.html">
                                     <i class="icon" data-bs-toggle="tooltip" title="Report" data-bs-placement="right">
                                         <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -264,7 +263,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="./adminbusiness-patientRecord.html">
+                                <a class="nav-link active" aria-current="page"
+                                    href="./adminbusiness-patientRecord.html">
                                     <i class="icon" data-bs-toggle="tooltip" title="Report" data-bs-placement="right">
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -1196,7 +1196,7 @@
                                                     href="#userApps" role="button" aria-expanded="false"
                                                     aria-controls="userApps">
                                                     User
-                                                    <i class="right-icon">  
+                                                    <i class="right-icon">
                                                         <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
                                                             xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M8.5 5L15.5 12L8.5 19" stroke="currentColor"
@@ -1853,7 +1853,145 @@
                 </svg>
                 <span class="head-title fw-500 mt-1">Report</span>
             </div>
-            
+
+            <div class="content-inner container-fluid pb-0 mt-4" id="page_layout">
+                <div id="null-data">
+                    <div class="card shadow-sm border-0 rounded-4">
+                        <div class="card-header bg-primary text-white rounded-top-4 p-3">
+                            <h4 class="card-title mb-0">Patient Medical Profiles<small>(all)</small></h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row mb-4 g-3">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white border-end-0">
+                                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor"
+                                                        stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor"
+                                                        stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </span>
+                                            <input type="text" class="form-control border-start-0" id="searchQuery"
+                                                placeholder="Search by Patient or Doctor Name" aria-label="Search">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <input type="date" class="form-control" id="startDate"
+                                            placeholder="Start Date...">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <input type="date" class="form-control" id="endDate" placeholder="End Date...">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <select class="form-select" id="filterGender" aria-label="Filter Status">
+                                            <option value="">All Gender</option>
+                                            <option value="Nam">Male</option>
+                                            <option value="Nữ">Fmale</option>
+                                            <option value="Khác">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">No.</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Age</th>
+                                            <th scope="col">Gender</th>
+                                            <th scope="col">Condition</th>
+                                            <th scope="col">Last Visit</th>
+                                            <th scope="col">Appointment Status</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="patientTableBody">
+                                        <!-- Example static row for reference -->
+                                        <tr>
+                                            <td>P001</td>
+                                            <td>John Doe</td>
+                                            <td>45</td>
+                                            <td>Male</td>
+                                            <td>Hypertension</td>
+                                            <td>2025-06-15</td>
+                                            <td>Complete</td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <a href="patient-record.html?id=P001"
+                                                        class="btn btn-primary btn-sm rounded-pill"
+                                                        data-bs-toggle="tooltip" title="View Profile"
+                                                        aria-label="View Profile">
+                                                        <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+                                                                fill="currentColor" />
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer row">
+                            <div class="d-flex justify-content-start col-md-6">
+                                <button class="btn btn-secondary text-white me-3" type="button" id="prevPage">
+                                    <span class="btn-inner">
+                                        <span class="text d-inline-block align-middle">Previous</span>
+                                        <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </button>
+                                <span class="align-self-center me-3" id="pageInfo">Page 1 of 8</span>
+                                <button class="btn btn-primary me-3" type="button" id="nextPage">
+                                    <span class="btn-inner">
+                                        <span class="text d-inline-block align-middle">Next</span>
+                                        <span class="icon d-inline-block align-middle ms-1 ps-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-center justify-content-md-end">
+                                <div class="input-group input-group-sm w-auto">
+                                    <label class="input-group-text text-bg-info" for="itemsPerPage">Items per
+                                        page</label>
+                                    <select class="form-select" name="page" id="itemsPerPage">
+                                        <option value="5">5</option>
+                                        <option value="10" selected>10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                        <option value="90">All</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- Footer Section Start -->
         <footer class="footer">
@@ -2695,6 +2833,8 @@
     <!-- Wrapper End-->
 
     <!--API-->
+    <script src="./assets/js/API/main-adminbusiness-view-recordPatient.js"></script>
+
 
     <!-- Library Bundle Script -->
     <script src="./assets/js/core/libs.min.js"></script>
