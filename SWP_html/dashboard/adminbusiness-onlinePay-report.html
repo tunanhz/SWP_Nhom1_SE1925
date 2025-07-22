@@ -200,8 +200,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page"
-                                    href="./adminbusiness-feedback-report.html">
+                                <a class="nav-link" aria-current="page" href="./adminbusiness-feedback-report.html">
                                     <i class="icon" data-bs-toggle="tooltip" title="Report" data-bs-placement="right">
                                         <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -222,7 +221,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="./adminbusiness-onlinePay-report.html">
+                                <a class="nav-link active" aria-current="page"
+                                    href="./adminbusiness-onlinePay-report.html">
                                     <i class="icon" data-bs-toggle="tooltip" title="Report" data-bs-placement="right">
                                         <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -1196,7 +1196,7 @@
                                                     href="#userApps" role="button" aria-expanded="false"
                                                     aria-controls="userApps">
                                                     User
-                                                    <i class="right-icon">  
+                                                    <i class="right-icon">
                                                         <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
                                                             xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M8.5 5L15.5 12L8.5 19" stroke="currentColor"
@@ -1853,7 +1853,302 @@
                 </svg>
                 <span class="head-title fw-500 mt-1">Report</span>
             </div>
-            
+
+            <div class="container">
+                <h1 class="h4 text-center mb-4">Báo Cáo Doanh Thu</h1>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <label for="startDate" class="form-label small">Ngày Bắt Đầu</label>
+                                <input type="date" id="startDate" class="form-control form-control-sm"
+                                    placeholder="YYYY-MM-DD">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="endDate" class="form-label small">Ngày Kết Thúc</label>
+                                <input type="date" id="endDate" class="form-control form-control-sm"
+                                    placeholder="YYYY-MM-DD">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="searchTerm" class="form-label small">Tìm Kiếm</label>
+                                <input type="text" id="searchTerm" placeholder="Dịch vụ, bác sĩ, khoa"
+                                    class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end gap-2">
+                                <button class="btn btn-primary btn-sm flex-grow-1">Lấy Báo Cáo</button>
+                                <button class="btn btn-success btn-sm" id="exportExcel">Xuất File</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="errorMessage" class="alert alert-danger d-none text-center" role="alert">
+                    <span id="errorText"></span>
+                    <button class="btn btn-primary btn-sm ms-2">Thử Lại</button>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="h5 mb-3">Tổng Doanh Thu</h2>
+                                <p id="totalRevenue" class="loading">Đang tải...</p>
+                                <div class="chart-container mb-3">
+                                    <canvas id="totalRevenueChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tháng Có Doanh Thu Cao Nhất -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="h5 mb-3">Tháng Có Doanh Thu Cao Nhất</h2>
+                                <div class="chart-container mb-3">
+                                    <canvas id="topRevenueMonthsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="h5 mb-3">Top Dịch Vụ</h2>
+                                <div class="chart-container mb-3">
+                                    <canvas id="topServicesChart"></canvas>
+                                </div>
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên</th>                                           
+                                            <th>Số Lượng</th>
+                                            <th>Doanh Thu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="topServicesTable" class="loading">
+                                        <tr>
+                                            <td colspan="4" class="text-center">Đang tải...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="card-footer row">
+                                    <div class="d-flex justify-content-start col-md-6">
+                                        <button class="btn btn-secondary btn-sm me-2" type="button"
+                                            id="prevPageServices">
+                                            <span class="btn-inner">
+                                                <span class="text d-inline-block align-middle">Trước</span>
+                                                <span class="icon d-inline-block align-middle ms-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        fill="currentColor" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                            d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                        </button>
+                                        <span class="align-self-center me-2" id="pageInfoServices">Trang 1 / 8</span>
+                                        <button class="btn btn-primary btn-sm me-2" type="button" id="nextPageServices">
+                                            <span class="btn-inner">
+                                                <span class="text d-inline-block align-middle">Tiếp</span>
+                                                <span class="icon d-inline-block align-middle ms-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        fill="currentColor" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-center justify-content-md-end">
+                                        <div class="input-group input-group-sm w-auto">
+                                            <label class="input-group-text text-bg-info" for="itemsPerPageServices">Mục
+                                                mỗi trang</label>
+                                            <select class="form-select form-select-sm" name="page"
+                                                id="itemsPerPageServices">
+                                                <option value="5" selected>5</option>
+                                                <option value="10">10</option>
+                                                <option value="15">15</option>
+                                                <option value="20">20</option>
+                                                <option value="90">Tất cả</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="h5 mb-3">Top Bác Sĩ</h2>
+                                <div class="chart-container mb-3">
+                                    <canvas id="topDoctorsChart"></canvas>
+                                </div>
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên</th>
+                                            <th>Khoa</th>
+                                            <th>Doanh Thu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="topDoctorsTable" class="loading">
+                                        <tr>
+                                            <td colspan="3" class="text-center">Đang tải...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="card-footer row">
+                                    <div class="d-flex justify-content-start col-md-6">
+                                        <button class="btn btn-secondary btn-sm me-2" type="button"
+                                            id="prevPageDoctors">
+                                            <span class="btn-inner">
+                                                <span class="text d-inline-block align-middle">Trước</span>
+                                                <span class="icon d-inline-block align-middle ms-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        fill="currentColor" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                            d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                        </button>
+                                        <span class="align-self-center me-2" id="pageInfoDoctors">Trang 1 / 8</span>
+                                        <button class="btn btn-primary btn-sm me-2" type="button" id="nextPageDoctors">
+                                            <span class="btn-inner">
+                                                <span class="text d-inline-block align-middle">Tiếp</span>
+                                                <span class="icon d-inline-block align-middle ms-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        fill="currentColor" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-center justify-content-md-end">
+                                        <div class="input-group input-group-sm w-auto">
+                                            <label class="input-group-text text-bg-info" for="itemsPerPageDoctors">Mục
+                                                mỗi trang</label>
+                                            <select class="form-select form-select-sm" name="page"
+                                                id="itemsPerPageDoctors">
+                                                <option value="5" selected>5</option>
+                                                <option value="10" >10</option>
+                                                <option value="15">15</option>
+                                                <option value="20">20</option>
+                                                <option value="90">Tất cả</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <!-- Doanh Thu Theo Loại Thanh Toán -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="h5 mb-3">Doanh Thu Theo Loại Thanh Toán</h2>
+                                <div class="chart-container mb-3">
+                                    <canvas id="revenueByTypeChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tỷ Lệ Hoàn Thành Hóa Đơn -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="h5 mb-3">Tỷ Lệ Hoàn Thành Hóa Đơn</h2>
+                                <div class="chart-container mb-3">
+                                    <canvas id="invoiceStatusChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mb-4">
+                    <!-- Doanh Thu Theo Khoa -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="h5 mb-3">Doanh Thu Theo Khoa</h2>
+                                <div class="chart-container mb-3">
+                                    <canvas id="revenueByDepartmentChart"></canvas>
+                                </div>
+                                <div>
+                                    <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Khoa</th>
+                                            <th>Doanh Thu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="revenueByDepartmentTable" class="loading">
+                                        <tr>
+                                            <td colspan="2" class="text-center">Đang tải...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="card-footer row">
+                                    <div class="d-flex justify-content-start col-md-6">
+                                        <button class="btn btn-secondary btn-sm me-2" type="button"
+                                            id="prevPageDepartments">
+                                            <span class="btn-inner">
+                                                <span class="text d-inline-block align-middle">Trước</span>
+                                                <span class="icon d-inline-block align-middle ms-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        fill="currentColor" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                            d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                        </button>
+                                        <span class="align-self-center me-2" id="pageInfoDepartments">Trang 1 /
+                                            8</span>
+                                        <button class="btn btn-primary btn-sm me-2" type="button"
+                                            id="nextPageDepartments">
+                                            <span class="btn-inner">
+                                                <span class="text d-inline-block align-middle">Tiếp</span>
+                                                <span class="icon d-inline-block align-middle ms-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        fill="currentColor" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-center justify-content-md-end">
+                                        <div class="input-group input-group-sm w-auto">
+                                            <label class="input-group-text text-bg-info"
+                                                for="itemsPerPageDepartments">Mục mỗi trang</label>
+                                            <select class="form-select form-select-sm" name="page"
+                                                id="itemsPerPageDepartments">
+                                                <option value="5" selected>5</option>
+                                                <option value="10">10</option>
+                                                <option value="15">15</option>
+                                                <option value="20">20</option>
+                                                <option value="90">Tất cả</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- Footer Section Start -->
         <footer class="footer">
@@ -2695,7 +2990,9 @@
     <!-- Wrapper End-->
 
     <!--API-->
+    <script src="./assets/js/API/main-adminbusiness-report-invoice.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Library Bundle Script -->
     <script src="./assets/js/core/libs.min.js"></script>
     <!-- Plugin Scripts -->

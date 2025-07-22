@@ -1,8 +1,6 @@
 package dal;
 
-import dto.AppointmentReportDTO;
-import dto.AppointmentSummaryDTO;
-import dto.PatientRecordDTO;
+import dto.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -351,6 +349,430 @@ public class AdminBusinessReportDAO {
         return record;
     }
 
+    //Doanh thu
+    // Tổng doanh thu từ hóa đơn trong khoảng thời gian
+    public TotalRevenueDTO getTotalRevenue(String startDate, String endDate) {
+        // Chuyển chuỗi rỗng thành null
+        startDate = startDate != null && startDate.trim().isEmpty() ? null : startDate;
+        endDate = endDate != null && endDate.trim().isEmpty() ? null : endDate;
+
+        String query = """
+                SELECT SUM(total_amount) AS total_revenue
+                FROM Invoice
+                WHERE issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                    AND COALESCE(NULLIF(?, ''), GETDATE())
+                    AND status = 'Paid';
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(query);
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                double revenue = rs.getDouble("total_revenue");
+                return new TotalRevenueDTO(rs.wasNull() ? 0 : revenue);
+            }
+            return new TotalRevenueDTO(0);
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error fetching total revenue: " + e.getMessage());
+            throw new RuntimeException("Failed to fetch total revenue", e);
+        }
+    }
+
+    // Top dịch vụ được sử dụng nhiều nhất (với phân trang và tìm kiếm)
+    public ArrayList<TopServiceDTO> getTopServices(String startDate, String endDate, String searchTerm, int page, int pageSize) {
+        // Chuyển chuỗi rỗng thành null
+        startDate = startDate != null && startDate.trim().isEmpty() ? null : startDate;
+        endDate = endDate != null && endDate.trim().isEmpty() ? null : endDate;
+
+        ArrayList<TopServiceDTO> services = new ArrayList<>();
+        String query = """
+                SELECT 
+                    lms.name AS service_name,
+                    lms.description,
+                    SUM(si.quantity) AS total_quantity,
+                    SUM(si.total_price) AS total_service_revenue
+                FROM ServiceInvoice si
+                JOIN ServiceOrderItem soi ON si.service_order_item_id = soi.service_order_item_id
+                JOIN ListOfMedicalService lms ON soi.service_id = lms.service_id
+                JOIN Invoice i ON si.invoice_id = i.invoice_id
+                WHERE issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                    AND COALESCE(NULLIF(?, ''), GETDATE())
+                    AND i.status = 'Paid'
+                    AND lms.status = 'Enable'
+                    AND (? IS NULL OR lms.name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                GROUP BY lms.name, lms.description
+                ORDER BY total_quantity DESC, total_service_revenue DESC
+                OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(query);
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            boolean hasSearchTerm = searchTerm != null && !searchTerm.trim().isEmpty();
+            String searchQuery = hasSearchTerm ? "%" + searchTerm.trim().replaceAll("\\s+", " ") + "%" : null;
+            stmt.setString(3, searchQuery);
+            stmt.setString(4, searchQuery);
+            int offset = (page - 1) * pageSize;
+            stmt.setInt(5, offset);
+            stmt.setInt(6, pageSize);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                services.add(new TopServiceDTO(
+                        rs.getNString("service_name"),
+                        rs.getNString("description"),
+                        rs.getInt("total_quantity"),
+                        rs.getDouble("total_service_revenue")
+                ));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error fetching top services: " + e.getMessage());
+            throw new RuntimeException("Failed to fetch top services", e);
+        }
+        return services;
+    }
+
+    // Đếm tổng số dịch vụ
+    public int countTopServices(String startDate, String endDate, String searchTerm) {
+        // Chuyển chuỗi rỗng thành null
+        startDate = startDate != null && startDate.trim().isEmpty() ? null : startDate;
+        endDate = endDate != null && startDate.trim().isEmpty() ? null : endDate;
+
+        int totalRecords = 0;
+        String query = """
+                SELECT COUNT(DISTINCT lms.service_id) AS total_records
+                FROM ServiceInvoice si
+                JOIN ServiceOrderItem soi ON si.service_order_item_id = soi.service_order_item_id
+                JOIN ListOfMedicalService lms ON soi.service_id = lms.service_id
+                JOIN Invoice i ON si.invoice_id = i.invoice_id
+                WHERE issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                    AND COALESCE(NULLIF(?, ''), GETDATE())
+                    AND i.status = 'Paid'
+                    AND lms.status = 'Enable'
+                    AND (? IS NULL OR lms.name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?);
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(query);
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            boolean hasSearchTerm = searchTerm != null && !searchTerm.trim().isEmpty();
+            String searchQuery = hasSearchTerm ? "%" + searchTerm.trim().replaceAll("\\s+", " ") + "%" : null;
+            stmt.setString(3, searchQuery);
+            stmt.setString(4, searchQuery);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalRecords = rs.getInt("total_records");
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error counting top services: " + e.getMessage());
+            throw new RuntimeException("Failed to count top services", e);
+        }
+        return totalRecords;
+    }
+
+    // Tháng có doanh thu cao nhất
+    public ArrayList<MonthlyRevenueDTO> getTopRevenueMonths(String startDate, String endDate) {
+        // Chuyển chuỗi rỗng thành null
+        startDate = startDate != null && startDate.trim().isEmpty() ? null : startDate;
+        endDate = endDate != null && endDate.trim().isEmpty() ? null : endDate;
+
+        ArrayList<MonthlyRevenueDTO> months = new ArrayList<>();
+        String query = """
+                SELECT 
+                    YEAR(issue_date) AS year,
+                    MONTH(issue_date) AS month,
+                    SUM(total_amount) AS monthly_revenue
+                FROM Invoice
+                WHERE issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                    AND COALESCE(NULLIF(?, ''), GETDATE())
+                    AND status = 'Paid'
+                GROUP BY YEAR(issue_date), MONTH(issue_date)
+                ORDER BY monthly_revenue DESC;
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(query);
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                months.add(new MonthlyRevenueDTO(
+                        rs.getInt("year"),
+                        rs.getInt("month"),
+                        rs.getDouble("monthly_revenue")
+                ));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error fetching top revenue months: " + e.getMessage());
+            throw new RuntimeException("Failed to fetch top revenue months", e);
+        }
+        return months;
+    }
+
+    // Doanh thu theo loại thanh toán
+    public ArrayList<RevenueByTypeDTO> getRevenueByType(String startDate, String endDate) {
+        // Chuyển chuỗi rỗng thành null
+        startDate = startDate != null && startDate.trim().isEmpty() ? null : startDate;
+        endDate = endDate != null && endDate.trim().isEmpty() ? null : endDate;
+
+        ArrayList<RevenueByTypeDTO> revenues = new ArrayList<>();
+        String query = """
+                SELECT 
+                    p.payment_type,
+                    SUM(p.amount) AS total_revenue_by_type
+                FROM Payment p
+                JOIN Invoice i ON p.invoice_id = i.invoice_id
+                WHERE issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                    AND COALESCE(NULLIF(?, ''), GETDATE())
+                    AND i.status = 'Paid'
+                    AND p.status = 'Pending'
+                GROUP BY p.payment_type
+                ORDER BY total_revenue_by_type DESC;
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(query);
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                revenues.add(new RevenueByTypeDTO(
+                        rs.getString("payment_type"),
+                        rs.getDouble("total_revenue_by_type")
+                ));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error fetching revenue by type: " + e.getMessage());
+            throw new RuntimeException("Failed to fetch revenue by type", e);
+        }
+        return revenues;
+    }
+
+    // Top bác sĩ mang lại doanh thu cao nhất (với phân trang và tìm kiếm)
+    public ArrayList<TopDoctorDTO> getTopDoctors(String startDate, String endDate, String searchTerm, int page, int pageSize) {
+        // Chuyển chuỗi rỗng thành null
+        startDate = startDate != null && startDate.trim().isEmpty() ? null : startDate;
+        endDate = endDate != null && endDate.trim().isEmpty() ? null : endDate;
+
+        ArrayList<TopDoctorDTO> doctors = new ArrayList<>();
+        String query = """
+                SELECT 
+                    d.full_name AS doctor_name,
+                    d.department,
+                    COALESCE(SUM(si.total_price), 0) + COALESCE(SUM(i2.total_amount), 0) AS total_revenue
+                FROM Doctor d
+                LEFT JOIN ServiceOrderItem soi ON d.doctor_id = soi.doctor_id
+                LEFT JOIN ServiceInvoice si ON soi.service_order_item_id = si.service_order_item_id
+                LEFT JOIN Invoice i ON si.invoice_id = i.invoice_id
+                    AND issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                        AND COALESCE(NULLIF(?, ''), GETDATE())
+                    AND i.status = 'Paid'
+                LEFT JOIN Prescription pr ON d.doctor_id = pr.doctor_id
+                LEFT JOIN PrescriptionInvoice pi ON pr.prescription_id = pi.prescription_id
+                LEFT JOIN Invoice i2 ON pi.invoice_id = i2.invoice_id
+                    AND i2.issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                        AND COALESCE(NULLIF(?, ''), GETDATE())
+                    AND i2.status = 'Paid'
+                WHERE (? IS NULL OR d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                GROUP BY d.full_name, d.department
+                ORDER BY total_revenue DESC
+                OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(query);
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            stmt.setString(3, startDate);
+            stmt.setString(4, endDate);
+            boolean hasSearchTerm = searchTerm != null && !searchTerm.trim().isEmpty();
+            String searchQuery = hasSearchTerm ? "%" + searchTerm.trim().replaceAll("\\s+", " ") + "%" : null;
+            stmt.setString(5, searchQuery);
+            stmt.setString(6, searchQuery);
+            int offset = (page - 1) * pageSize;
+            stmt.setInt(7, offset);
+            stmt.setInt(8, pageSize);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                doctors.add(new TopDoctorDTO(
+                        rs.getNString("doctor_name"),
+                        rs.getNString("department"),
+                        rs.getDouble("total_revenue")
+                ));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error fetching top doctors: " + e.getMessage());
+            throw new RuntimeException("Failed to fetch top doctors", e);
+        }
+        return doctors;
+    }
+
+    // Đếm tổng số bác sĩ
+    public int countTopDoctors(String startDate, String endDate, String searchTerm) {
+        // Chuyển chuỗi rỗng thành null
+        startDate = startDate != null && startDate.trim().isEmpty() ? null : startDate;
+        endDate = endDate != null && endDate.trim().isEmpty() ? null : endDate;
+
+        int totalRecords = 0;
+        String query = """
+                SELECT COUNT(DISTINCT d.doctor_id) AS total_records
+                FROM Doctor d
+                LEFT JOIN ServiceOrderItem soi ON d.doctor_id = soi.doctor_id
+                LEFT JOIN ServiceInvoice si ON soi.service_order_item_id = si.service_order_item_id
+                LEFT JOIN Invoice i ON si.invoice_id = i.invoice_id
+                    AND issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                        AND COALESCE(NULLIF(?, ''), GETDATE())
+                    AND i.status = 'Paid'
+                LEFT JOIN Prescription pr ON d.doctor_id = pr.doctor_id
+                LEFT JOIN PrescriptionInvoice pi ON pr.prescription_id = pi.prescription_id
+                LEFT JOIN Invoice i2 ON pi.invoice_id = i2.invoice_id
+                    AND i2.issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                        AND COALESCE(NULLIF(?, ''), GETDATE())
+                    AND i2.status = 'Paid'
+                WHERE (? IS NULL OR d.full_name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?);
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(query);
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            stmt.setString(3, startDate);
+            stmt.setString(4, endDate);
+            boolean hasSearchTerm = searchTerm != null && !searchTerm.trim().isEmpty();
+            String searchQuery = hasSearchTerm ? "%" + searchTerm.trim().replaceAll("\\s+", " ") + "%" : null;
+            stmt.setString(5, searchQuery);
+            stmt.setString(6, searchQuery);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalRecords = rs.getInt("total_records");
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error counting top doctors: " + e.getMessage());
+            throw new RuntimeException("Failed to count top doctors", e);
+        }
+        return totalRecords;
+    }
+
+    // Doanh thu theo khoa (với phân trang và tìm kiếm)
+    public ArrayList<RevenueByDepartmentDTO> getRevenueByDepartment(String startDate, String endDate, String searchTerm, int page, int pageSize) {
+        // Chuyển chuỗi rỗng thành null
+        startDate = startDate != null && startDate.trim().isEmpty() ? null : startDate;
+        endDate = endDate != null && endDate.trim().isEmpty() ? null : endDate;
+
+        ArrayList<RevenueByDepartmentDTO> departments = new ArrayList<>();
+        String query = """
+                SELECT 
+                    d.department,
+                    SUM(si.total_price) AS total_revenue_by_department
+                FROM Doctor d
+                JOIN ServiceOrderItem soi ON d.doctor_id = soi.doctor_id
+                JOIN ServiceInvoice si ON soi.service_order_item_id = si.service_order_item_id
+                JOIN Invoice i ON si.invoice_id = i.invoice_id
+                WHERE issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                    AND COALESCE(NULLIF(?, ''), GETDATE())
+                    AND i.status = 'Paid'
+                    AND (? IS NULL OR d.department COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?)
+                GROUP BY d.department
+                ORDER BY total_revenue_by_department DESC
+                OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(query);
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            boolean hasSearchTerm = searchTerm != null && !searchTerm.trim().isEmpty();
+            String searchQuery = hasSearchTerm ? "%" + searchTerm.trim().replaceAll("\\s+", " ") + "%" : null;
+            stmt.setString(3, searchQuery);
+            stmt.setString(4, searchQuery);
+            int offset = (page - 1) * pageSize;
+            stmt.setInt(5, offset);
+            stmt.setInt(6, pageSize);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                departments.add(new RevenueByDepartmentDTO(
+                        rs.getNString("department"),
+                        rs.getDouble("total_revenue_by_department")
+                ));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error fetching revenue by department: " + e.getMessage());
+            throw new RuntimeException("Failed to fetch revenue by department", e);
+        }
+        return departments;
+    }
+
+    // Đếm tổng số khoa
+    public int countRevenueByDepartment(String startDate, String endDate, String searchTerm) {
+        // Chuyển chuỗi rỗng thành null
+        startDate = startDate != null && startDate.trim().isEmpty() ? null : startDate;
+        endDate = endDate != null && endDate.trim().isEmpty() ? null : endDate;
+
+        int totalRecords = 0;
+        String query = """
+                SELECT COUNT(DISTINCT d.department) AS total_records
+                FROM Doctor d
+                JOIN ServiceOrderItem soi ON d.doctor_id = soi.doctor_id
+                JOIN ServiceInvoice si ON soi.service_order_item_id = si.service_order_item_id
+                JOIN Invoice i ON si.invoice_id = i.invoice_id
+                WHERE issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                    AND COALESCE(NULLIF(?, ''), GETDATE())
+                    AND i.status = 'Paid'
+                    AND (? IS NULL OR d.department COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?);
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(query);
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            boolean hasSearchTerm = searchTerm != null && !searchTerm.trim().isEmpty();
+            String searchQuery = hasSearchTerm ? "%" + searchTerm.trim().replaceAll("\\s+", " ") + "%" : null;
+            stmt.setString(3, searchQuery);
+            stmt.setString(4, searchQuery);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalRecords = rs.getInt("total_records");
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error counting revenue by department: " + e.getMessage());
+            throw new RuntimeException("Failed to count revenue by department", e);
+        }
+        return totalRecords;
+    }
+
+    // Tỷ lệ hoàn thành hóa đơn
+    public ArrayList<InvoiceStatusDTO> getInvoiceStatus(String startDate, String endDate) {
+        // Chuyển chuỗi rỗng thành null
+        startDate = startDate != null && startDate.trim().isEmpty() ? null : startDate;
+        endDate = endDate != null && endDate.trim().isEmpty() ? null : endDate;
+
+        ArrayList<InvoiceStatusDTO> statuses = new ArrayList<>();
+        String query = """
+                SELECT 
+                    status,
+                    COUNT(*) AS invoice_count,
+                    SUM(total_amount) AS total_amount,
+                    (COUNT(*) * 100.0 / SUM(COUNT(*)) OVER ()) AS percentage
+                FROM Invoice
+                WHERE issue_date BETWEEN COALESCE(NULLIF(?, ''), '1900-01-01') 
+                    AND COALESCE(NULLIF(?, ''), GETDATE())
+                GROUP BY status
+                ORDER BY percentage DESC;
+                """;
+        try {
+            PreparedStatement stmt = ad.getConnection().prepareStatement(query);
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                statuses.add(new InvoiceStatusDTO(
+                        rs.getString("status"),
+                        rs.getInt("invoice_count"),
+                        rs.getDouble("total_amount"),
+                        rs.getDouble("percentage")
+                ));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(getClass().getName()).severe("Error fetching invoice status: " + e.getMessage());
+            throw new RuntimeException("Failed to fetch invoice status", e);
+        }
+        return statuses;
+    }
+
     public static void main(String[] args) {
         AdminBusinessReportDAO dao = new AdminBusinessReportDAO();
 
@@ -373,6 +795,93 @@ public class AdminBusinessReportDAO {
                 "", LocalDate.of(2025, 1, 1),
                 LocalDate.of(2025, 7, 31), "", 1, 5);
         System.out.println("Filtered records: " + filteredList.size());
+        // Tham số mẫu
+        String startDate = "";
+        String endDate = "";
+        String searchTerm = ""; // Tìm kiếm mẫu, có thể để null
+        int page = 1;
+        int pageSize = 10;
 
+        try {
+            // 1. Gọi hàm getTotalRevenue
+            System.out.println("=== Tổng Doanh Thu ===");
+            TotalRevenueDTO totalRevenue = dao.getTotalRevenue(startDate, endDate);
+            if (totalRevenue != null) {
+                System.out.println(totalRevenue);
+            } else {
+                System.out.println("No revenue data found.");
+            }
+
+            // 2. Gọi hàm getTopServices
+            System.out.println("\n=== Top Dịch Vụ ===");
+            ArrayList<TopServiceDTO> topServices = dao.getTopServices(startDate, endDate, searchTerm, page, pageSize);
+            if (!topServices.isEmpty()) {
+                for (TopServiceDTO service : topServices) {
+                    System.out.println(service);
+                }
+            } else {
+                System.out.println("No services found.");
+            }
+
+            // 3. Gọi hàm getTopRevenueMonths
+            System.out.println("\n=== Tháng Có Doanh Thu Cao Nhất ===");
+            ArrayList<MonthlyRevenueDTO> topMonths = dao.getTopRevenueMonths(startDate, endDate);
+            if (!topMonths.isEmpty()) {
+                for (MonthlyRevenueDTO month : topMonths) {
+                    System.out.println(month);
+                }
+            } else {
+                System.out.println("No monthly revenue data found.");
+            }
+
+            // 4. Gọi hàm getRevenueByType
+            System.out.println("\n=== Doanh Thu Theo Loại Thanh Toán ===");
+            ArrayList<RevenueByTypeDTO> revenueByTypes = dao.getRevenueByType(startDate, endDate);
+            if (!revenueByTypes.isEmpty()) {
+                for (RevenueByTypeDTO revenue : revenueByTypes) {
+                    System.out.println(revenue);
+                }
+            } else {
+                System.out.println("No revenue by type found.");
+            }
+
+            // 5. Gọi hàm getTopDoctors
+            System.out.println("\n=== Top Bác Sĩ ===");
+            ArrayList<TopDoctorDTO> topDoctors = dao.getTopDoctors(startDate, endDate, searchTerm, page, pageSize);
+            if (!topDoctors.isEmpty()) {
+                for (TopDoctorDTO doctor : topDoctors) {
+                    System.out.println(doctor);
+                }
+            } else {
+                System.out.println("No doctors found.");
+            }
+
+            // 6. Gọi hàm getRevenueByDepartment
+            System.out.println("\n=== Doanh Thu Theo Khoa ===");
+            ArrayList<RevenueByDepartmentDTO> revenueByDepartments = dao.getRevenueByDepartment(startDate, endDate, searchTerm, page, pageSize);
+            if (!revenueByDepartments.isEmpty()) {
+                for (RevenueByDepartmentDTO dept : revenueByDepartments) {
+                    System.out.println(dept);
+                }
+            } else {
+                System.out.println("No departments found.");
+            }
+
+            // 7. Gọi hàm getInvoiceStatus
+            System.out.println("\n=== Tỷ Lệ Hoàn Thành Hóa Đơn ===");
+            ArrayList<InvoiceStatusDTO> invoiceStatuses = dao.getInvoiceStatus(startDate, endDate);
+            if (!invoiceStatuses.isEmpty()) {
+                for (InvoiceStatusDTO status : invoiceStatuses) {
+                    System.out.println(status);
+                }
+            } else {
+                System.out.println("No invoice status data found.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Đóng kết nối
+        }
     }
 }
