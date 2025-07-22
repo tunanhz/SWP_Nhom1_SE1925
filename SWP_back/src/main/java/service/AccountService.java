@@ -4,6 +4,8 @@ import dal.AccountDAO;
 import dto.ResetPasswordRequestDTO;
 import dto.ResponseDTO;
 import dto.VerifyOTPRequestDTO;
+import org.mindrot.jbcrypt.BCrypt;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -60,8 +62,9 @@ public class AccountService {
         }
 
         String accountType = (String) otpData.get("accountType");
-        accountDAO.updatePassword(email, password, accountType);
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
 
+        accountDAO.updatePassword(email, hashedPassword, accountType);
         otpStore.remove(email);
         return new ResponseDTO(true, "Mật khẩu của bạn đã được cập nhật.", null);
     }
