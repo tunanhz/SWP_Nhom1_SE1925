@@ -394,4 +394,59 @@ public class MedicineDAO {
 
         return medicines;
     }
+
+    public ArrayList<MedicineDTO> getExpiredMedicines() {
+        ArrayList<MedicineDTO> medicines = new ArrayList<>();
+        String sql = """
+        SELECT
+            m.medicine_id,
+            m.name,
+            m.ingredient,
+            m.usage,
+            m.preservation,
+            m.quantity,
+            m.manuDate,
+            m.expDate,
+            m.price,
+            w.name AS warehouse_name,
+            w.location AS warehouse_location,
+            c.categoryName
+        FROM Medicine m
+        JOIN Warehouse w ON m.warehouse_id = w.warehouse_id
+        LEFT JOIN Category c ON m.category_id = c.category_id
+        WHERE m.expDate IS NOT NULL
+        AND m.expDate < ?
+        ORDER BY m.expDate ASC;
+        """;
+
+        try {
+            PreparedStatement ps = ad.getConnection().prepareStatement(sql);
+            java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
+            ps.setDate(1, currentDate);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                medicines.add(new MedicineDTO(
+                        rs.getInt("medicine_id"),
+                        rs.getNString("name"),
+                        rs.getNString("ingredient"),
+                        rs.getNString("usage"),
+                        rs.getNString("preservation"),
+                        rs.getInt("quantity"),
+                        rs.getDate("manuDate"),
+                        rs.getDate("expDate"),
+                        rs.getDouble("price"),
+                        rs.getNString("warehouse_name"),
+                        rs.getNString("warehouse_location")
+                ));
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return medicines;
+    }
 }

@@ -63,6 +63,10 @@ public class MedicineServlet extends HttpServlet {
                     ArrayList<MedicineDTO> medicines = dao.getMedicinesLowStock(quantityThreshold);
                     out.println(gson.toJson(medicines));
                     resp.setStatus(HttpServletResponse.SC_OK);
+                } else if (req.getParameter("expired") != null) {
+                    ArrayList<MedicineDTO> medicines = dao.getExpiredMedicines();
+                    out.println(gson.toJson(medicines));
+                    resp.setStatus(HttpServletResponse.SC_OK);
                 } else if (searchName != null && !searchName.trim().isEmpty()) {
                     ArrayList<MedicineDTO> medicines = dao.searchMedicinesByName(searchName);
                     out.println(gson.toJson(medicines));
