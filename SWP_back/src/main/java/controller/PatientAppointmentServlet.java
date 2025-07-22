@@ -210,7 +210,7 @@ public class PatientAppointmentServlet extends HttpServlet {
                     out.println(gson.toJson(updatedAppointment));
                 } catch (SQLException e) {
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    out.println("{\"error\": \"Failed to update appointment: " + e.getMessage() + "\"}");
+                    out.println("{\"error\": \"" + e.getMessage() + "\"}");
                 }
 
             } catch (NumberFormatException e) {

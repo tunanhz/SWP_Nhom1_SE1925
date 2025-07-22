@@ -308,7 +308,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                 if (!appointmentId || isNaN(appointmentId) || appointmentId <= 0) {
                     Swal.fire({
                         title: "Error!",
-                        text: "Invalid appointment ID.",
+                        text: "Mã cuộc hẹn không hợp lệ.",
                         icon: "error",
                         confirmButtonColor: "#c03221"
                     });
@@ -319,20 +319,20 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                 Swal.showLoading();
 
                 const { value: note } = await Swal.fire({
-                    title: "Confirm Cancellation?",
-                    text: `Are you sure you want to cancel appointment ? Please enter a cancellation reason (optional):`,
+                    title: "Xác nhận hủy?",
+                    text: `Bạn có chắc chắn muốn hủy cuộc hẹn không? Vui lòng nhập lý do hủy (tùy chọn):`,
                     icon: "warning",
                     input: "text",
-                    inputPlaceholder: "Enter cancellation reason (optional)",
+                    inputPlaceholder: "Nhập lý do hủy (tùy chọn)",
                     showCancelButton: true,
                     backdrop: `rgba(60,60,60,0.8)`,
-                    confirmButtonText: "Yes, cancel it!",
+                    confirmButtonText: "Đúng rồi, hủy!",
                     cancelButtonText: "No",
                     confirmButtonColor: "#c03221",
                     cancelButtonColor: "#6c757d",
                     inputValidator: (value) => {
                         if (value && value.length > 200) {
-                            return "Cancellation reason must not exceed 200 characters.";
+                            return "Lý do hủy không được vượt quá 200 ký tự.";
                         }
                     }
                 });
@@ -352,8 +352,8 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
 
                         if (response.status === 204) {
                             Swal.fire({
-                                title: "Cancelled!",
-                                text: `Appointment has been cancelled.`,
+                                title: "Đã hủy!",
+                                text: `Cuộc hẹn đã bị hủy.`,
                                 icon: "success",
                                 timer: 2000,
                                 showConfirmButton: false
@@ -362,18 +362,18 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                             await displayAppointment(state.currentPage, state.currentNameSearch, state.currentDateAppointment, state.currentStatus);
                         } else if (response.status === 404) {
                             const errorData = await response.json().catch(() => ({}));
-                            throw new Error(errorData.error || "Appointment not found");
+                            throw new Error(errorData.error || "Không tìm thấy cuộc hẹn");
                         } else if (response.status === 400) {
                             const errorData = await response.json().catch(() => ({}));
-                            throw new Error(errorData.error || "Invalid request");
+                            throw new Error(errorData.error || "Yêu cầu không hợp lệ");
                         } else {
-                            throw new Error(`Unexpected server response: ${response.status}`);
+                            throw new Error(`Phản hồi máy chủ không mong đợi: ${response.status}`);
                         }
                     } catch (error) {
                         Swal.close(); 
                         Swal.fire({
                             title: "Error!",
-                            text: `Could not cancel appointment: ${error.message}`,
+                            text: `Không thể hủy cuộc hẹn: ${error.message}`,
                             icon: "error",
                             confirmButtonColor: "#c03221"
                         });
@@ -449,28 +449,28 @@ async function handleFormSubmissionConfirm(event) {
 
 
     if (!patientId || isNaN(patientId)) {
-        Swal.fire("Error!", "Invalid patient ID", "error");
+        Swal.fire("Error!", "ID bệnh nhân không hợp lệ", "error");
         return;
     }
 
     if (!namePatient || namePatient.length > 100 || /\s{2,}/.test(namePatient)) {
-        Swal.fire("Error!", "Full name must be max 100 characters and contain single spaces only", "error");
+        Swal.fire("Error!", "Tên đầy đủ phải dài tối đa 100 ký tự và chỉ chứa một khoảng trắng", "error");
         return;
     }
 
     if (!phonePatient || !/^[0][1-9]{9}$/.test(phonePatient)) {
-        Swal.fire("Error!", "Phone number must be exactly 10 digits and start with 0", "error");
+        Swal.fire("Error!", "Số điện thoại phải có chính xác 10 chữ số và bắt đầu bằng số 0", "error");
         return;
     }
 
     if (address.length > 225) {
-        Swal.fire("Error!", "Address must not exceed 225 characters", "error");
+        Swal.fire("Error!", "Địa chỉ không được vượt quá 225 ký tự", "error");
         return;
     }
 
     try {
         if (!patientId || isNaN(patientId)) {
-            throw new Error("Invalid patient ID");
+            throw new Error("ID bệnh nhân không hợp lệ");
         }
 
         const patientData = {
@@ -490,7 +490,7 @@ async function handleFormSubmissionConfirm(event) {
         });
 
         if (!response) {
-            throw new Error("No response received from server");
+            throw new Error("Không nhận được phản hồi từ máy chủ");
         }
 
         if (!response.ok) {
@@ -499,7 +499,7 @@ async function handleFormSubmissionConfirm(event) {
         }
 
         const data = await response.json();
-        Swal.fire("Success!", "Patient updated successfully.", "success");
+        Swal.fire("Success!", "Bệnh nhân đã được cập nhật thành công.", "success");
         bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasEncounterEditConfirm")).hide();
         displayAppointment(state.currentPage);
     } catch (error) {
@@ -997,19 +997,19 @@ editPendingAppointmentForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     if (!doctorSelect.value) {
-        Swal.fire("Error!", "Please select a doctor", "error");
+        Swal.fire("Error!", "Vui lòng chọn một bác sĩ", "error");
         return;
     }
     if (!selectedDate.value) {
-        Swal.fire("Error!", "Please select a date", "error");
+        Swal.fire("Error!", "Vui lòng chọn ngày", "error");
         return;
     }
     if (!selectedTime.value) {
-        Swal.fire("Error!", "Please select time", "error");
+        Swal.fire("Error!", "Vui lòng chọn thời gian", "error");
         return;
     }
     if (noteInput.value.length > 500) {
-        Swal.fire("Error!", "Notes must not exceed 500 characters", "error");
+        Swal.fire("Error!", "Ghi chú không được vượt quá 500 ký tự", "error");
         return;
     }
 
@@ -1018,16 +1018,16 @@ editPendingAppointmentForm.addEventListener('submit', async (e) => {
     try {
         selectedDateTime = new Date(`${dateTimeString}:00+07:00`);
         if (isNaN(selectedDateTime.getTime())) {
-            throw new Error("Invalid date or time format");
+            throw new Error("Định dạng ngày hoặc giờ không hợp lệ");
         }
     } catch (error) {
-        Swal.fire("Error!", "Invalid date or time format", "error");
+        Swal.fire("Error!", "Định dạng ngày hoặc giờ không hợp lệ", "error");
         return;
     }
 
     const currentDateTime = new Date();
     if (selectedDateTime <= currentDateTime) {
-        Swal.fire("Error!", "Cannot select date or time in the past", "error");
+        Swal.fire("Error!", "Không thể chọn ngày hoặc giờ trong quá khứ", "error");
         return;
     }
 
@@ -1055,16 +1055,16 @@ editPendingAppointmentForm.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            Swal.fire("Success!", "Appointment update successful.", "success");
+            Swal.fire("Success!", "Cập nhật cuộc hẹn thành công.", "success");
             bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasEncounterEditPending')).hide();
             resetEditForm();
             displayAppointment();
         } else {
             // Hiển thị thông báo lỗi chi tiết từ server
-            Swal.fire("Error!", data.error || "Unable to update appointment", "error");
+            Swal.fire("Error!", data.error || "Không thể cập nhật cuộc hẹn", "error");
         }
     } catch (error) {
-        Swal.fire("Error!", `Unable to update appointment: ${error.message}`, "error");
+        Swal.fire("Error!", `${error.message}`, "error");
         console.error('Unable to update appointment:', error);
     }
 });

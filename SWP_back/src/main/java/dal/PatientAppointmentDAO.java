@@ -274,7 +274,7 @@ public class PatientAppointmentDAO {
                                                             	CONVERT(varchar, a.appointment_datetime, 103) AS appointment_date,
                                                                 CONVERT(varchar, a.appointment_datetime, 108) AS appointment_time,
                                                                 DATEDIFF(DAY, GETDATE(), a.appointment_datetime) AS days_until_appointment,
-                                                                CAST(DATEDIFF(DAY, GETDATE(), a.appointment_datetime) AS varchar) + ' days left, at ' + CONVERT(varchar, a.appointment_datetime, 108) AS message,
+                                                                CAST(DATEDIFF(DAY, GETDATE(), a.appointment_datetime) AS varchar) + ' ngày, lúc ' + CONVERT(varchar, a.appointment_datetime, 108) AS message,
                                                                 a.[shift],
                                                                 a.status AS appointment_status,
                                                                 a.note
@@ -292,7 +292,7 @@ public class PatientAppointmentDAO {
                                                                 AND ap.status = 'Enable'
                                                                 AND acs.status = 'Enable'
                                                                 AND p.status = 'Enable'
-                                                            	AND a.status = 'Confirmed'
+                                                            	AND a.status IN ('Confirmed', 'Pending')
                                                             	AND a.appointment_datetime > GETDATE()
                                                             	ORDER BY a.appointment_datetime ASC
                 """;
@@ -478,7 +478,7 @@ public class PatientAppointmentDAO {
                                          JOIN Medicine m ON med.medicine_id = m.medicine_id
                                          GROUP BY pi.invoice_id
                                      ) med ON i.invoice_id = med.invoice_id
-                                     WHERE i.status IN ('Pending')
+                                     WHERE i.status IN ('Paid')
                                          AND ap.account_patient_id = ?
                                          AND ap.status = 'Enable'
                                          AND p.status = 'Enable'
@@ -607,7 +607,7 @@ public class PatientAppointmentDAO {
                                                             	CONVERT(varchar, a.appointment_datetime, 103) AS appointment_date,
                                                                 CONVERT(varchar, a.appointment_datetime, 108) AS appointment_time,
                                                                 DATEDIFF(DAY, GETDATE(), a.appointment_datetime) AS days_until_appointment,
-                                                                CAST(DATEDIFF(DAY, GETDATE(), a.appointment_datetime) AS varchar) + ' days left, at ' + CONVERT(varchar, a.appointment_datetime, 108) AS message,
+                                                                CAST(DATEDIFF(DAY, GETDATE(), a.appointment_datetime) AS varchar) + ' ngày, lúc ' + CONVERT(varchar, a.appointment_datetime, 108) AS message,
                                                                 a.[shift],
                                                                 a.status AS appointment_status,
                                                                 a.note
@@ -625,7 +625,7 @@ public class PatientAppointmentDAO {
                                                                 AND ap.status = 'Enable'
                                                                 AND acs.status = 'Enable'
                                                                 AND p.status = 'Enable'
-                                                                AND a.status = 'Confirmed'
+                                                                AND a.status IN ('Confirmed', 'Pending')
                                                                 AND a.appointment_datetime > GETDATE()
                                                             	ORDER BY a.appointment_datetime ASC
                 """;
