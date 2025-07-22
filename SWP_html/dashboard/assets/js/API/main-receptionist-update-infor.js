@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Lấy thông tin tài khoản từ localStorage
     const account = JSON.parse(localStorage.getItem('account'));
     if (!account || !account.accountStaffId) {
-        showError(formError, 'Please log in to update your profile');
-        showError(passwordFormError, 'Please log in to change your password');
+        showError(formError, 'Vui lòng đăng nhập để cập nhật hồ sơ');
+        showError(passwordFormError, 'Vui lòng đăng nhập để thay đổi mật khẩu');
         saveChangesBtn.disabled = true;
         changePasswordBtn.disabled = true;
         return;
@@ -106,8 +106,8 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             console.log('GET response:', data);
             if (!data.success) {
-                showError(formError, data.error || 'Cannot load profile');
-                showError(passwordFormError, data.error || 'Cannot load profile');
+                showError(formError, data.error || 'Không thể tải hồ sơ');
+                showError(passwordFormError, data.error || 'Không thể tải hồ sơ');
                 saveChangesBtn.disabled = true;
                 changePasswordBtn.disabled = true;
                 return;
@@ -117,13 +117,13 @@ document.addEventListener('DOMContentLoaded', function () {
             phoneInput.value = phone || '';
             profileImg.src = img || './assets/images/user/user-1.jpg';
             userImg.src = img || './assets/images/avatars/12.png';
-            fullNameDisplay.textContent = fullName || 'Not specified';
+            fullNameDisplay.textContent = fullName || 'Chưa xác định';
             updateProfileSubmitButton();
         })
         .catch(error => {
             console.error('Error loading profile:', error);
-            showError(formError, `Error loading profile: ${error.message}`);
-            showError(passwordFormError, `Error loading profile: ${error.message}`);
+            showError(formError, `Lỗi khi tải hồ sơ: ${error.message}`);
+            showError(passwordFormError, `Lỗi khi tải hồ sơ: ${error.message}`);
             saveChangesBtn.disabled = true;
             changePasswordBtn.disabled = true;
         });
@@ -137,13 +137,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const maxSize = 5 * 1024 * 1024; // 5MB
             const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (!validTypes.includes(file.type)) {
-                showError(imgError, 'Only JPEG, PNG, or GIF images are accepted');
+                showError(imgError, 'Chỉ chấp nhận ảnh JPEG, PNG hoặc GIF');
                 imgInput.value = '';
                 updateProfileSubmitButton();
                 return;
             }
             if (file.size > maxSize) {
-                showError(imgError, 'Image size must not exceed 5MB');
+                showError(imgError, 'Kích thước ảnh không được vượt quá 5MB');
                 imgInput.value = '';
                 updateProfileSubmitButton();
                 return;
@@ -171,11 +171,11 @@ document.addEventListener('DOMContentLoaded', function () {
         data.append('upload_preset', 'upload.avt');
         return fetch(url, { method: 'POST', body: data })
             .then(response => {
-                if (!response.ok) throw new Error(`Cannot upload to Cloudinary: ${response.status}`);
+                if (!response.ok) throw new Error(`Không thể tải lên Cloudinary: ${response.status}`);
                 return response.json();
             })
             .then(data => {
-                if (!data.secure_url) throw new Error('Secure URL not found in response');
+                if (!data.secure_url) throw new Error('Không tìm thấy Secure URL trong phản hồi');
                 return data.secure_url;
             });
     }
@@ -192,13 +192,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let hasError = false;
         if (fullName && !fullName.match(/^[a-zA-Z\s\u00C0-\u1EF9]{2,100}$/)) {
-            showError(fullNameError, 'Full name must contain only letters and spaces, 2-100 characters');
+            showError(fullNameError, 'Họ và tên chỉ được chứa chữ cái và khoảng trắng, từ 2 đến 100 ký tự');
             hasError = true;
         } else {
             hideError(fullNameError);
         }
         if (phone && !phone.match(/^0[0-9]{9}$/)) {
-            showError(phoneError, 'Phone number must be 10 digits starting with 0');
+            showError(phoneError, 'Số điện thoại phải có 10 chữ số và bắt đầu bằng 0');
             hasError = true;
         } else {
             hideError(phoneError);
@@ -214,11 +214,11 @@ document.addEventListener('DOMContentLoaded', function () {
             headers: { 'Content-Type': 'application/json' }
         })
             .then(response => {
-                if (!response.ok) throw new Error(`Cannot get receptionistId: ${response.status}`);
+                if (!response.ok) throw new Error(`Không thể lấy receptionistId: ${response.status}`);
                 return response.json();
             })
             .then(data => {
-                if (!data.success) throw new Error(data.error || 'Cannot get receptionistId');
+                if (!data.success) throw new Error(data.error || 'Không thể lấy receptionistId');
                 const receptionistId = data.data.receptionistId;
 
                 const uploadPromise = imgFile ? uploadToCloudinary(imgFile) : Promise.resolve(null);
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             })
             .then(response => {
-                if (!response.ok) throw new Error(`Error during update: ${response.status}`);
+                if (!response.ok) throw new Error(`Lỗi khi cập nhật:: ${response.status}`);
                 return response.json();
             })
             .then(data => {
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 saveIcon.style.display = 'inline-block';
                 saveChangesBtn.disabled = false;
                 if (data.success) {
-                    showSuccess(formSuccess, 'Profile updated successfully!');
+                    showSuccess(formSuccess, 'Cập nhật hồ sơ thành công!');
                     if (fullName) fullNameDisplay.textContent = fullName;
                     const updatedAccount = { ...account };
                     if (fullName) updatedAccount.fullName = fullName;
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         userImg.src = data.data.img;
                     }
                 } else {
-                    showError(formError, data.error || 'Cannot update profile');
+                    showError(formError, data.error || 'Không thể cập nhật hồ sơ');
                 }
             })
             .catch(error => {
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 loadingSpinner.style.display = 'none';
                 saveIcon.style.display = 'inline-block';
                 saveChangesBtn.disabled = false;
-                showError(formError, `Error during update: ${error.message}`);
+                showError(formError, `Lỗi khi cập nhật: ${error.message}`);
             });
     });
 
@@ -279,19 +279,19 @@ passwordForm.addEventListener('submit', function (event) {
 
     let hasError = false;
     if (!currentPassword) {
-        showError(currentPasswordError, 'Current password is required');
+        showError(currentPasswordError, 'Mật khẩu hiện tại là bắt buộc');
         hasError = true;
     } else {
         hideError(currentPasswordError);
     }
     if (!newPassword || newPassword.length < 8) {
-        showError(newPasswordError, 'New password must be at least 8 characters');
+        showError(newPasswordError, 'Mật khẩu mới phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt');
         hasError = true;
     } else {
         hideError(newPasswordError);
     }
     if (!confirmPassword || confirmPassword !== newPassword) {
-        showError(confirmPasswordError, 'Confirm password must match new password');
+        showError(confirmPasswordError, 'Mật khẩu xác nhận phải khớp với mật khẩu mới');
         hasError = true;
     } else {
         hideError(confirmPasswordError);
@@ -329,20 +329,20 @@ passwordForm.addEventListener('submit', function (event) {
             passwordSaveIcon.style.display = 'inline-block';
             changePasswordBtn.disabled = false;
             if (data.success) {
-                showSuccess(passwordFormSuccess, 'Password changed successfully!');
+                showSuccess(passwordFormSuccess, 'Thay đổi mật khẩu thành công!');
                 passwordForm.reset();
                 updatePasswordSubmitButton();
             } else {
                 // Hiển thị lỗi cụ thể dựa trên message từ server
-                const errorMessage = data.message || 'Cannot change password';
+                const errorMessage = data.message || 'Không thể thay đổi mật khẩu';
                 if (errorMessage.includes('Current password is incorrect')) {
-                    showError(currentPasswordError, 'Error updating password: Current password is incorrect');
+                    showError(currentPasswordError, 'Lỗi khi cập nhật mật khẩu: Mật khẩu hiện tại không đúng');
                 } else if (errorMessage.includes('New password and confirm password must match')) {
-                    showError(confirmPasswordError, 'Error updating password: New password and confirm password must match');
+                    showError(confirmPasswordError, 'Lỗi khi cập nhật mật khẩu: Mật khẩu mới và mật khẩu xác nhận phải khớp');
                 } else if (errorMessage.includes('Password must be at least 8 characters')) {
-                    showError(newPasswordError, 'Error updating password: Password must be at least 8 characters');
+                    showError(newPasswordError, 'Lỗi khi cập nhật mật khẩu: Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt');
                 } else {
-                    showError(passwordFormError, `Error updating password: ${errorMessage}`);
+                    showError(passwordFormError, `Lỗi khi cập nhật mật khẩu: ${errorMessage}`);
                 }
             }
         })
@@ -352,9 +352,9 @@ passwordForm.addEventListener('submit', function (event) {
             passwordSaveIcon.style.display = 'inline-block';
             changePasswordBtn.disabled = false;
             if (error.status === 400) {
-                showError(passwordFormError, 'Error updating password: Invalid input data');
+                showError(passwordFormError, 'Lỗi khi cập nhật mật khẩu: Mật khẩu hiện tại không đúng');
             } else {
-                showError(passwordFormError, `Error updating password: ${error.message}`);
+                showError(passwordFormError, `Lỗi khi cập nhật mật khẩu: ${error.message}`);
             }
         });
 });
