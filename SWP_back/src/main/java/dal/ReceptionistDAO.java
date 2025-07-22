@@ -8,6 +8,7 @@ import model.Appointment;
 import model.Patient;
 import model.Receptionist;
 import model.Waitlist;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -1067,20 +1068,20 @@ public class ReceptionistDAO {
                         throw new SQLException("No account found");
                     }
                     String storedPassword = rs.getString("password");
-                    if (!storedPassword.equals(currentPassword)) { // Giả sử mật khẩu được lưu dưới dạng plain text (nên mã hóa trong thực tế)
+                    if (!BCrypt.checkpw(currentPassword, storedPassword)) {
                         LOGGER.warning("Current password mismatch for account_staff_id=" + accountStaffId);
                         throw new SQLException("Current password is incorrect");
                     }
                 }
             }
-
+            String hashedNewPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(12));
             String updatePasswordSql = """
                         UPDATE [dbo].[AccountStaff]
                         SET password = ?
                         WHERE account_staff_id = ?
                     """;
             try (PreparedStatement stmt = conn.prepareStatement(updatePasswordSql)) {
-                stmt.setString(1, newPassword);
+                stmt.setString(1, hashedNewPassword);
                 stmt.setInt(2, accountStaffId);
                 int rowsAffected = stmt.executeUpdate();
                 if (rowsAffected == 0) {

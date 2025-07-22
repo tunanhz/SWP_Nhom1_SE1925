@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const account = JSON.parse(localStorage.getItem('account'));
     if (account) {
-        document.getElementById('username').textContent = account.username;
+        document.getElementById('username').textContent = `Xin chào lễ tân ${account.username}`;
     }
     // logout
     document.getElementById('logoutLink').addEventListener('click', function (event) {
