@@ -106,7 +106,7 @@ async function fetchAppointments(page, pageSize) {
 }
 
 function renderAppointments(appointments) {
-    const tbody = document.getElementById("feedbackTableBody");
+    const tbody = document.getElementById("appointmentDetail");
     if (!tbody) {
         console.error("Appointment table body not found");
         return;
