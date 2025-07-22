@@ -1,4 +1,5 @@
 const BASE_API = "http://localhost:8080/SWP_back_war_exploded/api/admin/receptionist";
+const DEFAULT_IMAGE_URL = "https://res.cloudinary.com/dnoyqme5b/image/upload/v1752978933/avatars/1_xaytga.jpg";
 
 document.addEventListener("DOMContentLoaded", () => {
     let currentPage = 1;
@@ -49,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const itemsPerPage = document.getElementById("itemsPerPage");
     if (itemsPerPage) {
         itemsPerPage.addEventListener("change", (e) => {
-            pageSize = e.target.value === "All" ? parseInt(document.getElementById("all_receptionists").value, 10) : parseInt(e.target.value, 10);
+            pageSize = e.target.value === "All" ? parseInt(document.getElementById("all_receptionists").value, 10) || 10 : parseInt(e.target.value, 10);
             currentPage = 1;
             fetchReceptionists(currentPage, pageSize);
         });
@@ -142,15 +143,18 @@ function renderReceptionists(receptionists) {
 
     receptionists.forEach((receptionist, index) => {
         const isEnabled = receptionist.status === "Enable";
+        const imageUrl = receptionist.img && receptionist.img.trim() !== ""
+            ? receptionist.img
+            : DEFAULT_IMAGE_URL;
         const row = document.createElement("tr");
         row.innerHTML = `
             <th scope="row">${index + 1}</th>
             <td>${receptionist.accountStaffId || "-"}</td>
-            <td><h6 class="mb-0 text-body fw-500">${receptionist.accountStaff?.username || "-"}</h6></td>
+            <td><h6 class="mb-0 text-body fw-500">${receptionist.username || "-"}</h6></td>
             <td>${receptionist.fullName || "-"}</td>
-            <td>${receptionist.accountStaff?.email || "-"}</td>
+            <td>${receptionist.email || "-"}</td>
             <td>${receptionist.phone || "-"}</td>
-            <td><img src="${receptionist.accountStaff?.img || 'https://res.cloudinary.com/dnoyqme5b/image/upload/v1752978933/avatars/1_xaytga.jpg'}" alt="receptionist" class="avatar-40 rounded-pill"></td>
+            <td><img src="${imageUrl}" alt="receptionist" class="avatar-40 rounded-pill"></td>
             <td>${receptionist.status || "-"}</td>
             <td>
                 <a data-bs-toggle="offcanvas" href="#offcanvasReceptionistEdit" aria-controls="offcanvasReceptionistEdit" class="d-inline-block pe-2 edit-btn" data-account-staff-id="${receptionist.accountStaffId}">
@@ -193,10 +197,10 @@ async function handleEdit(accountStaffId) {
         if (receptionist) {
             document.getElementById("accountStaffId").value = receptionist.accountStaffId || "";
             document.getElementById("receptionistId").value = receptionist.receptionistId || "";
-            document.getElementById("username").value = receptionist.accountStaff?.username || "";
-            document.getElementById("password").value = receptionist.accountStaff?.password || "";
+            document.getElementById("username").value = receptionist.username || "";
+            document.getElementById("password").value = ""; // Password not returned for security
             document.getElementById("fullName").value = receptionist.fullName || "";
-            document.getElementById("email").value = receptionist.accountStaff?.email || "";
+            document.getElementById("email").value = receptionist.email || "";
             document.getElementById("phone").value = receptionist.phone || "";
             document.getElementById("status").value = receptionist.status || "Enable";
         } else {
@@ -235,8 +239,8 @@ async function handleUpdate() {
         return;
     }
 
-    if (!password || password.length < 6 || password.length > 50) {
-        Swal.fire("Error!", "Password must be 6-50 characters", "error");
+    if (password && (password.length < 6 || password.length > 50)) {
+        Swal.fire("Error!", "Password must be 6-50 characters if provided", "error");
         return;
     }
 
@@ -245,13 +249,13 @@ async function handleUpdate() {
         return;
     }
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        Swal.fire("Error!", "Invalid email format", "error");
+    if (!email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        Swal.fire("Error!", "Invalid email format (e.g., example@domain.com)", "error");
         return;
     }
 
     if (!phone || !/^[0][0-9]{9}$/.test(phone)) {
-        Swal.fire("Error!", "Phone number must be 10 digits starting with 0", "error");
+        Swal.fire("Error!", "Phone number must be exactly 10 digits starting with 0", "error");
         return;
     }
 
@@ -260,12 +264,12 @@ async function handleUpdate() {
             accountStaffId: parseInt(accountStaffId),
             receptionistId: parseInt(receptionistId),
             username,
-            password,
             fullName,
             email,
             phone,
-            status,
+            status
         };
+        if (password) receptionistData.password = password; // Only include password if provided
 
         const response = await fetch(`${BASE_API}/update`, {
             method: "POST",
@@ -275,15 +279,17 @@ async function handleUpdate() {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            if (errorData.errorCode === "DUPLICATE_USERNAME") {
-                throw new Error("Username already exists");
-            } else if (errorData.errorCode === "DUPLICATE_EMAIL") {
-                throw new Error("Email already exists");
-            } else if (errorData.errorCode === "DUPLICATE_PHONE") {
-                throw new Error("Phone already exists");
-            } else {
-                throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
-            }
+            const errorMap = {
+                "DUPLICATE_USERNAME": "Username already exists",
+                "DUPLICATE_EMAIL": "Email already exists",
+                "DUPLICATE_PHONE": "Phone already exists",
+                "INVALID_EMAIL": "Invalid email format",
+                "INVALID_PHONE": "Phone must be 10 digits starting with 0",
+                "INVALID_USERNAME": "Username must be 3-50 characters, alphanumeric or underscore only",
+                "INVALID_PASSWORD": "Password must be 6-50 characters",
+                "INVALID_FULLNAME": "Full name must be 1-100 characters with single spaces"
+            };
+            throw new Error(errorData.message || errorMap[errorData.errorCode] || `HTTP error! Status: ${response.status}`);
         }
 
         Swal.fire("Success!", "Receptionist updated successfully.", "success");
@@ -325,13 +331,13 @@ async function handleAdd() {
         return;
     }
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        Swal.fire("Error!", "Invalid email format", "error");
+    if (!email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        Swal.fire("Error!", "Invalid email format (e.g., example@domain.com)", "error");
         return;
     }
 
     if (!phone || !/^[0][0-9]{9}$/.test(phone)) {
-        Swal.fire("Error!", "Phone number must be 10 digits starting with 0", "error");
+        Swal.fire("Error!", "Phone number must be exactly 10 digits starting with 0", "error");
         return;
     }
 
@@ -357,20 +363,22 @@ async function handleAdd() {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            if (errorData.errorCode === "DUPLICATE_USERNAME") {
-                throw new Error("Username already exists");
-            } else if (errorData.errorCode === "DUPLICATE_EMAIL") {
-                throw new Error("Email already exists");
-            } else if (errorData.errorCode === "DUPLICATE_PHONE") {
-                throw new Error("Phone already exists");
-            } else {
-                throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
-            }
+            const errorMap = {
+                "DUPLICATE_USERNAME": "Username already exists",
+                "DUPLICATE_EMAIL": "Email already exists",
+                "DUPLICATE_PHONE": "Phone already exists",
+                "INVALID_EMAIL": "Invalid email format",
+                "INVALID_PHONE": "Phone must be 10 digits starting with 0",
+                "INVALID_USERNAME": "Username must be 3-50 characters, alphanumeric or underscore only",
+                "INVALID_PASSWORD": "Password must be 6-50 characters",
+                "INVALID_FULLNAME": "Full name must be 1-100 characters with single spaces"
+            };
+            throw new Error(errorData.message || errorMap[errorData.errorCode] || `HTTP error! Status: ${response.status}`);
         }
 
         Swal.fire("Success!", "Receptionist added successfully!", "success");
         bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasReceptionistAdd")).hide();
-        fetchReceptionists(1, document.getElementById("itemsPerPage").value);
+        await fetchReceptionists(1, document.getElementById("itemsPerPage").value);
     } catch (error) {
         Swal.fire("Error!", `Failed to add receptionist: ${error.message}`, "error");
         console.error("Add error:", error);
@@ -388,11 +396,12 @@ async function handleDelete(accountStaffId) {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
         }
 
         Swal.fire("Success!", "Receptionist status updated successfully.", "success");
-        fetchReceptionists(currentPage, document.getElementById("itemsPerPage").value);
+        await fetchReceptionists(currentPage, document.getElementById("itemsPerPage").value);
     } catch (error) {
         showError(`Error updating receptionist status: ${error.message}`);
         console.error("Error:", error);

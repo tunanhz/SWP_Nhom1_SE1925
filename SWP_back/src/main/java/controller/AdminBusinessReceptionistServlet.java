@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import dal.AdminBusinessDAO;
 import model.AccountStaff;
 import model.Receptionist;
+import dto.ReceptionistResponseDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -54,7 +55,7 @@ public class AdminBusinessReceptionistServlet extends HttpServlet {
                 }
 
                 long startTime = System.currentTimeMillis();
-                ArrayList<Receptionist> receptionists = adminBusinessDAO.getReceptionists(searchQuery, statusFilter, page, pageSize);
+                ArrayList<ReceptionistResponseDTO> receptionists = adminBusinessDAO.getReceptionists(searchQuery, statusFilter, page, pageSize);
                 int totalReceptionists = adminBusinessDAO.countReceptionists(searchQuery, statusFilter);
                 LOGGER.info("Servlet processing time: " + (System.currentTimeMillis() - startTime) + "ms");
 
@@ -70,7 +71,7 @@ public class AdminBusinessReceptionistServlet extends HttpServlet {
             } else if (pathInfo != null && pathInfo.matches("/\\d+")) {
                 int accountStaffId = Integer.parseInt(pathInfo.substring(1));
                 long startTime = System.currentTimeMillis();
-                Receptionist receptionist = adminBusinessDAO.getReceptionistById(accountStaffId);
+                ReceptionistResponseDTO receptionist = adminBusinessDAO.getReceptionistById(accountStaffId);
                 LOGGER.info("Get receptionist by ID time: " + (System.currentTimeMillis() - startTime) + "ms");
 
                 if (receptionist != null) {
@@ -122,7 +123,7 @@ public class AdminBusinessReceptionistServlet extends HttpServlet {
                 account.setUserName(jsonObject.get("username").getAsString());
                 account.setPassWord(jsonObject.get("password").getAsString());
                 account.setEmail(jsonObject.get("email").getAsString());
-                account.setStatus(jsonObject.has("status") ? jsonObject.get("status").getAsBoolean() : true);
+                account.setStatus(jsonObject.has("status") ? jsonObject.get("status").getAsString().equals("Enable") : true);
                 account.setRole("Receptionist");
 
                 Receptionist receptionist = new Receptionist();
@@ -143,7 +144,7 @@ public class AdminBusinessReceptionistServlet extends HttpServlet {
                 account.setUserName(jsonObject.get("username").getAsString());
                 account.setPassWord(jsonObject.get("password").getAsString());
                 account.setEmail(jsonObject.get("email").getAsString());
-                account.setStatus(jsonObject.has("status") ? jsonObject.get("status").getAsBoolean() : true);
+                account.setStatus(jsonObject.has("status") ? jsonObject.get("status").getAsString().equals("Enable") : true);
                 account.setRole("Receptionist");
 
                 Receptionist receptionist = new Receptionist();
@@ -182,6 +183,16 @@ public class AdminBusinessReceptionistServlet extends HttpServlet {
                 errorCode = "DUPLICATE_EMAIL";
             } else if (message.equals("Phone already exists")) {
                 errorCode = "DUPLICATE_PHONE";
+            } else if (message.equals("Invalid email format")) {
+                errorCode = "INVALID_EMAIL";
+            } else if (message.equals("Phone must be 10 digits starting with 0")) {
+                errorCode = "INVALID_PHONE";
+            } else if (message.equals("Username must be 3-50 characters, alphanumeric or underscore only")) {
+                errorCode = "INVALID_USERNAME";
+            } else if (message.equals("Password must be 6-50 characters")) {
+                errorCode = "INVALID_PASSWORD";
+            } else if (message.equals("Full name must be 1-100 characters with single spaces")) {
+                errorCode = "INVALID_FULLNAME";
             } else {
                 errorCode = "DATABASE_ERROR";
                 message = "Database error: " + message;
