@@ -2,7 +2,7 @@ const accountString = localStorage.getItem("account");
 const account = JSON.parse(accountString);
 const baseAPI = `http://localhost:8080/SWP_back_war_exploded/api/patientAppointment/?accountPatientId=${account.accountPatientId}`;
 if(account){
-    document.getElementById('username').innerHTML = `Hello! ${account.username}`;
+    document.getElementById('username').innerHTML = `Xin Chào! ${account.username}`;
 }
 
 function formatDateTimeConfirm(dateTime) {
@@ -43,13 +43,13 @@ async function displayThreeAppointment() {
     try {
 
         const container = document.getElementById("three-Appointment");
-        container.innerHTML = "<p>No Upcoming Appointment...</p>";
+        container.innerHTML = "<p>Không có cuộc hẹn sắp tới...</p>";
 
         const container1 = document.getElementById("three-AppointmentCompleted");
-        container1.innerHTML = "<p>No No Complete Appointment...</p>";
+        container1.innerHTML = "<p>Không có cuộc hẹn đã hoàn thành...</p>";
 
         const container2 = document.getElementById('infor-three-payment');
-        container2.innerHTML = "<p>No Payment...</p>";
+        container2.innerHTML = "<p>Không có thanh toán...</p>";
 
         const response = await fetch(baseAPI, {
             method: "GET",
@@ -71,13 +71,11 @@ async function displayThreeAppointment() {
         threeAppointmentsUpcomings.forEach((ap) => {
             threeAppointmentCards += `<li class="d-flex mb-4 align-items-center pb-5 mb-5 border-bottom">
                                 <div class="ms-4 flex-grow-1">
-                                    <h5>Skin Treatment</h5>
+                                    <h5>${ap.note}</h5>
                                     <ul class="list-inline m-0 p-0 d-flex gap-2 align-items-center flex-wrap">
                                         <li><h6 class="mb-0 text-body fw-normal">${ap.message} ${ap.shift === 'Morning' ? 'AM' : 'PM'}</h6></li>
                                         <li class="bg-light rounded p-1"></li>
                                         <li><h6 class="mb-0 text-body fw-normal">Dr.${ap.doctorName}</h6></li>
-                                        <li class="bg-light rounded p-1"></li>
-                                        <li><h6 class="mb-0 text-body fw-normal">${ap.note}</h6></li>
                                     </ul>
                                 </div>
                                 <div>
@@ -91,7 +89,7 @@ async function displayThreeAppointment() {
                                 </div>
                             </li>`;
 
-            container.innerHTML = threeAppointmentCards || '<p>No Upcoming Appointment.</p>';
+            container.innerHTML = threeAppointmentCards || '<p>Không có cuộc hẹn sắp tới.</p>';
         });
 
         let threePaymentCards = "";
@@ -115,7 +113,7 @@ async function displayThreeAppointment() {
                               </defs>
                            </svg>
                            <div>
-                              <h5 class="mb-0">Patient: ${pd.patient.fullName}</h5>
+                              <h5 class="mb-0">Bệnh nhân: ${pd.patient.fullName}</h5>
                               <h6 class="text-body fw-normal mb-0 mt-2">${formatDateTimeConfirm(pd.issueDate)}</h6>
                            </div>
                         </div>
@@ -129,7 +127,7 @@ async function displayThreeAppointment() {
                            </button>
                         </div>
                      </li>`;
-            container2.innerHTML = threePaymentCards || '<p>No Payment.</p>';
+            container2.innerHTML = threePaymentCards || '<p>Không thanh toán.</p>';
         });
 
 
@@ -138,12 +136,12 @@ async function displayThreeAppointment() {
         let appointmentTable = `
         <div class="card-header d-flex  align-items-center justify-content-between flex-wrap gap-2 mb-3">
                 <div>
-                    <h4 class="mb-0">Visited Doctors</h4>
+                    <h4 class="mb-0">Đã đến thăm bác sĩ</h4>
                 </div>
                 <div class="dropdown text-end">
                     <a href="patient-encounters.html" class="dropdown btn border-0 p-0"
                         aria-expanded="false">
-                        <span class="fw-500">View All</span>
+                        <span class="fw-500">Xem tất cả</span>
                         <svg width="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="transform-icon transform-down">
                             <path d="M8.5 5L15.5 12L8.5 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
@@ -156,9 +154,9 @@ async function displayThreeAppointment() {
                         <thead class="bg-primary-subtle">
                             <tr class="text-dark">
                                 <th class="border-bottom">No.</th>
-                                <th class="border-bottom">Names</th>
+                                <th class="border-bottom">Tên</th>
                                 <th class="border-bottom">Email</th>
-                                <th class="border-bottom">specializes</th>
+                                <th class="border-bottom">chuyên khoa</th>
                             </tr>
                         </thead>
                         <tbody>

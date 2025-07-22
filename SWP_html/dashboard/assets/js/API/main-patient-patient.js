@@ -113,12 +113,12 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
                     <thead class="table-dark">
                         <tr>
                             <th>No.</th>
-                            <th>Patient Name</th>
-                            <th>Date Of Birth</th>
-                            <th>Phone Number</th>
-                            <th>Gender</th>
-                            <th>Address</th>
-                            <th>Action</th>
+                            <th>Tên bệnh nhân</th>
+                            <th>Ngày sinh</th>
+                            <th>Số điện thoại</th>
+                            <th>Giới tính</th>
+                            <th>Địa chỉ</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,7 +137,7 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
                         ${state1.currentPage === 1 ? "disabled" : ""}
                         data-page="${state1.currentPage - 1}">
                     <span class="btn-inner">
-                        <span class="text d-inline-block align-middle">Previous</span>
+                        <span class="text d-inline-block align-middle">Trước</span>
                         <span class="icon d-inline-block align-middle ms-1 ps-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
@@ -145,12 +145,12 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
                         </span>
                     </span>
                 </button>
-                <span class="align-self-center me-3">Page ${state1.currentPage} of ${totalPages}</span>
+                <span class="align-self-center me-3">Trang ${state1.currentPage} / ${totalPages}</span>
                 <button class="btn btn-primary me-3" type="button"
                         ${state1.currentPage === totalPages ? "disabled" : ""}
                         data-page="${state1.currentPage + 1}">
                     <span class="btn-inner">
-                        <span class="text d-inline-block align-middle">Next</span>
+                        <span class="text d-inline-block align-middle">Kế tiếp</span>
                         <span class="icon d-inline-block align-middle ms-1 ps-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
@@ -161,13 +161,13 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
             </div>
             <div class="col-md-6 d-flex justify-content-center justify-content-md-end mt-4">
             <div class="input-group input-group-sm w-auto">
-            <label class="input-group-text text-bg-info" for="pageSize">Items per page</label>
+            <label class="input-group-text text-bg-info" for="pageSize">Số mục trên mỗi trang</label>
             <select class="form-select" name="page" id="pageSize">
                 <option value="6" ${pageSize === 6 ? 'selected' : ''}>6</option>
                 <option value="10" ${pageSize === 10 ? 'selected' : ''}>10</option>
                 <option value="15" ${pageSize === 15 ? 'selected' : ''}>15</option>
                 <option value="20" ${pageSize === 20 ? 'selected' : ''}>20</option>
-                <option value="${totalPatient}" ${pageSize === totalPatient ? 'selected' : ''}>All</option>
+                <option value="${totalPatient}" ${pageSize === totalPatient ? 'selected' : ''}>Tất cả</option>
             </select>
             </div>
             </div>
@@ -176,7 +176,7 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
         `;
 
         // Update container
-        container.innerHTML = patients.length ? patientTable + paginationHTML : '<h3 class="text-center" >No Patients found.</h3>';
+        container.innerHTML = patients.length ? patientTable + paginationHTML : '<h3 class="text-center" >Không tìm thấy bệnh nhân.</h3>';
         
     
         // Attach event listeners for edit buttons
@@ -194,12 +194,12 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
                 const id = this.dataset.id;
                 console.log("Deleting patient with ID:", id);
                 Swal.fire({
-                    title: "Are you sure?",
-                    text: "You want to delete this patient?",
+                    title: "Bạn có chắc không?",
+                    text: "Bạn muốn xóa bệnh nhân này?",
                     icon: "error",
                     showCancelButton: true,
                     backdrop: `rgba(60,60,60,0.8)`,
-                    confirmButtonText: "Yes, delete it!",
+                    confirmButtonText: "Đúng rồi, xóa!",
                     confirmButtonColor: "#c03221"
                 }).then(async (result) => {
                     if (result.isConfirmed) {
@@ -210,20 +210,20 @@ async function displayPatient(page = 1, nameSearch = state1.currentNameSearch, d
                             if (!response.ok) {
                                 const errorData = await response.json().catch(() => ({}));
                                 if (response.status === 404) {
-                                    Swal.fire("Error!", "Patient not found.", "error");
+                                    Swal.fire("Error!", "Không tìm thấy bệnh nhân.", "error");
                                 } else if (response.status === 400) {
-                                    Swal.fire("Error!", "Invalid request.", "error");
+                                    Swal.fire("Error!", "Yêu cầu không hợp lệ.", "error");
                                 } else {
-                                    Swal.fire("Error!", errorData.error || "Could not delete patient.", "error");
+                                    Swal.fire("Error!", errorData.error || "Không thể xóa bệnh nhân.", "error");
                                 }
-                                throw new Error(`Failed to delete patient: ${response.status}`);
+                                throw new Error(`Không xóa được bệnh nhân: ${response.status}`);
                             }
-                            Swal.fire("Deleted!", "Your patient has been deleted.", "success");
+                            Swal.fire("Deleted!", "Bệnh nhân của bạn đã bị xóa.", "success");
                             // Làm mới danh sách với các tham số tìm kiếm hiện tại
                             await displayPatient(state1.currentPage, state1.currentNameSearch, state1.currentDob, state1.currentGender);
                         } catch (error) {
                             console.error("Delete error:", error);
-                            Swal.fire("Error!", "Could not delete patient.", "error");
+                            Swal.fire("Error!", "Không thể xóa bệnh nhân.", "error");
                         }
                     }
                 });
@@ -291,12 +291,12 @@ async function handleFormSubmission(event) {
     const address = form.querySelector("#address").value;
 
     if (!patientId || isNaN(patientId)) {
-        Swal.fire("Error!", "Invalid patient ID", "error");
+        Swal.fire("Error!", "ID bệnh nhân không hợp lệ", "error");
         return;
     }
 
     if (!namePatient || namePatient.length > 100 || /\s{2,}/.test(namePatient)) {
-        Swal.fire("Error!", "Full name must be max 100 characters and contain single spaces only", "error");
+        Swal.fire("Error!", "Tên đầy đủ phải dài tối đa 100 ký tự và chỉ chứa một khoảng trắng", "error");
         return;
     }
 
@@ -306,12 +306,12 @@ async function handleFormSubmission(event) {
     }
 
     if (!phonePatient || !/^[0][1-9]{9}$/.test(phonePatient)) {
-        Swal.fire("Error!", "Phone number must be exactly 10 digits and start with 0", "error");
+        Swal.fire("Error!", "Số điện thoại phải có chính xác 10 chữ số và bắt đầu bằng số 0", "error");
         return;
     }
 
     if (address.length > 225) {
-        Swal.fire("Error!", "Address must not exceed 225 characters", "error");
+        Swal.fire("Error!", "Địa chỉ không được vượt quá 225 ký tự", "error");
         return;
     }
 
@@ -336,7 +336,7 @@ async function handleFormSubmission(event) {
 
         if (response.status == 500) {
             const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || `Patient already ${patientData.fullName}`);
+            throw new Error(errorData.error || `Bệnh nhân đã ${patientData.fullName}`);
         }
 
         if (!response.ok) {
@@ -344,12 +344,12 @@ async function handleFormSubmission(event) {
             throw new Error(errorData.error || `HTTP error! Status: ${response.status}`);
         }
 
-        Swal.fire("Success!", "Patient updated successfully.", "success");
+        Swal.fire("Success!", "Bệnh nhân đã được cập nhật thành công.", "success");
         bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasEncounterEditConfirm")).hide();
         await displayPatient(state1.currentPage, state1.currentNameSearch, state1.currentDob, state1.currentGender);
     } catch (error) {
         console.error("Update error:", error);
-        Swal.fire("Error!", `Could not update patient: ${error.message}`, "error");
+        Swal.fire("Error!", `Không thể cập nhật bệnh nhân: ${error.message}`, "error");
     }
 }
 
@@ -364,7 +364,7 @@ async function handleAddPatientSubmission(event) {
 
     // Validation
     if (!namePatient || namePatient.length > 100 || /\s{2,}/.test(namePatient)) {
-        Swal.fire("Error!", "Full name must be max 100 characters and contain single spaces only", "error");
+        Swal.fire("Error!", "Tên đầy đủ phải dài tối đa 100 ký tự và chỉ chứa một khoảng trắng", "error");
         return;
     }
 
@@ -374,17 +374,17 @@ async function handleAddPatientSubmission(event) {
     }
 
     if (!gender || gender === "") {
-        Swal.fire("Error!", "Gender is required", "error");
+        Swal.fire("Error!", "Giới tính là bắt buộc", "error");
         return;
     }
 
     if (!phonePatient || !/^[0][1-9]{9}$/.test(phonePatient)) {
-        Swal.fire("Error!", "Phone number must be exactly 10 digits and start with 0", "error");
+        Swal.fire("Error!", "Số điện thoại phải có chính xác 10 chữ số và bắt đầu bằng số 0", "error");
         return;
     }
 
     if (!address || address.length > 225) {
-        Swal.fire("Error!", "Address must not exceed 225 characters", "error");
+        Swal.fire("Error!", "Địa chỉ không được vượt quá 225 ký tự", "error");
         return;
     }
 
@@ -416,12 +416,12 @@ async function handleAddPatientSubmission(event) {
             throw new Error(errorData.error || `HTTP error! Status: ${response.status}`);
         }
 
-        Swal.fire("Success!", "Patient added successfully.", "success");
+        Swal.fire("Success!", "Đã thêm bệnh nhân thành công.", "success");
         bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasPatientAdd")).hide();
         await displayPatient(state1.currentPage, state1.currentNameSearch, state1.currentDob, state1.currentGender);
     } catch (error) {
         console.error("Add error:", error);
-        Swal.fire("Error!", `Could not add patient: ${error.message}`, "error");
+        Swal.fire("Error!", `Không thể thêm bệnh nhân: ${error.message}`, "error");
     }
 }
 
@@ -439,8 +439,8 @@ function triggerSearch() {
 
 function isPastOrPresentDate(dateString) {
     if (!dateString || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-        Swal.fire("Error", "Invalid date format. Please use YYYY-MM-DD.", "error");
-        return { isValid: false, message: "Invalid date format. Please use YYYY-MM-DD." };
+        Swal.fire("Error", "Định dạng ngày không hợp lệ. Vui lòng sử dụng YYYY-MM-DD.", "error");
+        return { isValid: false, message: "Định dạng ngày không hợp lệ. Vui lòng sử dụng YYYY-MM-DD." };
     }
 
     try {
@@ -449,19 +449,19 @@ function isPastOrPresentDate(dateString) {
         today.setHours(0, 0, 0, 0);
 
         if (isNaN(inputDate.getTime())) {
-            Swal.fire("Error", "Invalid date.", "error");
-            return { isValid: false, message: "Invalid date." };
+            Swal.fire("Error", "Ngày không hợp lệ.", "error");
+            return { isValid: false, message: "Ngày không hợp lệ." };
         }
 
         if (inputDate > today) {
-            Swal.fire("Error", "Only current or past dates can be selected.", "error");
-            return { isValid: false, message: "Only current or past dates can be selected." };
+            Swal.fire("Error", "Chỉ có thể chọn ngày hiện tại hoặc ngày đã qua.", "error");
+            return { isValid: false, message: "Chỉ có thể chọn ngày hiện tại hoặc ngày đã qua." };
         }
 
-        return { isValid: true, message: "Valid date.", date: dateString };
+        return { isValid: true, message: "Ngày hợp lệ.", date: dateString };
     } catch (error) {
-        Swal.fire("Error", `Error processing date: ${error.message}`, "error");
-        return { isValid: false, message: `Error processing date: ${error.message}` };
+        Swal.fire("Error", `Ngày xử lý lỗi: ${error.message}`, "error");
+        return { isValid: false, message: `Ngày xử lý lỗi: ${error.message}` };
     }
 }
 

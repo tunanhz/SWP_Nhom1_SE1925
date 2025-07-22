@@ -114,7 +114,7 @@ public class LoginServlet extends HttpServlet {
             }
 
             if (account == null) {
- //               AccountPharmacist pharmacist = pharmacistDAO.getAccountByUsernameAndPassword(identifier, password);
+                //               AccountPharmacist pharmacist = pharmacistDAO.getAccountByUsernameAndPassword(identifier, password);
                 AccountPharmacist pharmacist = pharmacistDAO.getAccountByUsername(identifier);
                 if (pharmacist != null && BCrypt.checkpw(password, pharmacist.getPassword())) {
                     account = pharmacist;
