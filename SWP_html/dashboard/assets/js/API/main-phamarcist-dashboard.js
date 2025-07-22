@@ -6,25 +6,31 @@ let currentStatus = ''; // Biến lưu trạng thái hiện tại
 
 async function fetchMedicines(page, size, status = '') {
     try {
-        // Tạo URL với tham số page, size và status (nếu có)
-        let url = `${API_URL}?nearExpiry=true&days=30&page=${page}&size=${size}`;
+        // Gọi song song 2 API: thuốc sắp hết hạn và thuốc đã hết hạn
+        let nearExpiryUrl = `${API_URL}?nearExpiry=true&days=30&page=${page}&size=${size}`;
+        let expiredUrl = `${API_URL}?expired=true`;
         if (status) {
-            url += `&status=${encodeURIComponent(status)}`;
+            nearExpiryUrl += `&status=${encodeURIComponent(status)}`;
+            expiredUrl += `&status=${encodeURIComponent(status)}`;
         }
 
-        const response = await fetch(url, {
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
+        // Gọi song song
+        const [nearExpiryRes, expiredRes] = await Promise.all([
+            fetch(nearExpiryUrl, { headers: { 'Accept': 'application/json' } }),
+            fetch(expiredUrl, { headers: { 'Accept': 'application/json' } })
+        ]);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        if (!nearExpiryRes.ok || !expiredRes.ok) {
+            throw new Error(`HTTP error! status: ${nearExpiryRes.status}, ${expiredRes.status}`);
         }
 
-        const data = await response.json();
-        displayMedicines(data);
-        updatePagination(data.length);
+        const nearExpiryData = await nearExpiryRes.json();
+        const expiredData = await expiredRes.json();
+
+        // Gộp 2 mảng, ưu tiên thuốc hết hạn lên đầu danh sách
+        const allMedicines = [...expiredData, ...nearExpiryData];
+        displayMedicines(allMedicines);
+        updatePagination(allMedicines.length);
         hideError();
     } catch (error) {
         showError(`Không thể tải danh sách thuốc: ${error.message}`);
