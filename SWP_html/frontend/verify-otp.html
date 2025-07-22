@@ -64,7 +64,10 @@
                   </div>
                   <div class="custom-form-field">
                     <label for="password">Mật khẩu mới <span>*</span></label>
-                    <input type="password" name="password" id="password" class="form-control mb-5" placeholder="Nhập mật khẩu mới" required>
+                    <input type="password" name="password" id="password" class="form-control mb-5" placeholder="Nhập mật khẩu mới" required
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                    oninvalid="this.setCustomValidity('Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt')"
+                    oninput="this.setCustomValidity('')">
                   </div>
                   <div class="custom-form-field">
                     <label for="confirmPassword">Xác nhận mật khẩu <span>*</span></label>

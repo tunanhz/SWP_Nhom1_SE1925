@@ -120,7 +120,9 @@
                                     <label for="email">Email <span>*</span></label>
                                     <input type="email" name="email" id="email" class="form-control mb-5" required
                                         pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-                                        title="Vui lòng nhập địa chỉ email hợp lệ">
+                                        title="Vui lòng nhập địa chỉ email hợp lệ(ví dụ: chuhung@gmail.com)"
+                                        oninvalid="this.setCustomValidity('Vui lòng nhập địa chỉ email hợp lệ (ví dụ: chuhung@gmail.com)')"
+                                        oninput="this.setCustomValidity('')">
                                     <div id="email-error" class="error-message"></div>
                                     <div id="email-valid" class="valid-message">Email có thể sử dụng</div>
                                 </div>
@@ -132,8 +134,10 @@
                                 </div>
                                 <div class="custom-form-field">
                                     <label for="password">Mật khẩu <span>*</span></label>
-                                    <input type="password" name="password" id="password" class="form-control mb-5"
-                                        required>
+                                    <input type="password" name="password" id="password" class="form-control mb-5" required
+                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                                    oninvalid="this.setCustomValidity('Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt')"
+                                    oninput="this.setCustomValidity('')">
                                 </div>
                                 <div class="custom-form-field">
                                     <label for="confirm-password">Xác nhận mật khẩu <span>*</span></label>

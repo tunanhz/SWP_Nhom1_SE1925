@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Validate email format
         const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
         if (!emailPattern.test(email)) {
-            errorMessage.textContent = 'Please enter a valid Gmail address (e.g., example@gmail.com)';
+            errorMessage.textContent = 'Vui lòng nhập địa chỉ Gmail hợp lệ (ví dụ: chuhung@gmail.com)';
             errorMessage.style.display = 'block';
             return;
         }
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Thay đổi nội dung nút khi gửi yêu cầu
         const originalButtonText = submitButton.innerHTML;
-        submitButton.innerHTML = 'Checking...';
+        submitButton.innerHTML = 'Đang kiểm tra...';
         submitButton.disabled = true;
 
         try {
@@ -50,13 +50,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Response data:', data);
             } catch (jsonError) {
                 console.error('Failed to parse JSON:', jsonError);
-                errorMessage.textContent = 'Invalid server response. Please try again.';
+                errorMessage.textContent = 'Phản hồi từ server không hợp lệ. Vui lòng thử lại.';
                 errorMessage.style.display = 'block';
                 throw new Error('JSON parse failed');
             }
 
             if (response.ok && data.success) {
-                successMessage.textContent = data.message || 'An OTP has been sent to your email.';
+                successMessage.textContent = data.message || 'Mã OTP đã được gửi đến email của bạn.';
                 successMessage.style.display = 'block';
                 form.reset();
                 sessionStorage.setItem('resetEmail', email);
@@ -67,15 +67,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Xử lý lỗi cụ thể
                 console.log('Error condition triggered, data.error:', data.error);
                 if (data.error === "Email not found") {
-                    errorMessage.textContent = 'Email does not exist';
+                    errorMessage.textContent = 'Email không tồn tại';
                 } else {
-                    errorMessage.textContent = data.error || 'Failed to process reset request.';
+                    errorMessage.textContent = data.error || 'Không thể xử lý yêu cầu đặt lại mật khẩu.';
                 }
                 errorMessage.style.display = 'block';
             }
         } catch (error) {
             console.error('Fetch or JSON error:', error);
-            errorMessage.textContent = 'An error occurred. Please try again later.';
+            errorMessage.textContent = 'Đã xảy ra lỗi. Vui lòng thử lại sau.';
             errorMessage.style.display = 'block';
         } finally {
             // Khôi phục nút sau khi hoàn tất
