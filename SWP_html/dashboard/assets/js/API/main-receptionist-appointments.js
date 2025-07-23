@@ -90,11 +90,11 @@ function fetchAppointments(page, pageSize) {
                 renderAppointments(data.appointments);
                 updatePagination(data.totalPages, data.currentPage, data.pageSize, data.totalAppointments);
             } else {
-                showError(data.message || 'Failed to fetch appointments');
+                showError(data.message || 'Không thể tải danh sách cuộc hẹn');
             }
         })
         .catch(error => {
-            showError(`Error fetching appointments: ${error.message}`);
+            showError(`Lỗi khi tải danh sách cuộc hẹn: ${error.message}`);
             console.error('Error:', error);
         });
 }
@@ -104,7 +104,7 @@ function renderAppointments(appointments) {
     tbody.innerHTML = '';
 
     if (appointments.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No appointments found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center">Không tìm thấy cuộc hẹn nào</td></tr>';
         return;
     }
 
@@ -126,7 +126,7 @@ function renderAppointments(appointments) {
             <td><span class="status-badge ${statusClass}">${appt.status || '-'}</span></td>
             <td>
                 ${appt.status === 'Pending' ?
-                `<button class="btn btn-checkin" data-appointment-id="${appt.appointmentId || 0}">Check-in</button>`
+                `<button class="btn btn-checkin" data-appointment-id="${appt.appointmentId || 0}">Xác nhận</button>`
                 : '-'}
             </td>
         `;
@@ -157,15 +157,15 @@ function handleCheckIn(appointmentId, button) {
         })
         .then(data => {
             if (data.success) {
-                alert('Check-in successful!');
+                alert('Xác nhận thành công!');
                 fetchAppointments(1, document.getElementById('itemsPerPage').value); // Refresh the table
             } else {
-                showError(data.message || 'Check-in failed!');
+                showError(data.message || 'Xác nhận thất bại!');
                 button.disabled = false;
             }
         })
         .catch(error => {
-            showError(`Error during check-in: ${error.message}`);
+            showError(`Lỗi trong quá trình xác nhận: ${error.message}`);
             button.disabled = false;
             console.error('Error:', error);
         });
@@ -218,7 +218,7 @@ function updatePagination(totalPages, currentPage, pageSize, totalAppointments) 
     const pageInfo = document.getElementById('pageInfo');
     const prevPage = document.getElementById('prevPage');
     const nextPage = document.getElementById('nextPage');
-    if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1} (Total: ${totalAppointments || 0})`;
+    if (pageInfo) pageInfo.textContent = `Trang ${currentPage} / ${totalPages || 1} (Tổng cuộc hẹn: ${totalAppointments || 0})`;
     if (prevPage) prevPage.classList.toggle('disabled', currentPage <= 1);
     if (nextPage) nextPage.classList.toggle('disabled', currentPage >= (totalPages || 1));
     document.getElementById('itemsPerPage').value = pageSize;

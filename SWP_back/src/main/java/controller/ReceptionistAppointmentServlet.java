@@ -159,8 +159,8 @@ public class ReceptionistAppointmentServlet extends HttpServlet {
 
             JsonObject responseJson = new JsonObject();
             responseJson.addProperty("success", success);
-            responseJson.addProperty("message", success ? "Check-in successful" :
-                    "Check-in failed: appointment may not exist, not in Pending status, no room assigned, or invalid timestamp format");
+            responseJson.addProperty("message", success ? "Xác nhận thành công" :
+                    "Không thể xác nhận phòng: cuộc hẹn có thể không tồn tại, không ở trạng thái Đang chờ, không có phòng được chỉ định hoặc định dạng dấu thời gian không hợp lệ");
             out.print(gson.toJson(responseJson));
         } catch (com.google.gson.JsonSyntaxException e) {
             sendError(response, HttpServletResponse.SC_BAD_REQUEST,
