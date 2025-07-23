@@ -774,17 +774,16 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <li>
-                                        <a class="dropdown-item" href="./app/user-profile.html">Profile</a>
+                                        <a class="dropdown-item" href="./app/user-profile.html">Hồ sơ</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="./app/user-privacy-setting.html">Privacy
-                                            Setting</a>
+                                        <a class="dropdown-item" href="./app/user-privacy-setting.html">Cài đặt quyền riêng tư</a>
                                     </li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" id="logoutLink" href="">Logout</a>
+                                        <a class="dropdown-item" id="logoutLink" href="">Đăng xuất</a>
                                     </li>
                                 </ul>
                             </li>
@@ -979,7 +978,7 @@
                                                     d="M16.7551 8.12793H17.6881C19.7231 8.12793 21.3721 9.77693 21.3721 11.8129V16.6969C21.3721 18.7269 19.7271 20.3719 17.6971 20.3719L6.55707 20.3719C4.52207 20.3719 2.87207 18.7219 2.87207 16.6869V11.8019C2.87207 9.77293 4.51807 8.12793 6.54707 8.12793L7.48907 8.12793"
                                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                                                     stroke-linejoin="round"></path>
-                                            </svg> Download All</a>
+                                            </svg> Tải xuống tất cả</a>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -1038,7 +1037,7 @@
                                 <div class="d-flex justify-content-start col-md-6 mt-4">
                                     <button class="btn btn-secondary text-white me-3" type="button" id="prevPage">
                                         <span class="btn-inner">
-                                            <span class="text d-inline-block align-middle">Previous</span>
+                                            <span class="text d-inline-block align-middle">Trước</span>
                                             <span class="icon d-inline-block align-middle ms-1 ps-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                     fill="currentColor" viewBox="0 0 16 16">
@@ -1051,7 +1050,7 @@
                                     <span class="align-self-center me-3" id="pageInfo">Page 1 of 8</span>
                                     <button class="btn btn-primary me-3" type="button" id="nextPage">
                                         <span class="btn-inner">
-                                            <span class="text d-inline-block align-middle">Next</span>
+                                            <span class="text d-inline-block align-middle">Kế Tiếp</span>
                                             <span class="icon d-inline-block align-middle ms-1 ps-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                     fill="currentColor" viewBox="0 0 16 16">
@@ -1064,14 +1063,13 @@
                                 </div>
                                 <div class="col-md-6 d-flex justify-content-center justify-content-md-end mt-4">
                                     <div class="input-group input-group-sm w-auto">
-                                        <label class="input-group-text text-bg-info" for="itemsPerPage">Items per
-                                            page</label>
+                                        <label class="input-group-text text-bg-info" for="itemsPerPage">Các mục trên mỗi trang</label>
                                         <select class="form-select" name="page" id="itemsPerPage">
                                             <option value="5">5</option>
                                             <option value="10" selected>10</option>
                                             <option value="15">15</option>
                                             <option value="20">20</option>
-                                            <option value="999" id="all_invoices">All</option>
+                                            <option value="999" id="all_invoices">Tất cả</option>
                                         </select>
                                     </div>
                                 </div>
@@ -1085,44 +1083,44 @@
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientPaymentPaid"
                 aria-labelledby="offcanvasPatientPaymentPaidLabel">
                 <div class="offcanvas-header border-bottom">
-                    <h3 class="offcanvas-title" id="offcanvasPatientPaymentPaidLabel">View Infor Payment</h3>
+                    <h3 class="offcanvas-title" id="offcanvasPatientPaymentPaidLabel">Xem thanh toán thông tin</h3>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <div class="form-group col-md-12">
-                        <label class="form-label" for="patient-name">Patinet Name <span
+                        <label class="form-label" for="patient-name">Tên bệnh nhân <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="patient-name" readonly>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="form-label" for="patient-phone">Patinet Phone <span
+                        <label class="form-label" for="patient-phone">Số điện thoại bệnh nhân <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="patient-phone" readonly>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="form-label" for="issueDate">Issue Date <span class="text-danger">*</span></label>
+                        <label class="form-label" for="issueDate">Ngày thanh toán <span class="text-danger">*</span></label>
                         <input type="text" id="issueDate" class="form-control" value="2023-04-24" readonly>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="form-label" for="serviceDetail">Service Detail <span
+                        <label class="form-label" for="serviceDetail">Chi tiết dịch vụ <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="serviceDetail" value="kivicare skin specialist"
                             readonly>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="form-label" for="medicineDetail">Medicine Detail <span
+                        <label class="form-label" for="medicineDetail">Chi tiết thuốc <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="medicineDetail" value="Dr. Amine Louis" readonly>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="form-label" for="invoiceTotalAmount">Total Cost <span
+                        <label class="form-label" for="invoiceTotalAmount">Tổng số tiền <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="invoiceTotalAmount" value="Dr. Amine Louis"
                             readonly>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="form-label" for="status">Status <span class="text-danger">*</span></label>
+                        <label class="form-label" for="status">Trạng thái <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="status" value="Dr. Amine Louis" readonly>
                     </div>
                 </div>
@@ -1130,7 +1128,7 @@
                     <div class="d-grid d-md-flex gap-3 p-3">
                         <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
                             <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Close</span>
+                                <span class="text d-inline-block align-middle">Đóng</span>
                                 <span class="icon d-inline-block align-middle ms-1 ps-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
                                         fill="none">
@@ -1147,43 +1145,43 @@
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPatientPaymentPending"
                 aria-labelledby="offcanvasPatientPaymentPendingLabel">
                 <div class="offcanvas-header border-bottom">
-                    <h3 class="offcanvas-title" id="offcanvasPatientPaymentPendingLabel">Payment</h3>
+                    <h3 class="offcanvas-title" id="offcanvasPatientPaymentPendingLabel">Thanh toán</h3>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <form id="paymentForm">
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="patient-name1">Patient Name <span
+                            <label class="form-label" for="patient-name1">Tên bệnh nhân <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="patient-name1" readonly
                                 aria-describedby="patient-name-desc">
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="patient-phone1">Patient Phone <span
+                            <label class="form-label" for="patient-phone1">Số điện thoại bệnh nhân <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="patient-phone1" readonly>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="appointmentDateTime">Issue Date <span
+                            <label class="form-label" for="appointmentDateTime">Ngày phát sinh giao dịch <span
                                     class="text-danger">*</span></label>
                             <input type="text" id="appointmentDateTime" class="form-control" value="2023-04-24"
                                 readonly>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="serviceDetail1">Service Detail <span
+                            <label class="form-label" for="serviceDetail1">Chi tiết dịch vụ <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="serviceDetail1" value="Kivicare Skin Specialist"
                                 readonly>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="medicineDetail1">Medicine Detail <span
+                            <label class="form-label" for="medicineDetail1">Chi tiết thuốc <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="medicineDetail1"
                                 value="Prescription: Antibiotics" readonly>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="invoiceTotalAmount1">Total Cost <span
+                            <label class="form-label" for="invoiceTotalAmount1">Tổng số tiền <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="invoiceTotalAmount1" value="$150.00" readonly>
                         </div>
@@ -1211,7 +1209,7 @@
                         <div class="d-grid d-md-flex gap-3 p-3">
                             <button type="button" class="btn btn-primary" id="payButton">
                                 <span class="btn-inner">
-                                    <span class="text d-inline-block align-middle">Pay</span>
+                                    <span class="text d-inline-block align-middle">Thanh toán</span>
                                     <span class="icon d-inline-block align-middle ms-1 ps-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none">
@@ -1224,7 +1222,7 @@
                             </button>
                             <button class="btn btn-secondary" type="button" data-bs-dismiss="offcanvas">
                                 <span class="btn-inner">
-                                    <span class="text d-inline-block align-middle">Close</span>
+                                    <span class="text d-inline-block align-middle">Đóng</span>
                                     <span class="icon d-inline-block align-middle ms-1 ps-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none">
@@ -1304,7 +1302,7 @@
                                 d="M15.85 2.50065C16.481 2.50065 17.111 2.58965 17.71 2.79065C21.401 3.99065 22.731 8.04065 21.62 11.5806C20.99 13.3896 19.96 15.0406 18.611 16.3896C16.68 18.2596 14.561 19.9196 12.28 21.3496L12.03 21.5006L11.77 21.3396C9.48102 19.9196 7.35002 18.2596 5.40102 16.3796C4.06102 15.0306 3.03002 13.3896 2.39002 11.5806C1.26002 8.04065 2.59002 3.99065 6.32102 2.76965C6.61102 2.66965 6.91002 2.59965 7.21002 2.56065H7.33002C7.61102 2.51965 7.89002 2.50065 8.17002 2.50065H8.28002C8.91002 2.51965 9.52002 2.62965 10.111 2.83065H10.17C10.21 2.84965 10.24 2.87065 10.26 2.88965C10.481 2.96065 10.69 3.04065 10.89 3.15065L11.27 3.32065C11.3618 3.36962 11.4649 3.44445 11.554 3.50912C11.6104 3.55009 11.6612 3.58699 11.7 3.61065C11.7163 3.62028 11.7329 3.62996 11.7496 3.63972C11.8354 3.68977 11.9247 3.74191 12 3.79965C13.111 2.95065 14.46 2.49065 15.85 2.50065ZM18.51 9.70065C18.92 9.68965 19.27 9.36065 19.3 8.93965V8.82065C19.33 7.41965 18.481 6.15065 17.19 5.66065C16.78 5.51965 16.33 5.74065 16.18 6.16065C16.04 6.58065 16.26 7.04065 16.68 7.18965C17.321 7.42965 17.75 8.06065 17.75 8.75965V8.79065C17.731 9.01965 17.8 9.24065 17.94 9.41065C18.08 9.58065 18.29 9.67965 18.51 9.70065Z"
                                 fill="currentColor"></path>
                         </svg>
-                    </span> By <a href="https://iqonic.design/" target="_blank">IQONIC Design</a>.
+                    </span> By <a href="https://iqonic.design/" target="_blank">The Hung Design</a>.
                 </h6>
             </div>
         </footer>
@@ -1891,7 +1889,7 @@
             <div class="modal-content rounded-0 p-sm-5 p-4">
                 <!-- Modal Header -->
                 <div class="modal-header p-0 pb-3 mb-3 border-bottom">
-                    <h3 class="modal-title">Settings</h3>
+                    <h3 class="modal-title">Cài đặt</h3>
                     <a href="" class="text-secondary" id="logoutModalLink">
                         <svg height="20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -1903,7 +1901,7 @@
                             <path d="M18.8813 9.1062L21.8093 12.0212L18.8813 14.9372" stroke="currentColor"
                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
-                        <h6 class="d-inline-block mb-0 text-secondary align-middle ms-1">Logout</h6>
+                        <h6 class="d-inline-block mb-0 text-secondary align-middle ms-1">Đăng xuất</h6>
                     </a>
                     <a href="#" class="d-inline-block position-absolute text-secondary" data-bs-dismiss="modal">
                         <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none"
