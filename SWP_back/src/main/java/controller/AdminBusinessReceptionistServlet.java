@@ -67,7 +67,7 @@ public class AdminBusinessReceptionistServlet extends HttpServlet {
                 responseJson.addProperty("pageSize", pageSize);
                 responseJson.addProperty("totalReceptionists", totalReceptionists);
                 responseJson.addProperty("success", true);
-                responseJson.addProperty("message", receptionists.isEmpty() ? "No receptionists found" : "Receptionists fetched successfully");
+                responseJson.addProperty("message", receptionists.isEmpty() ? "Không tìm thấy nhân viên lễ tân" : "Lễ tân đã được đón thành công");
                 out.print(gson.toJson(responseJson));
             } else if (pathInfo != null && pathInfo.matches("/\\d+")) {
                 int accountStaffId = Integer.parseInt(pathInfo.substring(1));
@@ -138,7 +138,7 @@ public class AdminBusinessReceptionistServlet extends HttpServlet {
 
                 JsonObject responseJson = new JsonObject();
                 responseJson.addProperty("success", success);
-                responseJson.addProperty("message", "Receptionist created successfully");
+                responseJson.addProperty("message", "Lễ tân đã được tạo thành công");
                 out.print(gson.toJson(responseJson));
             } else if ("/update".equals(pathInfo)) {
                 AccountStaff account = new AccountStaff();
@@ -163,7 +163,7 @@ public class AdminBusinessReceptionistServlet extends HttpServlet {
 
                 JsonObject responseJson = new JsonObject();
                 responseJson.addProperty("success", success);
-                responseJson.addProperty("message", "Receptionist updated successfully");
+                responseJson.addProperty("message", "Lễ tân đã cập nhật thành công");
                 out.print(gson.toJson(responseJson));
             } else if ("/delete".equals(pathInfo)) {
                 int accountStaffId = jsonObject.get("accountStaffId").getAsInt();
@@ -173,7 +173,7 @@ public class AdminBusinessReceptionistServlet extends HttpServlet {
 
                 JsonObject responseJson = new JsonObject();
                 responseJson.addProperty("success", success);
-                responseJson.addProperty("message", success ? "Receptionist disabled successfully" : "Failed to disable receptionist");
+                responseJson.addProperty("message", success ? "Lễ tân đã vô hiệu hóa thành công" : "Không thể vô hiệu hóa nhân viên tiếp tân");
                 out.print(gson.toJson(responseJson));
             } else {
                 sendError(response, HttpServletResponse.SC_BAD_REQUEST, "INVALID_ENDPOINT", "Invalid endpoint");
