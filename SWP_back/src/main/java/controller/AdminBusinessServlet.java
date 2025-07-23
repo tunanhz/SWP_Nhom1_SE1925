@@ -76,7 +76,7 @@ public class AdminBusinessServlet extends HttpServlet {
                 responseJson.addProperty("pageSize", pageSize);
                 responseJson.addProperty("totalServices", totalServices);
                 responseJson.addProperty("success", true);
-                responseJson.addProperty("message", services.isEmpty() ? "No services found" : "Services fetched successfully");
+                responseJson.addProperty("message", services.isEmpty() ? "Không tìm thấy dịch vụ nào" : "Dịch vụ đã được tải thành công");
                 out.print(gson.toJson(responseJson));
             } else if (pathInfo != null && pathInfo.matches("/services/\\d+")) {
                 int serviceId = Integer.parseInt(pathInfo.substring(1).split("/")[1]);
@@ -140,7 +140,7 @@ public class AdminBusinessServlet extends HttpServlet {
 
                 JsonObject responseJson = new JsonObject();
                 responseJson.addProperty("success", success);
-                responseJson.addProperty("message", success ? "Service created successfully" : "Duplicate name detected");
+                responseJson.addProperty("message", success ? "Dịch vụ đã được tạo thành công" : "Đã phát hiện tên trùng lặp");
                 out.print(gson.toJson(responseJson));
             } else if ("/services/update".equals(pathInfo)) {
                 ListOfMedicalService service = new ListOfMedicalService();
@@ -155,7 +155,7 @@ public class AdminBusinessServlet extends HttpServlet {
 
                 JsonObject responseJson = new JsonObject();
                 responseJson.addProperty("success", success);
-                responseJson.addProperty("message", success ? "Service updated successfully" : "Duplicate name detected");
+                responseJson.addProperty("message", success ? "Dịch vụ đã được cập nhật thành công" : "Đã phát hiện tên trùng lặp");
                 out.print(gson.toJson(responseJson));
             } else if ("/services/delete".equals(pathInfo)) {
                 int serviceId = jsonObject.get("serviceId").getAsInt();
@@ -165,7 +165,7 @@ public class AdminBusinessServlet extends HttpServlet {
 
                 JsonObject responseJson = new JsonObject();
                 responseJson.addProperty("success", success);
-                responseJson.addProperty("message", success ? "Service disabled successfully" : "Failed to disable service");
+                responseJson.addProperty("message", success ? "Đã phát hiện ra vòng lặp tên" : "Đã phát hiện tên vòng lặp");
                 out.print(gson.toJson(responseJson));
             } else {
                 sendError(response, HttpServletResponse.SC_BAD_REQUEST, "INVALID_ENDPOINT", "Invalid endpoint");

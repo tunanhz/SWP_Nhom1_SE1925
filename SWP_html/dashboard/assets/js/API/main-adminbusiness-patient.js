@@ -19,12 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 handleEdit(patientId);
             } else if (target.classList.contains("delete-btn")) {
                 Swal.fire({
-                    title: "Are you sure?",
-                    text: "You want to update status this patient?",
+                    title: "Bạn có chắc không?",
+                    text: "Bạn muốn cập nhật trạng thái của bệnh nhân này?",
                     icon: "error",
                     showCancelButton: true, 
                     backdrop: `rgba(60,60,60,0.8)`,
-                    confirmButtonText: "Yes, update it!",
+                    confirmButtonText: "Đúng, cập nhật!",
                     confirmButtonColor: "#c03221",
                 }).then(async (result) => {
                     if (result.isConfirmed) {
@@ -155,7 +155,7 @@ function renderPatients(patients) {
 
     tbody.innerHTML =
         patients.length === 0
-            ? '<tr><td colspan="10" class="text-center">No patients found</td></tr>'
+            ? '<tr><td colspan="10" class="text-center">Không tìm thấy bệnh nhân</td></tr>'
             : "";
 
     patients.forEach((patient, index) => {
@@ -240,7 +240,7 @@ async function handleEdit(patientId) {
 async function handleUpdate() {
     const form = document.querySelector("#offcanvasPatientEdit form");
     if (!form) {
-        Swal.fire("Error!", "Edit form not found", "error");
+        Swal.fire("Error!", "Không tìm thấy biểu mẫu chỉnh sửa", "error");
         return;
     }
 
@@ -252,14 +252,14 @@ async function handleUpdate() {
     const address = form.querySelector("#address").value;
 
     if (!patientId || isNaN(patientId)) {
-        Swal.fire("Error!", "Invalid patient ID", "error");
+        Swal.fire("Error!", "ID bệnh nhân không hợp lệ", "error");
         return;
     }
 
     if (!namePatient || namePatient.length > 100 || /\s{2,}/.test(namePatient)) {
         Swal.fire(
             "Error!",
-            "Full name must be max 100 characters and contain single spaces only",
+            "Tên đầy đủ chỉ dài tối đa 100 ký tự và chỉ chứa một khoảng trắng",
             "error"
         );
         return;
@@ -273,14 +273,14 @@ async function handleUpdate() {
     if (!phonePatient || !/^[0][0-9]{9}$/.test(phonePatient)) {
         Swal.fire(
             "Error!",
-            "Phone number must be exactly 10 digits and start with 0",
+            "Số điện thoại phải có chính xác 10 chữ số và bắt đầu bằng số 0",
             "error"
         );
         return;
     }
 
     if (address.length > 225) {
-        Swal.fire("Error!", "Address must not exceed 225 characters", "error");
+        Swal.fire("Error!", "Địa chỉ không được vượt quá 225 ký tự", "error");
         return;
     }
 
@@ -308,21 +308,21 @@ async function handleUpdate() {
             throw new Error(errorData.error || `HTTP error! Status: ${response.status}`);
         }
 
-        Swal.fire("Success!", "Patient updated successfully.", "success");
+        Swal.fire("Success!", "Bệnh nhân đã được cập nhật thành công.", "success");
         bootstrap.Offcanvas.getInstance(
             document.getElementById("offcanvasPatientEdit")
         ).hide();
         await fetchPatients(1, document.getElementById("itemsPerPage").value);
     } catch (error) {
         console.error("Update error:", error);
-        Swal.fire("Error!", `Could not update patient: ${error.message}`, "error");
+        Swal.fire("Error!", `Không thể cập nhật bệnh nhân: ${error.message}`, "error");
     }
 }
 
 async function handleAdd() {
     const form = document.querySelector("#offcanvasPatientAdd form");
     if (!form) {
-        Swal.fire("Error!", "Add form not found", "error");
+        Swal.fire("Error!", "Thêm biểu mẫu không tìm thấy", "error");
         return;
     }
 
@@ -336,7 +336,7 @@ async function handleAdd() {
     if (!namePatient || namePatient.length > 100 || /\s{2,}/.test(namePatient)) {
         Swal.fire(
             "Error",
-            "Full name must be 1-100 characters with single spaces",
+            "Tên đầy đủ chỉ dài từ 1-100 ký tự với một khoảng trắng",
             "error"
         );
         return;
@@ -350,14 +350,14 @@ async function handleAdd() {
     if (!phonePatient || !/^[0][0-9]{9}$/.test(phonePatient)) {
         Swal.fire(
             "Error",
-            "Phone number must be 10 digits starting with 0",
+            "Số điện thoại phải có 10 chữ số bắt đầu bằng 0",
             "error"
         );
         return;
     }
 
     if (!address || address.length > 225) {
-        Swal.fire("Error", "Address must be 1-225 characters", "error");
+        Swal.fire("Error", "Địa chỉ phải dài từ 1-225 ký tự", "error");
         return;
     }
 
@@ -388,13 +388,13 @@ async function handleAdd() {
             );
         }
 
-        Swal.fire("Success", "Patient added successfully!", "success");
+        Swal.fire("Success", "Đã thêm bệnh nhân thành công!", "success");
         bootstrap.Offcanvas.getInstance(
             document.getElementById("offcanvasPatientAdd")
         ).hide();
         fetchPatients(1, document.getElementById("itemsPerPage").value);
     } catch (error) {
-        Swal.fire("Error", `Failed to add patient: ${error.message}`, "error");
+        Swal.fire("Error", `Không thêm được bệnh nhân: ${error.message}`, "error");
     } finally {
         submitButton.disabled = false;
     }
@@ -410,7 +410,7 @@ async function handleDelete(patientId) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        Swal.fire("Update status!", "Your patient has been update.", "success");
+        Swal.fire("Cập nhật trạng thái!", "Bệnh nhân của bạn đã được cập nhật.", "success");
         fetchPatients(1, document.getElementById("itemsPerPage").value);
     } catch (error) {
         showError(`Error deleting patient: ${error.message}`);
@@ -452,8 +452,8 @@ function showError(message) {
 
 function isPastOrPresentDate(dateString) {
     if (!dateString || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-        Swal.fire("Error", "Invalid date format. Please use YYYY-MM-DD.", "error");
-        return { isValid: false, message: "Invalid date format. Please use YYYY-MM-DD." };
+        Swal.fire("Error", "Định dạng ngày không hợp lệ. Vui lòng sử dụng YYYY-MM-DD.", "error");
+        return { isValid: false, message: "Định dạng ngày không hợp lệ. Vui lòng sử dụng YYYY-MM-DD." };
     }
 
     try {
@@ -462,19 +462,19 @@ function isPastOrPresentDate(dateString) {
         today.setHours(0, 0, 0, 0);
 
         if (isNaN(inputDate.getTime())) {
-            Swal.fire("Error", "Invalid date.", "error");
-            return { isValid: false, message: "Invalid date." };
+            Swal.fire("Error", "Ngày không hợp lệ.", "error");
+            return { isValid: false, message: "Ngày không hợp lệ." };
         }
 
         if (inputDate > today) {
-            Swal.fire("Error", "Only current or past dates can be selected.", "error");
-            return { isValid: false, message: "Only current or past dates can be selected." };
+            Swal.fire("Error", "Chỉ có thể chọn ngày hiện tại hoặc ngày đã qua.", "error");
+            return { isValid: false, message: "Chỉ có thể chọn ngày hiện tại hoặc ngày đã qua." };
         }
 
         return { isValid: true, message: "Valid date.", date: dateString };
     } catch (error) {
-        Swal.fire("Error", `Error processing date: ${error.message}`, "error");
-        return { isValid: false, message: `Error processing date: ${error.message}` };
+        Swal.fire("Error", `Ngày xử lý lỗi: ${error.message}`, "error");
+        return { isValid: false, message: `Ngày xử lý lỗi: ${error.message}` };
     }
 }
 
@@ -495,7 +495,7 @@ function updatePagination(totalPages, currentPageVal, pageSizeVal, totalItems) {
     if (allPatient) allPatient.value = totalItems;
 
     if (pageInfo)
-        pageInfo.textContent = `Page ${currentPageVal} of ${totalPages || 1} (Total: ${totalItems || 0})`;
+        pageInfo.textContent = `Trang ${currentPageVal} / ${totalPages || 1} (Tổng: ${totalItems || 0})`;
     if (prevPage) prevPage.disabled = currentPageVal <= 1;
     if (nextPage) nextPage.disabled = currentPageVal >= (totalPages || 1);
     const itemsPerPage = document.getElementById("itemsPerPage");
