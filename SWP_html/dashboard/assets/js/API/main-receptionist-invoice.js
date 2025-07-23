@@ -105,7 +105,7 @@ async function startCountdown(seconds) {
                                     handleFormSubmission({ target: form });
                                 } else {
                                     console.error("Form element not found in startCountdown");
-                                    Swal.fire("Error!", "Form element not found.", "error");
+                                    Swal.fire("Error!", "Không tìm thấy phần tử biểu mẫu.", "error");
                                 }
                             }
                         });
@@ -128,6 +128,9 @@ async function startCountdown(seconds) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    flatpickr('#startDate', { dateFormat: 'Y-m-d' });
+    flatpickr('#endDate', { dateFormat: 'Y-m-d' });
+
     let currentPage = 1;
     let pageSize = 10;
 
@@ -218,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const form = document.getElementById("paymentForm");
         if (!form) {
             console.error("Form element not found in payButton click");
-            errorElement.textContent = "Form element not found.";
+            errorElement.textContent = "Không tìm thấy phần tử biểu mẫu.";
             errorElement.style.display = "block";
             loadingElement.style.display = "none";
             return;
@@ -282,13 +285,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     handleFormSubmission({ target: form });
                 } else {
                     console.error("Form element not found in confirmPayment");
-                    Swal.fire("Error!", "Form element not found.", "error");
+                    Swal.fire("Error!", "Không tìm thấy phần tử biểu mẫu.", "error");
                 }
             } else {
-                Swal.fire("Error!", "Payment not confirmed. Please ensure the correct amount and description.", "error");
+                Swal.fire("Error!", "Thanh toán chưa được xác nhận. Vui lòng đảm bảo số tiền và mô tả chính xác.", "error");
             }
         } catch (error) {
-            Swal.fire("Error!", `Payment verification failed: ${error.message}`, "error");
+            Swal.fire("Error!", `Xác minh thanh toán không thành công: ${error.message}`, "error");
         }
     });
 });
@@ -300,7 +303,7 @@ async function fetchInvoices(page, pageSize) {
 
     // Basic validation
     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-        showError("Start date must be before end date");
+        showError("Ngày bắt đầu phải trước ngày kết thúc");
         return;
     }
 
@@ -331,10 +334,10 @@ async function fetchInvoices(page, pageSize) {
             renderInvoices(data.invoices, page, pageSize);
             updatePagination(data.totalInvoices, data.page, data.pageSize);
         } else {
-            throw new Error(data.message || "Failed to fetch invoices");
+            throw new Error(data.message || "Không thể lấy hóa đơn");
         }
     } catch (error) {
-        showError(`Error fetching invoices: ${error.message}`);
+        showError(`Lỗi khi lấy hóa đơn: ${error.message}`);
         console.error("Error:", error);
     }
 }
@@ -347,7 +350,7 @@ function renderInvoices(invoices, currentPage, pageSize) {
     }
 
     tbody.innerHTML = invoices.length === 0
-        ? '<tr><td colspan="7" class="text-center">No invoices found</td></tr>'
+        ? '<tr><td colspan="7" class="text-center">Không tìm thấy hóa đơn</td></tr>'
         : "";
 
     invoices.forEach((payment, index) => {
@@ -366,21 +369,21 @@ function renderInvoices(invoices, currentPage, pageSize) {
                     href="#offcanvasPatientPaymentPaid" aria-controls="offcanvasPatientPaymentPaid"
                     data-payment='${JSON.stringify(payment)}'>
                     <button class="btn btn-success text-white select-patient-btn" data-action="view">
-                        <i class="fas fa-eye me-1"></i>View
+                        <i class="fas fa-eye me-1"></i>Xem
                     </button>
                 </a>` : isPaid ? `
                 <a class="d-inline-block pe-2 edit-btn2" data-bs-toggle="offcanvas"
                     href="#offcanvasPatientPaymentPaid" aria-controls="offcanvasPatientPaymentPaid"
                     data-payment='${JSON.stringify(payment)}'>
                     <button class="btn btn-success text-white select-patient-btn" data-action="view">
-                        <i class="fas fa-eye me-1"></i>View
+                        <i class="fas fa-eye me-1"></i>Xem
                     </button>
                 </a>` : `
                 <a class="d-inline-block pe-2 edit-btn1" data-bs-toggle="offcanvas"
                     href="#offcanvasPatientPaymentPending" aria-controls="offcanvasPatientPaymentPending"
                     data-payment='${JSON.stringify(payment)}'>
                     <button class="btn btn-primary text-white select-patient-btn" data-action="view">
-                        <i class="fas fa-edit me-1"></i>Pay
+                        <i class="fas fa-edit me-1"></i>Trả
                     </button>
                 </a>`}
             </td>
@@ -410,10 +413,10 @@ async function markInvoiceAsPaid(invoiceId) {
             }
             fetchInvoices(currentPage, pageSize);
         } else {
-            throw new Error(data.message || "Failed to update invoice status");
+            throw new Error(data.message || "Không cập nhật được trạng thái hóa đơn");
         }
     } catch (error) {
-        showError(`Error updating invoice: ${error.message}`);
+        showError(`Lỗi khi cập nhật hóa đơn: ${error.message}`);
         console.error("Error:", error);
     }
 }
@@ -424,7 +427,7 @@ async function exportInvoices(type) {
     const status = document.getElementById("filterStatus")?.value || "";
 
     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-        showError("Start date must be before end date");
+        showError("Ngày bắt đầu phải trước ngày kết thúc");
         return;
     }
 
@@ -459,12 +462,12 @@ async function exportInvoices(type) {
         window.URL.revokeObjectURL(downloadUrl);
 
         if (typeof Swal !== 'undefined') {
-            Swal.fire("Success!", `Report exported as ${type.toUpperCase()}`, "success");
+            Swal.fire("Success!", `Báo cáo được xuất dưới dạng ${type.toUpperCase()}`, "success");
         } else {
-            alert(`Report exported as ${type.toUpperCase()}`);
+            alert(`Báo cáo được xuất dưới dạng ${type.toUpperCase()}`);
         }
     } catch (error) {
-        showError(`Error exporting report: ${error.message}`);
+        showError(`Lỗi khi xuất báo cáo: ${error.message}`);
         console.error("Error:", error);
     }
 }
@@ -488,12 +491,12 @@ async function handleFormSubmission(event) {
             throw new Error(errorData.message || `Failed to update payment: HTTP ${response.status}`);
         }
         const data = await response.json();
-        Swal.fire("Success!", data.message || "Invoice updated successfully.", "success");
+        Swal.fire("Success!", data.message || "Hóa đơn đã được cập nhật thành công.", "success");
         bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasPatientPaymentPending"))?.hide();
         fetchInvoices(currentPage, pageSize);
     } catch (error) {
         console.error("Update error:", error);
-        Swal.fire("Error!", `Could not update payment: ${error.message}`, "error");
+        Swal.fire("Error!", `Không thể cập nhật thanh toán: ${error.message}`, "error");
     }
 }
 
@@ -604,7 +607,7 @@ function updatePagination(totalItems, currentPageVal, pageSizeVal) {
     const totalPages = Math.ceil(totalItems / pageSizeVal) || 1;
     if (pageInfo) {
         pageInfo.textContent = totalItems === 0
-            ? "No invoices found"
+            ? "Không tìm thấy hóa đơn"
             : `Page ${currentPageVal} of ${totalPages} (Total: ${totalItems || 0})`;
     }
     if (prevPage) prevPage.disabled = currentPageVal <= 1;
