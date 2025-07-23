@@ -119,7 +119,7 @@ function renderAppointments(appointments) {
     let stt = 0;
 
     console.log('Rendering appointments:', appointments.length);
-    appointments.forEach(appt => {
+    appointments.forEach((appt, index) => {
         if (!appt || !appt.appointmentId) {
             console.warn('Skipping invalid appointment:', appt);
             return;
@@ -133,7 +133,7 @@ function renderAppointments(appointments) {
         }
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${stt}</td>
+            <td>${index+1}</td>
             <td>${appt.patientName || '-'}</td>
             <td>${formatDateTime(appt.appointmentDatetime) || '-'}</td>
             <td>${appt.shift || '-'}</td>
@@ -156,7 +156,7 @@ function renderWaitlistEntries(waitlistEntries) {
     let stt = 0;
 
     console.log('Rendering waitlist entries:', waitlistEntries.length);
-    waitlistEntries.forEach(entry => {
+    waitlistEntries.forEach((entry,index) => {
         if (!entry || !entry.waitlistId) {
             console.warn('Skipping invalid waitlist entry:', entry);
             return;
@@ -170,7 +170,7 @@ function renderWaitlistEntries(waitlistEntries) {
         }
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${stt}</td>
+            <td>${index+1}</td>
             <td>${entry.patientName || '-'}</td>
             <td>${entry.doctorName || '-'}</td>
             <td>${entry.roomName || '-'}</td>
