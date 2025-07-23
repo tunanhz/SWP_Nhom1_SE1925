@@ -64,7 +64,7 @@ async function fetchAppointments(page, pageSize) {
 
     // Basic validation
     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-        showError("Start date must be before end date");
+        showError("Ngày bắt đầu phải trước ngày kết thúc");
         return;
     }
 
@@ -88,7 +88,7 @@ async function fetchAppointments(page, pageSize) {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+            throw new Error(errorData.message || `Lỗi HTTP! Trạng thái: ${response.status}`);
         }
 
         const data = await response.json();
@@ -97,10 +97,10 @@ async function fetchAppointments(page, pageSize) {
             updateOverview(data.overview);
             updatePagination(data.totalPages, data.page, data.pageSize, data.totalItems);
         } else {
-            throw new Error(data.message || "Failed to fetch appointments");
+            throw new Error(data.message || "Không thể lấy được cuộc hẹn");
         }
     } catch (error) {
-        showError(`Error fetching appointments: ${error.message}`);
+        showError(`Lỗi khi tìm kiếm cuộc hẹn: ${error.message}`);
         console.error("Error:", error);
     }
 }
@@ -113,7 +113,7 @@ function renderAppointments(appointments) {
     }
 
     tbody.innerHTML = appointments.length === 0
-        ? '<tr><td colspan="9" class="text-center">No appointments found</td></tr>'
+        ? '<tr><td colspan="9" class="text-center">Không tìm thấy cuộc hẹn nào</td></tr>'
         : "";
 
     appointments.forEach(appt => {
@@ -123,9 +123,9 @@ function renderAppointments(appointments) {
             <td>${appt.patientId || "-"}</td>
             <td>${appt.patientName || "-"}</td>
             <td>${formatDateTime(appt.appointmentDateTime) || "-"}</td>
-            <td>${appt.shift || "-"}</td>
+            <td>${translateTimeOfDay(appt.shift) || "-"}</td>
             <td>${appt.cancellationReason || "-"}</td>
-            <td>${appt.appointmentStatus || "-"}</td>
+            <td>${translateStatus(appt.appointmentStatus) || "-"}</td>
             <td>${appt.doctorId || "-"}</td>
             <td>${appt.doctorName || "-"}</td>
         `;
@@ -160,7 +160,7 @@ async function exportReport(type) {
     const searchTerm = document.getElementById("searchTerm")?.value || "";
 
     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-        showError("Start date must be before end date");
+        showError("Ngày bắt đầu phải trước ngày kết thúc");
         return;
     }
 
@@ -195,12 +195,12 @@ async function exportReport(type) {
         window.URL.revokeObjectURL(downloadUrl);
 
         if (typeof Swal !== 'undefined') {
-            Swal.fire("Success!", "Report exported as XLSX", "success");
+            Swal.fire("Success!", "Báo cáo được xuất dưới dạng XLSX", "success");
         } else {
-            alert("Report exported as XLSX");
+            alert("Báo cáo được xuất dưới dạng XLSX");
         }
     } catch (error) {
-        showError(`Error exporting report: ${error.message}`);
+        showError(`Lỗi khi xuất báo cáo: ${error.message}`);
         console.error("Error:", error);
     }
 }
@@ -221,6 +221,27 @@ function formatDateTime(dateTime) {
     const year = date.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric' });
 
     return `${timePart}, ${day}/${month}/${year}`;
+}
+
+function translateTimeOfDay(time) {
+    const translations = {
+        "Evening": "Buổi tối",
+        "Morning": "Buổi sáng",
+        "Afternoon": "Buổi chiều"
+    };
+    
+    return translations[time] || "Không xác định";
+}
+
+function translateStatus(status) {
+    const translations = {
+        "Pending": "Đang chờ",
+        "Confirmed": "Đã xác nhận",
+        "Completed": "Đã hoàn thành",
+        "Cancelled": "Đã hủy"
+    };
+    
+    return translations[status] || "Không xác định";
 }
 
 function showError(message) {
@@ -258,8 +279,8 @@ function updatePagination(totalPages, currentPageVal, pageSizeVal, totalItems) {
 
     if (pageInfo) {
         pageInfo.textContent = totalPages === 0
-            ? "No appointments found"
-            : `Page ${currentPageVal} of ${totalPages} (Total: ${totalItems || 0})`;
+            ? "Không tìm thấy cuộc hẹn nào"
+            : `Trang ${currentPageVal} / ${totalPages} (Tổng: ${totalItems || 0})`;
     }
     if (prevPage) prevPage.disabled = currentPageVal <= 1;
     if (nextPage) nextPage.disabled = currentPageVal >= (totalPages || 1);

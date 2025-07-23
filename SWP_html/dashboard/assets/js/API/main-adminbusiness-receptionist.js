@@ -18,12 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
             handleEdit(accountStaffId);
         } else if (target.classList.contains("delete-btn")) {
             Swal.fire({
-                title: "Are you sure?",
-                text: `You want to ${target.classList.contains("enable-btn") ? "enable" : "disable"} this receptionist?`,
+                title: "Bạn có chắc không?",
+                text: `Bạn muốn ${target.classList.contains("enable-btn") ? "enable" : "disable"} nhân viên lễ tân này?`,
                 icon: "warning",
                 showCancelButton: true,
                 backdrop: `rgba(60,60,60,0.8)`,
-                confirmButtonText: "Yes, update status!",
+                confirmButtonText: "Đúng, cập nhật trạng thái!",
                 confirmButtonColor: "#c03221",
             }).then(async (result) => {
                 if (result.isConfirmed) {
@@ -125,7 +125,7 @@ async function fetchReceptionists(page, pageSize) {
             throw new Error(data.message || "Failed to fetch receptionists");
         }
     } catch (error) {
-        showError(`Error fetching receptionists: ${error.message}`);
+        showError(`Lỗi khi tìm kiếm nhân viên lễ tân: ${error.message}`);
         console.error("Error:", error);
     }
 }
@@ -207,7 +207,7 @@ async function handleEdit(accountStaffId) {
             throw new Error(data.message || "Failed to fetch receptionist details");
         }
     } catch (error) {
-        showError(`Error fetching receptionist: ${error.message}`);
+        showError(`Lỗi khi tìm kiếm nhân viên lễ tân: ${error.message}`);
         console.error("Error:", error);
     }
 }
@@ -215,7 +215,7 @@ async function handleEdit(accountStaffId) {
 async function handleUpdate() {
     const form = document.querySelector("#offcanvasReceptionistEdit form");
     if (!form) {
-        Swal.fire("Error!", "Edit form not found", "error");
+        Swal.fire("Error!", "Không tìm thấy biểu mẫu chỉnh sửa", "error");
         return;
     }
 
@@ -230,32 +230,32 @@ async function handleUpdate() {
 
     // Validation
     if (!accountStaffId || isNaN(accountStaffId) || !receptionistId || isNaN(receptionistId)) {
-        Swal.fire("Error!", "Invalid account staff ID or receptionist ID", "error");
+        Swal.fire("Error!", "ID nhân viên tài khoản hoặc ID lễ tân không hợp lệ", "error");
         return;
     }
 
     if (!username || username.length < 3 || username.length > 50 || !/^[a-zA-Z0-9_]+$/.test(username)) {
-        Swal.fire("Error!", "Username must be 3-50 characters, alphanumeric or underscore only", "error");
+        Swal.fire("Error!", "Tên người dùng phải dài từ 3-50 ký tự, chỉ gồm chữ và số hoặc dấu gạch dưới", "error");
         return;
     }
 
     if (password && (password.length < 6 || password.length > 50)) {
-        Swal.fire("Error!", "Password must be 6-50 characters if provided", "error");
+        Swal.fire("Error!", "Mật khẩu phải dài từ 6-50 ký tự nếu được cung cấp", "error");
         return;
     }
 
     if (!fullName || fullName.length > 100 || /\s{2,}/.test(fullName)) {
-        Swal.fire("Error!", "Full name must be 1-100 characters with single spaces", "error");
+        Swal.fire("Error!", "Tên đầy đủ phải dài từ 1-100 ký tự với một khoảng trắng", "error");
         return;
     }
 
     if (!email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-        Swal.fire("Error!", "Invalid email format (e.g., example@domain.com)", "error");
+        Swal.fire("Error!", "Định dạng email không hợp lệ (ví dụ: example@domain.com)", "error");
         return;
     }
 
     if (!phone || !/^[0][0-9]{9}$/.test(phone)) {
-        Swal.fire("Error!", "Phone number must be exactly 10 digits starting with 0", "error");
+        Swal.fire("Error!", "Số điện thoại phải có chính xác 10 chữ số bắt đầu bằng 0", "error");
         return;
     }
 
@@ -292,11 +292,11 @@ async function handleUpdate() {
             throw new Error(errorData.message || errorMap[errorData.errorCode] || `HTTP error! Status: ${response.status}`);
         }
 
-        Swal.fire("Success!", "Receptionist updated successfully.", "success");
+        Swal.fire("Success!", "Lễ tân đã cập nhật thành công.", "success");
         bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasReceptionistEdit")).hide();
         await fetchReceptionists(currentPage, document.getElementById("itemsPerPage").value);
     } catch (error) {
-        Swal.fire("Error!", `Could not update receptionist: ${error.message}`, "error");
+        Swal.fire("Error!", `Không thể cập nhật nhân viên lễ tân: ${error.message}`, "error");
         console.error("Update error:", error);
     }
 }
@@ -304,7 +304,7 @@ async function handleUpdate() {
 async function handleAdd() {
     const form = document.querySelector("#offcanvasReceptionistAdd form");
     if (!form) {
-        Swal.fire("Error!", "Add form not found", "error");
+        Swal.fire("Error!", "Thêm biểu mẫu không tìm thấy", "error");
         return;
     }
 
@@ -317,27 +317,27 @@ async function handleAdd() {
 
     // Validation
     if (!username || username.length < 3 || username.length > 50 || !/^[a-zA-Z0-9_]+$/.test(username)) {
-        Swal.fire("Error!", "Username must be 3-50 characters, alphanumeric or underscore only", "error");
+        Swal.fire("Error!", "Tên người dùng phải dài từ 3-50 ký tự, chỉ gồm chữ và số hoặc dấu gạch dưới", "error");
         return;
     }
 
     if (!password || password.length < 6 || password.length > 50) {
-        Swal.fire("Error!", "Password must be 6-50 characters", "error");
+        Swal.fire("Error!", "Mật khẩu phải dài từ 6-50 ký tự", "error");
         return;
     }
 
     if (!fullName || fullName.length > 100 || /\s{2,}/.test(fullName)) {
-        Swal.fire("Error!", "Full name must be 1-100 characters with single spaces", "error");
+        Swal.fire("Error!", "Tên đầy đủ phải dài từ 1-100 ký tự với một khoảng trắng", "error");
         return;
     }
 
     if (!email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-        Swal.fire("Error!", "Invalid email format (e.g., example@domain.com)", "error");
+        Swal.fire("Error!", "Định dạng email không hợp lệ (ví dụ: example@domain.com)", "error");
         return;
     }
 
     if (!phone || !/^[0][0-9]{9}$/.test(phone)) {
-        Swal.fire("Error!", "Phone number must be exactly 10 digits starting with 0", "error");
+        Swal.fire("Error!", "Số điện thoại phải có chính xác 10 chữ số bắt đầu bằng 0", "error");
         return;
     }
 
@@ -364,19 +364,19 @@ async function handleAdd() {
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
             const errorMap = {
-                "DUPLICATE_USERNAME": "Username already exists",
-                "DUPLICATE_EMAIL": "Email already exists",
-                "DUPLICATE_PHONE": "Phone already exists",
-                "INVALID_EMAIL": "Invalid email format",
-                "INVALID_PHONE": "Phone must be 10 digits starting with 0",
-                "INVALID_USERNAME": "Username must be 3-50 characters, alphanumeric or underscore only",
-                "INVALID_PASSWORD": "Password must be 6-50 characters",
-                "INVALID_FULLNAME": "Full name must be 1-100 characters with single spaces"
+                "DUPLICATE_USERNAME": "Tên người dùng đã tồn tại",
+                "DUPLICATE_EMAIL": "Email đã tồn tại",
+                "DUPLICATE_PHONE": "Điện thoại đã tồn tại",
+                "INVALID_EMAIL": "Định dạng email không hợp lệ",
+                "INVALID_PHONE": "Số điện thoại phải có 10 chữ số bắt đầu bằng 0",
+                "INVALID_USERNAME": "Tên người dùng phải dài từ 3-50 ký tự, chỉ gồm chữ và số hoặc dấu gạch dưới",
+                "INVALID_PASSWORD": "Mật khẩu phải dài từ 6-50 ký tự",
+                "INVALID_FULLNAME": "Tên đầy đủ phải dài từ 1-100 ký tự với một khoảng trắng"
             };
             throw new Error(errorData.message || errorMap[errorData.errorCode] || `HTTP error! Status: ${response.status}`);
         }
 
-        Swal.fire("Success!", "Receptionist added successfully!", "success");
+        Swal.fire("Success!", "Đã thêm lễ tân thành công!", "success");
         bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasReceptionistAdd")).hide();
         await fetchReceptionists(1, document.getElementById("itemsPerPage").value);
     } catch (error) {
@@ -400,10 +400,10 @@ async function handleDelete(accountStaffId) {
             throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
         }
 
-        Swal.fire("Success!", "Receptionist status updated successfully.", "success");
+        Swal.fire("Success!", "Trạng thái lễ tân đã được cập nhật thành công.", "success");
         await fetchReceptionists(currentPage, document.getElementById("itemsPerPage").value);
     } catch (error) {
-        showError(`Error updating receptionist status: ${error.message}`);
+        showError(`Lỗi khi cập nhật trạng thái lễ tân: ${error.message}`);
         console.error("Error:", error);
     }
 }
@@ -436,7 +436,7 @@ function updatePagination(totalPages, currentPageVal, pageSizeVal, totalItems) {
     if (allReceptionists) allReceptionists.value = totalItems;
 
     if (pageInfo)
-        pageInfo.textContent = `Page ${currentPageVal} of ${totalPages || 1} (Total: ${totalItems || 0})`;
+        pageInfo.textContent = `Trang ${currentPageVal} / ${totalPages || 1} (Tổng: ${totalItems || 0})`;
     if (prevPage) prevPage.disabled = currentPageVal <= 1;
     if (nextPage) nextPage.disabled = currentPageVal >= (totalPages || 1);
     const itemsPerPage = document.getElementById("itemsPerPage");

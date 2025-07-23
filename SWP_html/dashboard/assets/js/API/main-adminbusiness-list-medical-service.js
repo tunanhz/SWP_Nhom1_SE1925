@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.success) {
                 totalPages = data.totalPages;
                 currentPage = page;
-                document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+                document.getElementById('pageInfo').textContent = `Trang ${currentPage} / ${totalPages}`;
                 populateTable(data.services);
                 updatePaginationButtons();
             } else {
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const minPrice = document.getElementById('minPrice').value || null;
         const maxPrice = document.getElementById('maxPrice').value || null;
         if (minPrice && maxPrice && parseFloat(minPrice) > parseFloat(maxPrice)) {
-            Swal.fire('Error', 'Min price cannot be greater than max price', 'error');
+            Swal.fire('Error', 'Giá tối thiểu không thể lớn hơn giá tối đa', 'error');
             return;
         }
         fetchServices(currentPage, document.getElementById('searchQuery').value, minPrice, maxPrice,
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const status = document.getElementById('addStatus').value;
 
         if (!name || !description || isNaN(price) || price < 0) {
-            Swal.fire('Error', 'Please fill all required fields with valid data (price must be non-negative).', 'error');
+            Swal.fire('Error', 'Vui lòng điền đầy đủ dữ liệu hợp lệ vào tất cả các trường bắt buộc (giá không được âm).', 'error');
             return;
         }
 
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Error adding service:', error);
-            Swal.fire('Error', `An error occurred while adding the service: ${error.message}`, 'error');
+            Swal.fire('Error', `Đã xảy ra lỗi khi thêm dịch vụ: ${error.message}`, 'error');
         }
     });
 
@@ -258,11 +258,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('editStatus').value = service.status;
                 document.getElementById('editNameExistsError').style.display = 'none';
             } else {
-                Swal.fire('Error', data.message || 'Failed to fetch service details.', 'error');
+                Swal.fire('Error', data.message || 'Không thể lấy thông tin chi tiết về dịch vụ.', 'error');
             }
         } catch (error) {
             console.error('Error fetching service:', error);
-            Swal.fire('Error', `An error occurred while fetching service details: ${error.message}`, 'error');
+            Swal.fire('Error', `Đã xảy ra lỗi khi tìm kiếm thông tin chi tiết về dịch vụ: ${error.message}`, 'error');
         }
     };
 
@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const status = document.getElementById('editStatus').value;
 
         if (!serviceId || !name || !description || isNaN(price) || price < 0) {
-            Swal.fire('Error', 'Please fill all required fields with valid data (price must be non-negative).', 'error');
+            Swal.fire('Error', 'Vui lòng điền đầy đủ dữ liệu hợp lệ vào tất cả các trường bắt buộc (giá không được âm).', 'error');
             return;
         }
 
@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Error updating service:', error);
-            Swal.fire('Error', `An error occurred while updating the service: ${error.message}`, 'error');
+            Swal.fire('Error', `Đã xảy ra lỗi khi cập nhật dịch vụ: ${error.message}`, 'error');
         }
     });
 
@@ -314,12 +314,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const button = e.currentTarget;
         const serviceId = parseInt(button.getAttribute('data-id'));
         Swal.fire({
-            title: 'Are you sure?',
-            text: 'This will disable the service.',
+            title: 'Bạn có chắc không?',
+            text: 'Thao tác này sẽ vô hiệu hóa dịch vụ.',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, disable it!',
-            cancelButtonText: 'No, cancel'
+            confirmButtonText: 'Đúng, hãy vô hiệu hóa nó!',
+            cancelButtonText: 'Không, hủy bỏ'
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 } catch (error) {
                     console.error('Error deleting service:', error);
-                    Swal.fire('Error', `An error occurred while disabling the service: ${error.message}`, 'error');
+                    Swal.fire('Error', `Đã xảy ra lỗi khi vô hiệu hóa dịch vụ: ${error.message}`, 'error');
                 }
             }
         });

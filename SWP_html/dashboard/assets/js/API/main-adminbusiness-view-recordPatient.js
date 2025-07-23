@@ -97,7 +97,7 @@ async function renderPatientRecords(records, totalRecords, totalPages) {
     tbody.innerHTML = '<tr><td colspan="8" class="text-center">Loading...</td></tr>';
 
     if (!records || records.length === 0) {
-        tbody.innerHTML = '<h3 class="text-center">No patient records found.</h3>';
+        tbody.innerHTML = '<h3 class="text-center">Không tìm thấy hồ sơ bệnh nhân.</h3>';
         return;
     }
 
@@ -125,7 +125,7 @@ function createTableRow(record, index) {
         <td>${sanitizeHTML(record.gender || '-')}</td>
         <td>${sanitizeHTML(record.disease || '-')}</td>
         <td>${formatDateTime(record.appointmentDatetime)}</td>
-        <td><span class="badge bg-success-subtle p-2 text-success">Complete</span></td>
+        <td><span class="badge bg-success-subtle p-2 text-success">Hoàn thành</span></td>
         <td>
             <div class="d-flex gap-2">
                 <a href="adminbusiness-view-recordPatient.html" data-patient-id="${record.patientId}" class="btn btn-primary btn-sm rounded-pill feedback-link" data-bs-toggle="tooltip" title="View Profile" aria-label="View Profile">
@@ -201,7 +201,7 @@ function updatePagination(totalPages, currentPage, pageSize, totalRecords) {
     const prevPage = document.getElementById('prevPage');
     const nextPage = document.getElementById('nextPage');
     if (pageInfo) {
-        pageInfo.textContent = `Page ${currentPage} of ${totalPages} (Total: ${totalRecords})`;
+        pageInfo.textContent = `Trang ${currentPage} / ${totalPages} (Tổng: ${totalRecords})`;
     }
     if (prevPage) {
         prevPage.classList.toggle('disabled', currentPage <= 1);
@@ -214,7 +214,7 @@ function updatePagination(totalPages, currentPage, pageSize, totalRecords) {
 
 function validateDates(startDate, endDate) {
     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-        showError('Start date must be before end date');
+        showError('Ngày bắt đầu phải trước ngày kết thúc');
         return false;
     }
     return true;

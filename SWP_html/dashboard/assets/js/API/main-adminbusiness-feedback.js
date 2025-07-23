@@ -62,11 +62,11 @@ async function fetchFeedback(page, pageSize) {
 
     // Basic validation
     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-        showError("Start date must be before end date");
+        showError("Ngày bắt đầu phải trước ngày kết thúc");
         return;
     }
     if (minAvgFeedback && maxAvgFeedback && Number(minAvgFeedback) > Number(maxAvgFeedback)) {
-        showError("Minimum average feedback must be less than maximum");
+        showError("Phản hồi trung bình tối thiểu phải nhỏ hơn mức tối đa");
         return;
     }
 
@@ -115,7 +115,7 @@ function renderFeedback(feedbacks) {
     }
 
     tbody.innerHTML = feedbacks.length === 0
-        ? '<tr><td colspan="9" class="text-center">No feedback found</td></tr>'
+        ? '<tr><td colspan="9" class="text-center">Không tìm thấy phản hồi</td></tr>'
         : "";
 
     feedbacks.forEach(fb => {
@@ -158,11 +158,11 @@ async function exportReport(type) {
     const maxAvgFeedback = document.getElementById("maxAvgFeedback")?.value || "";
 
     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-        showError("Start date must be before end date");
+        showError("Ngày bắt đầu phải trước ngày kết thúc");
         return;
     }
     if (minAvgFeedback && maxAvgFeedback && Number(minAvgFeedback) > Number(maxAvgFeedback)) {
-        showError("Minimum average feedback must be less than maximum");
+        showError("Phản hồi trung bình tối thiểu phải nhỏ hơn mức tối đa");
         return;
     }
 
@@ -200,12 +200,12 @@ async function exportReport(type) {
 
         // Use Swal if available, otherwise fall back to alert
         if (typeof Swal !== 'undefined') {
-            Swal.fire("Success!", `Report exported as ${type.toUpperCase()}`, "success");
+            Swal.fire("Success!", `Báo cáo được xuất dưới dạng ${type.toUpperCase()}`, "success");
         } else {
-            alert(`Report exported as ${type.toUpperCase()}`);
+            alert(`Báo cáo được xuất dưới dạng ${type.toUpperCase()}`);
         }
     } catch (error) {
-        showError(`Error exporting report: ${error.message}`);
+        showError(`Lỗi khi xuất báo cáo: ${error.message}`);
         console.error("Error:", error);
     }
 }
@@ -252,8 +252,8 @@ function updatePagination(totalPages, currentPageVal, pageSizeVal, totalItems) {
 
     if (pageInfo) {
         pageInfo.textContent = totalPages === 0
-            ? "No feedback found"
-            : `Page ${currentPageVal} of ${totalPages} (Total: ${totalItems || 0})`;
+            ? "Không tìm thấy phản hồi"
+            : `Trang ${currentPageVal} / ${totalPages} (Tổng: ${totalItems || 0})`;
     }
     if (prevPage) prevPage.disabled = currentPageVal <= 1;
     if (nextPage) nextPage.disabled = currentPageVal >= (totalPages || 1);
