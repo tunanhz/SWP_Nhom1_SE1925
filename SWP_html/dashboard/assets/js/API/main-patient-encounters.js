@@ -206,14 +206,14 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                         <thead class="table-dark">
                             <tr>
                                 <th scope="col">No.</th>
-                                <th scope="col">Patient</th>
-                                <th scope="col">Doctors</th>
-                                <th scope="col">Clinic Name</th>
-                                <th scope="col">Appointment Date</th>
-                                <th scope="col">Add Note</th>
-                                <th scope="col">Last Visit</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Bệnh nhân</th>
+                                <th scope="col">Bác sĩ</th>
+                                <th scope="col">Tên phòng khám</th>
+                                <th scope="col">Ngày hẹn</th>
+                                <th scope="col">Ghi chú</th>
+                                <th scope="col">Lần ghé thăm cuối cùng</th>
+                                <th scope="col">Trạng thái</th>
+                                <th scope="col">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -232,7 +232,7 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                         ${state.currentPage === 1 ? "disabled" : ""}
                         data-page="${state.currentPage - 1}">
                     <span class="btn-inner">
-                        <span class="text d-inline-block align-middle">Previous</span>
+                        <span class="text d-inline-block align-middle">Trang trước</span>
                         <span class="icon d-inline-block align-middle ms-1 ps-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
@@ -240,12 +240,12 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
                         </span>
                     </span>
                 </button>
-                <span class="align-self-center me-3">Page ${state.currentPage} of ${totalPages}</span>
+                <span class="align-self-center me-3">Trang ${state.currentPage} / ${totalPages}</span>
                 <button class="btn btn-primary me-3" type="button"
                         ${state.currentPage === totalPages ? "disabled" : ""}
                         data-page="${state.currentPage + 1}">
                     <span class="btn-inner">
-                        <span class="text d-inline-block align-middle">Next</span>
+                        <span class="text d-inline-block align-middle">Trang sau</span>
                         <span class="icon d-inline-block align-middle ms-1 ps-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
@@ -256,13 +256,13 @@ async function displayAppointment(page = 1, nameSearch = state.currentNameSearch
             </div>
             <div class="col-md-6 d-flex justify-content-center justify-content-md-end mt-4">
             <div class="input-group input-group-sm w-auto">
-            <label class="input-group-text text-bg-info" for="pageSize">Items per page</label>
+            <label class="input-group-text text-bg-info" for="pageSize">Số mục trên mỗi trang</label>
             <select class="form-select" name="page" id="pageSize">
                 <option value="6" ${pageSize === 6 ? 'selected' : ''}>6</option>
                 <option value="10" ${pageSize === 10 ? 'selected' : ''}>10</option>
                 <option value="15" ${pageSize === 15 ? 'selected' : ''}>15</option>
                 <option value="20" ${pageSize === 20 ? 'selected' : ''}>20</option>
-                <option value="${totalAppointment}" ${pageSize === totalAppointment ? 'selected' : ''}>All</option>
+                <option value="${totalAppointment}" ${pageSize === totalAppointment ? 'selected' : ''}>Tất cả</option>
             </select>
             </div>
             </div>
