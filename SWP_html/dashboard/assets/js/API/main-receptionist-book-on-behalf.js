@@ -89,7 +89,7 @@ function fetchPatients(page, pageSize, sortBy, sortOrder) {
 
     const url = `${baseAPI}?page=${page}&pageSize=${pageSize}&searchQuery=${encodeURIComponent(searchQuery || '')}&dob=${encodeURIComponent(dob || '')}&gender=${encodeURIComponent(gender || '')}&sortBy=${encodeURIComponent(sortBy)}&sortOrder=${encodeURIComponent(sortOrder)}`;
 
-    console.log('Fetching URL:', url);
+    console.log('Đang lấy dữ liệu từ URL:', url);
 
     fetch(url, {
         method: 'GET',
@@ -97,26 +97,26 @@ function fetchPatients(page, pageSize, sortBy, sortOrder) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                throw new Error(`Lỗi HTTP! Trạng thái: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
             if (data.success) {
-                console.log('Received data:', data);
+                console.log('Dữ liệu nhận được:', data);
                 renderPatients(data.patients);
                 updatePagination(data.totalPages, data.currentPage, data.pageSize, data.totalPatients);
             } else {
-                showError(data.message || 'Failed to fetch patients');
-                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No patients found</td></tr>';
+                showError(data.message || 'Không thể lấy danh sách bệnh nhân');
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">Không tìm thấy bệnh nhân</td></tr>';
                 if (prevPage) prevPage.disabled = currentPage <= 1;
                 if (nextPage) nextPage.disabled = currentPage >= totalPages;
             }
         })
         .catch(error => {
-            showError(`Error fetching patients: ${error.message}`);
+            showError(`Lỗi khi lấy danh sách bệnh nhân: ${error.message}`);
             console.error('Error:', error);
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Error loading patients</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Lỗi khi tải danh sách bệnh nhân</td></tr>';
             if (prevPage) prevPage.disabled = currentPage <= 1;
             if (nextPage) nextPage.disabled = true;
         });
@@ -127,14 +127,14 @@ function renderPatients(patients) {
     tbody.innerHTML = '';
 
     if (patients.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No patients found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center">Không tìm thấy bệnh nhân</td></tr>';
         return;
     }
 
-    console.log('Rendering patients:', patients.length);
+    console.log('Đang hiển thị danh sách bệnh nhân:', patients.length);
     patients.forEach((patient, index) => {
         if (!patient || !patient.id) {
-            console.warn('Skipping invalid patient:', patient);
+            console.warn('Bỏ qua bệnh nhân không hợp lệ:', patient);
             return;
         }
         const row = document.createElement('tr');
@@ -146,7 +146,7 @@ function renderPatients(patients) {
             <td>${patient.phone || '-'}</td>
             <td>${patient.address || '-'}</td>
             <td>
-                <button class="btn btn-checkin" onclick="bookAppointment(${patient.id})">Book</button>
+                <button class="btn btn-checkin" onclick="bookAppointment(${patient.id})">Đặt Lịch</button>
             </td>
         `;
         tbody.appendChild(row);
@@ -154,7 +154,7 @@ function renderPatients(patients) {
 }
 
 function bookAppointment(patientId) {
-    console.log(`Initiating booking for patient ID: ${patientId}`);
+    console.log(`Bắt đầu đặt lịch cho bệnh nhân ID: ${patientId}`);
     const offcanvasElement = document.getElementById('offcanvasAppointmentBook');
     const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement) || new bootstrap.Offcanvas(offcanvasElement);
     document.getElementById('patientId').value = patientId;
@@ -274,7 +274,7 @@ function initializeAppointmentForm() {
         });
 
         if (!doctorId || !selectedDateStr) {
-            console.warn('Skipping fetch: doctorId or date is missing', { doctorId, selectedDateStr });
+            console.warn('Bỏ qua lấy dữ liệu: thiếu doctorId hoặc ngày', { doctorId, selectedDateStr });
             return;
         }
 
@@ -287,7 +287,7 @@ function initializeAppointmentForm() {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error(`Failed to fetch booked times: HTTP ${response.status} - ${response.statusText}`, errorText);
+                console.error(`Không thể lấy danh sách thời gian đã đặt: HTTP ${response.status} - ${response.statusText}`, errorText);
                 return;
             }
 
@@ -298,8 +298,8 @@ function initializeAppointmentForm() {
                 }
             });
         } catch (error) {
-            console.error('Error fetching booked times:', error.message, error);
-            showError(`Error fetching booked times: ${error.message}`);
+            console.error('Lỗi khi lấy danh sách thời gian đã đặt:', error.message, error);
+            showError(`Lỗi khi lấy danh sách thời gian đã đặt: ${error.message}`);
         }
     }
 
@@ -327,17 +327,17 @@ function initializeAppointmentForm() {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error(`Failed to fetch working dates: HTTP ${response.status} - ${response.statusText}`, errorText);
+                console.error(`Không thể lấy danh sách ngày làm việc: HTTP ${response.status} - ${response.statusText}`, errorText);
                 doctorWorkingDates = [];
             } else {
                 doctorWorkingDates = await response.json();
             }
             generateCalendar(yearSelect.value, monthSelect.value);
         } catch (error) {
-            console.error('Error fetching working dates:', error.message, error);
+            console.error('Lỗi khi lấy danh sách ngày làm việc:', error.message, error);
             doctorWorkingDates = [];
             generateCalendar(yearSelect.value, monthSelect.value);
-            showError(`Error fetching working dates: ${error.message}`);
+            showError(`Lỗi khi lấy danh sách ngày làm việc: ${error.message}`);
         }
     }
 
@@ -357,13 +357,13 @@ function initializeAppointmentForm() {
                 loadDoctors();
             })
             .catch(error => {
-                console.error('Error fetching departments:', error);
-                showError(`Error fetching departments: ${error.message}`);
+                console.error('Lỗi khi lấy danh sách khoa:', error);
+                showError(`Lỗi khi lấy danh sách khoa: ${error.message}`);
             });
     }
 
     function loadDoctors(department = "") {
-        doctorSelect.innerHTML = '<option value="">-- Select Doctor --</option>';
+        doctorSelect.innerHTML = '<option value="">-- Chọn Bác Sĩ --</option>';
         doctorSelect.disabled = true;
 
         let url = doctorAPI;
@@ -385,8 +385,8 @@ function initializeAppointmentForm() {
                 doctorSelect.disabled = false;
             })
             .catch(error => {
-                console.error('Error fetching doctors:', error);
-                showError(`Error fetching doctors: ${error.message}`);
+                console.error('Lỗi khi lấy danh sách bác sĩ:', error);
+                showError(`Lỗi khi lấy danh sách bác sĩ: ${error.message}`);
             });
     }
 
@@ -461,21 +461,21 @@ function initializeAppointmentForm() {
         const patientId = document.getElementById('patientId').value;
 
         if (!doctorId) {
-            showError('Please select a doctor.');
+            showError('Vui lòng chọn bác sĩ.');
             return;
         }
         if (!date) {
-            showError('Please select a date.');
+            showError('Vui lòng chọn ngày.');
             return;
         }
         if (!time) {
-            showError('Please select a time.');
+            showError('Vui lòng chọn giờ.');
             return;
         }
 
         const selectedDateTime = new Date(`${date}T${time}`);
         if (selectedDateTime < new Date()) {
-            showError('Cannot select a past date or time.');
+            showError('Không thể chọn ngày hoặc giờ trong quá khứ.');
             return;
         }
 
@@ -514,12 +514,12 @@ function initializeAppointmentForm() {
                 doctorSelect.disabled = true;
                 doctorWorkingDates = [];
                 generateCalendar(yearSelect.value, monthSelect.value);
-                showSuccess('Appointment booked successfully!');
+                showSuccess('Đặt lịch khám thành công!');
             } else {
-                showError(data.error || 'Failed to book appointment.');
+                showError(data.error || 'Không thể đặt lịch khám.');
             }
         } catch (error) {
-            showError(`Error booking appointment: ${error.message}`);
+            showError(`Lỗi khi đặt lịch khám: ${error.message}`);
             console.error('Error:', error);
         }
     });
@@ -558,8 +558,8 @@ function updatePagination(totalPagesReceived, currentPageReceived, pageSizeRecei
     const nextPage = document.getElementById('nextPage');
     if (pageInfo) {
         pageInfo.textContent = totalEntries > 0
-            ? `Page ${currentPage} of ${totalPages} (Total: ${totalEntries})`
-            : 'No patients found';
+            ? `Trang ${currentPage} / ${totalPages} (Tổng: ${totalEntries})`
+            : 'Không tìm thấy bệnh nhân';
     }
     if (prevPage) prevPage.disabled = currentPage <= 1;
     if (nextPage) nextPage.disabled = currentPage >= totalPages;
@@ -582,23 +582,23 @@ document.getElementById('addPatient').addEventListener('submit', function (event
     const address = document.getElementById('address1').value.trim();
 
     if (!namePatient) {
-        showError('Patient name is required');
+        showError('Tên bệnh nhân là bắt buộc');
         return;
     }
     if (!dateOfBirth || !/^\d{4}-\d{2}-\d{2}$/.test(dateOfBirth)) {
-        showError('Invalid date of birth format (yyyy-MM-dd)');
+        showError('Định dạng ngày sinh không hợp lệ (yyyy-MM-dd)');
         return;
     }
     if (!['Male', 'Female', 'Other'].includes(gender)) {
-        showError('Please select a valid gender');
+        showError('Vui lòng chọn giới tính hợp lệ');
         return;
     }
     if (!phonePatient || !/^\d{10,12}$/.test(phonePatient)) {
-        showError('Phone number must be 10-12 digits');
+        showError('Số điện thoại phải có 10-12 chữ số');
         return;
     }
     if (!address) {
-        showError('Address is required');
+        showError('Địa chỉ là bắt buộc');
         return;
     }
 
@@ -620,7 +620,7 @@ document.getElementById('addPatient').addEventListener('submit', function (event
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                throw new Error(`Lỗi HTTP! Trạng thái: ${response.status}`);
             }
             return response.json();
         })
@@ -633,13 +633,13 @@ document.getElementById('addPatient').addEventListener('submit', function (event
                 this.classList.remove('was-validated');
                 currentPage = 1;
                 fetchPatients(currentPage, pageSize, sortBy, sortOrder);
-                showSuccess('Patient added successfully!');
+                showSuccess('Thêm bệnh nhân thành công!');
             } else {
-                showError(data.message || 'Failed to add patient');
+                showError(data.message || 'Không thể thêm bệnh nhân');
             }
         })
         .catch(error => {
-            showError(`Error adding patient: ${error.message}`);
-            console.error('Error:', error);
+            showError(`Lỗi khi thêm bệnh nhân: ${error.message}`);
+            console.error('Lỗi:', error);
         });
 });
