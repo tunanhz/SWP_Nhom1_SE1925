@@ -138,7 +138,7 @@
                                                         fill="currentColor"></path>
                                                 </svg>
                                             </i>
-                                            <span class="item-name">patient-dashboard</span>
+                                            <span class="item-name">Trang chủ</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -162,7 +162,7 @@
                                                         fill="currentColor" />
                                                 </svg>
                                             </i>
-                                            <span class="item-name">Appointments</span>
+                                            <span class="item-name">Cuộc hẹn</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -181,7 +181,7 @@
                                                         fill="currentColor"></path>
                                                 </svg>
                                             </i>
-                                            <span class="nav-text ms-2">Pages</span>
+                                            <span class="nav-text ms-2">Trang</span>
                                         </a>
                                         <ul class="iq-header-sub-menu list-unstyled collapse" id="allPatitentPages">
                                             <li class="nav-item">
@@ -211,7 +211,7 @@
                                                                 fill="currentColor"></path>
                                                         </svg>
                                                     </i>
-                                                    <span class="item-name">Patients</span>
+                                                    <span class="item-name">Bệnh nhân</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
@@ -229,7 +229,7 @@
                                                                 fill="currentColor" />
                                                         </svg>
                                                     </i>
-                                                    <span class="item-name">Encounters</span>
+                                                    <span class="item-name">Những cuộc gặp gỡ</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
@@ -247,7 +247,7 @@
                                                                 fill="currentColor"></path>
                                                         </svg>
                                                     </i>
-                                                    <span class="item-name">Doctors</span>
+                                                    <span class="item-name">Bác sĩ</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
@@ -268,8 +268,7 @@
                                                                 fill="currentColor"></path>
                                                         </svg>
                                                     </i>
-                                                    <span class="item-name">patient
-                                                        record</span>
+                                                    <span class="item-name">Hồ sơ bệnh nhân</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -290,7 +289,7 @@
                                                     <circle cx="18" cy="11.8999" r="1" fill="currentColor"></circle>
                                                 </svg>
                                             </i>
-                                            <span class="item-name">Payments</span>
+                                            <span class="item-name">Thanh toán</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -309,7 +308,7 @@
                                                         fill="currentColor"></path>
                                                 </svg>
                                             </i>
-                                            <span class="item-name">Setting</span>
+                                            <span class="item-name">Cài đặt</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -775,8 +774,7 @@
             <div id="null-data">
                 <div class="card shadow-sm border-0 rounded-4">
                 <div class="card-header bg-primary text-white rounded-top-4 p-3">
-                    <h4 class="card-title mb-0">Patient Medical Profiles(<small>You have to give feedback before you see
-                            results.</small>)</h4>
+                    <h4 class="card-title mb-0">Hồ sơ bệnh án của bệnh nhân<small>(Bạn phải đưa ra phản hồi trước khi thấy kết quả.)</small></h4>
                 </div>
                 <div class="card-body p-4">
                     <div class="row mb-4 g-3">
@@ -793,27 +791,27 @@
                                         </svg>
                                     </span>
                                     <input type="text" class="form-control border-start-0" id="searchQuery"
-                                        placeholder="Search by Patient or Doctor Name" aria-label="Search">
+                                        placeholder="Tìm kiếm theo tên bệnh nhân hoặc bác sĩ" aria-label="Search">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <input type="date" class="form-control" id="startDate" placeholder="Start Date...">
+                                <input type="date" class="form-control" id="startDate" placeholder="Ngày bắt đầu...">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <input type="date" class="form-control" id="endDate" placeholder="End Date...">
+                                <input type="date" class="form-control" id="endDate" placeholder="Ngày kết thúc...">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <select class="form-select" id="filterGender" aria-label="Filter Status">
-                                    <option value="">All Gender</option>
-                                    <option value="Nam">Male</option>
-                                    <option value="Nữ">Fmale</option>
-                                    <option value="Khác">Other</option>
+                                    <option value="">Tất cả</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                    <option value="Khác">Khác</option>
                                 </select>
                             </div>
                         </div>
@@ -823,13 +821,13 @@
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col">No.</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Age</th>
-                                    <th scope="col">Gender</th>
-                                    <th scope="col">Condition</th>
-                                    <th scope="col">Last Visit</th>
-                                    <th scope="col">Appointment Status</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col">Tên</th>
+                                    <th scope="col">Tuổi</th>
+                                    <th scope="col">Giới tính</th>
+                                    <th scope="col">Tình trạng</th>
+                                    <th scope="col">Lần ghé thăm cuối cùng</th>
+                                    <th scope="col">Trạng thái cuộc hẹn</th>
+                                    <th scope="col">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody id="patientTableBody">
@@ -885,7 +883,7 @@
                 <div class="d-flex justify-content-start col-md-6 mt-4">
                     <button class="btn btn-secondary text-white me-3" type="button" id="prevPage">
                         <span class="btn-inner">
-                            <span class="text d-inline-block align-middle">Previous</span>
+                            <span class="text d-inline-block align-middle">Trước</span>
                             <span class="icon d-inline-block align-middle ms-1 ps-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     viewBox="0 0 16 16">
@@ -898,7 +896,7 @@
                     <span class="align-self-center me-3" id="pageInfo">Page 1 of 8</span>
                     <button class="btn btn-primary me-3" type="button" id="nextPage">
                         <span class="btn-inner">
-                            <span class="text d-inline-block align-middle">Next</span>
+                            <span class="text d-inline-block align-middle">Kế tiếp</span>
                             <span class="icon d-inline-block align-middle ms-1 ps-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     viewBox="0 0 16 16">
@@ -911,13 +909,13 @@
                 </div>
                 <div class="col-md-6 d-flex justify-content-center justify-content-md-end mt-4">
                     <div class="input-group input-group-sm w-auto">
-                        <label class="input-group-text text-bg-info" for="itemsPerPage">Items per page</label>
+                        <label class="input-group-text text-bg-info" for="itemsPerPage">Số mục trên mỗi trang</label>
                         <select class="form-select" name="page" id="itemsPerPage">
                             <option value="5">5</option>
                             <option value="10" selected>10</option>
                             <option value="15">15</option>
                             <option value="20">20</option>
-                            <option value="90">All</option>
+                            <option value="90">Tất cả</option>
                         </select>
                     </div>
                 </div>
@@ -1582,7 +1580,7 @@
                               stroke="currentColor" stroke-width="1.42857" stroke-linecap="round"
                               stroke-linejoin="round"></path>
                         </svg>
-                        <span class="align-middle fw-500">Edit Avatars Profile</span>
+                        <span class="align-middle fw-500">Chỉnh sửa hình đại diện</span>
                      </a>
                   </li>
                   <li class="nav-item">
@@ -1599,7 +1597,7 @@
                            <path d="M11.8628 14.2026V16.4236" stroke="currentColor" stroke-width="1.5"
                               stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
-                        <span class="align-middle fw-500">Change Password</span>
+                        <span class="align-middle fw-500">Thay đổi mật khẩu</span>
                      </a>
                   </li>
                   <li class="nav-item">
@@ -1613,7 +1611,7 @@
                               stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                            </path>
                         </svg>
-                        <span class="align-middle fw-500">Notification</span>
+                        <span class="align-middle fw-500">Thông báo</span>
                      </a>
                   </li>
                </ul>
@@ -1631,7 +1629,7 @@
                                     class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white me-1 mb-1"></span>
                               </div>
                               <div class="content">
-                                 <p class="m-0">Upload A New Image.</p>
+                                 <p class="m-0">Tải lên hình ảnh mới.</p>
                                  <input type="file" id="profileImgInput" name="img" accept="image/*"
                                     class="form-control mt-2">
                                  <div id="img-error" class="error-message"></div>
@@ -1639,7 +1637,7 @@
                            </div>
                            <button type="submit" class="btn btn-primary" id="saveChangesBtn" disabled>
                               <span class="btn-inner">
-                                 <span class="text d-inline-block align-middle">Save Changes</span>
+                                 <span class="text d-inline-block align-middle">Lưu thay đổi</span>
                                  <span id="loadingSpinner" class="icon d-inline-block align-middle ms-1 ps-2"
                                     style="display: none;">
                                     <span class="icon d-inline-block align-middle ms-1 ps-2">
@@ -1689,12 +1687,12 @@
                         <div
                            class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
                            <div class="content">
-                              <h4 class="mb-2">Password</h4>
-                              <p class="m-0">Update Or Change Your Current Password.</p>
+                              <h4 class="mb-2">Mật khẩu</h4>
+                              <p class="m-0">Cập nhật hoặc thay đổi mật khẩu hiện tại của bạn.</p>
                            </div>
                            <button type="submit" class="btn btn-primary" id="changePasswordBtn">
                               <span class="btn-inner">
-                                 <span class="text d-inline-block align-middle">Change Password</span>
+                                 <span class="text d-inline-block align-middle">Thay đổi mật khẩu</span>
                                  <span class="icon d-inline-block align-middle ms-1 ps-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
                                        fill="none">
@@ -1708,17 +1706,17 @@
                         </div>
                         <div class="row mt-5">
                            <div class="col-md-12">
-                              <label class="mt-2 fw-bold">Your Old Password <span class="text-danger">*</span></label>
+                              <label class="mt-2 fw-bold">Mật khẩu cũ của bạn <span class="text-danger">*</span></label>
                               <input type="password" class="form-control" id="currentPassword"
-                                 placeholder="Your Current Password *">
+                                 placeholder="Mật khẩu hiện tại của bạn *">
                            </div>
                            <div class="col-md-12 mt-4">
-                              <label class="mt-2 fw-bold">Your New Pass Password <span class="text-danger">*</span></label>
-                              <input type="password" class="form-control" id="newPassword" placeholder="New Password *">
+                              <label class="mt-2 fw-bold">Mật khẩu mới của bạn <span class="text-danger">*</span></label>
+                              <input type="password" class="form-control" id="newPassword" placeholder="Mật khẩu mới *">
                            </div>
                            <div class="col-md-12 mt-4">
                               <input type="password" class="form-control" id="confirmPassword"
-                                 placeholder="Confirm New Password *">
+                                 placeholder="Xác nhận mật khẩu mới *">
                            </div>
                            <div id="password-error" class="error-message mt-2"></div>
                            <div id="password-success" class="success-message mt2"></div>
@@ -1728,17 +1726,17 @@
                   <div class="tab-pane fade" id="setting-content-3">
                      <form>
                         <div class="content">
-                           <h4 class="mb-2">Notification</h4>
-                           <p class="m-0">Update Or Change Your Notification Settings.</p>
+                           <h4 class="mb-2">Thông báo</h4>
+                           <p class="m-0">Cập nhật hoặc thay đổi cài đặt thông báo của bạn.</p>
                         </div>
                         <div
                            class="d-flex aling-items-center justify-content-between gap-3 mt-5 me-0 mb-0 p-0 form-check form-switch form-check-inline">
-                           <h5 class="mb-0">Email Notification</h5>
+                           <h5 class="mb-0">Thông báo qua email</h5>
                            <input class="form-check-input" type="checkbox" id="switch1" checked />
                         </div>
                         <div
                            class="d-flex aling-items-center justify-content-between gap-3 mt-3 me-0 mb-0 p-0 form-check form-switch form-check-inline">
-                           <h5 class="mb-0">App Notification</h5>
+                           <h5 class="mb-0">Thông báo ứng dụng</h5>
                            <input class="form-check-input" type="checkbox" id="switch2" checked />
                         </div>
                         <div class="mt-4 pt-4 border-top">
@@ -1746,32 +1744,28 @@
                               <li class="mb-3">
                                  <div
                                     class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                    <label class="form-check-label h5 text-body mb-0" for="customCheck1">Appointment
-                                       Reminder</label>
+                                    <label class="form-check-label h5 text-body mb-0" for="customCheck1">Nhắc nhở cuộc hẹn</label>
                                     <input type="checkbox" class="form-check-input" id="customCheck1">
                                  </div>
                               </li>
                               <li class="mb-3">
                                  <div
                                     class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                    <label class="form-check-label h5 text-body mb-0" for="customCheck2">Subscription
-                                       Offer</label>
+                                    <label class="form-check-label h5 text-body mb-0" for="customCheck2">Ưu đãi đăng ký</label>
                                     <input type="checkbox" class="form-check-input" id="customCheck2">
                                  </div>
                               </li>
                               <li class="mb-3">
                                  <div
                                     class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                    <label class="form-check-label h5 text-body mb-0" for="customCheck3">New
-                                       Update Notification</label>
+                                    <label class="form-check-label h5 text-body mb-0" for="customCheck3">Thông báo cập nhật mới</label>
                                     <input type="checkbox" class="form-check-input" id="customCheck3">
                                  </div>
                               </li>
                               <li>
                                  <div
                                     class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                    <label class="form-check-label h5 text-body mb-0" for="customCheck4">All
-                                       Notification</label>
+                                    <label class="form-check-label h5 text-body mb-0" for="customCheck4">Tất cả thông báo</label>
                                     <input type="checkbox" class="form-check-input" id="customCheck4">
                                  </div>
                               </li>

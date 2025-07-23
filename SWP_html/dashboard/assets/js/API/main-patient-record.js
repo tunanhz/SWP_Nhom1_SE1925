@@ -187,9 +187,9 @@ function formatDateTime(dateTime) {
 
 function showError(message, status) {
     const errorMap = {
-        404: 'Patient records not found',
-        500: 'Server error, please try again later',
-        default: 'An error occurred'
+        404: 'Không tìm thấy hồ sơ bệnh nhân',
+        500: 'Lỗi máy chủ, vui lòng thử lại sau',
+        default: 'Đã xảy ra lỗi'
     };
     const displayMessage = status ? errorMap[status] || errorMap.default : message;
     const errorMessage = document.getElementById('error-message');
@@ -212,7 +212,7 @@ function updatePagination(totalPages, currentPage, pageSize, totalRecords) {
     const prevPage = document.getElementById('prevPage');
     const nextPage = document.getElementById('nextPage');
     if (pageInfo) {
-        pageInfo.textContent = `Page ${currentPage} of ${totalPages} (Total: ${totalRecords})`;
+        pageInfo.textContent = `Trang ${currentPage} / ${totalPages} (Tổng: ${totalRecords})`;
     }
     if (prevPage) {
         prevPage.classList.toggle('disabled', currentPage <= 1);
@@ -225,7 +225,7 @@ function updatePagination(totalPages, currentPage, pageSize, totalRecords) {
 
 function validateDates(startDate, endDate) {
     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-        showError('Start date must be before end date');
+        showError('Ngày bắt đầu phải trước ngày kết thúc');
         return false;
     }
     return true;

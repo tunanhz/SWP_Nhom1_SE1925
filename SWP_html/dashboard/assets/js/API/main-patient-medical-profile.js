@@ -21,11 +21,11 @@ function renderPatientInfo() {
     if (!patientRecord) return;
     
     patientInfo.innerHTML = `
-        <p><strong>Name:</strong> ${patientRecord.patientName}</p>
-        <p><strong>Date of Birth:</strong> ${patientRecord.dob}</p>
-        <p><strong>Gender:</strong> ${patientRecord.gender}</p>
-        <p><strong>Phone:</strong> ${patientRecord.phone}</p>
-        <p><strong>Address:</strong> ${patientRecord.address}</p>
+        <p><strong>Tên:</strong> ${patientRecord.patientName}</p>
+        <p><strong>Ngày sinh:</strong> ${patientRecord.dob}</p>
+        <p><strong>Giới tính:</strong> ${patientRecord.gender}</p>
+        <p><strong>Điện thoại:</strong> ${patientRecord.phone}</p>
+        <p><strong>Địa chỉ:</strong> ${patientRecord.address}</p>
     `;
 }
 
@@ -35,16 +35,16 @@ function renderMedicalRecords() {
 
     const html = `
         <div class="mb-6">
-            <h4 class="text-lg font-medium mb-2">Diagnoses</h4>
+            <h4 class="text-lg font-medium mb-2">Chẩn đoán</h4>
             <div class="overflow-x-auto">
                 <table class="min-w-full bg-white border">
                     <thead>
                         <tr>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Date</th>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Doctor</th>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Disease</th>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Conclusion</th>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Treatment Plan</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Ngày</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Bác sĩ</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Bệnh</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Phần kết luận</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Kế hoạch điều trị</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,15 +58,15 @@ function renderMedicalRecords() {
                     </tbody>
                 </table>
             </div>
-            <h4 class="text-lg font-medium mb-2 mt-4">Exam Results</h4>
+            <h4 class="text-lg font-medium mb-2 mt-4">Kết quả thi</h4>
             <div class="overflow-x-auto">
                 <table class="min-w-full bg-white border">
                     <thead>
                         <tr>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Date</th>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Doctor</th>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Symptoms</th>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Preliminary Diagnosis</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Ngày</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Bác sĩ</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Triệu chứng</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Chẩn đoán sơ bộ</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -106,15 +106,15 @@ function renderPrescriptions() {
     const html = `
         <div class="mb-6">
             <h3 class="text-xl font-semibold mb-2">
-                Prescription (Date: ${patientRecord.prescriptionDate}, Status: ${patientRecord.prescriptionStatus})
+                Đơn thuốc (Ngày: ${patientRecord.prescriptionDate}, Trạng thái: ${patientRecord.prescriptionStatus})
             </h3>
             <div class="overflow-x-auto">
                 <table class="min-w-full bg-white border">
                     <thead>
                         <tr>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Medicine</th>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Quantity</th>
-                            <th class="py-2 px-4 border-b text-left text-gray-600">Dosage</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Thuốc</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Số lượng</th>
+                            <th class="py-2 px-4 border-b text-left text-gray-600">Liều dùng</th>
                         </tr>
                     </thead>
                     <tbody>
