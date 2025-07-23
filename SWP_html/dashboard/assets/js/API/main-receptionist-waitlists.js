@@ -97,7 +97,7 @@ function fetchWaitlistEntries(page, pageSize, sortBy, sortOrder) {
 
     const url = `${baseAPI}?page=${page}&pageSize=${pageSize}&searchQuery=${encodeURIComponent(searchQuery || '')}&startDate=${encodeURIComponent(startDate || '')}&endDate=${encodeURIComponent(endDate || '')}&status=${encodeURIComponent(status || '')}&visitType=${encodeURIComponent(visitType || '')}&sortBy=${encodeURIComponent(sortBy)}&sortOrder=${encodeURIComponent(sortOrder)}`;
 
-    console.log('Fetching URL:', url); // Debug request
+    console.log('Đang lấy dữ liệu từ URL:', url); // Debug request
 
     fetch(url, {
         method: 'GET',
@@ -105,21 +105,21 @@ function fetchWaitlistEntries(page, pageSize, sortBy, sortOrder) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                throw new Error(`Lỗi HTTP! Trạng thái: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
             if (data.success) {
-                console.log('Received data:', data); // Debug response
+                console.log('Dữ liệu nhận được:', data); // Debug response
                 renderWaitlistEntries(data.waitlistEntries);
                 updatePagination(data.totalPages, data.currentPage, data.pageSize, data.totalEntries);
             } else {
-                showError(data.message || 'Failed to fetch waitlist entries');
+                showError(data.message || 'Không thể lấy danh sách chờ');
             }
         })
         .catch(error => {
-            showError(`Error fetching waitlist entries: ${error.message}`);
+            showError(`Lỗi khi lấy danh sách chờ: ${error.message}`);
             console.error('Error:', error);
         });
 }
@@ -133,10 +133,10 @@ function renderWaitlistEntries(entries) {
         return;
     }
 
-    console.log('Rendering waitlist entries:', entries.length);
+    console.log('Đang hiển thị danh sách chờ:', entries.length);
     entries.forEach((entry, index) => {
         if (!entry || !entry.waitlistId) {
-            console.warn('Skipping invalid waitlist entry:', entry);
+            console.warn('Bỏ qua mục danh sách chờ không hợp lệ:', entry);
             return;
         }
         const statusClass = getStatusClass(entry.status);
@@ -152,7 +152,7 @@ function renderWaitlistEntries(entries) {
             <td><span class="status-badge ${statusClass}">${entry.status || '-'}</span></td>
             <td>
                 ${entry.visitType === 'Initial' && entry.status === 'Waiting' ?
-                `<button class="btn btn-update" data-waitlist-id="${entry.waitlistId}" data-estimated-time="${entry.estimatedTime || ''}">Update</button>`
+                `<button class="btn btn-update" data-waitlist-id="${entry.waitlistId}" data-estimated-time="${entry.estimatedTime || ''}">Cập Nhật</button>`
                 : '-'}
             </td>
         `;
@@ -168,19 +168,19 @@ function showUpdateModal(waitlistId, estimatedTime, button) {
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Update Estimated Time</h5>
+                    <h5 class="modal-title">Cập Nhật Thời Gian Dự Kiến</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="estimatedTimeInput">Estimated Time</label>
+                        <label for="estimatedTimeInput">Thời Gian Dự Kiến</label>
                         <input type="datetime-local" class="form-control" id="estimatedTimeInput" 
                                value="${estimatedTime ? new Date(estimatedTime).toISOString().slice(0, 16) : ''}">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="handleUpdateEstimatedTime(${waitlistId}, this)">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="handleUpdateEstimatedTime(${waitlistId}, this)">Lưu</button>
                 </div>
             </div>
         </div>
@@ -198,7 +198,7 @@ function handleUpdateEstimatedTime(waitlistId, button) {
 
     const estimatedTime = document.getElementById('estimatedTimeInput').value;
     if (!estimatedTime) {
-        showError('Please select an estimated time.');
+        showError('Vui lòng chọn thời gian dự kiến.');
         button.disabled = false;
         return;
     }
@@ -210,22 +210,22 @@ function handleUpdateEstimatedTime(waitlistId, button) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                throw new Error(`Lỗi HTTP! Trạng thái: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
             if (data.success) {
-                alert('Estimated time updated successfully!');
+                alert('Cập nhật thời gian dự kiến thành công!');
                 bootstrap.Modal.getInstance(document.getElementById('updateEstimatedTimeModal')).hide();
                 fetchWaitlistEntries(currentPage, pageSize, sortBy, sortOrder); // Refresh the table
             } else {
-                showError(data.message || 'Failed to update estimated time');
+                showError(data.message || 'Không thể cập nhật thời gian dự kiến');
                 button.disabled = false;
             }
         })
         .catch(error => {
-            showError(`Error during update: ${error.message}`);
+            showError(`Lỗi trong quá trình cập nhật: ${error.message}`);
             button.disabled = false;
             console.error('Error:', error);
         });
@@ -277,7 +277,7 @@ function updatePagination(totalPages, currentPage, pageSize, totalEntries) {
     const pageInfo = document.getElementById('pageInfo');
     const prevPage = document.getElementById('prevPage');
     const nextPage = document.getElementById('nextPage');
-    if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1} (Total: ${totalEntries || 0})`;
+    if (pageInfo) pageInfo.textContent = `Trang ${currentPage} / ${totalPages || 1} (Tổng: ${totalEntries || 0})`;
     if (prevPage) prevPage.classList.toggle('disabled', currentPage <= 1);
     if (nextPage) nextPage.classList.toggle('disabled', currentPage >= (totalPages || 1));
     document.getElementById('itemsPerPage').value = pageSize;
