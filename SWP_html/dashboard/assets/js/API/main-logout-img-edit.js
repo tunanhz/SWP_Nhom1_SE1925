@@ -62,17 +62,17 @@ function validatePasswordForm() {
     hideError(passwordError);
 
     if (!currentPassword) {
-        showError(passwordError, "Current password is required.");
+        showError(passwordError, "Cần phải nhập mật khẩu hiện tại.");
         isValid = false;
     }
 
     if (newPassword.length < 8) {
-        showError(passwordError, "New password must be at least 8 characters long.");
+        showError(passwordError, "Mật khẩu mới phải dài ít nhất 8 ký tự.");
         isValid = false;
     }
 
     if (newPassword !== confirmPassword) {
-        showError(passwordError, "Passwords do not match.");
+        showError(passwordError, "Mật khẩu không khớp.");
         isValid = false;
     }
 
@@ -91,30 +91,30 @@ if (account && account.accountPatientId) {
         headers: { "Content-Type": "application/json" },
     })
         .then((response) => {
-            if (!response.ok) throw new Error(`Cannot load profile: ${response.status}`);
+            if (!response.ok) throw new Error(`Không thể tải hồ sơ: ${response.status}`);
             return response.json();
         })
         .then((data) => {
             console.log("GET response:", data);
             if (!data.success) {
-                showError(formError, data.message || "Cannot load profile");
+                showError(formError, data.message || "Không thể tải hồ sơ");
                 saveChangesBtn.disabled = true;
                 return;
             }
             const img = data.data.img || "./assets/images/user/user-1.jpg";
             if (userImgElement) {
                 userImgElement.src = img;
-                userImgElement.alt = `Profile of ${account.username || "User"}`;
+                userImgElement.alt = `Hồ sơ của ${account.username || "User"}`;
             }
             if (profileImgElement) {
                 profileImgElement.src = img;
-                profileImgElement.alt = `Profile of ${account.username || "User"}`;
+                profileImgElement.alt = `Hồ sơ của ${account.username || "User"}`;
             }
             updateProfileSubmitButton();
         })
         .catch((error) => {
             console.error("Error loading profile:", error);
-            showError(formError, `Error loading profile: ${error.message}`);
+            showError(formError, `Lỗi khi tải hồ sơ: ${error.message}`);
             saveChangesBtn.disabled = true;
         });
 }
@@ -126,13 +126,13 @@ imgInput.addEventListener("change", function () {
         const maxSize = 5 * 1024 * 1024; // 5MB
         const validTypes = ["image/jpeg", "image/png", "image/gif"];
         if (!validTypes.includes(file.type)) {
-            showError(imgError, "Only JPEG, PNG, or GIF images are accepted");
+            showError(imgError, "Chỉ chấp nhận hình ảnh JPEG, PNG hoặc GIF");
             imgInput.value = "";
             updateProfileSubmitButton();
             return;
         }
         if (file.size > maxSize) {
-            showError(imgError, "Image size must not exceed 5MB");
+            showError(imgError, "Kích thước hình ảnh không được vượt quá 5MB");
             imgInput.value = "";
             updateProfileSubmitButton();
             return;
@@ -157,12 +157,12 @@ async function uploadToCloudinary(file) {
             method: "POST",
             body: formData,
         });
-        if (!response.ok) throw new Error(`Cannot upload to Cloudinary: ${response.status}`);
+        if (!response.ok) throw new Error(`Không thể tải lên Cloudinary: ${response.status}`);
         const data = await response.json();
-        if (!data.secure_url) throw new Error("Secure URL not found in response");
+        if (!data.secure_url) throw new Error("Không tìm thấy URL bảo mật trong phản hồi");
         return data.secure_url;
     } catch (error) {
-        throw new Error(`Cloudinary upload failed: ${error.message}`);
+        throw new Error(`Tải lên Cloudinary không thành công: ${error.message}`);
     }
 }
 
@@ -173,7 +173,7 @@ profileForm.addEventListener("submit", async function (event) {
     hideSuccess(formSuccess);
 
     if (!account || !account.accountPatientId) {
-        showError(formError, "User session not found. Please log in.");
+        showError(formError, "Không tìm thấy phiên người dùng. Vui lòng đăng nhập.");
         return;
     }
 
@@ -201,14 +201,14 @@ profileForm.addEventListener("submit", async function (event) {
         saveChangesBtn.disabled = false;
 
         if (data.success) {
-            showSuccess(formSuccess, data.message || "Profile updated successfully!");
+            showSuccess(formSuccess, data.message || "Hồ sơ đã được cập nhật thành công!");
             account.img = data.img;
             if (userImgElement) userImgElement.src = data.img;
             if (profileImgElement) profileImgElement.src = data.img;
             imgInput.value = "";
             updateProfileSubmitButton();
         } else {
-            showError(formError, data.message || "Cannot update profile");
+            showError(formError, data.message || "Không thể cập nhật hồ sơ");
         }
     } catch (error) {
         console.error("Error updating profile:", error);
@@ -226,7 +226,7 @@ passwordForm.addEventListener("submit", async function (event) {
     hideSuccess(passwordSuccess);
 
     if (!account || !account.accountPatientId) {
-        showError(passwordError, "User session not found. Please log in.");
+        showError(passwordError, "Không tìm thấy phiên người dùng. Vui lòng đăng nhập.");
         return;
     }
 
@@ -236,16 +236,16 @@ passwordForm.addEventListener("submit", async function (event) {
 
 
     if (!currentPassword || !newPassword || !confirmPassword) {
-        showError(passwordError, "All fields are required.");
+        showError(passwordError, "Tất cả các trường đều bắt buộc.");
         return;
     }
     if (newPassword.length < 8) {
-        showError(passwordError, "New password must be at least 8 characters long.");
+        showError(passwordError, "Mật khẩu mới phải dài ít nhất 8 ký tự.");
         return;
     }
     
     if (newPassword !== confirmPassword) {
-        showError(passwordError, "Passwords do not match.");
+        showError(passwordError, "Mật khẩu không khớp.");
         return;
     }
 
@@ -273,11 +273,11 @@ passwordForm.addEventListener("submit", async function (event) {
         changePasswordBtn.querySelector(".text").textContent = "Change Password";
 
         if (data.success) {
-            showSuccess(passwordSuccess, data.message || "Password changed successfully!");
+            showSuccess(passwordSuccess, data.message || "Đã thay đổi mật khẩu thành công!");
             passwordForm.reset();
             changePasswordBtn.disabled = true;
         } else {
-            showError(passwordError, data.message || "Cannot change password");
+            showError(passwordError, data.message || "Không thể thay đổi mật khẩu");
         }
     } catch (error) {
         console.error("Error changing password:", error);

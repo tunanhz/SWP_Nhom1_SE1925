@@ -106,7 +106,7 @@ public class PatientChangePassInfoServlet extends HttpServlet {
 
             JsonObject responseJson = new JsonObject();
             responseJson.addProperty("success", true);
-            responseJson.addProperty("message", "Profile updated successfully");
+            responseJson.addProperty("message", "Phồ sơ đã được cập nhật thành công");
             responseJson.addProperty("img", imgUrl != null ? imgUrl : "");
             out.print(gson.toJson(responseJson));
             LOGGER.info("Patient profile updated successfully: accountPatientId=" + accountPatientId);

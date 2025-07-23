@@ -47,9 +47,9 @@ function createPaymentRow(payment, index) {
 
     const renderStatus = () => {
         if (isPaid) {
-            return `<span class="badge bg-success-subtle p-2 text-success">Paid</span>`;
+            return `<span class="badge bg-success-subtle p-2 text-success">Đã Trả</span>`;
         } else {
-            return `<span class="badge bg-warning-subtle p-2 text-warning">Pending</span>`;
+            return `<span class="badge bg-warning-subtle p-2 text-warning"></span>`;
         }
     }
 
@@ -67,7 +67,7 @@ function createPaymentRow(payment, index) {
                 href="#offcanvasPatientPaymentPaid" aria-controls="offcanvasPatientPaymentPaid"
                 data-payment='${JSON.stringify(payment)}'>
                 <button class="btn btn-success text-white select-patient-btn" data-action="view">
-                <i class="fas fa-eye me-1"></i>View
+                <i class="fas fa-eye me-1"></i>Xem
                 </button>
             </a>`;
         }
@@ -117,12 +117,12 @@ async function displayPayment(page = 1, issueDateSearch = state.currentIssueDate
                     <thead class="table-dark">
                         <tr>
                             <th scope="col">No.</th>
-                            <th scope="col">Name Patient</th>
-                            <th scope="col">Phone Patient</th>
-                            <th scope="col">Issue Date</th>
-                            <th scope="col">Total Cost</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Tên bệnh nhân</th>
+                            <th scope="col">Điện thoại bệnh nhân</th>
+                            <th scope="col">Ngày thanh toán</th>
+                            <th scope="col">Tổng chi phí</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Hoạt động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -138,7 +138,7 @@ async function displayPayment(page = 1, issueDateSearch = state.currentIssueDate
                         ${state.currentPage === 1 ? "disabled" : ""}
                         data-page="${state.currentPage - 1}">
                     <span class="btn-inner">
-                        <span class="text d-inline-block align-middle">Previous</span>
+                        <span class="text d-inline-block align-middle">Trước</span>
                         <span class="icon d-inline-block align-middle ms-1 ps-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
@@ -146,12 +146,12 @@ async function displayPayment(page = 1, issueDateSearch = state.currentIssueDate
                         </span>
                     </span>
                 </button>
-                <span class="align-self-center me-3">Page ${state.currentPage} of ${totalPages}</span>
+                <span class="align-self-center me-3">Trang ${state.currentPage} / ${totalPages}</span>
                 <button class="btn btn-primary me-3" type="button"
                         ${state.currentPage === totalPages ? "disabled" : ""}
                         data-page="${state.currentPage + 1}">
                     <span class="btn-inner">
-                        <span class="text d-inline-block align-middle">Next</span>
+                        <span class="text d-inline-block align-middle">Kế tiếp</span>
                         <span class="icon d-inline-block align-middle ms-1 ps-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
@@ -162,19 +162,19 @@ async function displayPayment(page = 1, issueDateSearch = state.currentIssueDate
             </div>
             <div class="col-md-6 d-flex justify-content-center justify-content-md-end mt-4">
                 <div class="input-group input-group-sm w-auto">
-                    <label class="input-group-text text-bg-info" for="pageSize">Items per page</label>
+                    <label class="input-group-text text-bg-info" for="pageSize">Số mục trên mỗi trang</label>
                     <select class="form-select" name="page" id="pageSize">
                         <option value="6" ${pageSize === 6 ? 'selected' : ''}>6</option>
                         <option value="10" ${pageSize === 10 ? 'selected' : ''}>10</option>
                         <option value="15" ${pageSize === 15 ? 'selected' : ''}>15</option>
                         <option value="20" ${pageSize === 20 ? 'selected' : ''}>20</option>
-                        <option value="${totalInvoice}" ${pageSize === totalInvoice ? 'selected' : ''}>All</option>
+                        <option value="${totalInvoice}" ${pageSize === totalInvoice ? 'selected' : ''}>Tất cả</option>
                     </select>
                 </div>
             </div>
         </div>`;
 
-        container.innerHTML = payments.length ? paymentTable + paginationHTML :'<h3 class="text-center" >No Payment found.</h3>';
+        container.innerHTML = payments.length ? paymentTable + paginationHTML :'<h3 class="text-center" >Không tìm thấy thanh toán.</h3>';
         
         container.querySelectorAll(".edit-btn1").forEach(button => {
             button.addEventListener("click", function (e) {
