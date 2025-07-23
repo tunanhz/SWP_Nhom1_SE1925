@@ -150,7 +150,7 @@
                                           fill="currentColor"></path>
                                     </svg>
                                  </i>
-                                 <span class="item-name">receptionist-dashboard</span>
+                                 <span class="item-name">Trang chủ lễ tân</span>
                               </a>
                            </li>
                            <li class="nav-item">
@@ -174,7 +174,7 @@
                                           fill="currentColor" />
                                     </svg>
                                  </i>
-                                 <span class="nav-text ms-2">Appoiment</span>
+                                 <span class="nav-text ms-2">Quản lý cuộc hẹn</span>
                               </a>
                               <!-- <a class="nav-link menu-arrow justify-content-start gap-2 rounded-0 active"
                                  aria-current="page" href="#receptionist">
@@ -221,7 +221,7 @@
                                                 fill="currentColor" />
                                           </svg>
                                        </i>
-                                       <span class="item-name">Appointments Checkin</span>
+                                       <span class="item-name">Xác nhận cuộc hẹn</span>
                                     </a>
                                  </li>
                                  <li class="nav-item">
@@ -245,7 +245,7 @@
                                                 fill="currentColor" />
                                           </svg>
                                        </i>
-                                       <span class="item-name">Book on Behalf</span>
+                                       <span class="item-name">Đặt lịch khám hộ</span>
                                     </a>
                                  </li>
                               </ul>
@@ -268,7 +268,7 @@
                                           fill="currentColor"></path>
                                     </svg>
                                  </i>
-                                 <span class="item-name">Waitlists</span>
+                                 <span class="item-name">Danh sách chờ</span>
                               </a>
                            </li>
                            <!-- <li class="nav-item">
@@ -394,7 +394,7 @@
                                        <circle cx="18" cy="11.8999" r="1" fill="currentColor"></circle>
                                     </svg>
                                             </i>
-                                            <span class="item-name">Patient Invoices</span>
+                                            <span class="item-name">Hóa đơn bệnh nhân</span>
                                         </a>
                                     </li>
 
@@ -412,7 +412,7 @@
                                           fill="currentColor"></path>
                                     </svg>
                                  </i>
-                                 <span class="item-name">Setting</span>
+                                 <span class="item-name">Cài đặt</span>
                               </a>
                            </li>
                         </ul>
@@ -1016,35 +1016,35 @@
       <div class="content-inner container-fluid pb-0" id="page_layout">
          <div class="row">
             <div class="col-lg-12">
-               <h1>Check-in</h1>
+               <h1>Xác nhận cuộc hẹn</h1>
                <div class="card">
                   <div class="card-header">
-                     <h3 class="card-title">All Check-ins</h3>
+                     <h3 class="card-title">Tất cả cuộc hẹn</h3>
                   </div>
                   <div class="card-body">
                      <div class="row mb-3">
                         <div class="col-md-3">
                            <div class="form-group">
                               <input type="text" class="form-control" id="searchQuery"
-                                 placeholder="Search by Patient or Doctor Name...">
+                                 placeholder="Tìm kiếm theo tên bệnh nhân hoặc bác sĩ...">
                            </div>
                         </div>
                         <div class="col-md-3">
                            <div class="form-group">
                               <input type="date" class="form-control " id="startDate"
-                                 placeholder="Start Date (yyyy-mm-dd)...">
+                                 placeholder="Ngày bắt đầu (yyyy-mm-dd)...">
                            </div>
                         </div>
                         <div class="col-md-3">
                            <div class="form-group">
                               <input type="date" class="form-control " id="endDate"
-                                 placeholder="End Date (yyyy-mm-dd)...">
+                                 placeholder="Ngày kết thúc (yyyy-mm-dd)...">
                            </div>
                         </div>
                         <div class="col-md-3">
                            <div class="form-group">
                               <select class="form-control" id="filterStatus">
-                                 <option value="">All Status</option>
+                                 <option value="">Tất cả trạng thái</option>
                                  <option value="Pending">Pending</option>
                                  <option value="Confirmed">Confirmed</option>
                                  <option value="Cancelled">Cancelled</option>
@@ -1058,14 +1058,14 @@
                         <table class="table checkin-table">
                            <thead>
                               <tr>
-                                 <th>No.</th>
-                                 <th>Patient Name</th>
-                                 <th>Doctor Name</th>
-                                 <th>Appointment Time</th>
-                                 <th>Shift</th>
-                                 <th>Note</th>
-                                 <th>Status</th>
-                                 <th>Action</th>
+                                 <th>STT</th>
+                                 <th>Tên Bệnh Nhân</th>
+                                 <th>Tên Bác Sĩ</th>
+                                 <th>Thời Gian Hẹn</th>
+                                 <th>Ca</th>
+                                 <th>Ghi Chú</th>
+                                 <th>Trạng Thái</th>
+                                 <th>Hành Động</th>
                               </tr>
                            </thead>
                            <tbody id="checkin-table-body">
@@ -1706,245 +1706,189 @@
    <!-- Wrapper End-->
 
    <!-- The Modal -->
-   <div class="modal fade setting-modal" id="setting-modal">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-         <div class="modal-content rounded-0 p-sm-5 p-4">
-            <!-- Modal Header -->
-            <div class="modal-header p-0 pb-3 mb-3 border-bottom">
-               <h3 class="modal-title">Settings</h3>
-               <a href="" class="text-secondary" id="logoutModalLink">
-                  <svg height="20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                     <path
-                        d="M15.016 7.38948V6.45648C15.016 4.42148 13.366 2.77148 11.331 2.77148H6.45597C4.42197 2.77148 2.77197 4.42148 2.77197 6.45648V17.5865C2.77197 19.6215 4.42197 21.2715 6.45597 21.2715H11.341C13.37 21.2715 15.016 19.6265 15.016 17.5975V16.6545"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                     </path>
-                     <path d="M21.8096 12.0215H9.76855" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                        stroke-linejoin="round"></path>
-                     <path d="M18.8813 9.1062L21.8093 12.0212L18.8813 14.9372" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
-                  </svg>
-                  <h6 class="d-inline-block mb-0 text-secondary align-middle ms-1">Logout</h6>
-               </a>
-               <a href="#" class="d-inline-block position-absolute text-secondary" data-bs-dismiss="modal">
-                  <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                     <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M7.67 1.99927H16.34C19.73 1.99927 22 4.37927 22 7.91927V16.0903C22 19.6203 19.73 21.9993 16.34 21.9993H7.67C4.28 21.9993 2 19.6203 2 16.0903V7.91927C2 4.37927 4.28 1.99927 7.67 1.99927ZM15.01 14.9993C15.35 14.6603 15.35 14.1103 15.01 13.7703L13.23 11.9903L15.01 10.2093C15.35 9.87027 15.35 9.31027 15.01 8.97027C14.67 8.62927 14.12 8.62927 13.77 8.97027L12 10.7493L10.22 8.97027C9.87 8.62927 9.32 8.62927 8.98 8.97027C8.64 9.31027 8.64 9.87027 8.98 10.2093L10.76 11.9903L8.98 13.7603C8.64 14.1103 8.64 14.6603 8.98 14.9993C9.15 15.1693 9.38 15.2603 9.6 15.2603C9.83 15.2603 10.05 15.1693 10.22 14.9993L12 13.2303L13.78 14.9993C13.95 15.1803 14.17 15.2603 14.39 15.2603C14.62 15.2603 14.84 15.1693 15.01 14.9993Z"
-                        fill="currentColor"></path>
-                  </svg>
-               </a>
-            </div>
-            <!-- Modal body -->
-            <div class="modal-body p-0">
-               <!-- Nav tabs -->
-               <ul class="nav nav-tabs gap-sm-5 gap-3 border-bottom p-0">
-                  <li class="nav-item">
-                     <a class="nav-link active border-0" data-bs-toggle="tab" href="#setting-content-1">
-                        <svg height="18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                           <path fill-rule="evenodd" clip-rule="evenodd"
-                              d="M11.9849 15.3462C8.11731 15.3462 4.81445 15.931 4.81445 18.2729C4.81445 20.6148 8.09636 21.2205 11.9849 21.2205C15.8525 21.2205 19.1545 20.6348 19.1545 18.2938C19.1545 15.9529 15.8735 15.3462 11.9849 15.3462Z"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                           </path>
-                           <path fill-rule="evenodd" clip-rule="evenodd"
-                              d="M11.9849 12.0059C14.523 12.0059 16.5801 9.94779 16.5801 7.40969C16.5801 4.8716 14.523 2.81445 11.9849 2.81445C9.44679 2.81445 7.3887 4.8716 7.3887 7.40969C7.38013 9.93922 9.42394 11.9973 11.9525 12.0059H11.9849Z"
-                              stroke="currentColor" stroke-width="1.42857" stroke-linecap="round"
-                              stroke-linejoin="round"></path>
+    <div class="modal fade setting-modal" id="setting-modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-0 p-sm-5 p-4">
+                <!-- Modal Header -->
+                <div class="modal-header p-0 pb-3 mb-3 border-bottom">
+                    <h3 class="modal-title">Cài đặt</h3>
+                    <a href="" class="text-secondary" id="logoutModalLink">
+                        <svg height="20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15.016 7.38948V6.45648C15.016 4.42148 13.366 2.77148 11.331 2.77148H6.45597C4.42197 2.77148 2.77197 4.42148 2.77197 6.45648V17.5865C2.77197 19.6215 4.42197 21.2715 6.45597 21.2715H11.341C13.37 21.2715 15.016 19.6265 15.016 17.5975V16.6545"
+                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            </path>
+                            <path d="M21.8096 12.0215H9.76855" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M18.8813 9.1062L21.8093 12.0212L18.8813 14.9372" stroke="currentColor"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
-                        <span class="align-middle fw-500">Edit Profile</span>
-                     </a>
-                  </li>
-                  <li class="nav-item">
-                     <a class="nav-link border-0" data-bs-toggle="tab" href="#setting-content-2">
-                        <svg height="18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                           <path
-                              d="M16.4232 9.4478V7.3008C16.4232 4.7878 14.3852 2.7498 11.8722 2.7498C9.35925 2.7388 7.31325 4.7668 7.30225 7.2808V7.3008V9.4478"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                           </path>
-                           <path fill-rule="evenodd" clip-rule="evenodd"
-                              d="M15.683 21.2497H8.042C5.948 21.2497 4.25 19.5527 4.25 17.4577V13.1687C4.25 11.0737 5.948 9.37671 8.042 9.37671H15.683C17.777 9.37671 19.475 11.0737 19.475 13.1687V17.4577C19.475 19.5527 17.777 21.2497 15.683 21.2497Z"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                           </path>
-                           <path d="M11.8628 14.2026V16.4236" stroke="currentColor" stroke-width="1.5"
-                              stroke-linecap="round" stroke-linejoin="round"></path>
+                        <h6 class="d-inline-block mb-0 text-secondary align-middle ms-1">Đăng xuất</h6>
+                    </a>
+                    <a href="#" class="d-inline-block position-absolute text-secondary" data-bs-dismiss="modal">
+                        <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M7.67 1.99927H16.34C19.73 1.99927 22 4.37927 22 7.91927V16.0903C22 19.6203 19.73 21.9993 16.34 21.9993H7.67C4.28 21.9993 2 19.6203 2 16.0903V7.91927C2 4.37927 4.28 1.99927 7.67 1.99927ZM15.01 14.9993C15.35 14.6603 15.35 14.1103 15.01 13.7703L13.23 11.9903L15.01 10.2093C15.35 9.87027 15.35 9.31027 15.01 8.97027C14.67 8.62927 14.12 8.62927 13.77 8.97027L12 10.7493L10.22 8.97027C9.87 8.62927 9.32 8.62927 8.98 8.97027C8.64 9.31027 8.64 9.87027 8.98 10.2093L10.76 11.9903L8.98 13.7603C8.64 14.1103 8.64 14.6603 8.98 14.9993C9.15 15.1693 9.38 15.2603 9.6 15.2603C9.83 15.2603 10.05 15.1693 10.22 14.9993L12 13.2303L13.78 14.9993C13.95 15.1803 14.17 15.2603 14.39 15.2603C14.62 15.2603 14.84 15.1693 15.01 14.9993Z"
+                                fill="currentColor"></path>
                         </svg>
-                        <span class="align-middle fw-500">Setting</span>
-                     </a>
-                  </li>
-                  <li class="nav-item">
-                     <a class="nav-link border-0" data-bs-toggle="tab" href="#setting-content-3">
-                        <svg height="18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                           <path fill-rule="evenodd" clip-rule="evenodd"
-                              d="M12 17.8476C17.6392 17.8476 20.2481 17.1242 20.5 14.2205C20.5 11.3188 18.6812 11.5054 18.6812 7.94511C18.6812 5.16414 16.0452 2 12 2C7.95477 2 5.31885 5.16414 5.31885 7.94511C5.31885 11.5054 3.5 11.3188 3.5 14.2205C3.75295 17.1352 6.36177 17.8476 12 17.8476Z"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                           </path>
-                           <path d="M14.3889 20.8572C13.0247 22.3719 10.8967 22.3899 9.51953 20.8572"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                           </path>
-                        </svg>
-                        <span class="align-middle fw-500">Notification</span>
-                     </a>
-                  </li>
-               </ul>
-               <!-- Tab panes -->
-               <div class="tab-content mt-4">
-                  <div class="tab-pane fade show active" id="setting-content-1">
-                     <form id="updateProfileForm" enctype="multipart/form-data">
-                        <div
-                           class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
-                           <div class="d-flex align-items-center gap-3">
-                              <div class="flex-shrink-0 d-inline-block position-relative">
-                                 <img id="profileImg" src="./assets/images/user/user-1.jpg" alt="img-fluid">
-                                 <span
-                                    class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white me-1 mb-1"></span>
-                              </div>
-                              <div class="content">
-                                 <h4 class="mb-2" id="fullNameDisplay">Loading...</h4>
-                                 <p class="m-0">Upload A New Image.</p>
-                                 <input type="file" id="profileImgInput" name="img" accept="image/*"
-                                    class="form-control mt-2">
-                                 <div id="img-error" class="error-message"></div>
-                              </div>
-                           </div>
-                           <button type="submit" class="btn btn-primary" id="saveChangesBtn" disabled>
-                              <span class="btn-inner">
-                                 <span class="text d-inline-block align-middle">Save Changes</span>
-                                 <span id="loadingSpinner" class="icon d-inline-block align-middle ms-1 ps-2"
-                                    style="display: none;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                       stroke-linejoin="round" class="spinner">
-                                       <circle cx="12" cy="12" r="10"></circle>
-                                    </svg>
-                                 </span>
-                                 <span id="saveIcon" class="icon d-inline-block align-middle ms-1 ps-2">
-                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                    </a>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body p-0">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs gap-sm-5 gap-3 border-bottom p-0">
+                        <li class="nav-item">
+                            <a class="nav-link active border-0" data-bs-toggle="tab" href="#setting-content-1">
+                                <svg height="18" width="18" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M11.9849 15.3462C8.11731 15.3462 4.81445 15.931 4.81445 18.2729C4.81445 20.6148 8.09636 21.2205 11.9849 21.2205C15.8525 21.2205 19.1545 20.6348 19.1545 18.2938C19.1545 15.9529 15.8735 15.3462 11.9849 15.3462Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M11.9849 12.0059C14.523 12.0059 16.5801 9.94779 16.5801 7.40969C16.5801 4.8716 14.523 2.81445 11.9849 2.81445C9.44679 2.81445 7.3887 4.8716 7.3887 7.40969C7.38013 9.93922 9.42394 11.9973 11.9525 12.0059H11.9849Z"
+                                        stroke="currentColor" stroke-width="1.42857" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </svg>
+                                <span class="align-middle fw-500">Cập nhật thông tin</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link border-0" data-bs-toggle="tab" href="#setting-content-2">
+                                <svg height="18" width="18" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.4232 9.4478V7.3008C16.4232 4.7878 14.3852 2.7498 11.8722 2.7498C9.35925 2.7388 7.31325 4.7668 7.30225 7.2808V7.3008V9.4478"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M15.683 21.2497H8.042C5.948 21.2497 4.25 19.5527 4.25 17.4577V13.1687C4.25 11.0737 5.948 9.37671 8.042 9.37671H15.683C17.777 9.37671 19.475 11.0737 19.475 13.1687V17.4577C19.475 19.5527 17.777 21.2497 15.683 21.2497Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M11.8628 14.2026V16.4236" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                                <span class="align-middle fw-500">Đổi mật khẩu</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content mt-4">
+                        <div class="tab-pane fade show active" id="setting-content-1">
+                            <form id="updateProfileForm" enctype="multipart/form-data">
+                                <div
+                                    class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="flex-shrink-0 d-inline-block position-relative">
+                                            <img id="profileImg" src="./assets/images/user/user-1.jpg" alt="img-fluid">
+                                            <span
+                                                class="bg-success p-1 rounded-circle position-absolute end-0 bottom-0 border border-3 border-white me-1 mb-1"></span>
+                                        </div>
+                                        <div class="content">
+                                            <h4 class="mb-2" id="fullNameDisplay">Đang tải...</h4>
+                                            <p class="m-0">Tải ảnh mới.</p>
+                                            <input type="file" id="profileImgInput" name="img" accept="image/*"
+                                                class="form-control mt-2">
+                                            <div id="img-error" class="error-message"></div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" id="saveChangesBtn" disabled>
+                                        <span class="btn-inner">
+                                            <span class="text d-inline-block align-middle">Lưu</span>
+                                            <span id="loadingSpinner" class="icon d-inline-block align-middle ms-1 ps-2"
+                                                style="display: none;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="spinner">
+                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                </svg>
+                                            </span>
+                                            <span id="saveIcon" class="icon d-inline-block align-middle ms-1 ps-2">
+                                                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
                 <path d="M7.32046 4.70834H4.74952V7.25698C4.74952 7.66734 4.41395 8 4 8C3.58605 8 3.25048 7.25698V4.70834H0.679545C0.293423 4.6687 0 4.34614 0 3.96132C0 3.5765 0.293423 3.25394 0.679545 3.21431H3.24242V0.673653C3.28241 0.290878 3.60778 0 3.99597 0C4.38416 0 4.70954 0.290878 4.74952 0.673653V3.21431H7.32046C7.70658 3.25394 8 3.5765 8 3.96132C8 4.34614 7.70658 4.6687 7.32046 4.70834Z" fill="currentColor"></path>
             </svg> -->
-                                 </span>
-                              </span>
-                           </button>
+                                            </span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control" id="fullName" name="fullName"
+                                            placeholder="Your Full Name *" required>
+                                        <div id="fullName-error" class="error-message"></div>
+                                    </div>
+                                    <div class="col-md-12 mt-4">
+                                        <input type="text" class="form-control" id="phone" name="phone"
+                                            placeholder="Your Phone Number (e.g., 0123456789) *" required
+                                            pattern="^0[0-9]{9}$"
+                                            title="Phone number must be 10 digits starting with 0">
+                                        <div id="phone-error" class="error-message"></div>
+                                    </div>
+                                    <div id="form-error" class="error-message mt-2"></div>
+                                    <div id="form-success" class="valid-message mt-2"></div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="row mt-5">
-                           <div class="col-md-12">
-                              <input type="text" class="form-control" id="fullName" name="fullName"
-                                 placeholder="Your Full Name *" required>
-                              <div id="fullName-error" class="error-message"></div>
-                           </div>
-                           <div class="col-md-12 mt-4">
-                              <input type="text" class="form-control" id="phone" name="phone"
-                                 placeholder="Your Phone Number (e.g., 0123456789) *" required pattern="^0[0-9]{9}$"
-                                 title="Phone number must be 10 digits starting with 0">
-                              <div id="phone-error" class="error-message"></div>
-                           </div>
-                           <div id="form-error" class="error-message mt-2"></div>
-                           <div id="form-success" class="valid-message mt-2"></div>
+                        <div class="tab-pane fade" id="setting-content-2">
+                            <form id="changePasswordForm">
+                                <div
+                                    class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
+                                    <div class="content">
+                                        <h4 class="mb-2">Thay đổi mật khẩu</h4>
+                                        <p class="m-0">Cập nhật hoặc thay đổi mật khẩu hiện tại của bạn.</p>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" id="changePasswordBtn" disabled>
+                                        <span class="btn-inner">
+                                            <span class="text d-inline-block align-middle">Thay đổi mật khẩu</span>
+                                            <span id="passwordLoadingSpinner"
+                                                class="icon d-inline-block align-middle ms-1 ps-2"
+                                                style="display: none;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="spinner">
+                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                </svg>
+                                            </span>
+                                            <span id="passwordSaveIcon"
+                                                class="icon d-inline-block align-middle ms-1 ps-2"></span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-md-12">
+                                        <input type="password" class="form-control" id="currentPassword"
+                                            name="currentPassword" placeholder="Nhập mật khẩu hiện tại*" required>
+                                        <div id="currentPassword-error" class="error-message"></div>
+                                    </div>
+                                    <div class="col-md-12 mt-4">
+                                        <input type="password" class="form-control" id="newPassword" name="newPassword"
+                                            placeholder="Mật khẩu mới *" required minlength="8"
+                                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                                            oninvalid="this.setCustomValidity('Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt')"
+                                            oninput="this.setCustomValidity('')">
+                                        <label class="mt-2 text-muted">Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt</label>
+                                        <div id="newPassword-error" class="error-message"></div>
+                                    </div>
+                                    <div class="col-md-12 mt-4">
+                                        <input type="password" class="form-control" id="confirmPassword"
+                                            name="confirmPassword" placeholder="Nhập lại mật khẩu mới *" required>
+                                        <label class="mt-2 text-muted">Phải khớp với mật khẩu mới</label>
+                                        <div id="confirmPassword-error" class="error-message"></div>
+                                    </div>
+                                    <div id="password-form-error" class="error-message mt-2"></div>
+                                    <div id="password-form-success" class="valid-message mt-2"></div>
+                                </div>
+                            </form>
                         </div>
-                     </form>
-                  </div>
-                  <div class="tab-pane fade" id="setting-content-2">
-                     <form id="changePasswordForm">
-                        <div
-                           class="d-flex align-items-sm-center align-items-start justify-content-between flex-sm-row flex-column gap-4">
-                           <div class="content">
-                              <h4 class="mb-2">Change Password</h4>
-                              <p class="m-0">Update or change your current password.</p>
-                           </div>
-                           <button type="submit" class="btn btn-primary" id="changePasswordBtn" disabled>
-                              <span class="btn-inner">
-                                 <span class="text d-inline-block align-middle">Change Password</span>
-                                 <span id="passwordLoadingSpinner" class="icon d-inline-block align-middle ms-1 ps-2"
-                                    style="display: none;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                       stroke-linejoin="round" class="spinner">
-                                       <circle cx="12" cy="12" r="10"></circle>
-                                    </svg>
-                                 </span>
-                                 <span id="passwordSaveIcon" class="icon d-inline-block align-middle ms-1 ps-2"></span>
-                              </span>
-                           </button>
-                        </div>
-                        <div class="row mt-5">
-                           <div class="col-md-12">
-                              <input type="password" class="form-control" id="currentPassword" name="currentPassword"
-                                 placeholder="Your Current Password *" required>
-                              <div id="currentPassword-error" class="error-message"></div>
-                           </div>
-                           <div class="col-md-12 mt-4">
-                              <input type="password" class="form-control" id="newPassword" name="newPassword"
-                                 placeholder="New Password *" required minlength="8">
-                              <label class="mt-2 text-muted">Password must be at least 8 characters</label>
-                              <div id="newPassword-error" class="error-message"></div>
-                           </div>
-                           <div class="col-md-12 mt-4">
-                              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                                 placeholder="Confirm New Password *" required>
-                              <label class="mt-2 text-muted">Must match the new password</label>
-                              <div id="confirmPassword-error" class="error-message"></div>
-                           </div>
-                           <div id="password-form-error" class="error-message mt-2"></div>
-                           <div id="password-form-success" class="valid-message mt-2"></div>
-                        </div>
-                     </form>
-                  </div>
-                  <div class="tab-pane fade" id="setting-content-3">
-                     <form>
-                        <div class="content">
-                           <h4 class="mb-2">Notification</h4>
-                           <p class="m-0">Update Or Change Your Notification Settings.</p>
-                        </div>
-                        <div
-                           class="d-flex aling-items-center justify-content-between gap-3 mt-5 me-0 mb-0 p-0 form-check form-switch form-check-inline">
-                           <h5 class="mb-0">Email Notification</h5>
-                           <input class="form-check-input" type="checkbox" id="switch1" checked />
-                        </div>
-                        <div
-                           class="d-flex aling-items-center justify-content-between gap-3 mt-3 me-0 mb-0 p-0 form-check form-switch form-check-inline">
-                           <h5 class="mb-0">App Notification</h5>
-                           <input class="form-check-input" type="checkbox" id="switch2" checked />
-                        </div>
-                        <div class="mt-4 pt-4 border-top">
-                           <ul class="list-inline m-0 p-0">
-                              <li class="mb-3">
-                                 <div
-                                    class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                    <label class="form-check-label h5 text-body mb-0" for="customCheck1">Appointment
-                                       Reminder</label>
-                                    <input type="checkbox" class="form-check-input" id="customCheck1">
-                                 </div>
-                              </li>
-                              <li class="mb-3">
-                                 <div
-                                    class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                    <label class="form-check-label h5 text-body mb-0" for="customCheck2">Subscription
-                                       Offer</label>
-                                    <input type="checkbox" class="form-check-input" id="customCheck2">
-                                 </div>
-                              </li>
-                              <li class="mb-3">
-                                 <div
-                                    class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                    <label class="form-check-label h5 text-body mb-0" for="customCheck3">New
-                                       Update Notification</label>
-                                    <input type="checkbox" class="form-check-input" id="customCheck3">
-                                 </div>
-                              </li>
-                              <li>
-                                 <div
-                                    class="d-flex aling-items-center justify-content-between gap-3 m-0 p-0 form-check form-check-inline">
-                                    <label class="form-check-label h5 text-body mb-0" for="customCheck4">All
-                                       Notification</label>
-                                    <input type="checkbox" class="form-check-input" id="customCheck4">
-                                 </div>
-                              </li>
-                           </ul>
-                        </div>
-                     </form>
-                  </div>
-               </div>
+                        
+                    </div>
+                </div>
             </div>
-         </div>
-      </div>
-   </div>
+        </div>
+    </div>
    <!-- Library Bundle Script -->
    <script src="./assets/js/core/libs.min.js"></script>
    <!-- Plugin Scripts -->
