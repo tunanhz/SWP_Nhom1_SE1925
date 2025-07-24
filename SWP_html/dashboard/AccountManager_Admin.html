@@ -3848,20 +3848,15 @@ document.getElementById('status-filter').addEventListener('change', (e) => {
     </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+   document.addEventListener('DOMContentLoaded', function() {
   var btn = document.getElementById('btn-add-patient');
   if (btn) {
     btn.addEventListener('click', function() {
-      fetch('add_newAccountpatient.html')
-        .then(response => response.text())
-        .then(html => {
-          document.getElementById('addPatientModalContent').innerHTML = html;
-          var modal = new bootstrap.Modal(document.getElementById('addPatientModal'), { backdrop: false });
-          modal.show();
-        });
+      window.location.href = 'add_newAccountpatient.html';
     });
   }
 });
+
 
     </script>
     <script>
@@ -3894,35 +3889,52 @@ document.getElementById('status-filter').addEventListener('change', (e) => {
     document.addEventListener('DOMContentLoaded', function() {
     
         // Mở form tạo tài khoản Dược sĩ
-        var btnPharmacist = document.getElementById('btn-add-pharmacist');
-        if (btnPharmacist) {
-            btnPharmacist.addEventListener('click', function() {
-                fetch('pharmacist_account_create.html')
-                    .then(response => response.text())
-                    .then(html => {
-                        document.getElementById('addPharmacistModalContent').innerHTML = html;
-                        var modal = new bootstrap.Modal(document.getElementById('addPharmacistModal'), { backdrop: false });
-                        modal.show();
-                    });
-            });
-        }
+        var btn = document.getElementById('btn-add-pharmacist');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      window.location.href = 'pharmacist_account_create.html';
+    });
+  }
+
+
+  var btn = document.getElementById('btn-add-pharmacist');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      window.location.href = 'pharmacist_account_create.html';
+    });
+  }
     
         // Mở form tạo tài khoản Nhân viên
         var btnStaff = document.getElementById('btn-add-staff');
-        if (btnStaff) {
-            btnStaff.addEventListener('click', function() {
-                fetch('staff_account_create.html')
-                    .then(response => response.text())
-                    .then(html => {
-                        document.getElementById('addStaffModalContent').innerHTML = html;
-                        var modal = new bootstrap.Modal(document.getElementById('addStaffModal'), { backdrop: false });
-                        modal.show();
-                    });
-            });
-        }
+    if (btnStaff) {
+        btnStaff.addEventListener('click', function() {
+            window.location.href = 'staff_account_create.html';
+        });
+    }
     
     });
     </script>
+    <script>
+        document.getElementById("patientForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            try {
+                const response = await fetch("http://localhost:8080/SWP_back_war_exploded/api/admin/patient", {
+                    method: "POST",
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert("Tạo tài khoản thành công!");
+                    this.reset();
+                } else {
+                    alert(result.message || "Tạo tài khoản thất bại");
+                }
+            } catch (err) {
+                alert("Lỗi: " + err.message);
+            }
+        });
+        </script>
 
    <!-- Modal -->
 <!-- Modal tạo tài khoản Bệnh nhân -->
