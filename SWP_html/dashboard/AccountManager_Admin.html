@@ -418,7 +418,10 @@
     background: #5b21b6;
     color: #fff;
 }
-
+.modal-backdrop {
+  background-color: #000 !important;
+  opacity: 0.2 !important; /* Mặc định là 0.5 */
+}
 
 
 
@@ -2858,6 +2861,7 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
              </a>
           </li>
        </ul>
+       
 
        <!-- Tab panes -->
        <div class="tab-content mt-4">
@@ -3021,10 +3025,7 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
     <div class="container mx-auto p-4">
         <h1 class="text-3xl font-bold mb-6 text-center">Quản lý tài khoản</h1>
 
-        <!-- Add New Account Button (moved to top) -->
-        <div class="flex justify-end mb-4">
-            <button id="show-add-account-btn" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Tạo tài khoản</button>
-        </div>
+        
 
     
 
@@ -3035,6 +3036,13 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
             <button class="account-type-btn staff" onclick="showTab('staff', 'staff')">Nhân viên</button>
             <button class="account-type-btn pharmacists" onclick="showTab('pharmacists', 'pharmacist')">Dược sĩ</button>
         </div>
+        <!-- Nút tạo tài khoản -->
+<div class="flex justify-center gap-3 mb-4">
+    <button id="btn-add-patient" class="btn btn-primary">Tạo tài khoản Bệnh nhân</button>
+    <button id="btn-add-pharmacist" class="btn btn-success">Tạo tài khoản Dược sĩ</button>
+    <button id="btn-add-staff" class="btn btn-warning">Thêm tài khoản Nhân viên</button>
+</div>
+        
         <!-- Account Lists -->
         <div id="patients" class="account-tab">
             <h2 class="text-2xl font-semibold mb-4">Tài Khoản bệnh nhân : </h2>
@@ -3836,8 +3844,26 @@ document.getElementById('status-filter').addEventListener('change', (e) => {
                 });
             }
         });
+        
     </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('btn-add-patient');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      fetch('add_newAccountpatient.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('addPatientModalContent').innerHTML = html;
+          var modal = new bootstrap.Modal(document.getElementById('addPatientModal'), { backdrop: false });
+          modal.show();
+        });
+    });
+  }
+});
+
+    </script>
     <script>
     // ... existing code ...
     // Add Doctor Schedule Modal logic
@@ -3863,6 +3889,82 @@ document.getElementById('status-filter').addEventListener('change', (e) => {
   }
     // ... existing code ...
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    
+        // Mở form tạo tài khoản Dược sĩ
+        var btnPharmacist = document.getElementById('btn-add-pharmacist');
+        if (btnPharmacist) {
+            btnPharmacist.addEventListener('click', function() {
+                fetch('pharmacist_account_create.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('addPharmacistModalContent').innerHTML = html;
+                        var modal = new bootstrap.Modal(document.getElementById('addPharmacistModal'), { backdrop: false });
+                        modal.show();
+                    });
+            });
+        }
+    
+        // Mở form tạo tài khoản Nhân viên
+        var btnStaff = document.getElementById('btn-add-staff');
+        if (btnStaff) {
+            btnStaff.addEventListener('click', function() {
+                fetch('staff_account_create.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('addStaffModalContent').innerHTML = html;
+                        var modal = new bootstrap.Modal(document.getElementById('addStaffModal'), { backdrop: false });
+                        modal.show();
+                    });
+            });
+        }
+    
+    });
+    </script>
+
+   <!-- Modal -->
+<!-- Modal tạo tài khoản Bệnh nhân -->
+<div class="modal fade" id="addPatientModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Thêm bệnh nhân</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="addPatientModalContent"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal tạo tài khoản Dược sĩ -->
+  <div class="modal fade" id="addPharmacistModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tạo tài khoản Dược sĩ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="addPharmacistModalContent"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal tạo tài khoản Nhân viên -->
+  <div class="modal fade" id="addStaffModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Thêm tài khoản Nhân viên</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="addStaffModalContent"></div>
+      </div>
+    </div>
+  </div>
+  
+
 </body>
 
 </html>
