@@ -3,6 +3,7 @@ package dal;
 import dto.PatientDTO;
 import dto.ReceptionistDTO;
 import model.Patient;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -550,15 +551,16 @@ public class PatientDAO {
             }
 
             String storedPassword = rs.getString("password");
-            // Note: Consider using proper password hashing comparison instead of plain text
-            if (!storedPassword.equals(currentPassword)) {
-                throw new SQLException("Current password is incorrect");
+
+            if (!BCrypt.checkpw(currentPassword, storedPassword)) {
+                throw new SQLException("Mật khẩu hiện tại không đúng");
             }
 
+            String hashedNewPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(12));
             // Update password
             String updatePasswordSql = "UPDATE [dbo].[AccountPatient] SET password = ? WHERE account_patient_id = ?";
             updateStmt = conn.prepareStatement(updatePasswordSql);
-            updateStmt.setString(1, newPassword); // Use setString instead of setNString
+            updateStmt.setString(1, hashedNewPassword); // Use setString instead of setNString
             updateStmt.setInt(2, accountPatientId);
             int rowsAffected = updateStmt.executeUpdate();
 
@@ -644,6 +646,7 @@ public class PatientDAO {
         }
         return patients;
     }
+
     public static void main(String[] args) {
         PatientDAO patientDAO = new PatientDAO();
         ArrayList<Patient> patients = patientDAO.getAllPatients(null, null, "", "", 1, 50);
@@ -651,7 +654,7 @@ public class PatientDAO {
 
         PatientDTO patientDTO = patientDAO.getPatientInfoByAccountPatientId(1);
         System.out.println(patientDTO);
-        
+
         try {
             boolean p2 = patientDAO.updatePassword(1, "P@ss123", "11111111");
             System.out.println(p2);
