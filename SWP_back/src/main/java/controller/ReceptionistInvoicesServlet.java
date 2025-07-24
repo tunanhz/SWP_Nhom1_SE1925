@@ -22,23 +22,30 @@ public class ReceptionistInvoicesServlet extends HttpServlet {
 
     private ReceptionistDAO invoiceDAO = new ReceptionistDAO();
 
-    private void setCORSHeaders(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
-        response.setHeader("Access-Control-Max-Age", "86400");
+    private void setCORSHeaders(HttpServletResponse response, HttpServletRequest request) {
+        String origin = request.getHeader("Origin");
+        // Allow only the specific origin where your client is running
+        if (origin != null && origin.equals("http://127.0.0.1:5500")) {
+            response.setHeader("Access-Control-Allow-Origin", origin);
+        } else {
+            response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // Default to your client origin
+        }
+        response.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        response.setHeader("Access-Control-Allow-Credentials", "true"); // Allow credentials
+        response.setHeader("Access-Control-Max-Age", "3600"); // Cache preflight response for 1 hour
     }
 
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        setCORSHeaders(response);
+        setCORSHeaders(response, request);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        setCORSHeaders(response); // Add CORS headers to all GET responses
+        setCORSHeaders(response, request); // Add CORS headers to all GET responses
         String path = request.getServletPath();
         if ("/api/receptionistInvoices/export".equals(path)) {
             handleExportRequest(request, response);
@@ -50,7 +57,7 @@ public class ReceptionistInvoicesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        setCORSHeaders(response); // Add CORS headers to POST responses
+        setCORSHeaders(response, request); // Add CORS headers to POST responses
         JsonObject responseJson = new JsonObject();
         try {
             // Get invoiceId from request

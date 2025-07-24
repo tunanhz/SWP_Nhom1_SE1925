@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -56,7 +57,7 @@ public class PatientChangePassInfoServlet extends HttpServlet {
 
             responseJson.addProperty("success", true);
             responseJson.add("data", gson.toJsonTree(patient));
-            responseJson.addProperty("message", "Patient profile fetched successfully");
+            responseJson.addProperty("message", "Hồ sơ bệnh nhân đã được tải thành công");
             out.print(gson.toJson(responseJson));
             LOGGER.info("Fetched Patient profile for accountPatientId: " + accountPatientId);
         } catch (Exception e) {
@@ -124,6 +125,7 @@ public class PatientChangePassInfoServlet extends HttpServlet {
             if (accountPatientId == null) return;
 
             String currentPassword = request.getParameter("currentPassword");
+
             String newPassword = request.getParameter("newPassword");
             String confirmPassword = request.getParameter("confirmPassword");
 
@@ -135,7 +137,7 @@ public class PatientChangePassInfoServlet extends HttpServlet {
 
             JsonObject responseJson = new JsonObject();
             responseJson.addProperty("success", true);
-            responseJson.addProperty("message", "Password changed successfully");
+            responseJson.addProperty("message", "Mật khẩu đã được thay đổi thành công");
             out.print(gson.toJson(responseJson));
             LOGGER.info("Password changed successfully for accountPatientId=" + accountPatientId);
         } catch (SQLException e) {

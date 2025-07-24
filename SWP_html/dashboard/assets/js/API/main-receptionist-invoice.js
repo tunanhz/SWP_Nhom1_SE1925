@@ -3,7 +3,7 @@ let countdownInterval = null;
 let isModalOpen = false;
 
 async function checkPaid(price, content) {
-    const api_KEY = "AK_CS.4c6d2bf0534411f0a5a1fd736f0c57ae.nTTG1gClRwhVsT7Br3bXuF78WldPBhqmFmMLS9yS8ziX8IwjmJOZApBIVUl9ddzDpkcwI1q3";
+    const api_KEY = "AK_CS.1fb280d068a511f0b7f9c39f1519547d.scwFIZkmxCiHs8RGYuOBx316avm3JGiY1URdbUakboooMmbCR4Ry9xnA7LaW1sDMMAd6Ryo3";
     const api_get_paid = 'https://oauth.casso.vn/v2/transactions';
     try {
         const response = await fetch(`${api_get_paid}/?sort=DESC`, {
@@ -493,7 +493,7 @@ async function handleFormSubmission(event) {
         const data = await response.json();
         Swal.fire("Success!", data.message || "Hóa đơn đã được cập nhật thành công.", "success");
         bootstrap.Offcanvas.getInstance(document.getElementById("offcanvasPatientPaymentPending"))?.hide();
-        fetchInvoices(currentPage, pageSize);
+        fetchInvoices(1, 10);
     } catch (error) {
         console.error("Update error:", error);
         Swal.fire("Error!", `Không thể cập nhật thanh toán: ${error.message}`, "error");
