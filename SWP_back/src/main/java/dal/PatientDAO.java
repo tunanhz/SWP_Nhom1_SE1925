@@ -660,4 +660,221 @@ public class PatientDAO {
         }
 
     }
+    public boolean createPatientAccount(
+            String username,
+            String password,
+            String email,
+            String img,
+            String fullName,
+            String dob,
+            String gender,
+            String phone,
+            String address) {
+        String insertAccountSql = """
+            INSERT INTO [dbo].[AccountPatient]
+                (username, password, email, img, status)
+            VALUES (?, ?, ?, ?, 'Enable');
+            """;
+        String insertPatientSql = """
+            INSERT INTO [dbo].[Patient]
+                (full_name, dob, gender, phone, address, status)
+            VALUES (?, ?, ?, ?, ?, 'Enable');
+            """;
+        String linkSql = """
+            INSERT INTO [dbo].[Patient_AccountPatient]
+                (patient_id, account_patient_id)
+            VALUES (?, ?);
+            """;
+        Connection conn = null;
+        try {
+            conn = ad.getConnection();
+            conn.setAutoCommit(false); // Start transaction
+
+            // 1. Insert AccountPatient
+            PreparedStatement psAccount = conn.prepareStatement(insertAccountSql, PreparedStatement.RETURN_GENERATED_KEYS);
+            psAccount.setNString(1, username);
+            psAccount.setNString(2, password); // **Note**: Hash password before saving in real app
+            psAccount.setNString(3, email);
+            psAccount.setNString(4, img);
+            psAccount.executeUpdate();
+            ResultSet rsAcc = psAccount.getGeneratedKeys();
+            if (!rsAcc.next()) throw new SQLException("Failed to get AccountPatient ID");
+            int accountId = rsAcc.getInt(1);
+
+            // 2. Insert Patient
+            PreparedStatement psPatient = conn.prepareStatement(insertPatientSql, PreparedStatement.RETURN_GENERATED_KEYS);
+            psPatient.setNString(1, fullName);
+            psPatient.setNString(2, dob);
+            psPatient.setNString(3, gender);
+            psPatient.setNString(4, phone);
+            psPatient.setNString(5, address);
+            psPatient.executeUpdate();
+            ResultSet rsPat = psPatient.getGeneratedKeys();
+            if (!rsPat.next()) throw new SQLException("Failed to get Patient ID");
+            int patientId = rsPat.getInt(1);
+
+            // 3. Link Patient_AccountPatient
+            PreparedStatement psLink = conn.prepareStatement(linkSql);
+            psLink.setInt(1, patientId);
+            psLink.setInt(2, accountId);
+            psLink.executeUpdate();
+
+            conn.commit();
+            return true;
+        } catch (SQLException e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (conn != null) {
+                try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+        }
+    }
+
+    // === PHARMACIST ===
+    public boolean createPharmacistAccount(
+            String username,
+            String password,
+            String email,
+            String img,
+            String fullName,
+            String phone,
+            String eduLevel) {
+        String insertAccountSql = """
+            INSERT INTO [dbo].[AccountPharmacist]
+                (username, password, email, img, status)
+            VALUES (?, ?, ?, ?, 'Enable');
+            """;
+        String insertPharmacistSql = """
+            INSERT INTO [dbo].[Pharmacist]
+                (full_name, phone, eduLevel, account_pharmacist_id)
+            VALUES (?, ?, ?, ?);
+            """;
+
+        Connection conn = null;
+        try {
+            conn = ad.getConnection();
+            conn.setAutoCommit(false);
+
+            // Insert AccountPharmacist
+            PreparedStatement psAcc = conn.prepareStatement(insertAccountSql, PreparedStatement.RETURN_GENERATED_KEYS);
+            psAcc.setNString(1, username);
+            psAcc.setNString(2, password);
+            psAcc.setNString(3, email);
+            psAcc.setNString(4, img);
+            psAcc.executeUpdate();
+            ResultSet rsAcc = psAcc.getGeneratedKeys();
+            if (!rsAcc.next()) throw new SQLException("Cannot get AccountPharmacist ID");
+            int accountId = rsAcc.getInt(1);
+
+            // Insert Pharmacist info
+            PreparedStatement psPhar = conn.prepareStatement(insertPharmacistSql);
+            psPhar.setNString(1, fullName);
+            psPhar.setNString(2, phone);
+            psPhar.setNString(3, eduLevel);
+            psPhar.setInt(4, accountId);
+            psPhar.executeUpdate();
+
+            conn.commit();
+            return true;
+        } catch (SQLException e) {
+            if (conn != null) try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (conn != null) try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+        }
+    }
+
+
+    // === STAFF ===
+    public boolean createStaffAccount(
+            String username,
+            String password,
+            String email,
+            String img,
+            String role,
+            String fullName,
+            String phone,
+            String department,
+            String eduLevel) {
+
+        String insertAccountSql = """
+            INSERT INTO [dbo].[AccountStaff]
+                (username, password, email, role, img, status)
+            VALUES (?, ?, ?, ?, ?, 'Enable');
+            """;
+
+        // Tùy role mà chèn bảng khác
+        String insertStaffSql;
+        switch (role) {
+            case "Doctor":
+                insertStaffSql = "INSERT INTO Doctor(full_name, department, phone, eduLevel, account_staff_id) VALUES (?, ?, ?, ?, ?)";
+                break;
+            case "Nurse":
+                insertStaffSql = "INSERT INTO Nurse(full_name, department, phone, eduLevel, account_staff_id) VALUES (?, ?, ?, ?, ?)";
+                break;
+            case "Receptionist":
+                insertStaffSql = "INSERT INTO Receptionist(full_name, phone, account_staff_id) VALUES (?, ?, ?)";
+                break;
+            case "AdminSys":
+                insertStaffSql = "INSERT INTO AdminSystem(full_name, department, phone, account_staff_id) VALUES (?, ?, ?, ?)";
+                break;
+            case "AdminBusiness":
+                insertStaffSql = "INSERT INTO AdminBusiness(full_name, department, phone, account_staff_id) VALUES (?, ?, ?, ?)";
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid staff role: " + role);
+        }
+
+        Connection conn = null;
+        try {
+            conn = ad.getConnection();
+            conn.setAutoCommit(false);
+
+            // Insert AccountStaff
+            PreparedStatement psAcc = conn.prepareStatement(insertAccountSql, PreparedStatement.RETURN_GENERATED_KEYS);
+            psAcc.setNString(1, username);
+            psAcc.setNString(2, password);
+            psAcc.setNString(3, email);
+            psAcc.setNString(4, role);
+            psAcc.setNString(5, img);
+            psAcc.executeUpdate();
+            ResultSet rsAcc = psAcc.getGeneratedKeys();
+            if (!rsAcc.next()) throw new SQLException("Cannot get AccountStaff ID");
+            int accountId = rsAcc.getInt(1);
+
+            // Insert vào bảng phụ theo role
+            PreparedStatement psStaff = conn.prepareStatement(insertStaffSql);
+            psStaff.setNString(1, fullName);
+            if (role.equals("Receptionist")) {
+                psStaff.setNString(2, phone);
+                psStaff.setInt(3, accountId);
+            } else if (role.startsWith("Admin")) {
+                psStaff.setNString(2, department);
+                psStaff.setNString(3, phone);
+                psStaff.setInt(4, accountId);
+            } else { // Doctor / Nurse
+                psStaff.setNString(2, department);
+                psStaff.setNString(3, phone);
+                psStaff.setNString(4, eduLevel);
+                psStaff.setInt(5, accountId);
+            }
+            psStaff.executeUpdate();
+
+            conn.commit();
+            return true;
+        } catch (SQLException e) {
+            if (conn != null) try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (conn != null) try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+        }
+    }
+
+
 }
