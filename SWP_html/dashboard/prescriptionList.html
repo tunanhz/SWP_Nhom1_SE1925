@@ -1058,7 +1058,7 @@
             <!-- Nav End -->
         </div>
         <div class="container mx-auto max-w-7xl">
-            <h1 class="text-3xl font-bold mb-6 text-gray-800">Prescription List</h1>
+            <h1 class="text-3xl font-bold mb-6 text-gray-800">Danh sách đơn thuốc</h1>
             <!-- Error Message -->
             <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"></div>
             <!-- Table -->
@@ -1071,12 +1071,12 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Doctor</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bênh nhân</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bác sĩ</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phòng ban</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày khám</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hành động</th>
                         </tr>
                     </thead>
                     <tbody id="prescription-table" class="divide-y divide-gray-200">
@@ -1089,7 +1089,7 @@
                 <div class="flex space-x-4">
                     <!-- Status Filter -->
                     <div>
-                        <label for="status-filter" class="mr-2">Filter by Status:</label>
+                        <label for="status-filter" class="mr-2">Tìm bằng trạng thái:</label>
                         <select id="status-filter" class="border rounded p-1">
                             <option value="">All</option>
                             <option value="Pending">Pending</option>
@@ -1099,7 +1099,7 @@
                     </div>
                     <!-- Items per page -->
                     <div>
-                        <label for="page-size" class="mr-2">Items per page:</label>
+                        <label for="page-size" class="mr-2">Số phần tử trong trang:</label>
                         <select id="page-size" class="border rounded p-1">
                             <option value="5">5</option>
                             <option value="10" selected>10</option>
@@ -1108,9 +1108,9 @@
                     </div>
                 </div>
                 <div class="flex space-x-2">
-                    <button id="prev-page" class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300" disabled>Previous</button>
+                    <button id="prev-page" class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300" disabled>Trước</button>
                     <span id="page-info" class="px-4 py-2">Page 1</span>
-                    <button id="next-page" class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300">Next</button>
+                    <button id="next-page" class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300">Sau</button>
                 </div>
             </div>
         </div>
