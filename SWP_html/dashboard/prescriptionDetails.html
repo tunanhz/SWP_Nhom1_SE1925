@@ -1178,7 +1178,7 @@
     
 </body>
     <div class="container mx-auto max-w-4xl">
-        <h1 class="text-3xl font-bold mb-6 text-gray-800">Prescription Details</h1>
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">Chi tiết đơn thuốc</h1>
         
         <!-- Error Message -->
         <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"></div>
@@ -1189,40 +1189,40 @@
         <!-- Prescription Details -->
         <div id="prescription-details" class="bg-white shadow-md rounded-lg p-6">
             <div class="mb-4">
-                <h2 class="text-xl font-semibold text-gray-800">Prescription ID: <span id="prescription-id"></span></h2>
+                <h2 class="text-xl font-semibold text-gray-800">Đơn thuốc ID: <span id="prescription-id"></span></h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <p><strong>Patient Name:</strong> <span id="patient-name"></span></p>
+                    <p><strong>Tên bệnh nhân:</strong> <span id="patient-name"></span></p>
                 </div>
                 <div>
-                    <p><strong>Doctor Name:</strong> <span id="doctor-name"></span></p>
+                    <p><strong>Tên bác sĩ:</strong> <span id="doctor-name"></span></p>
                 </div>
             </div>
             <div class="mt-4">
-                <p><strong>Date:</strong> <span id="prescription-date"></span></p>
-                <p><strong>Status:</strong> <span id="prescription-status" class="px-2 py-1 rounded-full text-xs"></span></p>
+                <p><strong>Ngày:</strong> <span id="prescription-date"></span></p>
+                <p><strong>Trạng thái:</strong> <span id="prescription-status" class="px-2 py-1 rounded-full text-xs"></span></p>
             </div>
             <!-- Update Status Section -->
             <div class="mt-4">
-                <label for="status-select" class="block text-sm font-medium text-gray-700">Update Status:</label>
+                <label for="status-select" class="block text-sm font-medium text-gray-700">Cập nhật trạng thái:</label>
                 <select id="status-select" class="mt-1 block w-1/4 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     <option value="Pending">Pending</option>
                     <option value="Dispensed">Dispensed</option>
                     <option value="Cancelled">Cancelled</option>
                 </select>
-                <button id="update-status-btn" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Update Status</button>
+                <button id="update-status-btn" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Cập nhật</button>
             </div>
             <!-- Medication Details -->
             <div class="mt-6">
-                <h3 class="text-lg font-semibold text-gray-800">Medications</h3>
+                <h3 class="text-lg font-semibold text-gray-800">Danh sách thuốc : </h3>
                 <table class="min-w-full mt-2 divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Medicine Name</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dosage</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên thuốc :</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số lượng : </th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liều Lượng: </th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giá : </th>
                         </tr>
                     </thead>
                     <tbody id="medication-list" class="divide-y divide-gray-200"></tbody>
@@ -1232,7 +1232,7 @@
 
         <!-- Back Button -->
         <div class="mt-6">
-            <a href="pharmacist-dashboard.html" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Back to List</a>
+            <a href="pharmacist-dashboard.html" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Quay lại danh sách :</a>
         </div>
     </div>
 

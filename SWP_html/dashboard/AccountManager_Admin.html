@@ -3023,7 +3023,7 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
 
         <!-- Add New Account Button (moved to top) -->
         <div class="flex justify-end mb-4">
-            <button id="show-add-account-btn" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Add New Account</button>
+            <button id="show-add-account-btn" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Tạo tài khoản</button>
         </div>
 
     
@@ -3037,15 +3037,15 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
         </div>
         <!-- Account Lists -->
         <div id="patients" class="account-tab">
-            <h2 class="text-2xl font-semibold mb-4">Patients</h2>
+            <h2 class="text-2xl font-semibold mb-4">Tài Khoản bệnh nhân : </h2>
             <div id="patient-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
         <div id="staff" class="account-tab hidden">
-            <h2 class="text-2xl font-semibold mb-4">Staff</h2>
+            <h2 class="text-2xl font-semibold mb-4">Nhân viên </h2>
             <div id="staff-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
         <div id="pharmacists" class="account-tab hidden">
-            <h2 class="text-2xl font-semibold mb-4">Pharmacists</h2>
+            <h2 class="text-2xl font-semibold mb-4">Dược sĩ</h2>
             <div id="pharmacist-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
 
@@ -3054,28 +3054,28 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
 
         <!-- Add Account Form -->
         <div class="mt-8 bg-white p-6 rounded shadow hidden" id="add-account-form-container">
-            <h2 class="text-2xl font-semibold mb-4">Add New Account</h2>
+            <h2 class="text-2xl font-semibold mb-4">Tạo tài khoản mới : </h2>
             <form id="add-account-form" enctype="multipart/form-data" action="/SWP_back_war_exploded/api/account-management/" method="POST">
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Account Type</label>
+                    <label class="block text-sm font-medium text-gray-700">Loại Tài Khoản : </label>
                     <select id="add-account-type" name="accountType"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required disabled>
-                        <option value="" disabled>Select account type</option>
-                        <option value="patient" selected>Patient</option>
-                        <option value="staff">Staff</option>
-                        <option value="pharmacist">Pharmacist</option>
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required readonly>
+                        <option value="" disabled>Chọn loại Account </option>
+                        <option value="patient" selected>Bệnh nhân </option>
+                        <option value="staff">Nhân viên </option>
+                        <option value="pharmacist">Dược sĩ </option>
                     </select>
                 </div>
 
                 <!-- Common Fields -->
                 <div id="common-fields">
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Username</label>
+                        <label class="block text-sm font-medium text-gray-700">Tên người dùng : </label>
                         <input type="text" id="add-username" name="username"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Password</label>
+                        <label class="block text-sm font-medium text-gray-700">Mật khẩu : </label>
                         <input type="password" id="add-password" name="password"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                     </div>
@@ -3085,17 +3085,17 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Profile Image</label>
+                        <label class="block text-sm font-medium text-gray-700">Ảnh : </label>
                         <input type="file" id="add-img" name="img" accept="image/*"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         <img id="add-img-preview" class="img-preview mt-2 hidden" alt="Image Preview">
                     </div>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Status</label>
+                        <label class="block text-sm font-medium text-gray-700">Trạng thái : </label>
                         <select id="add-status" name="status"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                            <option value="true">Enable</option>
-                            <option value="false">Disable</option>
+                            <option value="true">Hợp lệ</option>
+                            <option value="false">Vô hiệu hóa</option>
                         </select>
                     </div>
                 </div>
@@ -3103,34 +3103,34 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
                 <!-- Patient Specific Fields -->
                 <div id="patient-fields">
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <label class="block text-sm font-medium text-gray-700">Tên đầy đủ : </label>
                         <input type="text" id="add-fullName" name="fullName"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
-                        <input type="text" id="add-dob" name="dobDisplay"
+                        <label class="block text-sm font-medium text-gray-700">Ngày sinh : </label>
+                        <input type="text" id="add-dob" name="dob"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required
                             placeholder="dd-MM-yyyy">
                         <!-- Trường ẩn để gửi giá trị yyyy-MM-dd -->
-                        <input type="hidden" id="add-dob-hidden" name="dob">
+                        
                     </div>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Gender</label>
+                        <label class="block text-sm font-medium text-gray-700">Giới tính : </label>
                         <select id="add-gender" name="gender"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
+                            <option value="Male">Nữ </option>
+                            <option value="Female">Nam </option>
+                            <option value="Other">Khác</option>
                         </select>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Phone</label>
+                        <label class="block text-sm font-medium text-gray-700">Điện thoại : </label>
                         <input type="text" id="add-phone" name="phone"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Address</label>
+                        <label class="block text-sm font-medium text-gray-700">Địa chỉ : </label>
                         <input type="text" id="add-address" name="address"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                     </div>
@@ -3139,35 +3139,35 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
                 <!-- Staff Specific Fields -->
                 <div id="staff-fields" class="hidden">
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Role</label>
+                        <label class="block text-sm font-medium text-gray-700">Vai trò : </label>
                         <select id="add-role" name="role" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                             required>
-                            <option value="Doctor">Doctor</option>
-                            <option value="Nurse">Nurse</option>
-                            <option value="Receptionist">Receptionist</option>
-                            <option value="AdminBusiness">Admin Business</option>
-                            <option value="AdminSys">Admin System</option>
+                            <option value="Doctor">Bác sĩ</option>
+                            <option value="Nurse">Y tá </option>
+                            <option value="Receptionist">Lễ tân </option>
+                            <option value="AdminBusiness">Quản trị viên kinh doanh </option>
+                            <option value="AdminSys">Quản trị viên hệ thống : </option>
                         </select>
                     </div>
                     <!-- Doctor/Nurse Fields -->
                     <div id="doctor-nurse-fields" class="hidden">
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <label class="block text-sm font-medium text-gray-700">Tên đầy đủ : </label>
                             <input type="text" id="add-staffFullNameDn" name="staffFullNameDn"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">Phone</label>
+                            <label class="block text-sm font-medium text-gray-700">Số điện thoại : </label>
                             <input type="text" id="add-staffPhoneDn" name="staffPhoneDn"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">Department</label>
+                            <label class="block text-sm font-medium text-gray-700">Phòng ban : </label>
                             <input type="text" id="add-departmentDn" name="departmentDn"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">Education Level</label>
+                            <label class="block text-sm font-medium text-gray-700">Cấp độ giáo dục : </label>
                             <input type="text" id="add-eduLevelDn" name="eduLevelDn"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         </div>
@@ -3175,12 +3175,12 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
                     <!-- Receptionist Fields -->
                     <div id="receptionist-fields" class="hidden">
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <label class="block text-sm font-medium text-gray-700">Tên đầy đủ : </label>
                             <input type="text" id="add-staffFullNameR" name="staffFullNameR"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">Phone</label>
+                            <label class="block text-sm font-medium text-gray-700">Số điện thoại : </label>
                             <input type="text" id="add-staffPhoneR" name="staffPhoneR"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         </div>
@@ -3188,17 +3188,17 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
                     <!-- Admin Fields -->
                     <div id="admin-fields" class="hidden">
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <label class="block text-sm font-medium text-gray-700">Tên đầy đủ : </label>
                             <input type="text" id="add-staffFullNameA" name="staffFullNameA"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">Phone</label>
+                            <label class="block text-sm font-medium text-gray-700">Số điện thoại : </label>
                             <input type="text" id="add-staffPhoneA" name="staffPhoneA"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">Department</label>
+                            <label class="block text-sm font-medium text-gray-700">Phòng ban : </label>
                             <input type="text" id="add-departmentA" name="departmentA"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         </div>
@@ -3208,49 +3208,49 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
                 <!-- Pharmacist Specific Fields -->
                 <div id="pharmacist-fields" class="hidden">
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <label class="block text-sm font-medium text-gray-700">Tên đầy đủ : </label>
                         <input type="text" id="add-pharmacistFullName" name="pharmacistFullName"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Phone</label>
+                        <label class="block text-sm font-medium text-gray-700">Số điện thoại : </label>
                         <input type="text" id="add-pharmacistPhone" name="pharmacistPhone"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Education Level</label>
+                        <label class="block text-sm font-medium text-gray-700">Trình độ giáo dục : </label>
                         <input type="text" id="add-pharmacistEduLevel" name="pharmacistEduLevel"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
                 </div>
 
                 <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                    id="submit-button">Add Account</button>
+                    id="submit-button">Tạo tài khoản</button>
             </form>
         </div>
 
         <!-- Update Account Form -->
         <div class="mt-8 bg-white p-6 rounded shadow hidden" id="update-account-form-container">
-            <h2 class="text-2xl font-semibold mb-4">Update Account</h2>
+            <h2 class="text-2xl font-semibold mb-4">Cập nhật tài khoản : </h2>
             <form id="update-account-form" enctype="multipart/form-data">
                 <input type="hidden" id="update-account-id" name="accountId">
                 <input type="hidden" id="update-account-type" name="accountType">
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Username</label>
+                    <label class="block text-sm font-medium text-gray-700">Tên người dùng : </label>
                     <input type="text" id="update-username" name="username"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <label class="block text-sm font-medium text-gray-700">Email : </label>
                     <input type="email" id="update-email" name="email"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Current Image</label>
+                    <label class="block text-sm font-medium text-gray-700">Ảnh hiện tại : </label>
                     <img id="current-img" src="" alt="Current Image" class="img-preview mt-2 hidden">
                 </div>
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">New Profile Image</label>
+                    <label class="block text-sm font-medium text-gray-700">Chọn ảnh mới : </label>
                     <input type="file" id="update-img" name="img" accept="image/*"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     <img id="update-img-preview" class="img-preview mt-2 hidden" alt="Image Preview">
@@ -3266,17 +3266,17 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
                     </select>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <label class="block text-sm font-medium text-gray-700">Trạng thái : </label>
                     <select id="update-status" name="status"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                         <option value="true">Enable</option>
                         <option value="false">Disable</option>
                     </select>
                 </div>
-                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Update
-                    Account</button>
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Cập nhật tài khoản
+                    </button>
                 <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-                    onclick="cancelUpdate()">Cancel</button>
+                    onclick="cancelUpdate()">Hủy</button>
             </form>
         </div>
     </div>
@@ -3379,9 +3379,9 @@ document.getElementById('status-filter').addEventListener('change', (e) => {
                 if (selectedDates.length > 0) {
                     const date = selectedDates[0];
                     const yyyyMMdd = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-                    document.getElementById('add-dob-hidden').value = yyyyMMdd;
+                    document.getElementById('add-dob').value = yyyyMMdd;
                 } else {
-                    document.getElementById('add-dob-hidden').value = '';
+                    document.getElementById('add-dob').value = '';
                 }
             }
         });
@@ -3497,13 +3497,13 @@ document.getElementById('status-filter').addEventListener('change', (e) => {
                 card.className = 'bg-white p-4 rounded shadow';
                 card.innerHTML = `
                     <p><strong>ID:</strong> ${account.accountPatientId || account.accountStaffId || account.accountPharmacistId}</p>
-                    <p><strong>Username:</strong> ${account.username}</p>
+                    <p><strong>Tên người dùng :</strong> ${account.username}</p>
                     <p><strong>Email:</strong> ${account.email}</p>
                     ${type === 'staff' ? `<p><strong>Role:</strong> ${account.role}</p>` : ''}
-                    <p><strong>Status:</strong> ${account.status ? 'Enable' : 'Disable'}</p>
+                    <p><strong>Trạng thái :</strong> ${account.status ? 'Enable' : 'Disable'}</p>
                     ${account.img ? `<img src="${IMAGE_URL}${account.img.split('/').pop()}" alt="Profile" class="img-preview mt-2">` : '<p>No image</p>'}
-                    <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="fetchAndShowUpdateForm('${type}', ${account.accountPatientId || account.accountStaffId || account.accountPharmacistId})">Update</button>
-                    <button class="mt-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600" onclick="disableAccount('${type}', ${account.accountPatientId || account.accountStaffId || account.accountPharmacistId})">Disable</button>
+                    <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="fetchAndShowUpdateForm('${type}', ${account.accountPatientId || account.accountStaffId || account.accountPharmacistId})">Cập nhật </button>
+                    <button class="mt-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600" onclick="disableAccount('${type}', ${account.accountPatientId || account.accountStaffId || account.accountPharmacistId})">Vô hiệu hóa </button>
                 `;
                 container.appendChild(card);
             });
@@ -3631,7 +3631,7 @@ document.getElementById('status-filter').addEventListener('change', (e) => {
             document.getElementById('submit-button').classList.add('hidden');
             // Reset Flatpickr
             flatpickr("#add-dob").clear();
-            document.getElementById('add-dob-hidden').value = '';
+            document.getElementById('add-dob').value = '';
         }
 
         // Add new account
@@ -3652,6 +3652,7 @@ document.getElementById('status-filter').addEventListener('change', (e) => {
             const password = document.getElementById('add-password').value;
             const email = document.getElementById('add-email').value;
 
+            formData.append('accountType', document.getElementById('add-account-type').value);
             // Log FormData for debugging
             console.log('FormData contents:');
             for (const pair of formData.entries()) {
@@ -3667,7 +3668,7 @@ document.getElementById('status-filter').addEventListener('change', (e) => {
             // Check specific fields based on accountType
             if (accountType === 'patient') {
                 const fullName = document.getElementById('add-fullName').value;
-                const dob = document.getElementById('add-dob-hidden').value;
+                const dob = document.getElementById('add-dob').value;
                 const gender = document.getElementById('add-gender').value;
                 const phone = document.getElementById('add-phone').value;
                 const address = document.getElementById('add-address').value;
@@ -3857,6 +3858,9 @@ document.getElementById('status-filter').addEventListener('change', (e) => {
             }
         });
     }
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+  }
     // ... existing code ...
     </script>
 </body>
