@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import model.Patient;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class PatientAccountServlet extends HttpServlet {
             String phone = req.getParameter("phone");
             String address = req.getParameter("address");
             Part imgPart = req.getPart("img");
-
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
             // Upload image
             String imgPath = null;
             if (imgPart != null && imgPart.getSize() > 0) {
@@ -87,7 +88,7 @@ public class PatientAccountServlet extends HttpServlet {
             }
 
             // Create account
-            boolean success = patientDAO.createPatientAccount(username, password, email, imgPath, fullName, dob, gender, phone, address);
+            boolean success = patientDAO.createPatientAccount(username, hashedPassword, email, imgPath, fullName, dob, gender, phone, address);
             out.print("{\"success\":" + success + "}");
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

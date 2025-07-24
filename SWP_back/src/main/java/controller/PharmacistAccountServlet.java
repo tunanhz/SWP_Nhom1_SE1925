@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.*;
 
@@ -43,6 +44,7 @@ public class PharmacistAccountServlet extends HttpServlet {
             String fullName = req.getParameter("fullName");
             String phone = req.getParameter("phone");
             String eduLevel = req.getParameter("eduLevel");
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
 
             Part imgPart = req.getPart("img");
             String imgPath = null;
@@ -55,7 +57,7 @@ public class PharmacistAccountServlet extends HttpServlet {
                 imgPath = "images/accounts/" + fileName;
             }
 
-            boolean success = dao.createPharmacistAccount(username, password, email, imgPath, fullName, phone, eduLevel);
+            boolean success = dao.createPharmacistAccount(username, hashedPassword, email, imgPath, fullName, phone, eduLevel);
             out.print("{\"success\":" + success + "}");
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
