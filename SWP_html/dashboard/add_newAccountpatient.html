@@ -2735,10 +2735,45 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
         toast.show();
     }
 
+    function validateForm(formData) {
+        const username = formData.get("username").trim();
+        const password = formData.get("password").trim();
+        const email = formData.get("email").trim();
+        const phone = formData.get("phone").trim();
+        const dob = new Date(formData.get("dob"));
+
+        if (username.length < 3) {
+            showToast("Tên người dùng phải có ít nhất 3 ký tự!", false);
+            return false;
+        }
+        if (password.length < 6) {
+            showToast("Mật khẩu phải có ít nhất 6 ký tự!", false);
+            return false;
+        }
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            showToast("Email không hợp lệ!", false);
+            return false;
+        }
+        const phonePattern = /^[0-9]{9,11}$/;
+        if (!phonePattern.test(phone)) {
+            showToast("Số điện thoại chỉ chứa số (9-11 số)!", false);
+            return false;
+        }
+        if (dob > new Date()) {
+            showToast("Ngày sinh không được lớn hơn hiện tại!", false);
+            return false;
+        }
+        return true;
+    }
+
     document.getElementById("patientForm").addEventListener("submit", async function (e) {
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
+
+        // Gọi hàm validate trước khi gửi
+        if (!validateForm(formData)) return;
 
         try {
             const response = await fetch("http://localhost:8080/SWP_back_war_exploded/api/admin/patient", {
@@ -2747,14 +2782,14 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
             });
             const result = await response.json();
             if (result.success) {
-                showToast("Patient account created successfully!", true);
+                showToast("Tạo tài khoản thành công!", true);
                 form.reset();
             } else {
-                showToast("Failed to create patient account.", false);
+                showToast("Tạo tài khoản thất bại!", false);
             }
         } catch (error) {
             console.error(error);
-            showToast("Error: " + error.message, false);
+            showToast("Lỗi: " + error.message, false);
         }
     });
 </script>
