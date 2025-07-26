@@ -32,7 +32,18 @@
         
         
         
-        
+        <style>
+            .chart-container {
+    height: 300px; /* Increase chart height */
+    width: 100%; /* Maintain full width */
+    position: relative;
+}
+
+#totalRevenueChart {
+    width: 100%;
+    height: 100%; /* Ensure canvas fills container */
+}
+        </style>
         
         
         
@@ -1800,7 +1811,7 @@
                                          <hr class="dropdown-divider">
                                       </li>
                                       <li>
-                                         <a class="dropdown-item" href="./auth/sign-in.html">Logout</a>
+                                         <a class="dropdown-item" href="" id="logoutLink">Logout</a>
                                       </li>
                                    </ul>
                                 </li>
@@ -1827,14 +1838,14 @@
         <div class="d-flex align-items-center justify-content-between flex-sm-row flex-column-reverse">
             <div>
                 <h1 class="fs-37">
-                    <span class="left-text text-capitalize fw-light">Good morning, </span>
-                    <span class="right-text text-capitalize">Dr. Christopher </span>
+                    <span class="left-text text-capitalize fw-light">Chào buổi sáng, </span>
+                    <span class="right-text text-capitalize">Admin </span>
                 </h1>
-                <p class="mb-5">Have a nice day at work. Progress is excellent!</p>
+                <p class="mb-5">Chúc bạn một ngày làm việc tốt lành. Tiến độ công việc rất tốt!</p>
                 <div class="d-flex align-items-center flex-wrap gap-3">
-                    <a class="btn btn-primary">
+                    <a class="btn btn-primary" href="./adminbusiness-appointment-report.html">
                         <span class="btn-inner">
-                            <span class="text d-inline-block align-middle">View Schedule</span>
+                            <span class="text d-inline-block align-middle">Xem thống kê các cuộc hẹn</span>
                             <span class="icon d-inline-block align-middle ms-1 ps-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
                                     fill="none">
@@ -1845,9 +1856,9 @@
                             </span>
                         </span>
                     </a>
-                    <a href="appointment.html" class="btn btn-secondary">
+                    <a href="./adminbusiness-onlinePay-report.html" class="btn btn-secondary">
                         <span class="btn-inner">
-                            <span class="text d-inline-block align-middle">Appointment</span>
+                            <span class="text d-inline-block align-middle">Xem thống kê các thanh toán</span>
                             <span class="icon d-inline-block align-middle ms-1 ps-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
                                     fill="none">
@@ -1866,20 +1877,21 @@
             </div>
         </div>
         <div class="row mt-5">
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <div class="card card-block card-stretch card-height overflow-hidden">
                     <div class="card-body px-0 pb-0 text-center d-flex flex-column justify-content-end">
-                        <h5>Monthly Progress</h5>
-                        <h3 class="text-secondary counter mb-4" style="visibility: visible;">56%</h3>
-                        <div id="areachart"></div>
+                        <h5>Tổng Doanh Thu</h5>
+                        <h3 class="text-secondary counter mb-4" style="visibility: visible;"></h3>
+                        <div id="totalRevenueChart"></div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
+            </div> -->
+           
+            <div class="col-md-6">
                 <div class="card card-block card-stretch card-height overflow-hidden">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
-                            <h5 class="mb-3">Today Appointment</h5>
+                            <h5 class="mb-3">Tổng số cuộc hẹn</h5>
                             <div class="dropdown lh-1">
                                 <span role="button" id="dropdownMenuTodayAppointment" data-bs-toggle="dropdown"
                                     aria-expanded="false">
@@ -1892,9 +1904,9 @@
                                 </span>
                                 <ul class="dropdown-menu dropdown-menu-soft-primary sub-dropdown"
                                     aria-labelledby="dropdownMenuTodayAppointment">
-                                    <li><a class="dropdown-item active" href="#">View</a></li>
-                                    <li><a class="dropdown-item my-1" href="#">Delete</a></li>
-                                    <li><a class="dropdown-item" href="#">Edit</a></li>
+                                    <li><a class="dropdown-item active" href="#">Xem Tất Cả</a></li>
+                                    <!-- <li><a class="dropdown-item my-1" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item" href="#">Edit</a></li> -->
                                 </ul>
                             </div>
                         </div>
@@ -1909,11 +1921,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card card-block card-stretch card-height overflow-hidden">
                     <div class="card-body pb-0">
                         <div class="d-flex justify-content-between">
-                            <h5 class="mb-3">Total patients</h5>
+                            <h5 class="mb-3">Tổng số bệnh nhân</h5>
                             <div class="dropdown lh-1">
                                 <span role="button" id="dropdownMenuTotalPatients" data-bs-toggle="dropdown"
                                     aria-expanded="false">
@@ -1926,16 +1938,16 @@
                                 </span>
                                 <ul class="dropdown-menu dropdown-menu-soft-primary sub-dropdown"
                                     aria-labelledby="dropdownMenuTotalPatients">
-                                    <li><a class="dropdown-item active" href="#">View</a></li>
-                                    <li><a class="dropdown-item my-1" href="#">Print</a></li>
-                                    <li><a class="dropdown-item" href="#">Download</a></li>
+                                    <li><a class="dropdown-item active" href="#">Xem Tất Cả</a></li>
+                                    <!-- <li><a class="dropdown-item my-1" href="#">Print</a></li>
+                                    <li><a class="dropdown-item" href="#">Download</a></li> -->
                                 </ul>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-3">
-                            <h3 class="text-primary d-inline-block counter mb-0" style="visibility: visible;">20M</h3>
+                            <h3 class="text-primary d-inline-block counter mb-0" style="visibility: visible;">50</h3>
                             <span class="badge rounded-pill bg-success-subtle text-success p-2">+25.2%
-                                last week</span>
+                                Tính từ tuần trước</span>
                         </div>
                     </div>
                     <div class="card-bg position-relative mt-2">
@@ -1950,20 +1962,25 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <div>
-                    <h4>Upcoming Appointment</h4>
-                    <p class="mb-0">6 Appointment Today</p>
+                    <h4>Tổng Doanh Thu</h4>
+                    
                 </div>
-                <div class="dropdown text-end f-none">
-                    <button class="dropdown btn btn-light-subtle border text-body py-2 px-3"
+                <div class="chart-container mb-3">
+                    <canvas id="totalRevenueChart"></canvas>
+                </div>
+                    <!-- <p class="mb-0">6 Appointment Today</p> -->
+                </div>
+                <!-- <div class="dropdown text-end f-none">
+                    <a class="dropdown btn btn-light-subtle border text-body py-2 px-3"
                         id="dropdownMenuAppointmentToday" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="fw-500">Today</span>
+                        <span class="fw-500">Xem Tất cả</span>
                         <svg width="8" class="ms-1 transform-up" viewBox="0 0 12 8" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
                                 d="M6 5.08579L10.2929 0.792893C10.6834 0.402369 11.3166 0.402369 11.7071 0.792893C12.0976 1.18342 12.0976 1.81658 11.7071 2.20711L6.70711 7.20711C6.31658 7.59763 5.68342 7.59763 5.29289 7.20711L0.292893 2.20711C-0.0976311 1.81658 -0.0976311 1.18342 0.292893 0.792893C0.683418 0.402369 1.31658 0.402369 1.70711 0.792893L6 5.08579Z"
                                 fill="currentColor" />
                         </svg>
-                    </button>
+                    </a>
                     <ul class="dropdown-menu dropdown-menu-soft-primary sub-dropdown"
                         aria-labelledby="dropdownMenuAppointmentToday">
                         <li><a class="dropdown-item active" href="#">Monday</a></li>
@@ -1972,10 +1989,11 @@
                         <li><a class="dropdown-item" href="#">Thursday</a></li>
                         <li><a class="dropdown-item" href="#">Friday</a></li>
                     </ul>
-                </div>
+                </div> -->
             </div>
             <div class="card-body pt-0">
-                <div class="d-flex align-items-center mb-4 bg-primary-subtle px-3 py-3 px-lg-4 rounded">
+                
+                <!-- <div class="d-flex align-items-center mb-4 bg-primary-subtle px-3 py-3 px-lg-4 rounded">
                     <h6 class="mb-0 text-primary f-none">10:00 AM</h6>
                     <div class="border-start ps-3 ms-3 flex-grow-1">
                         <h5>Emily Johnson</h5>
@@ -2019,12 +2037,12 @@
                             </svg>
                         </button>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
 </div>
-<div class="row">
+<!-- <div class="row">
     <div class="col-lg-8">
         <div class="card">
             <div class="card-header">
@@ -2291,7 +2309,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
             </div>
             <!-- Footer Section Start -->
@@ -3099,56 +3117,57 @@
         </a>        <!-- Live Customizer end -->
         <!-- Wrapper End-->
 
+        <script src="./assets/js/API/main-adminbusiness-home.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Library Bundle Script -->
+    <script src="./assets/js/core/libs.min.js"></script>
+    <!-- Plugin Scripts -->
+    <!-- Tour plugin Start -->
+    <script src="./assets/vendor/sheperd/dist/js/sheperd.min.js"></script>
+    <script src="./assets/js/plugins/tour.js" defer></script>
 
-        <!-- Library Bundle Script -->
-        <script src="./assets/js/core/libs.min.js"></script>
-        <!-- Plugin Scripts -->
-        <!-- Tour plugin Start -->
-        <script src="./assets/vendor/sheperd/dist/js/sheperd.min.js"></script>
-        <script src="./assets/js/plugins/tour.js" defer></script>
-        
-        <!-- Flatpickr Script -->
-        <script src="./assets/vendor/flatpickr/dist/flatpickr.min.js"></script>
-        <script src="./assets/js/plugins/flatpickr.js" defer></script>
-        
-        
-        
-        <!-- Slider-tab Script -->
-        <script src="./assets/js/plugins/slider-tabs.js"></script>
-        
-        
-        <!-- fslightbox Script -->
-        <script src="./assets/js/plugins/fslightbox.js" defer></script>
-        
-        
-        
-        
-          <!-- Select2 Script -->
-          <script src="./assets/js/plugins/select2.js" defer></script>
-        
-        
-        
-        
-        <!-- Lodash Utility -->
-        <script src="./assets/vendor/lodash/lodash.min.js"></script>
-        <!-- Utilities Functions -->
-        <script src="./assets/js/iqonic-script/utility.min.js"></script>
-        <!-- Settings Script -->
-        <script src="./assets/js/iqonic-script/setting.min.js"></script>
-        <!-- Settings Init Script -->
-        <script src="./assets/js/setting-init.js"></script>
-        <!-- External Library Bundle Script -->
-        <script src="./assets/js/core/external.min.js"></script>
-        <!-- Widgetchart Script -->
-        <script src="./assets/js/charts/widgetcharts.js?v=1.4.1" defer></script>
-        <!-- Dashboard Script -->
-        <script src="./assets/js/charts/dashboard.js?v=1.4.1" defer></script>
-        <!-- Hopeui Script -->
-        <script src="./assets/js/kivicare.js?v=1.4.1" defer></script>
-        <script src="./assets/js/kivicare-advance.js?v=1.4.1" defer></script>
-        <script src="./assets/js/sidebar.js?v=1.4.1" defer></script>
-        
-        <!-- Icons -->
-        <script src="./assets/js/solid-icon-search-filter.js?v=1.4.1" defer></script>
+    <!-- Flatpickr Script -->
+    <script src="./assets/vendor/flatpickr/dist/flatpickr.min.js"></script>
+    <script src="./assets/js/plugins/flatpickr.js" defer></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Slider-tab Script -->
+    <script src="./assets/js/plugins/slider-tabs.js"></script>
+
+
+    <!-- fslightbox Script -->
+    <script src="./assets/js/plugins/fslightbox.js" defer></script>
+
+
+
+
+    <!-- Select2 Script -->
+    <script src="./assets/js/plugins/select2.js" defer></script>
+
+
+
+
+    <!-- Lodash Utility -->
+    <script src="./assets/vendor/lodash/lodash.min.js"></script>
+    <!-- Utilities Functions -->
+    <script src="./assets/js/iqonic-script/utility.min.js"></script>
+    <!-- Settings Script -->
+    <script src="./assets/js/iqonic-script/setting.min.js"></script>
+    <!-- Settings Init Script -->
+    <script src="./assets/js/setting-init.js"></script>
+    <!-- External Library Bundle Script -->
+    <script src="./assets/js/core/external.min.js"></script>
+    <!-- Widgetchart Script -->
+    <script src="./assets/js/charts/widgetcharts.js?v=1.4.1" defer></script>
+    <!-- Dashboard Script -->
+    <script src="./assets/js/charts/dashboard.js?v=1.4.1" defer></script>
+    <!-- Hopeui Script -->
+    <script src="./assets/js/kivicare.js?v=1.4.1" defer></script>
+    <script src="./assets/js/kivicare-advance.js?v=1.4.1" defer></script>
+    <script src="./assets/js/sidebar.js?v=1.4.1" defer></script>
+
+    <!-- Icons -->
+    <script src="./assets/js/solid-icon-search-filter.js?v=1.4.1" defer></script>
     </body>
 </html>

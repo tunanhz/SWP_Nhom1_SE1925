@@ -586,3 +586,22 @@ searchTermInput.addEventListener('change', () => {
 
 // Khởi tạo dữ liệu khi tải trang
 fetchAllData();
+
+document.addEventListener("DOMContentLoaded", () => {
+    const logoutLink = document.getElementById("logoutLink");
+    const logoutModalLink = document.getElementById("logoutModalLink");
+    const logoutHandler = async (event) => {
+        event.preventDefault();
+        try {
+            await fetch("/api/logout", { method: "POST" }); 
+            localStorage.removeItem("account");
+            window.location.href = "/frontend/login.html";
+        } catch (error) {
+            console.error("Logout failed:", error);
+            localStorage.removeItem("account");
+            window.location.href = "/frontend/login.html";
+        }
+    };
+    if (logoutLink) logoutLink.addEventListener("click", logoutHandler);
+    if (logoutModalLink) logoutModalLink.addEventListener("click", logoutHandler);
+});
