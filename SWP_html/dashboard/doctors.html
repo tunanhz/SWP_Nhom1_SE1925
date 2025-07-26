@@ -37,7 +37,92 @@
 
     <!-- Kivicare Design System Css -->
     <link rel="stylesheet" href="./assets/css/kivicare.min.css?v=1.4.1" />
-
+        <style>
+        .form-container {
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .add-schedule-btn {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            margin: 0 auto 20px auto;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .add-schedule-btn:hover {
+            background-color: #45a049;
+        }
+        .add-schedule-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.4);
+        }
+        #result {
+            margin-top: 30px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .loading {
+            font-style: italic;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        #message {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .text-red-500 {
+            color: #e74c3c;
+        }
+        @media (max-width: 600px) {
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            label {
+                text-align: left;
+                width: 100%;
+            }
+            input, select {
+                width: 100%;
+            }
+        }
+    </style>
     <!-- Custom Css -->
     <link rel="stylesheet" href="./assets/css/custom.min.css?v=1.4.1" />
 
@@ -55,7 +140,7 @@
         rel="stylesheet">
 </head>
 
-<body class="  ">
+<body class="  " onload="fetchAllSchedules()">
     <!-- loader Start -->
     <div id="loading">
         <div class="loader simple-loader">
@@ -1836,7 +1921,7 @@
                 <span class="head-title fw-500 mt-1">Doctors</span>
             </div>
             <div class="card">
-                <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+                <!-- <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
                     <div>
                         <h4>All Doctors</h4>
                         <span>More Than 25+ New Doctors</span>
@@ -2088,7 +2173,17 @@
                             <option value="90">All</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
+            <div class="form-container">
+            <h2>Doctor Schedule List : </h2>
+            <button id="addScheduleBtn" class="add-schedule-btn">Add Schedule</button>
+            <iframe id="scheduleFormContainer" src="addDoctor-Schedule.html" style="display:none;width:100%;max-width:900px;height:700px;border:none;margin-top:20px;border-radius:15px;box-shadow:0 8px 16px rgba(0,0,0,0.1);"></iframe>
+            </div>
+            <div id="result">
+            <p class="loading">Loading schedules...</p>
+            </div>
+            <div id="message"></div>
+
             </div>
             </div>
 
@@ -3081,6 +3176,59 @@
 
     <!-- Icons -->
     <script src="./assets/js/solid-icon-search-filter.js?v=1.4.1" defer></script>
+
+    <script>
+        const baseUrl = 'http://localhost:8080/SWP_back_war_exploded/api/Add_doctor_schedule/';
+
+        async function fetchAllSchedules() {
+            try {
+                // Fetch all schedules
+                const response = await fetch(baseUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                displaySchedules(data);
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+            }
+        }
+
+        function displaySchedules(schedules) {
+            let table = '<table><tr><th>Schedule ID</th><th>Doctor Name</th><th>Department</th><th>Date</th><th>Shift</th><th>Room</th><th>Availability</th><th>Note</th></tr>';
+            if (Array.isArray(schedules)) {
+                schedules.forEach(schedule => {
+                    table += `<tr>
+                        <td>${schedule.scheduleId}</td>
+                        <td>${schedule.doctorName}</td>
+                        <td>${schedule.doctorDepartment}</td>
+                        <td>${schedule.workingDate}</td>
+                        <td>${schedule.shift}</td>
+                        <td>${schedule.roomName || 'N/A'}</td>
+                        <td>${schedule.availability}</td>
+                        <td>${schedule.note || 'N/A'}</td>
+                    </tr>`;
+                });
+            } else if (schedules.error) {
+                table += `<tr><td colspan="8">${schedules.error}</td></tr>`;
+            } else {
+                table += `<tr><td colspan="8">No schedules found</td></tr>`;
+            }
+            table += '</table>';
+            document.getElementById('result').innerHTML = table;
+        }
+
+        // Add event listener for the Add Schedule button
+        const addBtn = document.getElementById('addScheduleBtn');
+        const formContainer = document.getElementById('scheduleFormContainer');
+        addBtn.addEventListener('click', () => {
+            formContainer.style.display = 'block';
+            addBtn.style.display = 'none';
+        });
+    </script>
 </body>
 
 </html>
