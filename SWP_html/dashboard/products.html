@@ -1977,30 +1977,29 @@
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMedicalServiceAdd"
                 aria-labelledby="offcanvasMedicalServiceAddLabel">
                 <div class="offcanvas-header border-bottom">
-                    <h3 class="offcanvas-title" id="offcanvasMedicalServiceAddLabel">Add Medical Service</h3>
+                    <h3 class="offcanvas-title" id="offcanvasMedicalServiceAddLabel">Thêm dịch vụ y tế</h3>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <form id="addMedicalServiceForm">
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="addServiceName">Service Name <span
+                            <label class="form-label" for="addServiceName">Tên dịch vụ <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="addServiceName" required>
-                            <small class="text-danger" id="nameExistsError" style="display: none;">Service name already
-                                exists</small>
+                            <small class="text-danger" id="nameExistsError" style="display: none;">Tên dịch vụ đã tồn tại</small>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="addDescription">Description <span
+                            <label class="form-label" for="addDescription">Mô tả <span
                                     class="text-danger">*</span></label>
                             <textarea class="form-control" id="addDescription" required></textarea>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="addPrice">Price <span class="text-danger">*</span></label>
+                            <label class="form-label" for="addPrice">Giá tiền <span class="text-danger">*</span></label>
                             <input type="number" step="0.01" class="form-control" id="addPrice" required>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="addStatus">Status <span class="text-danger">*</span></label>
+                            <label class="form-label" for="addStatus">Trạng thái <span class="text-danger">*</span></label>
                             <select class="form-control" id="addStatus">
                                 <option value="Enable">Enable</option>
                                 <option value="Disable">Disable</option>
@@ -2012,7 +2011,7 @@
                     <div class="d-grid d-md-flex gap-3 p-3">
                         <button type="button" class="btn btn-primary d-block" id="saveMedicalServiceButton">
                             <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Save</span>
+                                <span class="text d-inline-block align-middle">Lưu</span>
                                 <span class="icon d-inline-block align-middle ms-1 ps-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
                                         fill="none">
@@ -2025,7 +2024,7 @@
                         </button>
                         <button class="btn btn-secondary d-block" type="button" data-bs-dismiss="offcanvas">
                             <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Close</span>
+                                <span class="text d-inline-block align-middle">Đóng</span>
                                 <span class="icon d-inline-block align-middle ms-1 ps-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
                                         fill="none">
@@ -2044,35 +2043,34 @@
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMedicalServiceEdit"
                 aria-labelledby="offcanvasMedicalServiceEditLabel">
                 <div class="offcanvas-header border-bottom">
-                    <h3 class="offcanvas-title" id="offcanvasMedicalServiceEditLabel">Edit Medical Service</h3>
+                    <h3 class="offcanvas-title" id="offcanvasMedicalServiceEditLabel">Chỉnh sửa dịch vụ y tế</h3>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <form id="editMedicalServiceForm">
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="editServiceId">Service ID <span
+                            <label class="form-label" for="editServiceId">ID dịch vụ <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="editServiceId" readonly>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="editServiceName">Service Name <span
+                            <label class="form-label" for="editServiceName">Tên dịch vụ <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="editServiceName" required>
-                            <small class="text-danger" id="editNameExistsError" style="display: none;">Service name
-                                already exists</small>
+                            <small class="text-danger" id="editNameExistsError" style="display: none;">Tên dịch vụ đã tồn tại</small>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="editDescription">Description <span
+                            <label class="form-label" for="editDescription">Mô tả <span
                                     class="text-danger">*</span></label>
                             <textarea class="form-control" id="editDescription" required></textarea>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="editPrice">Price <span class="text-danger">*</span></label>
+                            <label class="form-label" for="editPrice">Giá tiền <span class="text-danger">*</span></label>
                             <input type="number" step="0.01" class="form-control" id="editPrice" required>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="editStatus">Status <span class="text-danger">*</span></label>
+                            <label class="form-label" for="editStatus">Trạng thái <span class="text-danger">*</span></label>
                             <select class="form-control" id="editStatus">
                                 <option value="Enable">Enable</option>
                                 <option value="Disable">Disable</option>
@@ -2084,7 +2082,7 @@
                     <div class="d-grid d-md-flex gap-3 p-3">
                         <button type="button" class="btn btn-primary d-block" id="updateMedicalServiceButton">
                             <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Update</span>
+                                <span class="text d-inline-block align-middle">Cập nhật</span>
                                 <span class="icon d-inline-block align-middle ms-1 ps-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
                                         fill="none">
@@ -2097,7 +2095,7 @@
                         </button>
                         <button class="btn btn-secondary d-block" type="button" data-bs-dismiss="offcanvas">
                             <span class="btn-inner">
-                                <span class="text d-inline-block align-middle">Close</span>
+                                <span class="text d-inline-block align-middle">Đóng</span>
                                 <span class="icon d-inline-block align-middle ms-1 ps-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"
                                         fill="none">
