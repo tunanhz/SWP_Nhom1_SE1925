@@ -2675,6 +2675,28 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
 
     document.getElementById("pharmacistForm").addEventListener("submit", async function(e){
         e.preventDefault();
+        const username = this.username.value.trim();
+        const password = this.password.value.trim();
+        const email = this.email.value.trim();
+        const fullName = this.fullName.value.trim();
+        const phone = this.phone.value.trim();
+        const eduLevel = this.eduLevel.value.trim();
+        const img = this.img.files[0];
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^[0-9]{10,11}$/;
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+        const nameRegex = /^[A-Za-zÀ-ỹ\s]{2,}$/;
+
+        if (username.length < 3) return showToastPharmacist("Tên người dùng phải từ 3 ký tự trở lên!", false);
+        if (!passwordRegex.test(password)) return showToastPharmacist("Mật khẩu phải >=6 ký tự, chứa cả chữ và số!", false);
+        if (!emailRegex.test(email)) return showToastPharmacist("Email không hợp lệ!", false);
+        if (!nameRegex.test(fullName)) return showToastPharmacist("Tên đầy đủ không hợp lệ!", false);
+        if (!phoneRegex.test(phone)) return showToastPharmacist("Số điện thoại phải 10-11 chữ số!", false);
+        if (eduLevel && eduLevel.length < 2) return showToastPharmacist("Trình độ giáo dục phải từ 2 ký tự!", false);
+        if (img && !['image/png','image/jpeg'].includes(img.type)) return showToastPharmacist("Chỉ chấp nhận ảnh PNG hoặc JPEG!", false);
+
+        // Nếu hợp lệ, submit
         const formData = new FormData(this);
         try {
             const res = await fetch("http://localhost:8080/SWP_back_war_exploded/api/admin/pharmacist", {method:"POST", body:formData});

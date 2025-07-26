@@ -2687,18 +2687,57 @@ data-bs-target="#live-customizer" role="button" aria-controls="live-customizer">
         new bootstrap.Toast(toastEl, {delay: 4000}).show();
     }
 
+    function validateStaffForm() {
+        const username = document.querySelector("[name='username']").value.trim();
+        const password = document.querySelector("[name='password']").value.trim();
+        const email = document.querySelector("[name='email']").value.trim();
+        const phone = document.querySelector("[name='phone']").value.trim();
+        const role = document.querySelector("[name='role']").value;
+
+        if (username.length < 3) {
+            showToastStaff("Tên người dùng phải có ít nhất 3 ký tự!", false);
+            return false;
+        }
+        if (password.length < 6) {
+            showToastStaff("Mật khẩu phải có ít nhất 6 ký tự!", false);
+            return false;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showToastStaff("Email không hợp lệ!", false);
+            return false;
+        }
+        const phoneRegex = /^[0-9]{9,11}$/;
+        if (!phoneRegex.test(phone)) {
+            showToastStaff("Số điện thoại phải từ 9–11 chữ số!", false);
+            return false;
+        }
+        if (role === "") {
+            showToastStaff("Vui lòng chọn vai trò!", false);
+            return false;
+        }
+        return true;
+    }
+
     document.getElementById("staffForm").addEventListener("submit", async function(e){
         e.preventDefault();
+        if (!validateStaffForm()) return;
+
         const formData = new FormData(this);
         try {
-            const res = await fetch("http://localhost:8080/SWP_back_war_exploded/api/admin/staff", {method:"POST", body:formData});
+            const res = await fetch("http://localhost:8080/SWP_back_war_exploded/api/admin/staff", {
+                method:"POST", 
+                body:formData
+            });
             const data = await res.json();
             if(data.success){
-                showToastStaff("Staff account created successfully!");
+                showToastStaff("Tạo tài khoản thành công!");
                 this.reset();
-            } else showToastStaff("Failed to create staff account!", false);
+            } else {
+                showToastStaff("Tạo tài khoản thất bại!", false);
+            }
         } catch (err){
-            showToastStaff("Error: "+err.message, false);
+            showToastStaff("Lỗi: "+err.message, false);
         }
     });
 </script>
