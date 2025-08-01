@@ -1,7 +1,3 @@
-Below is a revised and improved version of the `README.md` file for your project, `SWP_Nhom1_SE1925`. The updated version is concise, professional, and structured to provide clear information about the project, its features, setup instructions, and contribution guidelines. It avoids redundancy, improves readability, and aligns with standard practices for a README file.
-
----
-
 # Healthcare System - SWP_Nhom1_SE1925
 
 A comprehensive clinic management system designed to streamline operations, including patient management, appointment scheduling, medical examinations, lab services, prescription management, staff management, inventory, billing, and internal notifications. The system offers a modern, user-friendly interface with detailed role-based access control.
