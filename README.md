@@ -135,19 +135,3 @@ Key tables include:
 
 ## Contact
 - **Group Name**: Nhom1_SE1925
-- **Email**: [Insert group email]
-- **GitHub**: [Insert repository link]
-
----
-
-### Changes Made
-1. **Improved Structure**: Organized sections clearly with concise descriptions.
-2. **Removed Redundancy**: Eliminated repetitive details (e.g., detailed module instructions moved to documentation or code comments).
-3. **Enhanced Readability**: Used markdown formatting for better clarity (e.g., tables, code blocks, lists).
-4. **Standardized Terminology**: Unified terms like "Healthcare System" and "SWP_Nhom1_SE1925".
-5. **Simplified Setup Instructions**: Condensed installation steps for clarity.
-6. **Professional Tone**: Adopted a formal yet approachable tone suitable for a project README.
-7. **Omitted Unnecessary Details**: Removed excessive technical notes (e.g., directory structure, validation details) that belong in internal documentation.
-8. **Aligned with GitHub Standards**: Included standard sections like Contributing and Contact.
-
-If you need further refinements or additional sections, let me know!
